@@ -1,0 +1,13 @@
+type Game @model {
+  id: ID!
+  name: String!
+  image: String
+}
+
+type Users @model {
+  id: ID!
+  name: String
+  level: Int
+  xp: Int
+  avatarImage: String
+}

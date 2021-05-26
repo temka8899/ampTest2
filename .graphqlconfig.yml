@@ -1,0 +1,15 @@
+projects:
+  ampTest2API:
+    schemaPath: amplify/backend/api/ampTest2API/build/schema.graphql
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: src/graphql
+extensions:
+  amplify:
+    version: 3
