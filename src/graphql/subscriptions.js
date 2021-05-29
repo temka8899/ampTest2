@@ -1,6 +1,57 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateLeague = /* GraphQL */ `
+  subscription OnCreateLeague {
+    onCreateLeague {
+      id
+      startDate
+      game {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateLeague = /* GraphQL */ `
+  subscription OnUpdateLeague {
+    onUpdateLeague {
+      id
+      startDate
+      game {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteLeague = /* GraphQL */ `
+  subscription OnDeleteLeague {
+    onDeleteLeague {
+      id
+      startDate
+      game {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateGame = /* GraphQL */ `
   subscription OnCreateGame {
     onCreateGame {
@@ -29,45 +80,6 @@ export const onDeleteGame = /* GraphQL */ `
       id
       name
       image
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateUsers = /* GraphQL */ `
-  subscription OnCreateUsers {
-    onCreateUsers {
-      id
-      name
-      level
-      xp
-      avatarImage
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateUsers = /* GraphQL */ `
-  subscription OnUpdateUsers {
-    onUpdateUsers {
-      id
-      name
-      level
-      xp
-      avatarImage
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteUsers = /* GraphQL */ `
-  subscription OnDeleteUsers {
-    onDeleteUsers {
-      id
-      name
-      level
-      xp
-      avatarImage
       createdAt
       updatedAt
     }

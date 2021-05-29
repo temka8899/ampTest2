@@ -18,8 +18,10 @@ import {wp, hp} from '../constants/constants';
 import {useNavigation} from '@react-navigation/core';
 import FormInput from '../components/formInput';
 import {SignUp} from 'aws-amplify-react-native/dist/Auth';
-import {showMessage, hideMessage} from 'react-native-flash-message';
-import FlashMessage from 'react-native-flash-message';
+import FlashMessage, {
+  showMessage,
+  hideMessage,
+} from 'react-native-flash-message';
 
 Amplify.configure({
   ...awsmobile,
@@ -30,11 +32,13 @@ Amplify.configure({
 
 const SwitchView = ({value, onPress}) => {
   const navigation = useNavigation();
-  const [email, setSignUpEmail] = useState('moogii67890@gmail.com');
-  const [username, setSignUpUsername] = useState('moogii67890@gmail.com');
-  const [password, setSignUpPassword] = useState('12345678');
+  const [email, setSignUpEmail] = useState('');
+  const [username, setSignUpUsername] = useState('');
+  const [password, setSignUpPassword] = useState('');
   const [phone_number, setPhoneNumber] = useState('+97688888888');
   const [authCode, setConfirmCode] = useState('');
+  const [Level, setLevel] = useState(0);
+  const [Xp, setXp] = useState(0);
 
   async function signUp() {
     console.log(email);
@@ -46,8 +50,14 @@ const SwitchView = ({value, onPress}) => {
       await Auth.signUp({
         username,
         password,
-        attributes: {email, phone_number},
+        attributes: {
+          email: `${email}`,
+          phone_number: `${phone_number}`,
+          'custom:IntLevel': `${Level}`,
+          'custom:Xp': `${Xp}`,
+        },
       });
+
       console.log('✅ Sign-up Confirmed');
       onPress(3);
     } catch (error) {
@@ -59,7 +69,6 @@ const SwitchView = ({value, onPress}) => {
       await Auth.confirmSignUp(username, authCode);
       console.log('✅ Code confirmed');
       navigation.navigate('Home');
-      setWhichScreen(0);
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
     }
@@ -92,7 +101,7 @@ const SwitchView = ({value, onPress}) => {
 
     //SignIn
     case 1:
-      return <SignInScreen navigation={navigation} />;
+      return <SignInScreen navigation={navigation} onPress={onPress} />;
     //SignUp screen
     case 2:
       return (
@@ -245,15 +254,23 @@ const SwitchView = ({value, onPress}) => {
   }
 };
 
-const SignInScreen = ({navigation}) => {
+const SignInScreen = ({navigation, onPress}) => {
   const [username, setUsername] = useState('temuleon8899@gmail.com');
   const [password, setPassword] = useState('12345678');
   const signIn = async () => {
     try {
       await Auth.signIn(username, password);
       navigation.navigate('Home');
-      console.log('✅ Success');
+      console.log('✅ Sign In Success');
+      setUsername('');
+      setPassword('');
+      onPress(0);
     } catch (error) {
+      showMessage({
+        message: `${error.message}`,
+        description: 'Check your email and password',
+        type: 'warning',
+      });
       console.log('❌ Error signing in...', error);
     }
   };
@@ -308,7 +325,15 @@ const SignInScreen = ({navigation}) => {
             marginTop: 5,
           }}
         />
-        <Button title="Login" onPress={() => signIn()} />
+        <Button title="Login" onPress={signIn} />
+        <View style={{flexDirection: 'row'}}>
+          <Button
+            title="Forgot password"
+            color="white"
+            style={{borderColor: 'white', borderRadius: 10, borderWidth: 10}}
+          />
+          <Button title="Sign in" />
+        </View>
       </View>
     </View>
   );
@@ -322,6 +347,7 @@ export default function AuthScreen() {
     <ImageBackground
       source={require('../images/background.png')}
       style={styles.container}>
+      <FlashMessage position="top" />
       <StatusBar animated={true} barStyle="light-content" />
       <SafeAreaView style={{flex: 1}}>
         <StatusBar barStyle="light-content" />
