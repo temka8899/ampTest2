@@ -9,17 +9,24 @@ import {
   Button,
   ImageBackground,
   Keyboard,
+  Image,
+  TouchableWithoutFeedback,
   KeyboardAvoidingView,
   StatusBar,
+  ColorPropType,
 } from 'react-native';
 import Amplify, {Auth} from 'aws-amplify';
 import awsmobile from '../aws-exports';
-import {wp, hp} from '../constants/constants';
 import {useNavigation} from '@react-navigation/core';
-import FormInput from '../components/formInput';
+import FormInput from '../components/FormInput';
 import {SignUp} from 'aws-amplify-react-native/dist/Auth';
-import {showMessage, hideMessage} from 'react-native-flash-message';
-import FlashMessage from 'react-native-flash-message';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {icons, images, index, theme} from '../constants';
+import {wp, hp, ft, FONTS, COLORS} from '../constants/theme';
+import FlashMessage, {
+  showMessage,
+  hideMessage,
+} from 'react-native-flash-message';
 
 Amplify.configure({
   ...awsmobile,
@@ -30,11 +37,13 @@ Amplify.configure({
 
 const SwitchView = ({value, onPress}) => {
   const navigation = useNavigation();
-  const [email, setSignUpEmail] = useState('moogii67890@gmail.com');
-  const [username, setSignUpUsername] = useState('moogii67890@gmail.com');
-  const [password, setSignUpPassword] = useState('12345678');
+  const [email, setSignUpEmail] = useState('');
+  const [username, setSignUpUsername] = useState('');
+  const [password, setSignUpPassword] = useState('');
   const [phone_number, setPhoneNumber] = useState('+97688888888');
   const [authCode, setConfirmCode] = useState('');
+  const [Level, setLevel] = useState(0);
+  const [Xp, setXp] = useState(0);
 
   async function signUp() {
     console.log(email);
@@ -46,8 +55,14 @@ const SwitchView = ({value, onPress}) => {
       await Auth.signUp({
         username,
         password,
-        attributes: {email, phone_number},
+        attributes: {
+          email: `${email}`,
+          phone_number: `${phone_number}`,
+          'custom:IntLevel': `${Level}`,
+          'custom:Xp': `${Xp}`,
+        },
       });
+
       console.log('✅ Sign-up Confirmed');
       onPress(3);
     } catch (error) {
@@ -59,7 +74,6 @@ const SwitchView = ({value, onPress}) => {
       await Auth.confirmSignUp(username, authCode);
       console.log('✅ Code confirmed');
       navigation.navigate('Home');
-      setWhichScreen(0);
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
     }
@@ -68,23 +82,19 @@ const SwitchView = ({value, onPress}) => {
   switch (value) {
     case 0:
       return (
-        <View style={{flex: 1, marginTop: 400, alignItems: 'center'}}>
+        <View style={{flex: 1}}>
           <TouchableOpacity
             style={styles.btnContainer}
             onPress={() => onPress(1)}>
-            <ImageBackground
-              source={require('../images/button.png')}
-              style={styles.button}>
-              <Text style={[styles.btnText, {color: 'white'}]}>SIGN IN</Text>
+            <ImageBackground source={images.button} style={styles.button}>
+              <Text style={styles.btnText}>SIGN IN</Text>
             </ImageBackground>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btnContainer}
             onPress={() => onPress(2)}>
-            <ImageBackground
-              source={require('../images/button.png')}
-              style={styles.button}>
-              <Text style={[styles.btnText, {color: 'white'}]}>SIGN UP</Text>
+            <ImageBackground source={images.button} style={styles.button}>
+              <Text style={styles.btnText}>SIGN UP</Text>
             </ImageBackground>
           </TouchableOpacity>
         </View>
@@ -92,193 +102,240 @@ const SwitchView = ({value, onPress}) => {
 
     //SignIn
     case 1:
-      return <SignInScreen navigation={navigation} />;
+      return <SignInScreen navigation={navigation} onPress={onPress} />;
     //SignUp screen
     case 2:
       return (
-        <View
-          style={{
-            flex: 1,
-            marginTop: 350,
-            alignSelf: 'center',
-            alignItems: 'center',
-            width: wp(72.5),
-            height: hp(28),
-            backgroundColor: 'rgba(0,3,37,0.75)',
-            borderRadius: 15,
-          }}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}>
-            <View style={styles.inner}>
-              <View style={styles.form}>
-                <TextInput
-                  // value={signUpEmail}
-                  onChangeText={text => [
-                    setSignUpEmail(text),
-                    setSignUpUsername(text),
-                  ]}
-                  leftIcon="account"
-                  placeholder="Enter sign up email"
-                  placeholderTextColor="white"
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  textContentType="emailAddress"
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View
+            style={{
+              width: wp(75.5),
+              height: hp(35),
+              backgroundColor: '#00032590',
+              borderRadius: 15,
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              paddingVertical: hp(2),
+            }}>
+            <FormInput
+              // value={signUpEmail}
+              onChangeText={text => [
+                setSignUpEmail(text),
+                setSignUpUsername(text),
+              ]}
+              placeholder="Email"
+              keyboardType="email-address"
+            />
+            {/* <TextInput
+              
+
+              leftIcon="account"
+              placeholder="Enter sign up email"
+              placeholderTextColor="white"
+              autoCorrect={false}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              style={{
+                color: 'white',
+                borderColor: 'white',
+                borderWidth: 3,
+              }}
+            /> */}
+            <FormInput
+              // value={signUpPassword}
+              onChangeText={text => setSignUpPassword(text)}
+              placeholder="Password"
+              secureTextEntry
+            />
+            {/* <TextInput
+              // value={signUpPassword}
+              onChangeText={text => setSignUpPassword(text)}
+              leftIcon="lock"
+              placeholder="Enter password"
+              autoCapitalize="none"
+              placeholderTextColor="white"
+              autoCorrect={false}
+              secureTextEntry
+              textContentType="password"
+              style={{
+                color: 'white',
+                borderColor: 'white',
+                borderWidth: 3,
+                marginTop: 5,
+              }}
+            /> */}
+            <FormInput
+              // value={signUpPassword}
+              onChangeText={text => [setPhoneNumber(`+976${text}`)]}
+              placeholder="Phone number"
+              keyboardType="number-pad"
+            />
+            {/* <TextInput
+              // value={signUpPassword}
+              onChangeText={text => [setPhoneNumber(`+976${text}`)]}
+              keyboardType="number-pad"
+              leftIcon="lock"
+              placeholder="Enter phone number"
+              autoCapitalize="none"
+              placeholderTextColor="white"
+              autoCorrect={false}
+              style={{
+                color: 'white',
+                borderColor: 'white',
+                borderWidth: 3,
+                marginTop: 5,
+              }}
+            /> */}
+            {/* <TouchableOpacity onPress={() => onPress(3)}> */}
+
+            <TouchableOpacity onPress={() => signUp()}>
+              <ImageBackground
+                source={images.button}
+                style={{
+                  width: wp(50),
+                  height: hp(5.29),
+                  // borderColor: 'white',
+                  // borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
                   style={{
-                    color: 'white',
-                    borderColor: 'white',
-                    borderWidth: 3,
-                  }}
-                />
-                <TextInput
-                  // value={signUpPassword}
-                  onChangeText={text => setSignUpPassword(text)}
-                  leftIcon="lock"
-                  placeholder="Enter password"
-                  autoCapitalize="none"
-                  placeholderTextColor="white"
-                  autoCorrect={false}
-                  secureTextEntry
-                  textContentType="password"
-                  style={{
-                    color: 'white',
-                    borderColor: 'white',
-                    borderWidth: 3,
-                    marginTop: 5,
-                  }}
-                />
-                <TextInput
-                  // value={signUpPassword}
-                  onChangeText={text => [setPhoneNumber(`+976${text}`)]}
-                  keyboardType="number-pad"
-                  leftIcon="lock"
-                  placeholder="Enter phone number"
-                  autoCapitalize="none"
-                  placeholderTextColor="white"
-                  autoCorrect={false}
-                  style={{
-                    color: 'white',
-                    borderColor: 'white',
-                    borderWidth: 3,
-                    marginTop: 5,
-                  }}
-                />
-                {/* <TouchableOpacity onPress={() => onPress(3)}> */}
-                <TouchableOpacity onPress={() => signUp()}>
-                  <ImageBackground
-                    source={require('../images/button.png')}
-                    style={{
-                      width: wp(50),
-                      height: hp(5.29),
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        paddingTop: hp(0.6),
-                        margin: hp(1),
-                        color: 'white',
-                      }}>
-                      SIGN UP
-                    </Text>
-                  </ImageBackground>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </KeyboardAvoidingView>
-        </View>
+                    fontFamily: FONTS.brandFont,
+                    color: COLORS.white,
+                    paddingTop: hp(0.6),
+                    margin: hp(1),
+                    fontSize: RFPercentage(1.7),
+                  }}>
+                  SIGN UP
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       );
     //SignUp
     case 3:
       return (
-        <View
-          style={{
-            flex: 1,
-            marginTop: 350,
-            alignSelf: 'center',
-            width: wp(72.5),
-            height: hp(28),
-            backgroundColor: 'rgba(0,3,37,0.75)',
-            borderRadius: 15,
-          }}>
-          <FlashMessage position="top" />
-          <TextInput
-            // value={signUpPassword}
-            onChangeText={text => setConfirmCode(text)}
-            keyboardType="number-pad"
-            leftIcon="lock"
-            placeholder="Enter confirmation code"
-            autoCapitalize="none"
-            placeholderTextColor="white"
-            autoCorrect={false}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View
             style={{
-              color: 'white',
-              borderColor: 'white',
-              borderWidth: 3,
-              marginTop: 5,
-            }}
-          />
-          <TouchableOpacity onPress={() => confirmSignUp()}>
-            <ImageBackground
-              source={require('../images/button.png')}
+              width: wp(75.5),
+              height: hp(26),
+              backgroundColor: '#00032590',
+              borderRadius: 15,
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              paddingVertical: hp(2),
+            }}>
+            <FlashMessage position="top" />
+            <Text style={styles.text}>Enter your code from email</Text>
+            <FormInput
+              placeholder="Code"
+              onChangeText={text => setConfirmCode(text)}
+              keyboardType="number-pad"
+            />
+            {/* <TextInput
+              // value={signUpPassword}
+              onChangeText={text => setConfirmCode(text)}
+              keyboardType="number-pad"
+              leftIcon="lock"
+              placeholder="Enter confirmation code"
+              autoCapitalize="none"
+              placeholderTextColor="white"
+              autoCorrect={false}
               style={{
-                width: wp(50),
-                height: hp(5.29),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text
+                color: 'white',
+                borderColor: 'white',
+                borderWidth: 3,
+                marginTop: 5,
+              }}
+            /> */}
+            <TouchableOpacity onPress={() => confirmSignUp()}>
+              <ImageBackground
+                source={images.button}
                 style={{
-                  paddingTop: hp(0.6),
-                  margin: hp(1),
-                  color: 'white',
+                  width: wp(50),
+                  height: hp(5.29),
+                  // borderColor: 'white',
+                  // borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
-                SIGN UP
-              </Text>
-            </ImageBackground>
-          </TouchableOpacity>
-        </View>
+                <Text
+                  style={{
+                    fontFamily: FONTS.brandFont,
+                    color: COLORS.white,
+                    paddingTop: hp(0.6),
+                    margin: hp(1),
+                    fontSize: RFPercentage(1.7),
+                  }}>
+                  CONFIRM
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       );
     default:
       return;
   }
 };
 
-const SignInScreen = ({navigation}) => {
+const SignInScreen = ({navigation, onPress}) => {
   const [username, setUsername] = useState('temuleon8899@gmail.com');
   const [password, setPassword] = useState('12345678');
   const signIn = async () => {
     try {
       await Auth.signIn(username, password);
       navigation.navigate('Home');
-      console.log('✅ Success');
+      console.log('✅ Sign In Success');
+      setUsername('');
+      setPassword('');
+      onPress(0);
     } catch (error) {
+      showMessage({
+        message: `${error.message}`,
+        description: 'Check your email and password',
+        type: 'warning',
+      });
       console.log('❌ Error signing in...', error);
     }
   };
   return (
-    <View
-      style={{marginTop: 450, justifyContent: 'center', alignItems: 'center'}}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View
         style={{
-          width: wp(72.5),
-          height: hp(28),
-          backgroundColor: 'rgba(0,3,37,0.75)',
+          width: wp(75.5),
+          height: hp(30),
+          backgroundColor: '#00032590',
           borderRadius: 15,
+          alignItems: 'center',
+          justifyContent: 'space-evenly',
+          paddingVertical: hp(2),
         }}>
-        <View style={{alignItems: 'center'}}>
+        {/* <View style={{alignItems: 'center'}}>
           <Text
             style={{
-              color: 'white',
-              fontFamily: 'PressStart2P-Regular',
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
               justifyContent: 'center',
+              textAlign: 'center',
             }}>
             Sign in to your account
           </Text>
-        </View>
-
-        <TextInput
+        </View> */}
+        <FormInput
+          placeholder="Email"
+          keyboardType="email-address"
+          value={username}
+          onChangeText={text => setUsername(text)}
+        />
+        {/* <TextInput
           value={username}
           onChangeText={text => setUsername(text)}
           leftIcon="account"
@@ -291,8 +348,16 @@ const SignInScreen = ({navigation}) => {
             borderColor: 'white',
             borderWidth: 3,
           }}
+        /> */}
+        <FormInput
+          placeholder="Password"
+          keyboardType="email-address"
+          value={password}
+          onChangeText={text => setPassword(text)}
+          textContentType="password"
+          secureTextEntry
         />
-        <TextInput
+        {/* <TextInput
           value={password}
           onChangeText={text => setPassword(text)}
           leftIcon="lock"
@@ -307,10 +372,41 @@ const SignInScreen = ({navigation}) => {
             borderWidth: 3,
             marginTop: 5,
           }}
-        />
-        <Button title="Login" onPress={() => signIn()} />
+        /> */}
+        <TouchableOpacity onPress={signIn}>
+          <ImageBackground
+            source={images.button}
+            style={{
+              width: wp(50),
+              height: hp(5.29),
+              // borderColor: 'white',
+              // borderWidth: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                color: COLORS.white,
+                paddingTop: hp(0.6),
+                margin: hp(1),
+                fontSize: RFPercentage(1.7),
+              }}>
+              SIGN IN
+            </Text>
+          </ImageBackground>
+        </TouchableOpacity>
+        {/* <Button title="Login" onPress={signIn} /> */}
+        {/* <View style={{flexDirection: 'row'}}>
+          <Button
+            title="Forgot password"
+            color="white"
+            style={{borderColor: 'white', borderRadius: 10, borderWidth: 10}}
+          />
+          <Button title="Sign in" />
+        </View> */}
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -319,16 +415,20 @@ export default function AuthScreen() {
 
   //SignIn Home screen
   return (
-    <ImageBackground
-      source={require('../images/background.png')}
-      style={styles.container}>
-      <StatusBar animated={true} barStyle="light-content" />
-      <SafeAreaView style={{flex: 1}}>
-        <StatusBar barStyle="light-content" />
-        <View style={{alignItems: 'center'}}>
-          <View style={{flex: 3}}>
-            {/* <ImageBackground
-                source={require('../images/button.png')}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <ImageBackground
+        source={images.backgroundImage}
+        style={styles.backgroundImage}>
+        <FlashMessage position="top" />
+        <SafeAreaView style={{flex: 1}}>
+          <StatusBar barStyle="light-content" />
+          <View
+            style={{
+              alignItems: 'center',
+            }}>
+            <View style={{flex: 3}}>
+              <Image
+                source={images.banner}
                 style={{
                   resizeMode: 'contain',
                   width: wp(74.66),
@@ -336,16 +436,19 @@ export default function AuthScreen() {
                   marginTop: hp(8),
                   justifyContent: 'flex-start',
                 }}
-              /> */}
+              />
+            </View>
+            <SwitchView
+              value={whichScreen}
+              onPress={val => setWhichScreen(val)}
+            />
           </View>
-        </View>
-        <SwitchView value={whichScreen} onPress={val => setWhichScreen(val)} />
-      </SafeAreaView>
-      {/* <SafeAreaView>
+        </SafeAreaView>
+        {/* <SafeAreaView>
           <View style={{marginTop: 450}}>
             <TouchableOpacity onPress={() => setWhichScreen(1)}>
               <ImageBackground
-                source={require('../images/button.png')}
+                source={images.button}
                 style={{
                   height: 100,
                   alignItems: 'center',
@@ -356,7 +459,7 @@ export default function AuthScreen() {
             </TouchableOpacity>
             <TouchableOpacity>
               <ImageBackground
-                source={require('../images/button.png')}
+                source={images.button}
                 style={{
                   height: 100,
                   alignItems: 'center',
@@ -367,12 +470,14 @@ export default function AuthScreen() {
             </TouchableOpacity>
           </View>
         </SafeAreaView> */}
-    </ImageBackground>
+      </ImageBackground>
+    </TouchableWithoutFeedback>
   );
 }
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
+    alignItems: 'center',
   },
   backgroundImage: {
     flex: 1,
@@ -390,5 +495,22 @@ const styles = StyleSheet.create({
   },
   btnText: {
     marginTop: hp(1),
+    fontFamily: FONTS.brandFont,
+    color: COLORS.white,
+  },
+  input: {
+    height: hp(4),
+    width: wp(55.2),
+    color: COLORS.white,
+    fontFamily: FONTS.brandFont,
+    fontSize: RFPercentage(1.5),
+    padding: 0,
+  },
+  text: {
+    fontFamily: FONTS.brandFont,
+    color: COLORS.greyText,
+    fontSize: RFPercentage(1.7),
+    textAlign: 'center',
+    width: wp(50),
   },
 });

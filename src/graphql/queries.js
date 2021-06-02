@@ -1,6 +1,47 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getLeague = /* GraphQL */ `
+  query GetLeague($id: ID!) {
+    getLeague(id: $id) {
+      id
+      startDate
+      game {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listLeagues = /* GraphQL */ `
+  query ListLeagues(
+    $filter: ModelLeagueFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listLeagues(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getGame = /* GraphQL */ `
   query GetGame($id: ID!) {
     getGame(id: $id) {
@@ -23,39 +64,6 @@ export const listGames = /* GraphQL */ `
         id
         name
         image
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getUsers = /* GraphQL */ `
-  query GetUsers($id: ID!) {
-    getUsers(id: $id) {
-      id
-      name
-      level
-      xp
-      avatarImage
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listUserss = /* GraphQL */ `
-  query ListUserss(
-    $filter: ModelUsersFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUserss(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        level
-        xp
-        avatarImage
         createdAt
         updatedAt
       }

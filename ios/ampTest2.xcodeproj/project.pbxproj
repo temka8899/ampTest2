@@ -11,10 +11,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		3552D94E8D5446CA91822436 /* PressStart2P-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B12E76F330614A7A8803E463 /* PressStart2P-Regular.ttf */; };
 		65EC43B9C6639276886CE2E2 /* libPods-ampTest2-ampTest2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15EB0C0C7E6741FDB9D694F9 /* libPods-ampTest2-ampTest2Tests.a */; };
 		66D4383132AA6E8202D2C4E7 /* libPods-ampTest2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1521AA0BBC74D057DCA9095A /* libPods-ampTest2.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F2B71F45475448BFB43F4764 /* PressStart2P-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 072ABBB944B94BADABE0DDD8 /* PressStart2P-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +31,7 @@
 		00E356EE1AD99517003FC87E /* ampTest2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ampTest2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* ampTest2Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ampTest2Tests.m; sourceTree = "<group>"; };
+		072ABBB944B94BADABE0DDD8 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "PressStart2P-Regular.ttf"; path = "../src/assets/fonts/PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* ampTest2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ampTest2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ampTest2/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ampTest2/AppDelegate.m; sourceTree = "<group>"; };
@@ -44,7 +45,6 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ampTest2/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		99F646BA033BCAF2388AEF4A /* Pods-ampTest2-ampTest2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2-ampTest2Tests.release.xcconfig"; path = "Target Support Files/Pods-ampTest2-ampTest2Tests/Pods-ampTest2-ampTest2Tests.release.xcconfig"; sourceTree = "<group>"; };
 		9F68E8E4649E2D9BC064CBE8 /* Pods-ampTest2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2.release.xcconfig"; path = "Target Support Files/Pods-ampTest2/Pods-ampTest2.release.xcconfig"; sourceTree = "<group>"; };
-		B12E76F330614A7A8803E463 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PressStart2P-Regular.ttf"; path = "../src/fonts/PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -154,7 +154,7 @@
 		D2F42C67CF7E4FAAA8A23814 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				B12E76F330614A7A8803E463 /* PressStart2P-Regular.ttf */,
+				072ABBB944B94BADABE0DDD8 /* PressStart2P-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -170,7 +170,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				BFA2D19957F0BC1C97168618 /* [CP] Embed Pods Frameworks */,
 				9198A7682FB0DD14EDCF6B87 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -193,7 +192,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				D7F0E72D5BAD55ADBF98EF0D /* [CP] Embed Pods Frameworks */,
 				ABC20A3ED7E06CFA6CF794A7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -255,7 +253,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				3552D94E8D5446CA91822436 /* PressStart2P-Regular.ttf in Resources */,
+				F2B71F45475448BFB43F4764 /* PressStart2P-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,40 +350,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ampTest2/Pods-ampTest2-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BFA2D19957F0BC1C97168618 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ampTest2-ampTest2Tests/Pods-ampTest2-ampTest2Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ampTest2-ampTest2Tests/Pods-ampTest2-ampTest2Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ampTest2-ampTest2Tests/Pods-ampTest2-ampTest2Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D7F0E72D5BAD55ADBF98EF0D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ampTest2/Pods-ampTest2-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ampTest2/Pods-ampTest2-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ampTest2/Pods-ampTest2-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
