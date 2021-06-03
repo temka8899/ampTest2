@@ -34,11 +34,24 @@ const LeagueListScreen = ({navigation}) => {
         <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('CreateLeagueScreen')}
-          style={styles.createBtn}>
-          <Text style={styles.createBtnText}>Create League</Text>
-        </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            alignSelf: 'flex-end',
+            borderColor: 'red',
+            borderWidth: 1,
+          }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CreateLeagueScreen')}
+            style={styles.createBtn}>
+            <Text style={styles.createBtnText}>Create League</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CreateLeagueScreen')}
+            style={styles.createBtn}>
+            <Text style={styles.createBtnText}>Create League</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
