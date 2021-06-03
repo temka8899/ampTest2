@@ -71,3 +71,51 @@ export const listGames = /* GraphQL */ `
     }
   }
 `;
+export const getLeaguePlayer = /* GraphQL */ `
+  query GetLeaguePlayer($id: ID!) {
+    getLeaguePlayer(id: $id) {
+      id
+      league_id {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      user_id
+      user_name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listLeaguePlayers = /* GraphQL */ `
+  query ListLeaguePlayers(
+    $filter: ModelLeaguePlayerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listLeaguePlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        league_id {
+          id
+          startDate
+          createdAt
+          updatedAt
+        }
+        user_id
+        user_name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

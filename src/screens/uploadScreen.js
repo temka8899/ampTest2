@@ -119,6 +119,7 @@ const Home = ({navigation}) => {
       console.log('Games>>>>', todos);
       setTodos(todos);
       const user2 = await Auth.currentAuthenticatedUser();
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
       const result = await Auth.updateUserAttributes(user2, {
         'custom:IntLevel': `5`,
         'custom:Xp': `390`,

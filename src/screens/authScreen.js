@@ -265,7 +265,7 @@ const SignInScreen = ({navigation, onPress}) => {
         'response:>>',
         response.signInUserSession.accessToken.jwtToken,
       );
-      navigation.replace('createGameScreen');
+      navigation.replace('Home');
       console.log('✅ Sign In Success');
       setUsername('');
       setPassword('');

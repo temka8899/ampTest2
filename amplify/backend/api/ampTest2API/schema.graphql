@@ -10,7 +10,8 @@ type Game @model {
   image: String
 }
 
-type League_Player @model {
+type LeaguePlayer @model {
   league_id: League @connection
   user_id: String!
+  user_name: String!
 }

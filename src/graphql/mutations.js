@@ -103,3 +103,84 @@ export const deleteGame = /* GraphQL */ `
     }
   }
 `;
+export const createLeaguePlayer = /* GraphQL */ `
+  mutation CreateLeaguePlayer(
+    $input: CreateLeaguePlayerInput!
+    $condition: ModelLeaguePlayerConditionInput
+  ) {
+    createLeaguePlayer(input: $input, condition: $condition) {
+      id
+      league_id {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      user_id
+      user_name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateLeaguePlayer = /* GraphQL */ `
+  mutation UpdateLeaguePlayer(
+    $input: UpdateLeaguePlayerInput!
+    $condition: ModelLeaguePlayerConditionInput
+  ) {
+    updateLeaguePlayer(input: $input, condition: $condition) {
+      id
+      league_id {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      user_id
+      user_name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteLeaguePlayer = /* GraphQL */ `
+  mutation DeleteLeaguePlayer(
+    $input: DeleteLeaguePlayerInput!
+    $condition: ModelLeaguePlayerConditionInput
+  ) {
+    deleteLeaguePlayer(input: $input, condition: $condition) {
+      id
+      league_id {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      user_id
+      user_name
+      createdAt
+      updatedAt
+    }
+  }
+`;

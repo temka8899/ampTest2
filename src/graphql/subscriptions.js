@@ -85,3 +85,75 @@ export const onDeleteGame = /* GraphQL */ `
     }
   }
 `;
+export const onCreateLeaguePlayer = /* GraphQL */ `
+  subscription OnCreateLeaguePlayer {
+    onCreateLeaguePlayer {
+      id
+      league_id {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      user_id
+      user_name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateLeaguePlayer = /* GraphQL */ `
+  subscription OnUpdateLeaguePlayer {
+    onUpdateLeaguePlayer {
+      id
+      league_id {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      user_id
+      user_name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteLeaguePlayer = /* GraphQL */ `
+  subscription OnDeleteLeaguePlayer {
+    onDeleteLeaguePlayer {
+      id
+      league_id {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      user_id
+      user_name
+      createdAt
+      updatedAt
+    }
+  }
+`;
