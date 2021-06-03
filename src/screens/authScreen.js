@@ -332,6 +332,7 @@ const SignInScreen = ({navigation, onPress}) => {
           borderRadius: 15,
           alignItems: 'center',
           justifyContent: 'space-evenly',
+
           paddingVertical: hp(2),
         }}>
         {/* <View style={{alignItems: 'center'}}>
@@ -348,6 +349,7 @@ const SignInScreen = ({navigation, onPress}) => {
         <FormInput
           placeholder="Email"
           keyboardType="email-address"
+          autoCorrect={false}
           value={username}
           onChangeText={text => setUsername(text)}
         />
@@ -368,6 +370,7 @@ const SignInScreen = ({navigation, onPress}) => {
         <FormInput
           placeholder="Password"
           keyboardType="email-address"
+          autoCorrect={false}
           value={password}
           onChangeText={text => setPassword(text)}
           textContentType="password"
