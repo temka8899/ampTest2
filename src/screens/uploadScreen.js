@@ -108,7 +108,7 @@ const Home = ({navigation}) => {
 
   async function fetchGames() {
     const user = await Auth.currentUserInfo();
-    console.log(user);
+    console.log('Name =======', user['attributes']['custom:Name']);
     // userInfo = await Auth.userAttributes(us).then(console.log(userInfo));
     try {
       const todoData = await API.graphql(graphqlOperation(listGames));
