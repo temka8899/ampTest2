@@ -33,6 +33,11 @@ const Item = ({item, onPress, backgroundColor, textColor}) => (
   </View>
 );
 
+async function getUserData() {
+  const user = Auth.currentUserInfo();
+  console.log(user);
+}
+
 const GameScreen = ({navigation}) => {
   const [selectedId, setSelectedId] = useState(null);
   const renderItem = ({item}) => {
@@ -90,7 +95,7 @@ const GameScreen = ({navigation}) => {
                 styles.greeting,
                 {marginTop: hp(1), fontSize: RFPercentage(2.5)},
               ]}>
-              {}
+              {/* {user['attributes']['custom:Name']} */}
             </Text>
           </View>
           <View>

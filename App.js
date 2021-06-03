@@ -8,6 +8,7 @@ import Tabs from './src/components/bottomTab';
 import ParticipatesScreen from './src/screens/ParticipatesScreen';
 import CreateLeagueScreen from './src/screens/CreateLeagueScreen';
 import LeagueListScreen from './src/screens/LeagueListScreen';
+import createGameScreen from './src/screens/createGame';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,7 @@ function App() {
           name="ParticipatesScreen"
           component={ParticipatesScreen}
         />
+        <Stack.Screen name="createGameScreen" component={createGameScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

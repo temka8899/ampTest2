@@ -15,6 +15,9 @@ import {listGames, listLeagues} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import {S3Image} from 'aws-amplify-react-native/dist/Storage';
+import {userData} from '../data/Players';
+import {CognitoIdToken, CognitoUser} from 'amazon-cognito-identity-js';
+import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
 // import {AmplifyTheme} from 'aws-amplify-react-native';
 
@@ -108,7 +111,7 @@ const Home = ({navigation}) => {
 
   async function fetchGames() {
     const user = await Auth.currentUserInfo();
-    console.log('Name =======', user['attributes']['custom:Name']);
+    console.log('Attributes =======', user);
     // userInfo = await Auth.userAttributes(us).then(console.log(userInfo));
     try {
       const todoData = await API.graphql(graphqlOperation(listGames));
@@ -119,7 +122,7 @@ const Home = ({navigation}) => {
       const result = await Auth.updateUserAttributes(user2, {
         'custom:IntLevel': `5`,
         'custom:Xp': `390`,
-        'custom:Name': `Temuulen`,
+        'custom:Name': `moogii`,
         'custom:Admin': `1`,
       });
       // const temp = Storage.get();
@@ -215,6 +218,7 @@ const Home = ({navigation}) => {
       <Button onPress={() => addLeague()} title="Create League" />
       <Button onPress={() => fetchLeague()} title="Fetch League" />
       <Button title="Create Game" onPress={addGame} />
+
       <TextInput
         onChangeText={val => setInput('name', val)}
         style={styles.input}
