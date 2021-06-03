@@ -124,11 +124,13 @@ const SwitchView = ({value, onPress}) => {
               paddingVertical: hp(2),
             }}>
             <FormInput
+              autoCorrect={false}
               // value={signUpPassword}
               onChangeText={text => [setSignUpUsername(text)]}
               placeholder="Name"
             />
             <FormInput
+              autoCorrect={false}
               // value={signUpEmail}
               onChangeText={text => [
                 setSignUpEmail(text),
@@ -154,52 +156,20 @@ const SwitchView = ({value, onPress}) => {
               }}
             /> */}
             <FormInput
+              autoCorrect={false}
               // value={signUpPassword}
               onChangeText={text => setSignUpPassword(text)}
               placeholder="Password"
               secureTextEntry
             />
-            {/* <TextInput
-              // value={signUpPassword}
-              onChangeText={text => setSignUpPassword(text)}
-              leftIcon="lock"
-              placeholder="Enter password"
-              autoCapitalize="none"
-              placeholderTextColor="white"
-              autoCorrect={false}
-              secureTextEntry
-              textContentType="password"
-              style={{
-                color: 'white',
-                borderColor: 'white',
-                borderWidth: 3,
-                marginTop: 5,
-              }}
-            /> */}
+
             <FormInput
+              autoCorrect={false}
               // value={signUpPassword}
               onChangeText={text => [setPhoneNumber(`+976${text}`)]}
               placeholder="Phone number"
               keyboardType="number-pad"
             />
-
-            {/* <TextInput
-              // value={signUpPassword}
-              onChangeText={text => [setPhoneNumber(`+976${text}`)]}
-              keyboardType="number-pad"
-              leftIcon="lock"
-              placeholder="Enter phone number"
-              autoCapitalize="none"
-              placeholderTextColor="white"
-              autoCorrect={false}
-              style={{
-                color: 'white',
-                borderColor: 'white',
-                borderWidth: 3,
-                marginTop: 5,
-              }}
-            /> */}
-            {/* <TouchableOpacity onPress={() => onPress(3)}> */}
 
             <TouchableOpacity onPress={() => signUp()}>
               <ImageBackground
@@ -244,27 +214,15 @@ const SwitchView = ({value, onPress}) => {
             }}>
             <FlashMessage position="top" />
             <Text style={styles.text}>Enter your code from email</Text>
+
             <FormInput
+              value={authCode}
+              autoCorrect={false}
               placeholder="Code"
-              onChangeText={text => setConfirmCode(text)}
+              onChangeText={text2 => setConfirmCode(text2)}
               keyboardType="number-pad"
             />
-            {/* <TextInput
-              // value={signUpPassword}
-              onChangeText={text => setConfirmCode(text)}
-              keyboardType="number-pad"
-              leftIcon="lock"
-              placeholder="Enter confirmation code"
-              autoCapitalize="none"
-              placeholderTextColor="white"
-              autoCorrect={false}
-              style={{
-                color: 'white',
-                borderColor: 'white',
-                borderWidth: 3,
-                marginTop: 5,
-              }}
-            /> */}
+
             <TouchableOpacity onPress={() => confirmSignUp()}>
               <ImageBackground
                 source={images.button}
@@ -335,39 +293,16 @@ const SignInScreen = ({navigation, onPress}) => {
 
           paddingVertical: hp(2),
         }}>
-        {/* <View style={{alignItems: 'center'}}>
-          <Text
-            style={{
-              color: COLORS.white,
-              fontFamily: FONTS.brandFont,
-              justifyContent: 'center',
-              textAlign: 'center',
-            }}>
-            Sign in to your account
-          </Text>
-        </View> */}
         <FormInput
+          autoCorrect={false}
           placeholder="Email"
           keyboardType="email-address"
           autoCorrect={false}
           value={username}
           onChangeText={text => setUsername(text)}
         />
-        {/* <TextInput
-          value={username}
-          onChangeText={text => setUsername(text)}
-          leftIcon="account"
-          placeholder="Enter username"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          style={{
-            color: 'white',
-            borderColor: 'white',
-            borderWidth: 3,
-          }}
-        /> */}
         <FormInput
+          autoCorrect={false}
           placeholder="Password"
           keyboardType="email-address"
           autoCorrect={false}
@@ -376,22 +311,6 @@ const SignInScreen = ({navigation, onPress}) => {
           textContentType="password"
           secureTextEntry
         />
-        {/* <TextInput
-          value={password}
-          onChangeText={text => setPassword(text)}
-          leftIcon="lock"
-          placeholder="Enter password"
-          autoCapitalize="none"
-          autoCorrect={false}
-          secureTextEntry
-          textContentType="password"
-          style={{
-            color: 'white',
-            borderColor: 'white',
-            borderWidth: 3,
-            marginTop: 5,
-          }}
-        /> */}
         <TouchableOpacity onPress={signIn}>
           <ImageBackground
             source={images.button}
@@ -415,15 +334,6 @@ const SignInScreen = ({navigation, onPress}) => {
             </Text>
           </ImageBackground>
         </TouchableOpacity>
-        {/* <Button title="Login" onPress={signIn} /> */}
-        {/* <View style={{flexDirection: 'row'}}>
-          <Button
-            title="Forgot password"
-            color="white"
-            style={{borderColor: 'white', borderRadius: 10, borderWidth: 10}}
-          />
-          <Button title="Sign in" />
-        </View> */}
       </View>
     </KeyboardAvoidingView>
   );
