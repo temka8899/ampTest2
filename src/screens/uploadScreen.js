@@ -120,6 +120,7 @@ const Home = ({navigation}) => {
         'custom:IntLevel': `5`,
         'custom:Xp': `390`,
         'custom:Name': `Temuulen`,
+        'custom:Admin': `1`,
       });
       // const temp = Storage.get();
       // // Storage.list('') // for listing ALL files without prefix, pass '' instead
@@ -213,6 +214,7 @@ const Home = ({navigation}) => {
       />
       <Button onPress={() => addLeague()} title="Create League" />
       <Button onPress={() => fetchLeague()} title="Fetch League" />
+      <Button title="Create Game" onPress={addGame} />
       <TextInput
         onChangeText={val => setInput('name', val)}
         style={styles.input}
@@ -229,8 +231,6 @@ const Home = ({navigation}) => {
       />
 
       {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
-
-      <Button title="Create Game" onPress={addGame} />
 
       {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
 
