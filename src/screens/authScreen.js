@@ -64,6 +64,7 @@ const SwitchView = ({value, onPress}) => {
           'custom:IntLevel': `${Level}`,
           'custom:Xp': `${Xp}`,
           'custom:Admin': `1`,
+          'custom:Name': `moogii`,
         },
       });
 
@@ -300,8 +301,18 @@ const SignInScreen = ({navigation, onPress}) => {
   const [password, setPassword] = useState('12345678');
   const signIn = async () => {
     try {
+<<<<<<< HEAD
       await Auth.signIn(username, password);
       navigation.replace('Tabs');
+=======
+      let response = await Auth.signIn(username, password);
+      console.log('response:>>', response);
+      console.log(
+        'response:>>',
+        response.signInUserSession.accessToken.jwtToken,
+      );
+      navigation.replace('createGameScreen');
+>>>>>>> 4aa3a2e8302cd957e3f6beb5f32e4f6a7f1bca76
       console.log('✅ Sign In Success');
       setUsername('');
       setPassword('');

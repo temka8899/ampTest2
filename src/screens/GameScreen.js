@@ -34,6 +34,11 @@ const Item = ({item, onPress, backgroundColor, textColor}) => (
   </View>
 );
 
+async function getUserData() {
+  const user = Auth.currentUserInfo();
+  console.log(user);
+}
+
 const GameScreen = ({navigation}) => {
   const [selectedId, setSelectedId] = useState(null);
   const renderItem = ({item}) => {
@@ -98,7 +103,11 @@ const GameScreen = ({navigation}) => {
                 styles.greeting,
                 {marginTop: hp(1), fontSize: RFPercentage(2.5)},
               ]}>
+<<<<<<< HEAD
               {name['custom:Name']}
+=======
+              {/* {user['attributes']['custom:Name']} */}
+>>>>>>> 4aa3a2e8302cd957e3f6beb5f32e4f6a7f1bca76
             </Text>
           </View>
 
