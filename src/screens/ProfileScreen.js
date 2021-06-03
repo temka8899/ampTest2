@@ -48,7 +48,7 @@ const Profile = ({navigation}) => {
           onPress={() => navigation.navigate('LeagueListScreen')}>
           <Image source={icons.plus} style={styles.plusBtn} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.popToTop()}>
+        <TouchableOpacity onPress={() => navigation.replace('Auth')}>
           <Image source={icons.logOut} style={styles.plusBtn} />
         </TouchableOpacity>
       </View>

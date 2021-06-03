@@ -18,7 +18,8 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import color from 'color';
 
 import {DATA} from '../data/DATA';
-import Auth from '@aws-amplify/auth';
+// import Auth from '@aws-amplify/auth';
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
 const Item = ({item, onPress, backgroundColor, textColor}) => (
   <View>
@@ -65,10 +66,17 @@ const GameScreen = ({navigation}) => {
 
   useEffect(() => {
     findGreet();
-    const user = Auth.currentUserInfo();
-    console.log('khanaa ->', user);
+    getName();
   }, []);
+  const [name, setName] = useState();
+  async function getName() {
+    const user = await Auth.currentUserInfo();
+    console.log('Name =======', user);
+    setName(user.attributes);
+  }
 
+  // const user = Auth.currentUserInfo();
+  // console.log('Name =======', user['attributes']['custom:Name']);
   return (
     <View style={{flex: 1, backgroundColor: COLORS.background}}>
       <SafeAreaView style={{paddingTop: hp(2)}}>
@@ -90,9 +98,10 @@ const GameScreen = ({navigation}) => {
                 styles.greeting,
                 {marginTop: hp(1), fontSize: RFPercentage(2.5)},
               ]}>
-              {}
+              {name['custom:Name']}
             </Text>
           </View>
+
           <View>
             <TouchableOpacity>
               <Image

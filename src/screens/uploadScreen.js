@@ -119,7 +119,7 @@ const Home = ({navigation}) => {
       const result = await Auth.updateUserAttributes(user2, {
         'custom:IntLevel': `5`,
         'custom:Xp': `390`,
-        'custom:Name': `Temuulen`,
+        'custom:Name': `moo`,
         'custom:Admin': `1`,
       });
       // const temp = Storage.get();
