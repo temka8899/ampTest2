@@ -1,0 +1,38 @@
+export const userData = [
+  {
+    id: 1,
+    name: 'Moogii',
+    level: '5',
+    xp: '60',
+    team: '',
+    inNba: 'true',
+    image: require('../assets/images/avatars/men1.png'),
+  },
+  {
+    id: 2,
+    name: 'Temuulen',
+    level: '4',
+    xp: '0',
+    team: '',
+    inNba: 'true',
+    image: require('../assets/images/avatars/men2.png'),
+  },
+  {
+    id: 3,
+    name: 'Buynaa',
+    level: '8',
+    xp: '0',
+    team: '',
+    inNba: 'true',
+    image: require('../assets/images/avatars/men3.png'),
+  },
+  {
+    id: 4,
+    name: 'Amaraa',
+    level: '10',
+    xp: '0',
+    team: '',
+    inNba: 'true',
+    image: require('../assets/images/avatars/men4.png'),
+  },
+];

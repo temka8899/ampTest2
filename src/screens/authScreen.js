@@ -73,7 +73,7 @@ const SwitchView = ({value, onPress}) => {
     try {
       await Auth.confirmSignUp(username, authCode);
       console.log('✅ Code confirmed');
-      navigation.navigate('Home');
+      navigation.navigate('Tabs');
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
     }
@@ -291,7 +291,7 @@ const SignInScreen = ({navigation, onPress}) => {
   const signIn = async () => {
     try {
       await Auth.signIn(username, password);
-      navigation.navigate('Home');
+      navigation.navigate('Tabs');
       console.log('✅ Sign In Success');
       setUsername('');
       setPassword('');
