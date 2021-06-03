@@ -117,7 +117,9 @@ const Home = ({navigation}) => {
       setTodos(todos);
       const user2 = await Auth.currentAuthenticatedUser();
       const result = await Auth.updateUserAttributes(user2, {
-        'custom:Level': `1000`,
+        'custom:IntLevel': `5`,
+        'custom:Xp': `390`,
+        'custom:Name': `Temuulen`,
       });
       // const temp = Storage.get();
       // // Storage.list('') // for listing ALL files without prefix, pass '' instead
@@ -141,8 +143,8 @@ const Home = ({navigation}) => {
   }
 
   async function addGame() {
-    console.log(formState.name);
-    console.log(file123.name);
+    console.log('FormState name: ', formState.name);
+    console.log('Filename: ', file123.name);
     try {
       blobber(file123);
       const todo = {...formState};
@@ -219,12 +221,12 @@ const Home = ({navigation}) => {
       />
       {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
 
-      {/* <Image
+      <Image
         source={{
-          uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/IMG_0006.HEIC`,
+          uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/nba.png`,
         }}
         style={{width: 400, height: 400}}
-      /> */}
+      />
 
       {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
 
