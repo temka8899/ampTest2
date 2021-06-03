@@ -11,7 +11,7 @@ import {
 import ImagePicker from 'react-native-image-crop-picker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague} from '../graphql/mutations';
-import {listGames} from '../graphql/queries';
+import {listGames, listLeagues} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import {S3Image} from 'aws-amplify-react-native/dist/Storage';
@@ -113,7 +113,7 @@ const Home = ({navigation}) => {
     try {
       const todoData = await API.graphql(graphqlOperation(listGames));
       const todos = todoData.data.listGames.items;
-      console.log('todos>>>>', todos);
+      console.log('Games>>>>', todos);
       setTodos(todos);
       const user2 = await Auth.currentAuthenticatedUser();
       const result = await Auth.updateUserAttributes(user2, {
@@ -124,6 +124,17 @@ const Home = ({navigation}) => {
       // //         .then(result => console.log(result))
       // //         .catch(err => console.log(err));
       // console.log('tempoooo ----> ', temp);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
+  async function fetchLeague() {
+    try {
+      const leagueData = await API.graphql(graphqlOperation(listLeagues));
+      const todos = leagueData.data.listLeagues.items;
+      console.log('leagueData', leagueData);
+      console.log('League>>>>>>>>>>>>>>', todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -158,21 +169,16 @@ const Home = ({navigation}) => {
       await API.graphql(
         graphqlOperation(createLeague, {
           input: {
-            startDate: '2021-06-01',
-            gameId: '9a49738c-fcca-4cab-b67f-3c8de2771dd4',
-            image: file123.name,
+            startDate: '2021-08-01',
+            leagueGameId: 'b95b3ca0-9338-442e-9eb8-a323c6114c4c',
           },
         }),
       );
-      //console.log('>>>>>>>>>>>>>>>>>', todo);
+      console.log('League Created');
     } catch (err) {
       console.log('error creating League:', err);
     }
   }
-
-  // const result = Storage.put('testimage.jpeg', './assets/images/wom1.jpeg', {
-  //   contentType: 'image/jpeg', // contentType is optional
-  // });
 
   return (
     <View style={styles.container}>
@@ -204,28 +210,38 @@ const Home = ({navigation}) => {
         title="Sign Out"
       />
       <Button onPress={() => addLeague()} title="Create League" />
+      <Button onPress={() => fetchLeague()} title="Fetch League" />
       <TextInput
         onChangeText={val => setInput('name', val)}
         style={styles.input}
         value={formState.name}
         placeholder="Name"
       />
-      <Image
+      {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
+
+      {/* <Image
         source={{
           uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/IMG_0006.HEIC`,
         }}
         style={{width: 400, height: 400}}
-      />
+      /> */}
+
+      {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
+
       <Button title="Create Todo" onPress={addGame} />
 
-      {todos.map((todo, index) => {
+      {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
+
+      {/* {todos.map((todo, index) => {
         return (
           <View key={todo.id ? todo.id : index} style={styles.todo}>
             <Text style={styles.todoName}>{todo.name}</Text>
             <Text>{todo.image}</Text>
           </View>
         );
-      })}
+      })} */}
+
+      {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
     </View>
   );
 };
