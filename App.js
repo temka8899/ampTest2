@@ -8,7 +8,7 @@ import Tabs from './src/components/bottomTab';
 import ParticipatesScreen from './src/screens/ParticipatesScreen';
 import CreateLeagueScreen from './src/screens/CreateLeagueScreen';
 import LeagueListScreen from './src/screens/LeagueListScreen';
-import createGameScreen from './src/screens/createGame';
+import createGameScreen from './src/screens/CreateGame';
 
 const Stack = createStackNavigator();
 

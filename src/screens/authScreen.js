@@ -64,7 +64,7 @@ const SwitchView = ({value, onPress}) => {
           'custom:IntLevel': `${Level}`,
           'custom:Xp': `${Xp}`,
           'custom:Admin': `1`,
-          'custom:Name': `moogii`,
+          'custom:Name': `${username}`,
         },
       });
 
