@@ -209,7 +209,7 @@ const Home = ({navigation}) => {
       />
 
       <Button
-        onPress={() => [Auth.signOut(), navigation.pop()]}
+        onPress={() => [Auth.signOut(), navigation.replace('Auth')]}
         title="Sign Out"
       />
       <Button onPress={() => addLeague()} title="Create League" />

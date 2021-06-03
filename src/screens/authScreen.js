@@ -301,7 +301,7 @@ const SignInScreen = ({navigation, onPress}) => {
   const signIn = async () => {
     try {
       await Auth.signIn(username, password);
-      navigation.navigate('Home');
+      navigation.replace('Home');
       console.log('✅ Sign In Success');
       setUsername('');
       setPassword('');
