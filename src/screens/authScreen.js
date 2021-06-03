@@ -27,6 +27,7 @@ import FlashMessage, {
   showMessage,
   hideMessage,
 } from 'react-native-flash-message';
+import {userData} from '../data/Players';
 
 Amplify.configure({
   ...awsmobile,
@@ -34,7 +35,6 @@ Amplify.configure({
     disabled: true,
   },
 });
-
 const SwitchView = ({value, onPress}) => {
   const navigation = useNavigation();
   const [email, setSignUpEmail] = useState('');
@@ -46,6 +46,9 @@ const SwitchView = ({value, onPress}) => {
   const [Level, setLevel] = useState(0);
   const [Xp, setXp] = useState(0);
 
+  const [currentUser, setCurrentUser] = useState();
+  // export default currentUser;
+
   async function signUp() {
     console.log(email);
     console.log(password);
@@ -56,15 +59,13 @@ const SwitchView = ({value, onPress}) => {
       await Auth.signUp({
         username,
         password,
-        name,
         attributes: {
           email: `${email}`,
           phone_number: `${phone_number}`,
-          name: `${name}`,
           'custom:IntLevel': `${Level}`,
           'custom:Xp': `${Xp}`,
           'custom:Admin': `1`,
-          'custom:Name': `${username}`,
+          'custom:Name': `${name}`,
         },
       });
 
@@ -78,7 +79,7 @@ const SwitchView = ({value, onPress}) => {
     try {
       await Auth.confirmSignUp(username, authCode);
       console.log('✅ Code confirmed');
-      navigation.replace('Home');
+      navigation.replace('Tabs');
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
     }
@@ -126,7 +127,7 @@ const SwitchView = ({value, onPress}) => {
             <FormInput
               autoCorrect={false}
               // value={signUpPassword}
-              onChangeText={text => [setSignUpUsername(text)]}
+              onChangeText={text => [setSignUpName(text)]}
               placeholder="Name"
             />
             <FormInput
@@ -265,7 +266,7 @@ const SignInScreen = ({navigation, onPress}) => {
         'response:>>',
         response.signInUserSession.accessToken.jwtToken,
       );
-      navigation.replace('Home');
+      navigation.replace('Tabs');
       console.log('✅ Sign In Success');
       setUsername('');
       setPassword('');

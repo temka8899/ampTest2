@@ -77,7 +77,7 @@ const GameScreen = ({navigation}) => {
   async function getName() {
     const user = await Auth.currentUserInfo();
     console.log('Name =======', user);
-    setName(user.attributes);
+    setName(user.attributes['custom:Name']);
   }
 
   // const user = Auth.currentUserInfo();
@@ -103,7 +103,7 @@ const GameScreen = ({navigation}) => {
                 styles.greeting,
                 {marginTop: hp(1), fontSize: RFPercentage(2.5)},
               ]}>
-              {/* {user['attributes']['custom:Name']} */}
+              {name}
             </Text>
           </View>
 
