@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import Svg, {Circle} from 'react-native-svg';
+// import Svg, {Circle} from 'react-native-svg';
 import {COLORS, images} from '../constants';
 import {hp, wp} from '../constants/theme';
 import {userData} from '../data/Players';

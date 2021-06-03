@@ -18,6 +18,7 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import color from 'color';
 
 import {DATA} from '../data/DATA';
+import Auth from '@aws-amplify/auth';
 
 const Item = ({item, onPress, backgroundColor, textColor}) => (
   <View>
@@ -64,6 +65,8 @@ const GameScreen = ({navigation}) => {
 
   useEffect(() => {
     findGreet();
+    const user = Auth.currentUserInfo();
+    console.log('khanaa ->', user);
   }, []);
 
   return (
@@ -87,7 +90,7 @@ const GameScreen = ({navigation}) => {
                 styles.greeting,
                 {marginTop: hp(1), fontSize: RFPercentage(2.5)},
               ]}>
-              Moogii
+              {}
             </Text>
           </View>
           <View>
