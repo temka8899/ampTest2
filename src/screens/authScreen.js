@@ -40,6 +40,7 @@ const SwitchView = ({value, onPress}) => {
   const [email, setSignUpEmail] = useState('');
   const [username, setSignUpUsername] = useState('');
   const [password, setSignUpPassword] = useState('');
+  const [name, setSignUpName] = useState('');
   const [phone_number, setPhoneNumber] = useState('+97688888888');
   const [authCode, setConfirmCode] = useState('');
   const [Level, setLevel] = useState(0);
@@ -55,9 +56,11 @@ const SwitchView = ({value, onPress}) => {
       await Auth.signUp({
         username,
         password,
+        name,
         attributes: {
           email: `${email}`,
           phone_number: `${phone_number}`,
+          name: `${name}`,
           'custom:IntLevel': `${Level}`,
           'custom:Xp': `${Xp}`,
         },
@@ -119,6 +122,11 @@ const SwitchView = ({value, onPress}) => {
               paddingVertical: hp(2),
             }}>
             <FormInput
+              // value={signUpPassword}
+              onChangeText={text => [setSignUpUsername(text)]}
+              placeholder="Name"
+            />
+            <FormInput
               // value={signUpEmail}
               onChangeText={text => [
                 setSignUpEmail(text),
@@ -172,6 +180,7 @@ const SwitchView = ({value, onPress}) => {
               placeholder="Phone number"
               keyboardType="number-pad"
             />
+
             {/* <TextInput
               // value={signUpPassword}
               onChangeText={text => [setPhoneNumber(`+976${text}`)]}
