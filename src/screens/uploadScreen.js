@@ -120,6 +120,7 @@ const Home = ({navigation}) => {
       setTodos(todos);
       const user2 = await Auth.currentAuthenticatedUser();
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
+      const temp = '5915c914-fbc8-4e08-a7c2-70b329539292';
       const result = await Auth.updateUserAttributes(user2, {
         'custom:IntLevel': `5`,
         'custom:Xp': `390`,

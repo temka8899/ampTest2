@@ -132,6 +132,7 @@ const SwitchView = ({value, onPress}) => {
             />
             <FormInput
               autoCorrect={false}
+              autoCapitalize="none"
               // value={signUpEmail}
               onChangeText={text => [
                 setSignUpEmail(text),
@@ -166,6 +167,7 @@ const SwitchView = ({value, onPress}) => {
 
             <FormInput
               autoCorrect={false}
+              whichScreen
               // value={signUpPassword}
               onChangeText={text => [setPhoneNumber(`+976${text}`)]}
               placeholder="Phone number"
@@ -291,12 +293,14 @@ const SignInScreen = ({navigation, onPress}) => {
           borderRadius: 15,
           alignItems: 'center',
           justifyContent: 'space-evenly',
+
           paddingVertical: hp(2),
         }}>
         <FormInput
           autoCorrect={false}
           placeholder="Email"
           keyboardType="email-address"
+          autoCorrect={false}
           value={username}
           onChangeText={text => setUsername(text)}
         />
@@ -304,6 +308,7 @@ const SignInScreen = ({navigation, onPress}) => {
           autoCorrect={false}
           placeholder="Password"
           keyboardType="email-address"
+          autoCorrect={false}
           value={password}
           onChangeText={text => setPassword(text)}
           textContentType="password"
