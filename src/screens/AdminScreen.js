@@ -37,9 +37,9 @@ const AdminScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
-          width: wp(95),
+          width: wp(100),
           alignSelf: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'space-evenly',
           alignItems: 'flex-end',
           flexDirection: 'row',
           // borderWidth: 1,
@@ -61,8 +61,8 @@ const AdminScreen = ({navigation}) => {
 };
 const styles = StyleSheet.create({
   createBtn: {
-    height: hp(4),
     width: wp(45),
+    height: hp(5),
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',

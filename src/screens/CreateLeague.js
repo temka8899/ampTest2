@@ -4,10 +4,11 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Button,
+  StatusBar,
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Modal,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
@@ -15,11 +16,15 @@ import {createGame, createLeague} from '../graphql/mutations';
 import {listGames, listLeagues} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
+import GamePicker from '../components/GamePicker';
+
 import {S3Image} from 'aws-amplify-react-native/dist/Storage';
 import {userData} from '../data/Players';
 import {CognitoIdToken, CognitoUser} from 'amazon-cognito-identity-js';
 import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
+import {COLORS, FONTS, icons} from '../constants';
+import {hp, wp} from '../constants/theme';
 Amplify.configure({
   ...awsmobile,
   Analytics: {
@@ -28,8 +33,18 @@ Amplify.configure({
 });
 
 const createLeagueScreen = ({navigation}) => {
+  const [uploadImage, setUploadImage] = useState('');
   const [GameList, setGameList] = useState([]);
   const [LeagueList, setLeagueList] = useState([]);
+  const [chooseData, setChooseData] = useState('Table Soccer');
+  const [modalVisible, setModalVisible] = useState(false);
+  const changeModalVisible = bool => {
+    setModalVisible(bool);
+  };
+
+  const setData = option => {
+    setChooseData(option);
+  };
 
   useEffect(() => {
     fetchGames();
@@ -86,19 +101,99 @@ const createLeagueScreen = ({navigation}) => {
     }
   }
   return (
-    <View>
-      <SafeAreaView>
-        <Text>addLeague screen</Text>
-        {GameList.map((todo, index) => {
-          return (
-            <View>
-              <Text key={index}>{[index, '. ', todo.name]}</Text>
-            </View>
-          );
-        })}
-        <Button title="Add League" onPress={() => addLeague()} />
-      </SafeAreaView>
-    </View>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
+      <StatusBar barStyle="light-content"></StatusBar>
+      <View
+        style={{
+          width: wp(100),
+          height: hp(7),
+          // borderColor: 'red',
+          // borderWidth: 1,
+          paddingHorizontal: wp(3),
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
+          <Image source={icons.backBtn} style={styles.backBtn} />
+        </TouchableOpacity>
+      </View>
+      <View>
+        <View style={{alignItems: 'center'}}>
+          {uploadImage == '' ? (
+            <Image
+              style={{
+                width: wp(70),
+                height: hp(40),
+                // borderColor: 'red',
+                // borderWidth: 1,
+              }}
+              source={require('../../assets/images/men1.png')}
+              resizeMode="contain"
+            />
+          ) : (
+            <Image
+              source={{
+                uri: uploadImage,
+              }}
+              style={{
+                width: wp(70),
+                height: hp(40),
+                backgroundColor: COLORS.background,
+              }}
+              resizeMode="contain"
+            />
+          )}
+        </View>
+      </View>
+      <TouchableOpacity
+        onPress={() => changeModalVisible(true)}
+        style={{
+          height: hp(6),
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingHorizontal: wp(3),
+          borderBottomColor: COLORS.brand,
+          borderWidth: 1,
+        }}>
+        <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+          {chooseData}
+        </Text>
+        <Image
+          source={icons.drop}
+          style={{resizeMode: 'contain', height: hp(1.7), width: wp(4.53)}}
+        />
+      </TouchableOpacity>
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={modalVisible}
+        nRequestClose={() => changeModalVisible(false)}>
+        <GamePicker changeModalVisible={changeModalVisible} setData={setData} />
+      </Modal>
+    </SafeAreaView>
+    // <View>
+    //   <SafeAreaView>
+    //     <Text>addLeague screen</Text>
+    //     {GameList.map((todo, index) => {
+    //       return (
+    //         <View>
+    //           <Text key={index}>{[index, '. ', todo.name]}</Text>
+    //         </View>
+    //       );
+    //     })}
+    //     <Button title="Add League" onPress={() => addLeague()} />
+    //   </SafeAreaView>
+    // </View>
   );
 };
+const styles = StyleSheet.create({
+  backBtn: {
+    resizeMode: 'contain',
+    width: wp(7.4),
+    height: hp(3.2),
+    borderColor: 'white',
+  },
+});
 export default createLeagueScreen;

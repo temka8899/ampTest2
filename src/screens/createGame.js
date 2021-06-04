@@ -10,6 +10,7 @@ import {
   Image,
   SafeAreaView,
   StatusBar,
+  ColorPropType,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {createGame, createLeague} from '../graphql/mutations';
@@ -126,7 +127,12 @@ const createGameScreen = ({navigation}) => {
         <View style={{alignItems: 'center'}}>
           {uploadImage == '' ? (
             <Image
-              style={{width: 195, height: 107}}
+              style={{
+                width: wp(80),
+                height: hp(50),
+                // borderColor: 'red',
+                // borderWidth: 1,
+              }}
               source={require('../../assets/images/men1.png')}
               resizeMode="contain"
             />
@@ -135,7 +141,11 @@ const createGameScreen = ({navigation}) => {
               source={{
                 uri: uploadImage,
               }}
-              style={{height: 195, width: 107, backgroundColor: 'green'}}
+              style={{
+                width: wp(80),
+                height: hp(50),
+                backgroundColor: COLORS.background,
+              }}
               resizeMode="contain"
             />
           )}
@@ -197,18 +207,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
   },
-  // container: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   padding: 20,
-  // },
-  // todo: {
-  //   marginBottom: 15,
-  // },
-  // todoName: {
-  //   fontSize: 18,
-  // },
-  button: {},
+  btnContainer: {
+    width: wp(100),
+    height: hp(10),
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    // borderColor: 'red',
+    // borderWidth: 1,
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  button: {
+    width: wp(45),
+    height: hp(5),
+    // borderColor: 'red',
+    // borderWidth: 1,
+    backgroundColor: COLORS.brand,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   backBtn: {
     resizeMode: 'contain',
     width: wp(7.4),
@@ -218,6 +235,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
+    fontSize: RFPercentage(1.4),
   },
 });
 export default createGameScreen;
