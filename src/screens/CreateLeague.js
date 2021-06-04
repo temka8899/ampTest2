@@ -14,7 +14,7 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 
 import ImagePicker from 'react-native-image-crop-picker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {createGame, createLeague} from '../graphql/mutations';
+import {createGame, createLeague, createTeam} from '../graphql/mutations';
 import {listGames, listLeagues} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
@@ -96,6 +96,19 @@ const createLeagueScreen = ({navigation}) => {
             leagueGameId: 'bbd83f8f-0dad-4ece-a0bf-63d76a148a2d',
             description: 'aeriabeubkaejbrkhaetbkaejtbkj',
           },
+        }),
+      );
+      console.log('League Created');
+    } catch (err) {
+      console.log('error creating League:', err);
+    }
+  }
+
+  async function addTeam() {
+    try {
+      await API.graphql(
+        graphqlOperation(createTeam, {
+          input: {},
         }),
       );
       console.log('League Created');
