@@ -13,7 +13,7 @@ type Game @model {
 
 type LeaguePlayer @model {
   league_id: League @connection
-  player: Player @connection
+  teamPlayer: TeamPlayer @connection
 }
 
 type Player @model {
@@ -26,7 +26,6 @@ type Player @model {
 type Team @model {
   id: ID!
   name: String!
-  member_number: Int!
 }
 
 type TeamPlayer @model {

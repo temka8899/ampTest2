@@ -106,11 +106,22 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      player {
+      teamPlayer {
         id
-        name
-        level
-        xp
+        teamId {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        playerId {
+          id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -137,11 +148,22 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      player {
+      teamPlayer {
         id
-        name
-        level
-        xp
+        teamId {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        playerId {
+          id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -168,11 +190,22 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      player {
+      teamPlayer {
         id
-        name
-        level
-        xp
+        teamId {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        playerId {
+          id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -222,7 +255,6 @@ export const onCreateTeam = /* GraphQL */ `
     onCreateTeam {
       id
       name
-      member_number
       createdAt
       updatedAt
     }
@@ -233,7 +265,6 @@ export const onUpdateTeam = /* GraphQL */ `
     onUpdateTeam {
       id
       name
-      member_number
       createdAt
       updatedAt
     }
@@ -244,7 +275,6 @@ export const onDeleteTeam = /* GraphQL */ `
     onDeleteTeam {
       id
       name
-      member_number
       createdAt
       updatedAt
     }
@@ -257,7 +287,6 @@ export const onCreateTeamPlayer = /* GraphQL */ `
       teamId {
         id
         name
-        member_number
         createdAt
         updatedAt
       }
@@ -281,7 +310,6 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
       teamId {
         id
         name
-        member_number
         createdAt
         updatedAt
       }
@@ -305,7 +333,6 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
       teamId {
         id
         name
-        member_number
         createdAt
         updatedAt
       }
