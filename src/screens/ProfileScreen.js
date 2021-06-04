@@ -100,12 +100,11 @@ const Profile = ({navigation}) => {
           alignItems: 'center',
         }}>
         <View>
-          {adminVisible ? (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('AdminScreen')}>
-              <Image source={icons.plus} style={styles.plusBtn} />
-            </TouchableOpacity>
-          ) : null}
+          {/* {adminVisible ? ( */}
+          <TouchableOpacity onPress={() => navigation.navigate('AdminScreen')}>
+            <Image source={icons.plus} style={styles.plusBtn} />
+          </TouchableOpacity>
+          {/* ) : null} */}
         </View>
         <TouchableOpacity onPress={() => navigation.replace('Auth')}>
           <Image source={icons.logOut} style={styles.plusBtn} />
