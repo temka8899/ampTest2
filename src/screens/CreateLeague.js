@@ -10,6 +10,8 @@ import {
   SafeAreaView,
   Modal,
 } from 'react-native';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+
 import ImagePicker from 'react-native-image-crop-picker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague} from '../graphql/mutations';
