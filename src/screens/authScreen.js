@@ -82,10 +82,29 @@ const SwitchView = ({value, onPress}) => {
     try {
       await Auth.confirmSignUp(username, authCode);
       console.log('✅ Code confirmed');
+      addPlayer();
       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
       navigation.replace('Tabs');
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
+    }
+  }
+
+  async function addPlayer() {
+    console.log(name);
+    try {
+      await API.graphql(
+        graphqlOperation(createPlayer, {
+          input: {
+            name: `${name}`,
+            xp: 1,
+            level: 1,
+          },
+        }),
+      );
+      console.log('Player Created');
+    } catch (err) {
+      console.log('error creating Player:', err);
     }
   }
 
