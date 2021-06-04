@@ -2,6 +2,7 @@ type League @model {
   id: ID!
   startDate: String!
   game: Game @connection
+  description: String
 }
 
 type Game @model {

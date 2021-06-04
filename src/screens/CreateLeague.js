@@ -92,6 +92,7 @@ const createLeagueScreen = ({navigation}) => {
           input: {
             startDate: '2021-07-01',
             leagueGameId: 'bbd83f8f-0dad-4ece-a0bf-63d76a148a2d',
+            description: 'aeriabeubkaejbrkhaetbkaejtbkj',
           },
         }),
       );
