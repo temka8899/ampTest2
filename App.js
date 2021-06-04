@@ -6,9 +6,9 @@ import AuthScreen from './src/screens/authScreen';
 import Home from './src/screens/uploadScreen';
 import Tabs from './src/components/bottomTab';
 import ParticipatesScreen from './src/screens/ParticipatesScreen';
-import CreateLeagueScreen from './src/screens/CreateLeagueScreen';
-import LeagueListScreen from './src/screens/LeagueListScreen';
+import createLeagueScreen from './src/screens/CreateLeague';
 import createGameScreen from './src/screens/CreateGame';
+import AdminScreen from './src/screens/AdminScreen';
 
 const Stack = createStackNavigator();
 
@@ -25,14 +25,14 @@ function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen
           name="CreateLeagueScreen"
-          component={CreateLeagueScreen}
+          component={createLeagueScreen}
         />
-        <Stack.Screen name="LeagueListScreen" component={LeagueListScreen} />
         <Stack.Screen
           name="ParticipatesScreen"
           component={ParticipatesScreen}
         />
         <Stack.Screen name="createGameScreen" component={createGameScreen} />
+        <Stack.Screen name="AdminScreen" component={AdminScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

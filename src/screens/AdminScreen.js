@@ -16,7 +16,7 @@ import {hp, wp} from '../constants/theme';
 import {userData} from '../data/Players';
 import GamePicker from '../components/GamePicker';
 
-const LeagueListScreen = ({navigation}) => {
+const AdminScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content" />
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
 });
-export default LeagueListScreen;
+export default AdminScreen;

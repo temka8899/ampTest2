@@ -268,7 +268,7 @@ const SignInScreen = ({navigation, onPress}) => {
         'response:>>',
         response.signInUserSession.accessToken.jwtToken,
       );
-      navigation.replace('Home');
+      navigation.replace('Tabs');
       console.log('✅ Sign In Success');
       setUsername('');
       setPassword('');

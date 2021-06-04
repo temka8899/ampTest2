@@ -44,8 +44,7 @@ const Profile = ({navigation}) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('LeagueListScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('AdminScreen')}>
           <Image source={icons.plus} style={styles.plusBtn} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.replace('Auth')}>
