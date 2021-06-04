@@ -11,6 +11,7 @@ import {
   ImageBackground,
   View,
   TextBase,
+  ActivityIndicator,
 } from 'react-native';
 import {icons, images, index, theme} from '../constants';
 import {wp, hp, ft, COLORS, FONTS} from '../constants/theme';
@@ -40,6 +41,8 @@ async function getUserData() {
 }
 
 const GameScreen = ({navigation}) => {
+  const [isLoading, setLoading] = React.useState(true);
+
   const [selectedId, setSelectedId] = useState(null);
   const renderItem = ({item}) => {
     // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
@@ -76,12 +79,21 @@ const GameScreen = ({navigation}) => {
   const [name, setName] = useState();
   async function getName() {
     const user = await Auth.currentUserInfo();
+    setLoading(false);
+
     console.log('Name =======', user);
     setName(user.attributes['custom:Name']);
   }
 
   // const user = Auth.currentUserInfo();
   // console.log('Name =======', user['attributes']['custom:Name']);
+  if (isLoading) {
+    return (
+      <View>
+        <ActivityIndicator size={'large'} />
+      </View>
+    );
+  }
   return (
     <View style={{flex: 1, backgroundColor: COLORS.background}}>
       <SafeAreaView style={{paddingTop: hp(2)}}>

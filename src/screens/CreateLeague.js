@@ -19,6 +19,7 @@ import {listGames, listLeagues} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import GamePicker from '../components/GamePicker';
+import DatePicker from 'react-native-datepicker';
 
 import {S3Image} from 'aws-amplify-react-native/dist/Storage';
 import {userData} from '../data/Players';
@@ -27,6 +28,7 @@ import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 Amplify.configure({
   ...awsmobile,
   Analytics: {
@@ -35,11 +37,20 @@ Amplify.configure({
 });
 
 const createLeagueScreen = ({navigation}) => {
+  // const [date, setDate] = useState('09-10-2020');
   const [uploadImage, setUploadImage] = useState('');
   const [GameList, setGameList] = useState([]);
   const [LeagueList, setLeagueList] = useState([]);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const initialState = {name: ''};
+  const [formState, setFormState] = useState(initialState);
+  const [startDate, setStartDate] = useState();
+  const [leagueGameId, setLeagueGameId] = useState();
+  const [leagueDescription, setleagueDescription] = useState();
+  function setInput(key, value) {
+    setFormState({...formState, [key]: value});
+  }
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
@@ -92,9 +103,9 @@ const createLeagueScreen = ({navigation}) => {
       await API.graphql(
         graphqlOperation(createLeague, {
           input: {
-            startDate: '2021-07-01',
-            leagueGameId: 'bbd83f8f-0dad-4ece-a0bf-63d76a148a2d',
-            description: 'aeriabeubkaejbrkhaetbkaejtbkj',
+            startDate: `${startDate}`,
+            leagueGameId: `${leagueGameId}`,
+            description: `${leagueDescription}`,
           },
         }),
       );
@@ -176,15 +187,78 @@ const createLeagueScreen = ({navigation}) => {
         nRequestClose={() => changeModalVisible(false)}>
         <GamePicker changeModalVisible={changeModalVisible} setData={setData} />
       </Modal>
-      <TextInput
-        onChangeText={val => setInput('name', val)}
-        // value={formState.name}
-        style={styles.input}
-        // onChangeText={onChangeNumber}
-        // value={number}
-        placeholder="Enter name"
-        placeholderTextColor={COLORS.purpleText}
-      />
+      <View
+        style={{
+          // borderColor: 'red',
+          // borderWidth: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: hp(3),
+        }}>
+        <TextInput
+          multiline
+          numberOfLines={4}
+          maxLength={150}
+          autoCorrect={false}
+          onChangeText={val => setInput('name', val)}
+          // value={formState.name}
+          style={styles.input}
+          // onChangeText={onChangeNumber}
+          // value={number}
+          placeholder="Enter description"
+          placeholderTextColor={COLORS.purpleText}
+        />
+      </View>
+      <View style={{marginHorizontal: wp(3), marginTop: hp(3)}}>
+        <Text style={[styles.text, {color: COLORS.purpleText}]}>Start</Text>
+        {/* <Text style={[styles.text, {color: COLORS.greyText}]}>{hrs}</Text> */}
+        <DatePicker
+          style={styles.datePickerStyle}
+          date={startDate}
+          mode="date"
+          placeholder="select date"
+          format="YYYY MM DD"
+          minDate="1921-01-01"
+          maxDate="2016-01-01"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              display: 'none',
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              borderWidth: 0,
+              alignItems: 'flex-start',
+            },
+            dateText: {
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+            },
+          }}
+          onDateChange={date => {
+            setDate(startDate);
+          }}
+        />
+      </View>
+      <View
+        style={{
+          flex: 1,
+          width: wp(90),
+          alignSelf: 'center',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          flexDirection: 'column',
+          // borderColor: 'red',
+          // borderWidth: 1,
+        }}>
+        <TouchableOpacity onPress={() => addLeague()} style={styles.createBtn}>
+          <Text style={styles.createBtnText}>Create League</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
     // <View>
     //   <SafeAreaView>
@@ -209,15 +283,32 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
   input: {
-    height: hp(4),
-    width: wp(70),
+    height: hp(10),
+    width: wp(94),
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
     fontSize: RFPercentage(1.5),
     padding: 0,
+    // borderColor: 'red',
+    // borderWidth: 1,
     justifyContent: 'center',
-    textAlign: 'center',
+    // textAlign: 'center',
     alignItems: 'center',
+  },
+  createBtn: {
+    height: hp(5),
+    width: wp(75),
+    backgroundColor: COLORS.brand,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  createBtnText: {
+    color: COLORS.white,
+    fontFamily: FONTS.brandFont,
+    fontSize: RFPercentage(2),
+  },
+  text: {
+    fontFamily: FONTS.brandFont,
   },
 });
 export default createLeagueScreen;
