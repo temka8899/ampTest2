@@ -91,12 +91,11 @@ export const getLeaguePlayer = /* GraphQL */ `
       player {
         id
         name
-        Level
-        Xp
+        level
+        xp
         createdAt
         updatedAt
       }
-      user_name
       createdAt
       updatedAt
     }
@@ -120,12 +119,11 @@ export const listLeaguePlayers = /* GraphQL */ `
         player {
           id
           name
-          Level
-          Xp
+          level
+          xp
           createdAt
           updatedAt
         }
-        user_name
         createdAt
         updatedAt
       }
@@ -138,8 +136,8 @@ export const getPlayer = /* GraphQL */ `
     getPlayer(id: $id) {
       id
       name
-      Level
-      Xp
+      level
+      xp
       createdAt
       updatedAt
     }
@@ -155,8 +153,92 @@ export const listPlayers = /* GraphQL */ `
       items {
         id
         name
-        Level
-        Xp
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getTeam = /* GraphQL */ `
+  query GetTeam($id: ID!) {
+    getTeam(id: $id) {
+      id
+      name
+      member_number
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTeams = /* GraphQL */ `
+  query ListTeams(
+    $filter: ModelTeamFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTeams(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        member_number
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getTeamPlayer = /* GraphQL */ `
+  query GetTeamPlayer($id: ID!) {
+    getTeamPlayer(id: $id) {
+      id
+      teamId {
+        id
+        name
+        member_number
+        createdAt
+        updatedAt
+      }
+      playerId {
+        id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTeamPlayers = /* GraphQL */ `
+  query ListTeamPlayers(
+    $filter: ModelTeamPlayerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTeamPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        teamId {
+          id
+          name
+          member_number
+          createdAt
+          updatedAt
+        }
+        playerId {
+          id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }

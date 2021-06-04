@@ -126,12 +126,11 @@ export const createLeaguePlayer = /* GraphQL */ `
       player {
         id
         name
-        Level
-        Xp
+        level
+        xp
         createdAt
         updatedAt
       }
-      user_name
       createdAt
       updatedAt
     }
@@ -160,12 +159,11 @@ export const updateLeaguePlayer = /* GraphQL */ `
       player {
         id
         name
-        Level
-        Xp
+        level
+        xp
         createdAt
         updatedAt
       }
-      user_name
       createdAt
       updatedAt
     }
@@ -194,12 +192,11 @@ export const deleteLeaguePlayer = /* GraphQL */ `
       player {
         id
         name
-        Level
-        Xp
+        level
+        xp
         createdAt
         updatedAt
       }
-      user_name
       createdAt
       updatedAt
     }
@@ -213,8 +210,8 @@ export const createPlayer = /* GraphQL */ `
     createPlayer(input: $input, condition: $condition) {
       id
       name
-      Level
-      Xp
+      level
+      xp
       createdAt
       updatedAt
     }
@@ -228,8 +225,8 @@ export const updatePlayer = /* GraphQL */ `
     updatePlayer(input: $input, condition: $condition) {
       id
       name
-      Level
-      Xp
+      level
+      xp
       createdAt
       updatedAt
     }
@@ -243,8 +240,131 @@ export const deletePlayer = /* GraphQL */ `
     deletePlayer(input: $input, condition: $condition) {
       id
       name
-      Level
-      Xp
+      level
+      xp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTeam = /* GraphQL */ `
+  mutation CreateTeam(
+    $input: CreateTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    createTeam(input: $input, condition: $condition) {
+      id
+      name
+      member_number
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTeam = /* GraphQL */ `
+  mutation UpdateTeam(
+    $input: UpdateTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    updateTeam(input: $input, condition: $condition) {
+      id
+      name
+      member_number
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTeam = /* GraphQL */ `
+  mutation DeleteTeam(
+    $input: DeleteTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    deleteTeam(input: $input, condition: $condition) {
+      id
+      name
+      member_number
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTeamPlayer = /* GraphQL */ `
+  mutation CreateTeamPlayer(
+    $input: CreateTeamPlayerInput!
+    $condition: ModelTeamPlayerConditionInput
+  ) {
+    createTeamPlayer(input: $input, condition: $condition) {
+      id
+      teamId {
+        id
+        name
+        member_number
+        createdAt
+        updatedAt
+      }
+      playerId {
+        id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTeamPlayer = /* GraphQL */ `
+  mutation UpdateTeamPlayer(
+    $input: UpdateTeamPlayerInput!
+    $condition: ModelTeamPlayerConditionInput
+  ) {
+    updateTeamPlayer(input: $input, condition: $condition) {
+      id
+      teamId {
+        id
+        name
+        member_number
+        createdAt
+        updatedAt
+      }
+      playerId {
+        id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTeamPlayer = /* GraphQL */ `
+  mutation DeleteTeamPlayer(
+    $input: DeleteTeamPlayerInput!
+    $condition: ModelTeamPlayerConditionInput
+  ) {
+    deleteTeamPlayer(input: $input, condition: $condition) {
+      id
+      teamId {
+        id
+        name
+        member_number
+        createdAt
+        updatedAt
+      }
+      playerId {
+        id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

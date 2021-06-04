@@ -105,12 +105,11 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
       player {
         id
         name
-        Level
-        Xp
+        level
+        xp
         createdAt
         updatedAt
       }
-      user_name
       createdAt
       updatedAt
     }
@@ -136,12 +135,11 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
       player {
         id
         name
-        Level
-        Xp
+        level
+        xp
         createdAt
         updatedAt
       }
-      user_name
       createdAt
       updatedAt
     }
@@ -167,12 +165,11 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
       player {
         id
         name
-        Level
-        Xp
+        level
+        xp
         createdAt
         updatedAt
       }
-      user_name
       createdAt
       updatedAt
     }
@@ -183,8 +180,8 @@ export const onCreatePlayer = /* GraphQL */ `
     onCreatePlayer {
       id
       name
-      Level
-      Xp
+      level
+      xp
       createdAt
       updatedAt
     }
@@ -195,8 +192,8 @@ export const onUpdatePlayer = /* GraphQL */ `
     onUpdatePlayer {
       id
       name
-      Level
-      Xp
+      level
+      xp
       createdAt
       updatedAt
     }
@@ -207,8 +204,113 @@ export const onDeletePlayer = /* GraphQL */ `
     onDeletePlayer {
       id
       name
-      Level
-      Xp
+      level
+      xp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateTeam = /* GraphQL */ `
+  subscription OnCreateTeam {
+    onCreateTeam {
+      id
+      name
+      member_number
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTeam = /* GraphQL */ `
+  subscription OnUpdateTeam {
+    onUpdateTeam {
+      id
+      name
+      member_number
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTeam = /* GraphQL */ `
+  subscription OnDeleteTeam {
+    onDeleteTeam {
+      id
+      name
+      member_number
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateTeamPlayer = /* GraphQL */ `
+  subscription OnCreateTeamPlayer {
+    onCreateTeamPlayer {
+      id
+      teamId {
+        id
+        name
+        member_number
+        createdAt
+        updatedAt
+      }
+      playerId {
+        id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTeamPlayer = /* GraphQL */ `
+  subscription OnUpdateTeamPlayer {
+    onUpdateTeamPlayer {
+      id
+      teamId {
+        id
+        name
+        member_number
+        createdAt
+        updatedAt
+      }
+      playerId {
+        id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTeamPlayer = /* GraphQL */ `
+  subscription OnDeleteTeamPlayer {
+    onDeleteTeamPlayer {
+      id
+      teamId {
+        id
+        name
+        member_number
+        createdAt
+        updatedAt
+      }
+      playerId {
+        id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
