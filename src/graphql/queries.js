@@ -13,6 +13,7 @@ export const getLeague = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      description
       createdAt
       updatedAt
     }
@@ -35,6 +36,7 @@ export const listLeagues = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        description
         createdAt
         updatedAt
       }
@@ -85,6 +87,7 @@ export const getLeaguePlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        description
         createdAt
         updatedAt
       }
@@ -113,6 +116,7 @@ export const listLeaguePlayers = /* GraphQL */ `
         league_id {
           id
           startDate
+          description
           createdAt
           updatedAt
         }

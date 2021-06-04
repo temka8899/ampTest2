@@ -16,6 +16,7 @@ export const createLeague = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      description
       createdAt
       updatedAt
     }
@@ -36,6 +37,7 @@ export const updateLeague = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      description
       createdAt
       updatedAt
     }
@@ -56,6 +58,7 @@ export const deleteLeague = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      description
       createdAt
       updatedAt
     }
@@ -120,6 +123,7 @@ export const createLeaguePlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        description
         createdAt
         updatedAt
       }
@@ -153,6 +157,7 @@ export const updateLeaguePlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        description
         createdAt
         updatedAt
       }
@@ -186,6 +191,7 @@ export const deleteLeaguePlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        description
         createdAt
         updatedAt
       }

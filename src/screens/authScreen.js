@@ -15,7 +15,9 @@ import {
   StatusBar,
   ColorPropType,
 } from 'react-native';
-import Amplify, {Auth} from 'aws-amplify';
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+import {createGame, createLeague, createPlayer} from '../graphql/mutations';
+import {listGames, listLeagues} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
 import FormInput from '../components/FormInput';
@@ -23,6 +25,7 @@ import {SignUp} from 'aws-amplify-react-native/dist/Auth';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {icons, images, index, theme} from '../constants';
 import {wp, hp, ft, FONTS, COLORS} from '../constants/theme';
+
 import FlashMessage, {
   showMessage,
   hideMessage,
@@ -79,6 +82,7 @@ const SwitchView = ({value, onPress}) => {
     try {
       await Auth.confirmSignUp(username, authCode);
       console.log('✅ Code confirmed');
+      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
       navigation.replace('Tabs');
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
