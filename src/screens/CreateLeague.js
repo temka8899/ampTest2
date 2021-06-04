@@ -29,6 +29,7 @@ import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 Amplify.configure({
   ...awsmobile,
   Analytics: {
@@ -45,7 +46,8 @@ const createLeagueScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const initialState = {name: ''};
   const [formState, setFormState] = useState(initialState);
-  const [startDate, setStartDate] = useState();
+  const [startDate, setStartDate] = useState('2021-06-01');
+  const [date, setdate] = useState('2021-06-01');
   const [leagueGameId, setLeagueGameId] = useState();
   const [leagueDescription, setleagueDescription] = useState();
   function setInput(key, value) {
@@ -57,6 +59,8 @@ const createLeagueScreen = ({navigation}) => {
 
   const setData = option => {
     setChooseData(option);
+    console.log(option.id);
+    setLeagueGameId(option.id);
   };
 
   useEffect(() => {
@@ -186,7 +190,7 @@ const createLeagueScreen = ({navigation}) => {
           borderWidth: 1,
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData}
+          {chooseData.name}
         </Text>
         <Image
           source={icons.drop}
@@ -213,7 +217,7 @@ const createLeagueScreen = ({navigation}) => {
           numberOfLines={4}
           maxLength={150}
           autoCorrect={false}
-          onChangeText={val => setInput('name', val)}
+          onChangeText={val => setleagueDescription(val)}
           // value={formState.name}
           style={styles.input}
           // onChangeText={onChangeNumber}
@@ -231,8 +235,8 @@ const createLeagueScreen = ({navigation}) => {
           mode="date"
           placeholder="select date"
           format="YYYY MM DD"
-          minDate="1921-01-01"
-          maxDate="2016-01-01"
+          minDate="2021-06-01"
+          maxDate="2022-06-01"
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           customStyles={{
@@ -252,8 +256,8 @@ const createLeagueScreen = ({navigation}) => {
               fontFamily: FONTS.brandFont,
             },
           }}
-          onDateChange={date => {
-            setDate(startDate);
+          onDateChange={startDate => {
+            setStartDate(startDate);
           }}
         />
       </View>
