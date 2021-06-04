@@ -80,11 +80,13 @@ const SwitchView = ({value, onPress}) => {
   }
   async function confirmSignUp() {
     try {
-      await Auth.confirmSignUp(username, authCode);
-      console.log('✅ Code confirmed');
+      let temp = await Auth.confirmSignUp(username, authCode);
       addPlayer();
+
+      console.log(temp);
+      console.log('✅ Code confirmed');
+
       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-      navigation.replace('Tabs');
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
     }
@@ -102,6 +104,7 @@ const SwitchView = ({value, onPress}) => {
           },
         }),
       );
+      navigation.replace('Tabs');
       console.log('Player Created');
     } catch (err) {
       console.log('error creating Player:', err);
@@ -286,11 +289,11 @@ const SignInScreen = ({navigation, onPress}) => {
   const signIn = async () => {
     try {
       let response = await Auth.signIn(username, password);
-      console.log('response:>>', response);
-      console.log(
-        'response:>>',
-        response.signInUserSession.accessToken.jwtToken,
-      );
+      // console.log('response:>>', response);
+      // console.log(
+      //   'response:>>',
+      //   response.signInUserSession.accessToken.jwtToken,
+      // );
       navigation.replace('Tabs');
       console.log('✅ Sign In Success');
       setUsername('');

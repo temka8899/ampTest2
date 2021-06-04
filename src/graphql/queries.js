@@ -91,11 +91,22 @@ export const getLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      player {
+      teamPlayer {
         id
-        name
-        level
-        xp
+        teamId {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        playerId {
+          id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -120,11 +131,8 @@ export const listLeaguePlayers = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        player {
+        teamPlayer {
           id
-          name
-          level
-          xp
           createdAt
           updatedAt
         }
@@ -171,7 +179,6 @@ export const getTeam = /* GraphQL */ `
     getTeam(id: $id) {
       id
       name
-      member_number
       createdAt
       updatedAt
     }
@@ -187,7 +194,6 @@ export const listTeams = /* GraphQL */ `
       items {
         id
         name
-        member_number
         createdAt
         updatedAt
       }
@@ -202,7 +208,6 @@ export const getTeamPlayer = /* GraphQL */ `
       teamId {
         id
         name
-        member_number
         createdAt
         updatedAt
       }
@@ -231,7 +236,6 @@ export const listTeamPlayers = /* GraphQL */ `
         teamId {
           id
           name
-          member_number
           createdAt
           updatedAt
         }
