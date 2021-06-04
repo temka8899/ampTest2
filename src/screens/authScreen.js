@@ -62,8 +62,8 @@ const SwitchView = ({value, onPress}) => {
         attributes: {
           email: `${email}`,
           phone_number: `${phone_number}`,
-          'custom:IntLevel': `${Level}`,
-          'custom:Xp': `${Xp}`,
+          'custom:IntLevel': `1`,
+          'custom:Xp': `10`,
           'custom:Admin': `1`,
           'custom:Name': `${name}`,
         },

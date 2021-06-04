@@ -18,7 +18,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export default function Xp({
-  percentage = 100,
+  percentage = 1000,
   radius = 40,
   strokeWidth = 10,
   duration = 500,

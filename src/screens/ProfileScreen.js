@@ -23,8 +23,15 @@ const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('Table Soccer');
   const [modalVisible, setModalVisible] = useState(false);
-  const [chooseDay, setChooseDay] = useState('1');
   const [currentUser, setCurrentUser] = useState();
+  const [adminVisible, setAdminVisible] = useState();
+  const [xpPercent, setXpPercent] = useState();
+
+  useEffect(() => {
+    getUser();
+    isAdmin();
+    getXp();
+  }, []);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -33,16 +40,27 @@ const Profile = ({navigation}) => {
   const setData = option => {
     setChooseData(option);
   };
-  useEffect(() => {
-    getUser();
-  }, []);
+
+  async function getXp() {
+    var max = currentUser.attributes['custom:IntLevel'] * 100;
+    var xp = currentUser.attributes['custom:Xp'];
+    setXpPercent((xp * 100) / max);
+  }
   async function getUser() {
     const user = await Auth.currentUserInfo();
     console.log('USER =======', user);
     setCurrentUser(user);
     setLoading(false);
   }
-
+  async function isAdmin() {
+    if (currentUser.attributes['custom:Admin'] == 1) {
+      // console.log('yeas');
+      setAdminVisible(true);
+    } else {
+      setAdminVisible(false);
+      // console.log('nooo');
+    }
+  }
   if (isLoading) {
     return (
       <View>
@@ -64,9 +82,14 @@ const Profile = ({navigation}) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <TouchableOpacity onPress={() => navigation.navigate('AdminScreen')}>
-          <Image source={icons.plus} style={styles.plusBtn} />
-        </TouchableOpacity>
+        <View>
+          {adminVisible ? (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('AdminScreen')}>
+              <Image source={icons.plus} style={styles.plusBtn} />
+            </TouchableOpacity>
+          ) : null}
+        </View>
         <TouchableOpacity onPress={() => navigation.replace('Auth')}>
           <Image source={icons.logOut} style={styles.plusBtn} />
         </TouchableOpacity>
@@ -90,7 +113,7 @@ const Profile = ({navigation}) => {
             alignItems: 'center',
             justifyContent: 'space-evenly',
           }}>
-          <CircleXp />
+          <CircleXp fill={xpPercent} />
           <View style={{flexDirection: 'column', marginLeft: wp(3)}}>
             <View
               style={{
