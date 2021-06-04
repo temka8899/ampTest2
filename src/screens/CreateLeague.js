@@ -76,10 +76,11 @@ const createLeagueScreen = ({navigation}) => {
         graphqlOperation(createLeague, {
           input: {
             startDate: '2021-08-01',
-            leagueGameId: 'b95b3ca0-9338-442e-9eb8-a323c6114c4c',
+            leagueGameId: '4501c413-7971-4358-ba35-89ac3597eafa',
           },
         }),
       );
+      r;
       console.log('League Created');
     } catch (err) {
       console.log('error creating League:', err);
@@ -96,6 +97,7 @@ const createLeagueScreen = ({navigation}) => {
             </View>
           );
         })}
+        <Button title="Add League" onPress={addLeague()} />
       </SafeAreaView>
     </View>
   );

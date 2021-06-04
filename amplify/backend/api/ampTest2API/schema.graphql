@@ -12,6 +12,13 @@ type Game @model {
 
 type LeaguePlayer @model {
   league_id: League @connection
-  user_id: String!
+  player: Player @connection
   user_name: String!
+}
+
+type Player @model {
+  id: ID!
+  name: String!
+  Level: Int!
+  Xp: Int!
 }

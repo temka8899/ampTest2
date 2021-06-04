@@ -102,7 +102,14 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      user_id
+      player {
+        id
+        name
+        Level
+        Xp
+        createdAt
+        updatedAt
+      }
       user_name
       createdAt
       updatedAt
@@ -126,7 +133,14 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      user_id
+      player {
+        id
+        name
+        Level
+        Xp
+        createdAt
+        updatedAt
+      }
       user_name
       createdAt
       updatedAt
@@ -150,8 +164,51 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      user_id
+      player {
+        id
+        name
+        Level
+        Xp
+        createdAt
+        updatedAt
+      }
       user_name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreatePlayer = /* GraphQL */ `
+  subscription OnCreatePlayer {
+    onCreatePlayer {
+      id
+      name
+      Level
+      Xp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdatePlayer = /* GraphQL */ `
+  subscription OnUpdatePlayer {
+    onUpdatePlayer {
+      id
+      name
+      Level
+      Xp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeletePlayer = /* GraphQL */ `
+  subscription OnDeletePlayer {
+    onDeletePlayer {
+      id
+      name
+      Level
+      Xp
       createdAt
       updatedAt
     }

@@ -88,7 +88,14 @@ export const getLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      user_id
+      player {
+        id
+        name
+        Level
+        Xp
+        createdAt
+        updatedAt
+      }
       user_name
       createdAt
       updatedAt
@@ -110,8 +117,46 @@ export const listLeaguePlayers = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        user_id
+        player {
+          id
+          name
+          Level
+          Xp
+          createdAt
+          updatedAt
+        }
         user_name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getPlayer = /* GraphQL */ `
+  query GetPlayer($id: ID!) {
+    getPlayer(id: $id) {
+      id
+      name
+      Level
+      Xp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listPlayers = /* GraphQL */ `
+  query ListPlayers(
+    $filter: ModelPlayerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        Level
+        Xp
         createdAt
         updatedAt
       }
