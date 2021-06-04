@@ -28,21 +28,22 @@ Amplify.configure({
 });
 
 const createLeagueScreen = ({navigation}) => {
-  const [todos, setTodos] = useState([]);
+  const [GameList, setGameList] = useState([]);
+  const [LeagueList, setLeagueList] = useState([]);
 
   useEffect(() => {
     fetchGames();
     fetchLeague();
   }, []);
+
   async function fetchGames() {
-    const user = await Auth.currentUserInfo();
-    console.log('Attributes =======', user);
-    // userInfo = await Auth.userAttributes(us).then(console.log(userInfo));
+    // const user = await Auth.currentUserInfo();
+    // console.log('Attributes =======', user);
     try {
-      const todoData = await API.graphql(graphqlOperation(listGames));
-      const todos = todoData.data.listGames.items;
-      console.log('Games>>>>', todos);
-      setTodos(todos);
+      const gameData = await API.graphql(graphqlOperation(listGames));
+      const gameList = gameData.data.listGames.items;
+      setGameList(gameList);
+      console.log('Games>>>>', gameList);
       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
       // const user2 = await Auth.currentAuthenticatedUser();
       // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
@@ -61,9 +62,9 @@ const createLeagueScreen = ({navigation}) => {
   async function fetchLeague() {
     try {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
-      const todos = leagueData.data.listLeagues.items;
-      console.log('leagueData', leagueData);
-      console.log('League>>>>>>>>>>>>>>', todos);
+      const leagueList = leagueData.data.listLeagues.items;
+      setLeagueList(leagueList);
+      console.log('League>>>>>>>>>>>>>>', leagueList);
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -88,6 +89,13 @@ const createLeagueScreen = ({navigation}) => {
     <View>
       <SafeAreaView>
         <Text>addLeague screen</Text>
+        {GameList.map((todo, index) => {
+          return (
+            <View>
+              <Text key={index}>{[index, '. ', todo.name]}</Text>
+            </View>
+          );
+        })}
       </SafeAreaView>
     </View>
   );
