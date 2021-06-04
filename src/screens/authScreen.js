@@ -256,7 +256,7 @@ const SwitchView = ({value, onPress}) => {
 };
 
 const SignInScreen = ({navigation, onPress}) => {
-  const [username, setUsername] = useState('temuleon8899@gmail.com');
+  const [username, setUsername] = useState('moogii67890@gmail.com');
   const [password, setPassword] = useState('12345678');
   const signIn = async () => {
     try {

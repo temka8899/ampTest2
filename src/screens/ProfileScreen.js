@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  StyleSheet,
+  ActivityIndicator,
   Image,
   View,
   Modal,
   StatusBar,
+  StyleSheet,
 } from 'react-native';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
@@ -15,12 +16,16 @@ import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import {userData} from '../data/Players';
 import GamePicker from '../components/GamePicker';
-
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import CircleXp from '../components/CircleXp';
 
 const Profile = ({navigation}) => {
+  const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('Table Soccer');
   const [modalVisible, setModalVisible] = useState(false);
+  const [chooseDay, setChooseDay] = useState('1');
+  const [currentUser, setCurrentUser] = useState();
+
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
@@ -28,8 +33,23 @@ const Profile = ({navigation}) => {
   const setData = option => {
     setChooseData(option);
   };
+  useEffect(() => {
+    getUser();
+  }, []);
+  async function getUser() {
+    const user = await Auth.currentUserInfo();
+    console.log('USER =======', user);
+    setCurrentUser(user);
+    setLoading(false);
+  }
 
-  const [chooseDay, setChooseDay] = useState('1');
+  if (isLoading) {
+    return (
+      <View>
+        <ActivityIndicator size={'large'} />
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content" />
@@ -81,7 +101,7 @@ const Profile = ({navigation}) => {
                 // borderWidth: 1,
               }}>
               <Text style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
-                Moogii
+                {currentUser.attributes['custom:Name']}
               </Text>
               <TouchableOpacity>
                 <Image
@@ -105,13 +125,9 @@ const Profile = ({navigation}) => {
               <Text style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
                 Level
               </Text>
-              {userData.map(item => (
-                <>
-                  {item.id === 1 && (
-                    <Text style={styles.level}>{item.level}</Text>
-                  )}
-                </>
-              ))}
+              <Text style={styles.level}>
+                {currentUser.attributes['custom:IntLevel']}
+              </Text>
             </View>
           </View>
         </View>
