@@ -27,31 +27,34 @@ const LeagueListScreen = ({navigation}) => {
           // borderColor: 'red',
           // borderWidth: 1,
           paddingHorizontal: wp(3),
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: 'column',
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
-        <View
-          style={{
-            flex: 1,
-            alignSelf: 'flex-end',
-            borderColor: 'red',
-            borderWidth: 1,
-          }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CreateLeagueScreen')}
-            style={styles.createBtn}>
-            <Text style={styles.createBtnText}>Create League</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CreateLeagueScreen')}
-            style={styles.createBtn}>
-            <Text style={styles.createBtnText}>Create League</Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+
+      <View
+        style={{
+          flex: 1,
+          width: wp(95),
+          alignSelf: 'center',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
+          flexDirection: 'row',
+          // borderWidth: 1,
+          // borderColor: 'red',
+        }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('createGameScreen')}
+          style={styles.createBtn}>
+          <Text style={styles.createBtnText}>Create Game</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CreateLeagueScreen')}
+          style={styles.createBtn}>
+          <Text style={styles.createBtnText}>Create League</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

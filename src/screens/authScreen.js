@@ -132,6 +132,7 @@ const SwitchView = ({value, onPress}) => {
             />
             <FormInput
               autoCorrect={false}
+              autoCapitalize="none"
               // value={signUpEmail}
               onChangeText={text => [
                 setSignUpEmail(text),
@@ -166,6 +167,7 @@ const SwitchView = ({value, onPress}) => {
 
             <FormInput
               autoCorrect={false}
+              whichScreen
               // value={signUpPassword}
               onChangeText={text => [setPhoneNumber(`+976${text}`)]}
               placeholder="Phone number"
@@ -266,7 +268,7 @@ const SignInScreen = ({navigation, onPress}) => {
         'response:>>',
         response.signInUserSession.accessToken.jwtToken,
       );
-      navigation.replace('Tabs');
+      navigation.replace('Home');
       console.log('✅ Sign In Success');
       setUsername('');
       setPassword('');
