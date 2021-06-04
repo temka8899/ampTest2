@@ -25,7 +25,9 @@ const Profile = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState();
   const [adminVisible, setAdminVisible] = useState();
-  const [xpPercent, setXpPercent] = useState();
+  const [xpPercent, setXpPercent] = useState('100');
+  const [xp, setXp] = useState('1');
+  const [level, setLevel] = useState('1');
 
   useEffect(() => {
     getUser();
@@ -42,6 +44,21 @@ const Profile = ({navigation}) => {
   };
 
   async function getXp() {
+    try {
+      const user = await Auth.currentUserInfo();
+      console.log(user);
+      const result = await Auth.updateUserAttributes(user, {
+        'custom:IntLevel': `5`,
+        'custom:Xp': `390`,
+        'custom:Name': `Monkhoo`,
+        'custom:Admin': `1`,
+      });
+    } catch (err) {
+      console.log('aldaa', err);
+    }
+    console.log('fdgbdg' + result);
+
+    console.log('mai');
     var max = currentUser.attributes['custom:IntLevel'] * 100;
     var xp = currentUser.attributes['custom:Xp'];
     setXpPercent((xp * 100) / max);

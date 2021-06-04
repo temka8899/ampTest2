@@ -15,13 +15,14 @@ import {userData} from '../data/Players';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 const CircleXp = props => {
+  console.log(props.fill);
   return (
     <View>
       <AnimatedCircularProgress
         {...props}
         size={wp(31.5)}
         width={wp(1.5)}
-        fill={fill}
+        fill={parseInt(props.fill)}
         rotation={0}
         duration={750}
         lineCap="round"

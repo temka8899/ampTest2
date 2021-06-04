@@ -43,8 +43,8 @@ const SwitchView = ({value, onPress}) => {
   const [name, setSignUpName] = useState('');
   const [phone_number, setPhoneNumber] = useState('+97688888888');
   const [authCode, setConfirmCode] = useState('');
-  const [Level, setLevel] = useState(0);
-  const [Xp, setXp] = useState(0);
+  const [Level, setLevel] = useState('1');
+  const [Xp, setXp] = useState('1');
 
   const [currentUser, setCurrentUser] = useState();
   // export default currentUser;
