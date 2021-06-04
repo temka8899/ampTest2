@@ -75,12 +75,11 @@ const createLeagueScreen = ({navigation}) => {
       await API.graphql(
         graphqlOperation(createLeague, {
           input: {
-            startDate: '2021-08-01',
-            leagueGameId: '4501c413-7971-4358-ba35-89ac3597eafa',
+            startDate: '2021-07-01',
+            leagueGameId: 'bbd83f8f-0dad-4ece-a0bf-63d76a148a2d',
           },
         }),
       );
-      r;
       console.log('League Created');
     } catch (err) {
       console.log('error creating League:', err);
@@ -97,7 +96,7 @@ const createLeagueScreen = ({navigation}) => {
             </View>
           );
         })}
-        <Button title="Add League" onPress={addLeague()} />
+        <Button title="Add League" onPress={() => addLeague()} />
       </SafeAreaView>
     </View>
   );

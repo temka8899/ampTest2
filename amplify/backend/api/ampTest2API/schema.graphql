@@ -13,12 +13,23 @@ type Game @model {
 type LeaguePlayer @model {
   league_id: League @connection
   player: Player @connection
-  user_name: String!
 }
 
 type Player @model {
   id: ID!
   name: String!
-  Level: Int!
-  Xp: Int!
+  level: Int!
+  xp: Int!
+}
+
+type Team @model {
+  id: ID!
+  name: String!
+  member_number: Int!
+}
+
+type TeamPlayer @model {
+  id: ID!
+  teamId: Team @connection
+  playerId: Player @connection
 }
