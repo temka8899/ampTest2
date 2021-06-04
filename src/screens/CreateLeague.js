@@ -36,7 +36,7 @@ const createLeagueScreen = ({navigation}) => {
   const [uploadImage, setUploadImage] = useState('');
   const [GameList, setGameList] = useState([]);
   const [LeagueList, setLeagueList] = useState([]);
-  const [chooseData, setChooseData] = useState('Table Soccer');
+  const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -156,6 +156,7 @@ const createLeagueScreen = ({navigation}) => {
           justifyContent: 'space-between',
           paddingHorizontal: wp(3),
           borderBottomColor: COLORS.brand,
+          borderTopColor: COLORS.brand,
           borderWidth: 1,
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
@@ -173,6 +174,15 @@ const createLeagueScreen = ({navigation}) => {
         nRequestClose={() => changeModalVisible(false)}>
         <GamePicker changeModalVisible={changeModalVisible} setData={setData} />
       </Modal>
+      <TextInput
+        onChangeText={val => setInput('name', val)}
+        // value={formState.name}
+        style={styles.input}
+        // onChangeText={onChangeNumber}
+        // value={number}
+        placeholder="Enter name"
+        placeholderTextColor={COLORS.purpleText}
+      />
     </SafeAreaView>
     // <View>
     //   <SafeAreaView>
@@ -195,6 +205,17 @@ const styles = StyleSheet.create({
     width: wp(7.4),
     height: hp(3.2),
     borderColor: 'white',
+  },
+  input: {
+    height: hp(4),
+    width: wp(70),
+    color: COLORS.white,
+    fontFamily: FONTS.brandFont,
+    fontSize: RFPercentage(1.5),
+    padding: 0,
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center',
   },
 });
 export default createLeagueScreen;
