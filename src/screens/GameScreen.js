@@ -16,6 +16,7 @@ import {
 import {icons, images, index, theme} from '../constants';
 import {wp, hp, ft, COLORS, FONTS} from '../constants/theme';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
+import {listPlayers, listLeagues, listTeams} from '../graphql/queries';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import color from 'color';
 import awsmobile from '../aws-exports';
@@ -105,6 +106,26 @@ const GameScreen = ({navigation}) => {
   }
 
   async function addPlayer(username, p_id) {
+    try {
+      const playerData = await API.graphql(graphqlOperation(listPlayers));
+      const todos = playerData.data.listPlayers.items;
+      console.log('Players>>>>>>>>>>>>>>', todos);
+
+      for (var i = 0; i < todos.length; i++) {
+        if (todos[i].c_id == p_id) {
+          console.log('found>>>>>>>>>>>>>>');
+          console.log(todos[i].c_id);
+          console.log(p_id);
+        } else {
+          console.log(todos[i].c_id);
+          console.log(p_id);
+        }
+        console.log('>>>>>>>>>>>>>>>>');
+      }
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+
     try {
       await API.graphql(
         graphqlOperation(createPlayer, {
