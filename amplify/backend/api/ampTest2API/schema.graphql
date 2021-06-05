@@ -12,6 +12,7 @@ type Game @model {
 }
 
 type LeaguePlayer @model {
+  id: ID!
   league_id: League @connection
   teamPlayer: TeamPlayer @connection
 }

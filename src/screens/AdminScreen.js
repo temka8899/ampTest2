@@ -56,6 +56,23 @@ const AdminScreen = ({navigation}) => {
           <Text style={styles.createBtnText}>Create League</Text>
         </TouchableOpacity>
       </View>
+      <View
+        style={{
+          flex: 1,
+          width: wp(100),
+          alignSelf: 'center',
+          justifyContent: 'space-evenly',
+          alignItems: 'flex-end',
+          flexDirection: 'row',
+          // borderWidth: 1,
+          // borderColor: 'red',
+        }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('createTeamScreen')}
+          style={styles.createBtn}>
+          <Text style={styles.createBtnText}>Team</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

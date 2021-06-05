@@ -15,7 +15,12 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import ImagePicker from 'react-native-image-crop-picker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague, createTeam} from '../graphql/mutations';
-import {listGames, listLeagues} from '../graphql/queries';
+import {
+  listGames,
+  listLeagues,
+  listPlayers,
+  listTeamPlayers,
+} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import GamePicker from '../components/GamePicker';
@@ -119,18 +124,6 @@ const createLeagueScreen = ({navigation}) => {
     }
   }
 
-  async function addTeam() {
-    try {
-      await API.graphql(
-        graphqlOperation(createTeam, {
-          input: {},
-        }),
-      );
-      console.log('League Created');
-    } catch (err) {
-      console.log('error creating League:', err);
-    }
-  }
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content"></StatusBar>

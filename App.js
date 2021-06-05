@@ -9,6 +9,8 @@ import ParticipatesScreen from './src/screens/ParticipatesScreen';
 import createLeagueScreen from './src/screens/CreateLeague';
 import createGameScreen from './src/screens/CreateGame';
 import AdminScreen from './src/screens/AdminScreen';
+import createTeamScreen from './src/screens/CreateTeam';
+import {createTeam} from './src/graphql/mutations';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +33,7 @@ function App() {
           name="ParticipatesScreen"
           component={ParticipatesScreen}
         />
+        <Stack.Screen name="createTeamScreen" component={createTeamScreen} />
         <Stack.Screen name="createGameScreen" component={createGameScreen} />
         <Stack.Screen name="AdminScreen" component={AdminScreen} />
       </Stack.Navigator>

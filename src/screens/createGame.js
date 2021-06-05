@@ -79,28 +79,26 @@ const createGameScreen = ({navigation}) => {
       contentType: 'image/jpeg',
       level: 'public',
     })
-      .then(data => console.log('Blobber Upload to S3 Success>>>>', data))
+      .then(console.log('Upload Success'))
       .catch(err => console.log('Blobber error>>>>', err));
   };
   async function addGame() {
     console.log('FormState name: ', formState.name);
     console.log('Filename: ', file123.name);
     try {
-      blobber(file123);
+      await blobber(file123);
       const todo = {...formState};
       setTodos([...todos, todo]);
       setFormState(initialState);
+      console.log('Success');
       await API.graphql(
         graphqlOperation(createGame, {
           input: {
             name: formState.name,
             image: fileName123,
-
-            // image: file123.name,
           },
         }),
       );
-      //console.log('>>>>>>>>>>>>>>>>>', todo);
     } catch (err) {
       console.log('error creating todo:', err);
     }
