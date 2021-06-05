@@ -20,8 +20,9 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import color from 'color';
 import awsmobile from '../aws-exports';
 import {DATA} from '../data/DATA';
-// import Auth from '@aws-amplify/auth';
+import LinearGradient from 'react-native-linear-gradient';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+import {listLeagues} from '../graphql/queries';
 
 Amplify.configure({
   ...awsmobile,
@@ -31,27 +32,26 @@ Amplify.configure({
 });
 
 const Item = ({item, onPress, backgroundColor, textColor}) => (
-  <View style={{marginHorizontal: wp(1)}}>
-    <TouchableOpacity
-      onPress={onPress}
-      style={[[styles.item, backgroundColor], {borderRadius: 10}]}>
+  <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
+    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <ImageBackground
         source={item.image}
-        style={[
-          styles.image,
-          {
-            width: wp(69.3),
-            height: hp(42),
-            // shadowOffset: {width: -wp(50), height: -hp(50)},
-          },
-        ]}>
-        <View style={{flex: 1}}></View>
+        style={{
+          width: wp(63.3),
+          height: hp(39),
+        }}
+        imageStyle={{borderRadius: 40}}>
+        <LinearGradient
+          style={{flex: 1, borderRadius: 40}}
+          start={{x: 1, y: 0}}
+          end={{x: 1, y: 1}}
+          colors={['#00000000', '#000']}>
+          {/* <Text>dsfgh</Text> */}
+        </LinearGradient>
       </ImageBackground>
     </TouchableOpacity>
   </View>
 );
-// box-shadow: inset 0px -131px 59px rgba(0, 0, 0, 0.71);
-// border-radius: 40px;
 
 async function getUserData() {
   const user = Auth.currentUserInfo();
@@ -59,12 +59,39 @@ async function getUserData() {
 }
 
 const GameScreen = ({navigation}) => {
+  useEffect(() => {
+    fetchLeagues();
+  }, []);
+  const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [playerId, setId] = useState('');
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
   const [name2, setName2] = useState('');
+
+  async function fetchLeagues() {
+    // const user = await Auth.currentUserInfo();
+    // console.log('Attributes =======', user);
+    try {
+      const leagueData = await API.graphql(graphqlOperation(listLeagues));
+      const leagueList = leagueData.data.listLeagues.items;
+      setLeagueList(leagueList);
+      console.log('Leagues>>>>', leagueList);
+      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      // const user2 = await Auth.currentAuthenticatedUser();
+      // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
+      // const result = await Auth.updateUserAttributes(user2, {
+      //   'custom:IntLevel': `5`,
+      //   'custom:Xp': `390`,
+      //   'custom:Name': `Mkoogii`,
+      //   'custom:Admin': `1`,
+      // });
+      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
 
   const renderItem = ({item}) => {
     // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
@@ -178,22 +205,6 @@ const GameScreen = ({navigation}) => {
             extraData={selectedId}
           />
         </View>
-        {/* <View
-          style={{
-            width: 150,
-            height: 150,
-            backgroundColor: 'white',
-            shadowColor: 'red',
-            shadowOffset: {
-              width: 0,
-              height: -12,
-            },
-            shadowOpacity: 0.58,
-            shadowRadius: 16.0,
-
-            elevation: 24,
-          }}
-        /> */}
       </SafeAreaView>
     </View>
   );
