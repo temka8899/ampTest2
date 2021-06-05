@@ -17,10 +17,10 @@ import {createGame, createLeague} from '../graphql/mutations';
 import {listGames, listLeagues} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import FormInput from '../components/FormInput';
+
 Amplify.configure({
   ...awsmobile,
   Analytics: {

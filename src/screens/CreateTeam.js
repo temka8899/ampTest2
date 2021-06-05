@@ -73,7 +73,7 @@ const createTeamScreen = ({navigation}) => {
       await API.graphql(
         graphqlOperation(createTeamPlayer, {
           input: {
-            teamPlayerTeamIdId: '1c9bfdff-087d-4702-8659-cc7f362bc431',
+            teamPlayerTeamIdId: '61ef307a-1d25-469d-9cf7-1f130b4f9b08',
             teamPlayerPlayerIdId: '066b97a8-36be-4872-9fb9-358ed8582661',
           },
         }),
@@ -82,6 +82,7 @@ const createTeamScreen = ({navigation}) => {
     } catch (err) {
       console.log('error creating League:', err);
     }
+    fetchTeamPlayers();
   }
 
   async function fetchTeam() {
