@@ -1,6 +1,48 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createGame = /* GraphQL */ `
+  mutation CreateGame(
+    $input: CreateGameInput!
+    $condition: ModelGameConditionInput
+  ) {
+    createGame(input: $input, condition: $condition) {
+      id
+      name
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateGame = /* GraphQL */ `
+  mutation UpdateGame(
+    $input: UpdateGameInput!
+    $condition: ModelGameConditionInput
+  ) {
+    updateGame(input: $input, condition: $condition) {
+      id
+      name
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteGame = /* GraphQL */ `
+  mutation DeleteGame(
+    $input: DeleteGameInput!
+    $condition: ModelGameConditionInput
+  ) {
+    deleteGame(input: $input, condition: $condition) {
+      id
+      name
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createLeague = /* GraphQL */ `
   mutation CreateLeague(
     $input: CreateLeagueInput!
@@ -64,43 +106,244 @@ export const deleteLeague = /* GraphQL */ `
     }
   }
 `;
-export const createGame = /* GraphQL */ `
-  mutation CreateGame(
-    $input: CreateGameInput!
-    $condition: ModelGameConditionInput
+export const createPlayer = /* GraphQL */ `
+  mutation CreatePlayer(
+    $input: CreatePlayerInput!
+    $condition: ModelPlayerConditionInput
   ) {
-    createGame(input: $input, condition: $condition) {
+    createPlayer(input: $input, condition: $condition) {
       id
+      c_id
       name
-      image
+      level
+      xp
       createdAt
       updatedAt
     }
   }
 `;
-export const updateGame = /* GraphQL */ `
-  mutation UpdateGame(
-    $input: UpdateGameInput!
-    $condition: ModelGameConditionInput
+export const updatePlayer = /* GraphQL */ `
+  mutation UpdatePlayer(
+    $input: UpdatePlayerInput!
+    $condition: ModelPlayerConditionInput
   ) {
-    updateGame(input: $input, condition: $condition) {
+    updatePlayer(input: $input, condition: $condition) {
       id
+      c_id
       name
-      image
+      level
+      xp
       createdAt
       updatedAt
     }
   }
 `;
-export const deleteGame = /* GraphQL */ `
-  mutation DeleteGame(
-    $input: DeleteGameInput!
-    $condition: ModelGameConditionInput
+export const deletePlayer = /* GraphQL */ `
+  mutation DeletePlayer(
+    $input: DeletePlayerInput!
+    $condition: ModelPlayerConditionInput
   ) {
-    deleteGame(input: $input, condition: $condition) {
+    deletePlayer(input: $input, condition: $condition) {
       id
+      c_id
       name
-      image
+      level
+      xp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTeam = /* GraphQL */ `
+  mutation CreateTeam(
+    $input: CreateTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    createTeam(input: $input, condition: $condition) {
+      id
+      league {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        description
+        createdAt
+        updatedAt
+      }
+      name
+      win
+      lose
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTeam = /* GraphQL */ `
+  mutation UpdateTeam(
+    $input: UpdateTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    updateTeam(input: $input, condition: $condition) {
+      id
+      league {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        description
+        createdAt
+        updatedAt
+      }
+      name
+      win
+      lose
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTeam = /* GraphQL */ `
+  mutation DeleteTeam(
+    $input: DeleteTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    deleteTeam(input: $input, condition: $condition) {
+      id
+      league {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        description
+        createdAt
+        updatedAt
+      }
+      name
+      win
+      lose
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTeamPlayer = /* GraphQL */ `
+  mutation CreateTeamPlayer(
+    $input: CreateTeamPlayerInput!
+    $condition: ModelTeamPlayerConditionInput
+  ) {
+    createTeamPlayer(input: $input, condition: $condition) {
+      id
+      team {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTeamPlayer = /* GraphQL */ `
+  mutation UpdateTeamPlayer(
+    $input: UpdateTeamPlayerInput!
+    $condition: ModelTeamPlayerConditionInput
+  ) {
+    updateTeamPlayer(input: $input, condition: $condition) {
+      id
+      team {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTeamPlayer = /* GraphQL */ `
+  mutation DeleteTeamPlayer(
+    $input: DeleteTeamPlayerInput!
+    $condition: ModelTeamPlayerConditionInput
+  ) {
+    deleteTeamPlayer(input: $input, condition: $condition) {
+      id
+      team {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -127,22 +370,12 @@ export const createLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      teamPlayer {
+      player {
         id
-        teamId {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        playerId {
-          id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
+        c_id
+        name
+        level
+        xp
         createdAt
         updatedAt
       }
@@ -172,22 +405,12 @@ export const updateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      teamPlayer {
+      player {
         id
-        teamId {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        playerId {
-          id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
+        c_id
+        name
+        level
+        xp
         createdAt
         updatedAt
       }
@@ -217,181 +440,9 @@ export const deleteLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      teamPlayer {
+      player {
         id
-        teamId {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        playerId {
-          id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createPlayer = /* GraphQL */ `
-  mutation CreatePlayer(
-    $input: CreatePlayerInput!
-    $condition: ModelPlayerConditionInput
-  ) {
-    createPlayer(input: $input, condition: $condition) {
-      id
-      name
-      level
-      xp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updatePlayer = /* GraphQL */ `
-  mutation UpdatePlayer(
-    $input: UpdatePlayerInput!
-    $condition: ModelPlayerConditionInput
-  ) {
-    updatePlayer(input: $input, condition: $condition) {
-      id
-      name
-      level
-      xp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deletePlayer = /* GraphQL */ `
-  mutation DeletePlayer(
-    $input: DeletePlayerInput!
-    $condition: ModelPlayerConditionInput
-  ) {
-    deletePlayer(input: $input, condition: $condition) {
-      id
-      name
-      level
-      xp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createTeam = /* GraphQL */ `
-  mutation CreateTeam(
-    $input: CreateTeamInput!
-    $condition: ModelTeamConditionInput
-  ) {
-    createTeam(input: $input, condition: $condition) {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateTeam = /* GraphQL */ `
-  mutation UpdateTeam(
-    $input: UpdateTeamInput!
-    $condition: ModelTeamConditionInput
-  ) {
-    updateTeam(input: $input, condition: $condition) {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteTeam = /* GraphQL */ `
-  mutation DeleteTeam(
-    $input: DeleteTeamInput!
-    $condition: ModelTeamConditionInput
-  ) {
-    deleteTeam(input: $input, condition: $condition) {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createTeamPlayer = /* GraphQL */ `
-  mutation CreateTeamPlayer(
-    $input: CreateTeamPlayerInput!
-    $condition: ModelTeamPlayerConditionInput
-  ) {
-    createTeamPlayer(input: $input, condition: $condition) {
-      id
-      teamId {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      playerId {
-        id
-        name
-        level
-        xp
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateTeamPlayer = /* GraphQL */ `
-  mutation UpdateTeamPlayer(
-    $input: UpdateTeamPlayerInput!
-    $condition: ModelTeamPlayerConditionInput
-  ) {
-    updateTeamPlayer(input: $input, condition: $condition) {
-      id
-      teamId {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      playerId {
-        id
-        name
-        level
-        xp
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteTeamPlayer = /* GraphQL */ `
-  mutation DeleteTeamPlayer(
-    $input: DeleteTeamPlayerInput!
-    $condition: ModelTeamPlayerConditionInput
-  ) {
-    deleteTeamPlayer(input: $input, condition: $condition) {
-      id
-      teamId {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      playerId {
-        id
+        c_id
         name
         level
         xp

@@ -1,6 +1,39 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateGame = /* GraphQL */ `
+  subscription OnCreateGame {
+    onCreateGame {
+      id
+      name
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateGame = /* GraphQL */ `
+  subscription OnUpdateGame {
+    onUpdateGame {
+      id
+      name
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteGame = /* GraphQL */ `
+  subscription OnDeleteGame {
+    onDeleteGame {
+      id
+      name
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateLeague = /* GraphQL */ `
   subscription OnCreateLeague {
     onCreateLeague {
@@ -55,34 +88,217 @@ export const onDeleteLeague = /* GraphQL */ `
     }
   }
 `;
-export const onCreateGame = /* GraphQL */ `
-  subscription OnCreateGame {
-    onCreateGame {
+export const onCreatePlayer = /* GraphQL */ `
+  subscription OnCreatePlayer {
+    onCreatePlayer {
       id
+      c_id
       name
-      image
+      level
+      xp
       createdAt
       updatedAt
     }
   }
 `;
-export const onUpdateGame = /* GraphQL */ `
-  subscription OnUpdateGame {
-    onUpdateGame {
+export const onUpdatePlayer = /* GraphQL */ `
+  subscription OnUpdatePlayer {
+    onUpdatePlayer {
       id
+      c_id
       name
-      image
+      level
+      xp
       createdAt
       updatedAt
     }
   }
 `;
-export const onDeleteGame = /* GraphQL */ `
-  subscription OnDeleteGame {
-    onDeleteGame {
+export const onDeletePlayer = /* GraphQL */ `
+  subscription OnDeletePlayer {
+    onDeletePlayer {
       id
+      c_id
       name
-      image
+      level
+      xp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateTeam = /* GraphQL */ `
+  subscription OnCreateTeam {
+    onCreateTeam {
+      id
+      league {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        description
+        createdAt
+        updatedAt
+      }
+      name
+      win
+      lose
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTeam = /* GraphQL */ `
+  subscription OnUpdateTeam {
+    onUpdateTeam {
+      id
+      league {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        description
+        createdAt
+        updatedAt
+      }
+      name
+      win
+      lose
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTeam = /* GraphQL */ `
+  subscription OnDeleteTeam {
+    onDeleteTeam {
+      id
+      league {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        description
+        createdAt
+        updatedAt
+      }
+      name
+      win
+      lose
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateTeamPlayer = /* GraphQL */ `
+  subscription OnCreateTeamPlayer {
+    onCreateTeamPlayer {
+      id
+      team {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTeamPlayer = /* GraphQL */ `
+  subscription OnUpdateTeamPlayer {
+    onUpdateTeamPlayer {
+      id
+      team {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTeamPlayer = /* GraphQL */ `
+  subscription OnDeleteTeamPlayer {
+    onDeleteTeamPlayer {
+      id
+      team {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -106,22 +322,12 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      teamPlayer {
+      player {
         id
-        teamId {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        playerId {
-          id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
+        c_id
+        name
+        level
+        xp
         createdAt
         updatedAt
       }
@@ -148,22 +354,12 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      teamPlayer {
+      player {
         id
-        teamId {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        playerId {
-          id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
+        c_id
+        name
+        level
+        xp
         createdAt
         updatedAt
       }
@@ -190,154 +386,9 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      teamPlayer {
+      player {
         id
-        teamId {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        playerId {
-          id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreatePlayer = /* GraphQL */ `
-  subscription OnCreatePlayer {
-    onCreatePlayer {
-      id
-      name
-      level
-      xp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdatePlayer = /* GraphQL */ `
-  subscription OnUpdatePlayer {
-    onUpdatePlayer {
-      id
-      name
-      level
-      xp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeletePlayer = /* GraphQL */ `
-  subscription OnDeletePlayer {
-    onDeletePlayer {
-      id
-      name
-      level
-      xp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateTeam = /* GraphQL */ `
-  subscription OnCreateTeam {
-    onCreateTeam {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateTeam = /* GraphQL */ `
-  subscription OnUpdateTeam {
-    onUpdateTeam {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteTeam = /* GraphQL */ `
-  subscription OnDeleteTeam {
-    onDeleteTeam {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateTeamPlayer = /* GraphQL */ `
-  subscription OnCreateTeamPlayer {
-    onCreateTeamPlayer {
-      id
-      teamId {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      playerId {
-        id
-        name
-        level
-        xp
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateTeamPlayer = /* GraphQL */ `
-  subscription OnUpdateTeamPlayer {
-    onUpdateTeamPlayer {
-      id
-      teamId {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      playerId {
-        id
-        name
-        level
-        xp
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteTeamPlayer = /* GraphQL */ `
-  subscription OnDeleteTeamPlayer {
-    onDeleteTeamPlayer {
-      id
-      teamId {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      playerId {
-        id
+        c_id
         name
         level
         xp

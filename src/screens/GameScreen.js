@@ -15,12 +15,20 @@ import {
 } from 'react-native';
 import {icons, images, index, theme} from '../constants';
 import {wp, hp, ft, COLORS, FONTS} from '../constants/theme';
+import {createGame, createLeague, createPlayer} from '../graphql/mutations';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import color from 'color';
-
+import awsmobile from '../aws-exports';
 import {DATA} from '../data/DATA';
 // import Auth from '@aws-amplify/auth';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+
+Amplify.configure({
+  ...awsmobile,
+  Analytics: {
+    disabled: true,
+  },
+});
 
 const Item = ({item, onPress, backgroundColor, textColor}) => (
   <View style={{marginHorizontal: wp(1)}}>
@@ -52,8 +60,12 @@ async function getUserData() {
 
 const GameScreen = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
-
   const [selectedId, setSelectedId] = useState(null);
+  const [playerId, setId] = useState('');
+  const [name, setName] = useState();
+  const [greet, setGreet] = useState('');
+  const [name2, setName2] = useState('');
+
   const renderItem = ({item}) => {
     // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
@@ -73,8 +85,6 @@ const GameScreen = ({navigation}) => {
     );
   };
 
-  const [greet, setGreet] = useState('');
-
   const findGreet = () => {
     const hrs = new Date().getHours();
     if (hrs === 0 || hrs < 12) return setGreet('Morning');
@@ -86,17 +96,32 @@ const GameScreen = ({navigation}) => {
     findGreet();
     getName();
   }, []);
-  const [name, setName] = useState();
+
   async function getName() {
     const user = await Auth.currentUserInfo();
     setLoading(false);
-
-    console.log('Name =======', user);
     setName(user.attributes['custom:Name']);
+    addPlayer(user.attributes['custom:Name'], user.username);
   }
 
-  // const user = Auth.currentUserInfo();
-  // console.log('Name =======', user['attributes']['custom:Name']);
+  async function addPlayer(username, p_id) {
+    try {
+      await API.graphql(
+        graphqlOperation(createPlayer, {
+          input: {
+            c_id: p_id,
+            name: username,
+            xp: 1,
+            level: 1,
+          },
+        }),
+      );
+      console.log('Player Created');
+    } catch (err) {
+      console.log('error creating Player:', err);
+    }
+  }
+
   if (isLoading) {
     return (
       <View>

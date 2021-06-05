@@ -59,6 +59,9 @@ const createTeamScreen = ({navigation}) => {
         graphqlOperation(createTeam, {
           input: {
             name: 'team4',
+            teamLeagueId: 'be297a57-2b43-450d-8c62-733e6dc7829d',
+            win: 0,
+            lose: 0,
           },
         }),
       );
@@ -73,8 +76,8 @@ const createTeamScreen = ({navigation}) => {
       await API.graphql(
         graphqlOperation(createTeamPlayer, {
           input: {
-            teamPlayerTeamIdId: '61ef307a-1d25-469d-9cf7-1f130b4f9b08',
-            teamPlayerPlayerIdId: '066b97a8-36be-4872-9fb9-358ed8582661',
+            teamPlayerTeamId: '1c9bfdff-087d-4702-8659-cc7f362bc431',
+            teamPlayerPlayerId: '27de6d33-0bcd-4a47-97e0-7419259d8c88',
           },
         }),
       );
