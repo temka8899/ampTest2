@@ -23,7 +23,6 @@ import awsmobile from '../aws-exports';
 import {DATA} from '../data/DATA';
 import LinearGradient from 'react-native-linear-gradient';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {listLeagues} from '../graphql/queries';
 
 Amplify.configure({
   ...awsmobile,
@@ -136,7 +135,7 @@ const GameScreen = ({navigation}) => {
     try {
       const playerData = await API.graphql(graphqlOperation(listPlayers));
       const todos = playerData.data.listPlayers.items;
-      console.log('Players>>>>>>>>>>>>>>', todos);
+      console.log('Players>>>>>>>>>>>>>>', todos[0].name);
 
       for (var i = 0; i < todos.length; i++) {
         if (todos[i].c_id == p_id) {
@@ -144,6 +143,7 @@ const GameScreen = ({navigation}) => {
           console.log(todos[i].c_id);
           console.log(p_id);
         } else {
+          // addPlayer();
           console.log(todos[i].c_id);
           console.log(p_id);
         }
