@@ -76,14 +76,13 @@ const SwitchView = ({value, onPress}) => {
       console.log('❌ Error signing up...', error);
     }
   }
+
   async function confirmSignUp() {
     try {
       let temp = await Auth.confirmSignUp(username, authCode);
-      addPlayer();
-
       console.log(temp);
       console.log('✅ Code confirmed');
-
+      onPress(1);
       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
@@ -302,7 +301,7 @@ const SignInScreen = ({navigation, onPress}) => {
           paddingVertical: hp(2),
         }}>
         <FormInput
-          autoCapitalize={false}
+          autoCapitalize="none"
           autoCorrect={false}
           placeholder="Email"
           keyboardType="email-address"
