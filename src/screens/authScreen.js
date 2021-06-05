@@ -104,7 +104,8 @@ const SwitchView = ({value, onPress}) => {
           },
         }),
       );
-      navigation.replace('Tabs');
+      onPress(1);
+      // navigation.replace('Tabs');
       console.log('Player Created');
     } catch (err) {
       console.log('error creating Player:', err);
