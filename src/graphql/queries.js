@@ -1,6 +1,35 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getGame = /* GraphQL */ `
+  query GetGame($id: ID!) {
+    getGame(id: $id) {
+      id
+      name
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listGames = /* GraphQL */ `
+  query ListGames(
+    $filter: ModelGameFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGames(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getLeague = /* GraphQL */ `
   query GetLeague($id: ID!) {
     getLeague(id: $id) {
@@ -44,28 +73,150 @@ export const listLeagues = /* GraphQL */ `
     }
   }
 `;
-export const getGame = /* GraphQL */ `
-  query GetGame($id: ID!) {
-    getGame(id: $id) {
+export const getPlayer = /* GraphQL */ `
+  query GetPlayer($id: ID!) {
+    getPlayer(id: $id) {
       id
+      c_id
       name
-      image
+      level
+      xp
       createdAt
       updatedAt
     }
   }
 `;
-export const listGames = /* GraphQL */ `
-  query ListGames(
-    $filter: ModelGameFilterInput
+export const listPlayers = /* GraphQL */ `
+  query ListPlayers(
+    $filter: ModelPlayerFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listGames(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        c_id
         name
-        image
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getTeam = /* GraphQL */ `
+  query GetTeam($id: ID!) {
+    getTeam(id: $id) {
+      id
+      league {
+        id
+        startDate
+        game {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        description
+        createdAt
+        updatedAt
+      }
+      name
+      win
+      lose
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTeams = /* GraphQL */ `
+  query ListTeams(
+    $filter: ModelTeamFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTeams(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getTeamPlayer = /* GraphQL */ `
+  query GetTeamPlayer($id: ID!) {
+    getTeamPlayer(id: $id) {
+      id
+      team {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTeamPlayers = /* GraphQL */ `
+  query ListTeamPlayers(
+    $filter: ModelTeamPlayerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTeamPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        team {
+          id
+          name
+          win
+          lose
+          createdAt
+          updatedAt
+        }
+        player {
+          id
+          c_id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -91,22 +242,12 @@ export const getLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      teamPlayer {
+      player {
         id
-        teamId {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        playerId {
-          id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
+        c_id
+        name
+        level
+        xp
         createdAt
         updatedAt
       }
@@ -131,116 +272,9 @@ export const listLeaguePlayers = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        teamPlayer {
+        player {
           id
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getPlayer = /* GraphQL */ `
-  query GetPlayer($id: ID!) {
-    getPlayer(id: $id) {
-      id
-      name
-      level
-      xp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listPlayers = /* GraphQL */ `
-  query ListPlayers(
-    $filter: ModelPlayerFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        level
-        xp
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getTeam = /* GraphQL */ `
-  query GetTeam($id: ID!) {
-    getTeam(id: $id) {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listTeams = /* GraphQL */ `
-  query ListTeams(
-    $filter: ModelTeamFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listTeams(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getTeamPlayer = /* GraphQL */ `
-  query GetTeamPlayer($id: ID!) {
-    getTeamPlayer(id: $id) {
-      id
-      teamId {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      playerId {
-        id
-        name
-        level
-        xp
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listTeamPlayers = /* GraphQL */ `
-  query ListTeamPlayers(
-    $filter: ModelTeamPlayerFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listTeamPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        teamId {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        playerId {
-          id
+          c_id
           name
           level
           xp

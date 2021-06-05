@@ -1,3 +1,9 @@
+type Game @model {
+  id: ID!
+  name: String!
+  image: String
+}
+
 type League @model {
   id: ID!
   startDate: String!
@@ -5,20 +11,9 @@ type League @model {
   description: String
 }
 
-type Game @model {
-  id: ID!
-  name: String!
-  image: String
-}
-
-type LeaguePlayer @model {
-  id: ID!
-  league_id: League @connection
-  teamPlayer: TeamPlayer @connection
-}
-
 type Player @model {
   id: ID!
+  c_id: String!
   name: String!
   level: Int!
   xp: Int!
@@ -26,11 +21,20 @@ type Player @model {
 
 type Team @model {
   id: ID!
+  league: League @connection
   name: String!
+  win: Int
+  lose: Int
 }
 
 type TeamPlayer @model {
   id: ID!
-  teamId: Team @connection
-  playerId: Player @connection
+  team: Team @connection
+  player: Player @connection
+}
+
+type LeaguePlayer @model {
+  id: ID!
+  league_id: League @connection
+  player: Player @connection
 }

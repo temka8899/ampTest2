@@ -65,8 +65,6 @@ const SwitchView = ({value, onPress}) => {
         attributes: {
           email: `${email}`,
           phone_number: `${phone_number}`,
-          'custom:IntLevel': `1`,
-          'custom:Xp': `10`,
           'custom:Admin': `1`,
           'custom:Name': `${name}`,
         },
@@ -89,26 +87,6 @@ const SwitchView = ({value, onPress}) => {
       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
-    }
-  }
-
-  async function addPlayer() {
-    console.log(name);
-    try {
-      await API.graphql(
-        graphqlOperation(createPlayer, {
-          input: {
-            name: `${name}`,
-            xp: 1,
-            level: 1,
-          },
-        }),
-      );
-      onPress(1);
-      // navigation.replace('Tabs');
-      console.log('Player Created');
-    } catch (err) {
-      console.log('error creating Player:', err);
     }
   }
 
@@ -324,6 +302,7 @@ const SignInScreen = ({navigation, onPress}) => {
           paddingVertical: hp(2),
         }}>
         <FormInput
+          autoCapitalize={false}
           autoCorrect={false}
           placeholder="Email"
           keyboardType="email-address"
