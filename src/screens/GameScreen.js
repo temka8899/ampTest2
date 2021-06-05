@@ -23,17 +23,27 @@ import {DATA} from '../data/DATA';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
 const Item = ({item, onPress, backgroundColor, textColor}) => (
-  <View>
+  <View style={{marginHorizontal: wp(1)}}>
     <TouchableOpacity
       onPress={onPress}
       style={[[styles.item, backgroundColor], {borderRadius: 10}]}>
-      <Image
+      <ImageBackground
         source={item.image}
-        style={[styles.image, {width: wp(69.3), height: hp(42)}]}
-      />
+        style={[
+          styles.image,
+          {
+            width: wp(69.3),
+            height: hp(42),
+            // shadowOffset: {width: -wp(50), height: -hp(50)},
+          },
+        ]}>
+        <View style={{flex: 1}}></View>
+      </ImageBackground>
     </TouchableOpacity>
   </View>
 );
+// box-shadow: inset 0px -131px 59px rgba(0, 0, 0, 0.71);
+// border-radius: 40px;
 
 async function getUserData() {
   const user = Auth.currentUserInfo();
@@ -143,6 +153,22 @@ const GameScreen = ({navigation}) => {
             extraData={selectedId}
           />
         </View>
+        {/* <View
+          style={{
+            width: 150,
+            height: 150,
+            backgroundColor: 'white',
+            shadowColor: 'red',
+            shadowOffset: {
+              width: 0,
+              height: -12,
+            },
+            shadowOpacity: 0.58,
+            shadowRadius: 16.0,
+
+            elevation: 24,
+          }}
+        /> */}
       </SafeAreaView>
     </View>
   );
@@ -167,6 +193,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  // image: {
+  //   shadowColor: 'red',
+  //   shadowOpacity: 0.5,
+  //   shadowRadius: 20,
+  // },
 });
 
 export default GameScreen;

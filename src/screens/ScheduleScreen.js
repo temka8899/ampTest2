@@ -18,6 +18,7 @@ import {COLORS, FONTS, icons} from '../constants';
 import GamePicker from '../components/GamePicker';
 import {hp, wp} from '../constants/theme';
 import color from 'color';
+import LeaguePicker from '../components/LeaguePicker';
 
 export const ScheduleData = [
   {
@@ -83,7 +84,10 @@ const ScheduleScreen = ({navigation, route}) => {
         animationType="fade"
         visible={modalVisible}
         nRequestClose={() => changeModalVisible(false)}>
-        <GamePicker changeModalVisible={changeModalVisible} setData={setData} />
+        <LeaguePicker
+          changeModalVisible={changeModalVisible}
+          setData={setData}
+        />
       </Modal>
       <View
         style={{

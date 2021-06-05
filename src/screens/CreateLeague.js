@@ -64,7 +64,11 @@ const createLeagueScreen = ({navigation}) => {
 
   const setData = option => {
     setChooseData(option);
-    console.log(option.id);
+    // const imageName
+    setUploadImage(
+      `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${option.image}`,
+    );
+    console.log(option.image);
     setLeagueGameId(option.id);
   };
 

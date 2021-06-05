@@ -18,6 +18,7 @@ import {userData} from '../data/Players';
 import GamePicker from '../components/GamePicker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import CircleXp from '../components/CircleXp';
+import {listPlayers} from '../graphql/queries';
 
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
@@ -64,8 +65,9 @@ const Profile = ({navigation}) => {
     setXpPercent((xp * 100) / max);
   }
   async function getUser() {
-    const user = await Auth.currentUserInfo();
-    console.log('USER =======', user);
+    const user = await API.graphql(graphqlOperation(listPlayers));
+    console.log(user); // const user = await Auth.currentUserInfo();
+    // .log('USER =======', user);
     setCurrentUser(user);
     setLoading(false);
   }
@@ -139,7 +141,7 @@ const Profile = ({navigation}) => {
                 // borderWidth: 1,
               }}>
               <Text style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
-                {currentUser.attributes['custom:Name']}
+                {currentUser.name}
               </Text>
               <TouchableOpacity>
                 <Image
@@ -163,9 +165,7 @@ const Profile = ({navigation}) => {
               <Text style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
                 Level
               </Text>
-              <Text style={styles.level}>
-                {currentUser.attributes['custom:IntLevel']}
-              </Text>
+              <Text style={styles.level}>{currentUser.level}</Text>
             </View>
           </View>
         </View>

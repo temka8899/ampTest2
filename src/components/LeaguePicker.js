@@ -9,23 +9,24 @@ import {
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {COLORS, FONTS, hp, wp} from '../constants/theme';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {listGames, listLeagues} from '../graphql/queries';
+import {listGames} from '../graphql/queries';
+import {listLeagues} from '../graphql/queries';
 
-const GamePicker = props => {
-  const [GameList, setGameList] = useState([]);
+const LeaguePicker = props => {
+  const [LeagueList, setLeagueList] = useState([]);
 
   useEffect(() => {
-    fetchGames();
+    fetchLeagues();
   }, []);
 
-  async function fetchGames() {
+  async function fetchLeagues() {
     // const user = await Auth.currentUserInfo();
     // console.log('Attributes =======', user);
     try {
-      const gameData = await API.graphql(graphqlOperation(listGames));
-      const gameList = gameData.data.listGames.items;
-      setGameList(gameList);
-      console.log('Games>>>>', gameList);
+      const leagueData = await API.graphql(graphqlOperation(listLeagues));
+      const leagueList = leagueData.data.listLeagues.items;
+      setLeagueList(leagueList);
+      console.log('Leagues>>>>', leagueList);
       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
       // const user2 = await Auth.currentAuthenticatedUser();
       // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
@@ -40,29 +41,29 @@ const GamePicker = props => {
       console.log('error fetching todos', err);
     }
   }
-  // const option = GameList.map((item, index) => {
-  //   return (
-  //     <TouchableOpacity
-  //       style={styles.option}
-  //       key={index}
-  //       onPress={() => onPressItem(item)}>
-  //       <Text style={styles.text}>{item.name}</Text>
-  //     </TouchableOpacity>
-  //   );
-  // });
-  // const onPressItem = option => {
-  //   props.changeModalVisible(false);
-  //   props.setData(option);
-  // };
-  // return (
-  //   <TouchableOpacity
-  //     onPress={() => props.changeModalVisible(false)}
-  //     style={styles.container}>
-  //     <View style={styles.modal}>
-  //       <ScrollView>{option}</ScrollView>
-  //     </View>
-  //   </TouchableOpacity>
-  // );
+  const option = LeagueList.map((item, index) => {
+    return (
+      <TouchableOpacity
+        style={styles.option}
+        key={index}
+        onPress={() => onPressItem(item)}>
+        <Text style={styles.text}>{item.game['name']}</Text>
+      </TouchableOpacity>
+    );
+  });
+  const onPressItem = option => {
+    props.changeModalVisible(false);
+    props.setData(option);
+  };
+  return (
+    <TouchableOpacity
+      onPress={() => props.changeModalVisible(false)}
+      style={styles.container}>
+      <View style={styles.modal}>
+        <ScrollView>{option}</ScrollView>
+      </View>
+    </TouchableOpacity>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -88,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GamePicker;
+export default LeaguePicker;
