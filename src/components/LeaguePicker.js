@@ -9,7 +9,6 @@ import {
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {COLORS, FONTS, hp, wp} from '../constants/theme';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {listGames} from '../graphql/queries';
 import {listLeagues} from '../graphql/queries';
 
 const LeaguePicker = props => {
@@ -18,6 +17,7 @@ const LeaguePicker = props => {
   useEffect(() => {
     fetchLeagues();
   }, []);
+  1;
 
   async function fetchLeagues() {
     // const user = await Auth.currentUserInfo();
