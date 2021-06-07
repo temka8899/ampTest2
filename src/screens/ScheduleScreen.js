@@ -74,7 +74,6 @@ const ScheduleScreen = ({navigation, route}) => {
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
           {chooseData == '' ? 'Select' : chooseData.game.name}
-          {/* {chooseData.game.name} */}
         </Text>
         <Image
           source={icons.drop}

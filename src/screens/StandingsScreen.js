@@ -16,7 +16,7 @@ import {
 import {DATA} from './GameScreen';
 import AppBar from '../components/AppBar';
 import {COLORS, FONTS, icons} from '../constants';
-import GamePicker from '../components/GamePicker';
+import LeaguePicker from '../components/LeaguePicker';
 import {hp, wp} from '../constants/theme';
 
 const StandingsScreen = ({navigation, route}) => {
@@ -26,7 +26,7 @@ const StandingsScreen = ({navigation, route}) => {
   //   itemID = route.params.itemId;
   // }
 
-  const [chooseData, setChooseData] = useState('Table Soccer');
+  const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -52,7 +52,7 @@ const StandingsScreen = ({navigation, route}) => {
           borderWidth: 1,
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData.name}
+          {chooseData == '' ? 'Select' : chooseData.game.name}
         </Text>
         <Image
           source={icons.drop}
@@ -64,7 +64,10 @@ const StandingsScreen = ({navigation, route}) => {
         animationType="fade"
         visible={modalVisible}
         nRequestClose={() => changeModalVisible(false)}>
-        <GamePicker changeModalVisible={changeModalVisible} setData={setData} />
+        <LeaguePicker
+          changeModalVisible={changeModalVisible}
+          setData={setData}
+        />
       </Modal>
     </SafeAreaView>
   );
