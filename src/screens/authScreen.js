@@ -4,16 +4,13 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
   SafeAreaView,
-  Button,
   ImageBackground,
   Keyboard,
   Image,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   StatusBar,
-  ColorPropType,
 } from 'react-native';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';

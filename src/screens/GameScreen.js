@@ -60,10 +60,11 @@ async function getUserData() {
 
 const GameScreen = ({navigation}) => {
   useEffect(() => {
-    fetchLeagues();
+    // fetchLeagues();
     findGreet();
     getName();
   }, []);
+
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -152,6 +153,8 @@ const GameScreen = ({navigation}) => {
         console.log(p_id);
       } else {
         addPlayer(user.attributes['custom:Name'], user.username);
+        console.log('Players>>>>>>>>>>>>>>', todos);
+
         console.log('taarsangui', i);
         console.log(todos[i].c_id);
         console.log(p_id);
