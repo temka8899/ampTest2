@@ -114,13 +114,9 @@ const GameScreen = ({navigation}) => {
       for (var i = 0; i < todos.length; i++) {
         if (todos[i].c_id == p_id) {
           console.log('found>>>>>>>>>>>>>>');
-          console.log(todos[i].c_id);
-          console.log(p_id);
         } else {
-          console.log(todos[i].c_id);
-          console.log(p_id);
+          console.log('NOTFOUND>>>>>>>>>>>');
         }
-        console.log('>>>>>>>>>>>>>>>>');
       }
     } catch (err) {
       console.log('error fetching todos', err);
