@@ -15,7 +15,7 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import {userData} from '../data/Players';
-import GamePicker from '../components/GamePicker';
+import LeaguePicker from '../components/LeaguePicker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import CircleXp from '../components/CircleXp';
 import {listPlayers} from '../graphql/queries';
@@ -24,11 +24,11 @@ import {AuthContext} from '../../App';
 
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
-  const [chooseData, setChooseData] = useState('Table Soccer');
+  const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   // const [currentUser, setCurrentUser] = useState();
   const [adminVisible, setAdminVisible] = useState();
-  const [xpPercent, setXpPercent] = useState('100');
+  const [xpPercent, setXpPercent] = useState('');
   const [xp, setXp] = useState('1');
   const [level, setLevel] = useState('1');
   const {userInfo} = React.useContext(AuthContext);
@@ -36,7 +36,7 @@ const Profile = ({navigation}) => {
   useEffect(() => {
     getUser();
     // isAdmin();
-    // getXp();
+    getXp();
   }, []);
 
   const changeModalVisible = bool => {
@@ -49,23 +49,14 @@ const Profile = ({navigation}) => {
 
   async function getXp() {
     try {
-      const user = await Auth.currentUserInfo();
-      console.log(user);
-      const result = await Auth.updateUserAttributes(user, {
-        'custom:IntLevel': `5`,
-        'custom:Xp': `390`,
-        'custom:Name': `Monkhoo`,
-        'custom:Admin': `1`,
-      });
+      let max = userInfo.level * 100;
+      let xp = userInfo.xp;
+      setXpPercent((xp * 100) / max);
+      console.log(max, xp);
+      console.log(xpPercent);
     } catch (err) {
       console.log('aldaa', err);
     }
-    console.log('fdgbdg' + result);
-
-    console.log('mai');
-    var max = userInfo.attributes['custom:IntLevel'] * 100;
-    var xp = userInfo.attributes['custom:Xp'];
-    setXpPercent((xp * 100) / max);
   }
   async function getUser() {
     console.log('object');
@@ -199,7 +190,7 @@ const Profile = ({navigation}) => {
           borderWidth: 1,
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData.name}
+          {chooseData == '' ? 'Select' : chooseData.game.name}
         </Text>
         <Image
           source={icons.drop}
@@ -211,7 +202,10 @@ const Profile = ({navigation}) => {
         animationType="fade"
         visible={modalVisible}
         nRequestClose={() => changeModalVisible(false)}>
-        <GamePicker changeModalVisible={changeModalVisible} setData={setData} />
+        <LeaguePicker
+          changeModalVisible={changeModalVisible}
+          setData={setData}
+        />
       </Modal>
     </SafeAreaView>
   );
