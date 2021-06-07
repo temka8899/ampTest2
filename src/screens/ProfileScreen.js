@@ -19,21 +19,24 @@ import GamePicker from '../components/GamePicker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import CircleXp from '../components/CircleXp';
 import {listPlayers} from '../graphql/queries';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../../App';
 
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('Table Soccer');
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentUser, setCurrentUser] = useState();
+  // const [currentUser, setCurrentUser] = useState();
   const [adminVisible, setAdminVisible] = useState();
   const [xpPercent, setXpPercent] = useState('100');
   const [xp, setXp] = useState('1');
   const [level, setLevel] = useState('1');
+  const {userInfo} = React.useContext(AuthContext);
 
   useEffect(() => {
     getUser();
-    isAdmin();
-    getXp();
+    // isAdmin();
+    // getXp();
   }, []);
 
   const changeModalVisible = bool => {
@@ -60,19 +63,25 @@ const Profile = ({navigation}) => {
     console.log('fdgbdg' + result);
 
     console.log('mai');
-    var max = currentUser.attributes['custom:IntLevel'] * 100;
-    var xp = currentUser.attributes['custom:Xp'];
+    var max = userInfo.attributes['custom:IntLevel'] * 100;
+    var xp = userInfo.attributes['custom:Xp'];
     setXpPercent((xp * 100) / max);
   }
   async function getUser() {
-    const user = await API.graphql(graphqlOperation(listPlayers));
-    console.log(user); // const user = await Auth.currentUserInfo();
-    // .log('USER =======', user);
-    setCurrentUser(user);
+    console.log('object');
+    // let userInfo = JSON.parse(await AsyncStorage.getItem('__user_key__'));
+    console.log(`userInfo`, userInfo);
+    // const user = await API.graphql(graphqlOperation(listPlayers));
+    // const playerData = await API.graphql(graphqlOperation(listPlayers));
+    // const players = playerData.data.listPlayers.items;
+
+    // console.log(user); // const user = await Auth.currentUserInfo();
+    // // .log('USER =======', user);
+    // setCurrentUser(userInfo);
     setLoading(false);
   }
   async function isAdmin() {
-    if (currentUser.attributes['custom:Admin'] == 1) {
+    if (userInfo.attributes['custom:Admin'] == 1) {
       // console.log('yeas');
       setAdminVisible(true);
     } else {
@@ -82,8 +91,8 @@ const Profile = ({navigation}) => {
   }
   if (isLoading) {
     return (
-      <View>
-        <ActivityIndicator size={'large'} />
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator color={'red'} size={'large'} />
       </View>
     );
   }
@@ -141,7 +150,7 @@ const Profile = ({navigation}) => {
                 // borderWidth: 1,
               }}>
               <Text style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
-                {currentUser.name}
+                {userInfo.name}
               </Text>
               <TouchableOpacity>
                 <Image
@@ -165,7 +174,7 @@ const Profile = ({navigation}) => {
               <Text style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
                 Level
               </Text>
-              <Text style={styles.level}>{currentUser.level}</Text>
+              <Text style={styles.level}>{userInfo.level}</Text>
             </View>
           </View>
         </View>

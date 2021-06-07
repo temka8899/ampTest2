@@ -35,7 +35,7 @@ type TeamPlayer @model {
 
 type LeaguePlayer @model {
   id: ID!
-  league_id: League @connection
+  league: League @connection
   player: Player @connection
 }
 

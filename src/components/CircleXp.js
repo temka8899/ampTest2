@@ -35,8 +35,8 @@ const CircleXp = props => {
         backgroundColor="#F74C1130">
         {fill => (
           <View>
-            {userData.map(item => (
-              <>
+            {userData.map((item, index) => (
+              <View key={index}>
                 {item.id === 1 && (
                   <Image
                     source={item.image}
@@ -50,7 +50,7 @@ const CircleXp = props => {
                     }}
                   />
                 )}
-              </>
+              </View>
             ))}
           </View>
         )}
