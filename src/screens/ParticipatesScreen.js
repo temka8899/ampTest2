@@ -9,6 +9,7 @@ import {
   ScrollView,
   FlatList,
   StatusBar,
+  Button,
 } from 'react-native';
 // import {DATA} from './GameScreen';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
@@ -80,20 +81,24 @@ const Player = ({item, index}) => (
 
 const ParticipatesScreen = ({navigation, route}) => {
   const [leagueId, setLeagueId] = useState('');
-  const {userInfo, setUserInfo} = React.useContext(AuthContext);
+  const [PlayerID, setPlayerID] = useState('');
+  const {userInfo} = React.useContext(AuthContext);
 
   const fetchTeamPlayers = async () => {
     try {
-      const leagueData = await API.graphql(graphqlOperation(listTeamPlayers));
-      const todos = leagueData.data.listTeamPlayers.items;
+      const TeamPlayerData = await API.graphql(
+        graphqlOperation(listTeamPlayers),
+      );
+      const todos = TeamPlayerData.data.listTeamPlayers.items;
       setLeagueId(todos.id);
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+      console.log('League Players', todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
   };
   useEffect(() => {
     fetchTeamPlayers();
+    getPlayerId();
   }, []);
 
   const sorted = userData.sort((a, b) => b.level - a.level);
@@ -115,13 +120,29 @@ const ParticipatesScreen = ({navigation, route}) => {
     setInLeague(bool);
   };
 
+  const getPlayerId = async () => {
+    try {
+      const playerData = await API.graphql(
+        graphqlOperation(listPlayers, {
+          filter: {c_id: {eq: '37e2f195-76f1-4d68-8ee1-bd453b8185c4'}},
+        }),
+      );
+      // const todos = leagueData.data.listTeams.items;
+      // console.log('Teams>>>>>>>>>>>>>>', todos);
+      setPlayerID(playerData.data.listPlayers.items[0].id);
+      console.log('Player ID', playerData.data.listPlayers.items[0].id);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  };
+
   const addPlayerBtn = async () => {
     try {
       await API.graphql(
         graphqlOperation(createLeaguePlayer, {
           input: {
             leaguePlayerLeagueId: leagueId,
-            leaguePlayerPlayerId: userInfo.c_id,
+            leaguePlayerPlayerId: PlayerID,
           },
         }),
       );
@@ -250,6 +271,7 @@ const ParticipatesScreen = ({navigation, route}) => {
         <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
           In League
         </Text>
+        <Button title="test fetch" onPress={() => fetchTeamPlayers()} />
       </View>
       <FlatList data={sorted} renderItem={renderPlayers} />
       {bottomModal()}

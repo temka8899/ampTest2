@@ -132,22 +132,25 @@ const GameScreen = ({navigation}) => {
     setName(user.attributes['custom:Name']);
     let existing = await checkPlayer(playerData, user.username);
     if (existing) {
-      addPlayer(user.attributes['custom:Name'], user.username);
+      await addPlayer(user.attributes['custom:Name'], user.username);
     } else {
       // user baigaa nuhtsul
     }
-    findUser(playerData, user);
+    findUser(user);
   }
 
-  async function findUser(users, user) {
-    console.log('users', users.data.listPlayers.items);
-    console.log('user', user);
-    let finded = users.data.listPlayers.items.find((item, index) => {
+  async function findUser(user) {
+    console.log(`user`, user);
+    const playerData = await API.graphql(graphqlOperation(listPlayers));
+    console.log(
+      `playerData.data.listPlayers.items`,
+      playerData.data.listPlayers.items,
+    );
+    let finded = playerData.data.listPlayers.items.find((item, index) => {
       if (user.username === item.c_id) {
         return item;
       }
     });
-    // await AsyncStorage.setItem('__user_key__', JSON.stringify(finded));
     setUserInfo(finded);
     console.log('finded set hiilee', finded);
   }
@@ -170,7 +173,7 @@ const GameScreen = ({navigation}) => {
   async function addPlayer(username, p_id) {
     console.log('uuslee', username, p_id);
     try {
-      await API.graphql(
+      const res = await API.graphql(
         graphqlOperation(createPlayer, {
           input: {
             c_id: p_id,
@@ -181,6 +184,7 @@ const GameScreen = ({navigation}) => {
           },
         }),
       );
+      console.log('>>>>>>>>>>>>>>>>>>>>', res);
       console.log('Player Created');
     } catch (err) {
       console.log('error creating Player:', err);
