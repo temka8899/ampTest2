@@ -18,6 +18,7 @@ import {
   createLeague,
   createTeam,
   createTeamPlayer,
+  createLeaguePlayer,
 } from '../graphql/mutations';
 import {
   listGames,
@@ -25,6 +26,7 @@ import {
   listPlayers,
   listTeamPlayers,
   listTeams,
+  listLeaguePlayers,
 } from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
@@ -58,8 +60,8 @@ const createTeamScreen = ({navigation}) => {
       await API.graphql(
         graphqlOperation(createTeam, {
           input: {
-            name: 'team4',
-            teamLeagueId: 'be297a57-2b43-450d-8c62-733e6dc7829d',
+            name: 'team3',
+            teamLeagueId: 'fbe1219f-7eec-4f34-b3b2-5a520fb05991',
             win: 0,
             lose: 0,
           },
@@ -76,8 +78,8 @@ const createTeamScreen = ({navigation}) => {
       await API.graphql(
         graphqlOperation(createTeamPlayer, {
           input: {
-            teamPlayerTeamId: '1c9bfdff-087d-4702-8659-cc7f362bc431',
-            teamPlayerPlayerId: '27de6d33-0bcd-4a47-97e0-7419259d8c88',
+            teamPlayerTeamId: 'a59b4e48-ea33-496e-8103-db1d1ef7b8b2',
+            teamPlayerPlayerId: '9cd492d9-e35a-470a-a4a8-e280c0f7df5e',
           },
         }),
       );
@@ -88,9 +90,28 @@ const createTeamScreen = ({navigation}) => {
     fetchTeamPlayers();
   }
 
+  async function addLeaguePlayer() {
+    try {
+      await API.graphql(
+        graphqlOperation(createLeaguePlayer, {
+          input: {
+            leaguePlayerLeagueId: 'fbe1219f-7eec-4f34-b3b2-5a520fb05991',
+            leaguePlayerPlayerId: '9cd492d9-e35a-470a-a4a8-e280c0f7df5e',
+          },
+        }),
+      );
+      console.log('League Player Created');
+    } catch (err) {
+      console.log('error creating League Player:', err);
+    }
+    fetchTeamPlayers();
+  }
+
   async function fetchTeam() {
     try {
-      const leagueData = await API.graphql(graphqlOperation(listTeams));
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeams, {name: 'team2'}),
+      );
       const todos = leagueData.data.listTeams.items;
       console.log('Teams>>>>>>>>>>>>>>', todos);
     } catch (err) {
@@ -108,14 +129,31 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function fetchLeaguePlayers() {
+    try {
+      const leaguePlayerData = await API.graphql(
+        graphqlOperation(listLeaguePlayers),
+      );
+      const todos = leaguePlayerData.data.listLeaguePlayers.items;
+      console.log('League Player>>>>>>>>>>>>>>', todos);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content"></StatusBar>
       <View>
+        <Button onPress={() => addTeam()} title="add Team" />
+        <Button onPress={() => addTeamPlayer()} title="add Team Player" />
+        <Button onPress={() => addLeaguePlayer()} title="add League Player" />
         <Button onPress={() => fetchTeam()} title="Fetch Team" />
         <Button onPress={() => fetchTeamPlayers()} title="Fetch TeamPlayer" />
-        <Button onPress={() => addTeam()} title="addteam" />
-        <Button onPress={() => addTeamPlayer()} title="addteamplayer" />
+        <Button
+          onPress={() => fetchLeaguePlayers()}
+          title="Fetch League Player"
+        />
       </View>
     </SafeAreaView>
   );
