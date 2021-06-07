@@ -97,7 +97,7 @@ const createTeamScreen = ({navigation}) => {
         graphqlOperation(createLeaguePlayer, {
           input: {
             leaguePlayerLeagueId: 'fbe1219f-7eec-4f34-b3b2-5a520fb05991',
-            leaguePlayerPlayerId: '9cd492d9-e35a-470a-a4a8-e280c0f7df5e',
+            leaguePlayerPlayerId: '5d6d8039-934e-4e9c-a8b8-63ae58715e98',
           },
         }),
       );
@@ -105,7 +105,6 @@ const createTeamScreen = ({navigation}) => {
     } catch (err) {
       console.log('error creating League Player:', err);
     }
-    fetchTeamPlayers();
   }
 
   async function fetchTeam() {

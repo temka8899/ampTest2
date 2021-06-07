@@ -46,7 +46,7 @@ const createGameScreen = ({navigation}) => {
       ImagePicker.openPicker({
         compressImageMaxWidth: 300,
         compressImageMaxHeight: 400,
-        compressImageQuality: 0.7,
+        compressImageQuality: 1,
         cropping: true,
       }).then(image => {
         const file = {
@@ -54,25 +54,16 @@ const createGameScreen = ({navigation}) => {
           name: image.filename,
           type: image.mime,
         };
-        //
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //blobber(file);
         setFile123(file);
-        //
-        //
         setUploadImage(image.path);
-        //console.log('-0-0-0-0-0-0-0-0-', image);
-        //console.log(image.path);
       });
     } catch (err) {
       console.log('Error uploading file:', err);
     }
   };
   const blobber = async file => {
-    //console.log('file ', file);
     const response = await fetch(file.uri);
     const blob = await response.blob();
-    //console.log('blob --> ', blob);
     const fileName = file.name;
     setFileName(fileName);
     await Storage.put(fileName, blob, {

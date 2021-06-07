@@ -169,7 +169,7 @@ const GameScreen = ({navigation}) => {
   async function addPlayer(username, p_id) {
     console.log('uuslee', username, p_id);
     try {
-      await API.graphql(
+      const res = await API.graphql(
         graphqlOperation(createPlayer, {
           input: {
             c_id: p_id,
@@ -180,6 +180,7 @@ const GameScreen = ({navigation}) => {
           },
         }),
       );
+      console.log('>>>>>>>>>>>>>>>>>>>>', res);
       console.log('Player Created');
     } catch (err) {
       console.log('error creating Player:', err);
