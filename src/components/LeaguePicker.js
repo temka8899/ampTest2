@@ -35,12 +35,13 @@ const LeaguePicker = props => {
         style={styles.option}
         key={index}
         onPress={() => onPressItem(item)}>
-        <Text style={styles.text}>{item.game['name']}</Text>
+        <Text style={styles.text}>{item.game.name}</Text>
       </TouchableOpacity>
     );
   });
   const onPressItem = option => {
     props.changeModalVisible(false);
+    console.log('option ochij bn');
     console.log(option);
     props.setData(option);
   };
