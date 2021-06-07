@@ -18,12 +18,12 @@ import {wp, hp, ft, COLORS, FONTS} from '../constants/theme';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
 import {listPlayers, listLeagues, listTeams} from '../graphql/queries';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import color from 'color';
 import awsmobile from '../aws-exports';
 import {DATA} from '../data/DATA';
 import LinearGradient from 'react-native-linear-gradient';
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-
+import Amplify, {API, graphqlOperation, Auth, Storage, JS} from 'aws-amplify';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../../App';
 Amplify.configure({
   ...awsmobile,
   Analytics: {
@@ -59,6 +59,8 @@ async function getUserData() {
 }
 
 const GameScreen = ({navigation}) => {
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
+
   useEffect(() => {
     // fetchLeagues();
     findGreet();
@@ -91,7 +93,7 @@ const GameScreen = ({navigation}) => {
       // });
       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     } catch (err) {
-      console.log('error fetching todos', err);
+      console.log('error fetching players', err);
     }
   }
 
@@ -123,32 +125,46 @@ const GameScreen = ({navigation}) => {
 
   async function getName() {
     const user = await Auth.currentUserInfo();
+    const playerData = await API.graphql(graphqlOperation(listPlayers));
     setLoading(false);
+    console.log(`userInfo`, userInfo);
     setName(user.attributes['custom:Name']);
-    let existing = await checkPlayer(user.username);
-    console.log(existing);
+    let existing = await checkPlayer(playerData, user.username);
     if (existing) {
-      console.log('unen uu', existing);
       addPlayer(user.attributes['custom:Name'], user.username);
+    } else {
+      // user baigaa nuhtsul
     }
+    findUser(playerData, user);
   }
 
-  async function checkPlayer(p_id) {
+  async function findUser(users, user) {
+    console.log(`users`, users.data.listPlayers.items);
+    console.log(`user`, user);
+    let finded = users.data.listPlayers.items.find((item, index) => {
+      if (user.username === item.c_id) {
+        return item;
+      }
+    });
+    // await AsyncStorage.setItem('__user_key__', JSON.stringify(finded));
+    setUserInfo(finded);
+    console.log('finded set hiilee', finded);
+  }
+
+  async function checkPlayer(playerData, p_id) {
     try {
-      const playerData = await API.graphql(graphqlOperation(listPlayers));
-      const todos = playerData.data.listPlayers.items;
-      console.log('Players>>>>>>>>>>>>>>', todos);
-      var result = true;
-      for (var i = 0; i < todos.length; i++) {
+      const players = playerData.data.listPlayers.items;
+      console.log('Players>>>>>>>>>>>>>>', players);
+      for (var i = 0; i < players.length; i++) {
         console.log('p', p_id);
-        console.log('c', todos[i].c_id);
-        if (todos[i].c_id == p_id) {
+        console.log('c', players[i].c_id);
+        if (players[i].c_id == p_id) {
           return false;
         }
       }
       return true;
     } catch (err) {
-      console.log('error fetching todos', err);
+      console.log('error fetching players', err);
     }
   }
 

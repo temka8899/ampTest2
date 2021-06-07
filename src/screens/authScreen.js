@@ -14,6 +14,7 @@ import {
   KeyboardAvoidingView,
   StatusBar,
   ColorPropType,
+  ActivityIndicator,
 } from 'react-native';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
@@ -265,10 +266,12 @@ const SwitchView = ({value, onPress}) => {
 const SignInScreen = ({navigation, onPress}) => {
   const [username, setUsername] = useState('moogii67890@gmail.com');
   const [password, setPassword] = useState('12345678');
+  const [loading, setLoading] = useState(false);
   const signIn = async () => {
     try {
+      setLoading(true);
       let response = await Auth.signIn(username, password);
-      // console.log('response:>>', response);
+      console.log('response:>>', response);
       // console.log(
       //   'response:>>',
       //   response.signInUserSession.accessToken.jwtToken,
@@ -276,6 +279,7 @@ const SignInScreen = ({navigation, onPress}) => {
 
       navigation.replace('Tabs');
       console.log('✅ Sign In Success');
+      setLoading(false);
       setUsername('');
       setPassword('');
       onPress(0);
@@ -285,6 +289,7 @@ const SignInScreen = ({navigation, onPress}) => {
         description: 'Check your email and password',
         type: 'warning',
       });
+      setLoading(false);
       console.log('❌ Error signing in...', error);
     }
   };
@@ -321,7 +326,7 @@ const SignInScreen = ({navigation, onPress}) => {
           textContentType="password"
           secureTextEntry
         />
-        <TouchableOpacity onPress={signIn}>
+        <TouchableOpacity disabled={loading} onPress={signIn}>
           <ImageBackground
             source={images.button}
             style={{
@@ -332,16 +337,20 @@ const SignInScreen = ({navigation, onPress}) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text
-              style={{
-                fontFamily: FONTS.brandFont,
-                color: COLORS.white,
-                paddingTop: hp(0.6),
-                margin: hp(1),
-                fontSize: RFPercentage(1.7),
-              }}>
-              SIGN IN
-            </Text>
+            {!loading ? (
+              <Text
+                style={{
+                  fontFamily: FONTS.brandFont,
+                  color: COLORS.white,
+                  paddingTop: hp(0.6),
+                  margin: hp(1),
+                  fontSize: RFPercentage(1.7),
+                }}>
+                SIGN IN
+              </Text>
+            ) : (
+              <ActivityIndicator size="small" color={'#fff'} />
+            )}
           </ImageBackground>
         </TouchableOpacity>
       </View>

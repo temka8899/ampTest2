@@ -13,32 +13,44 @@ import createTeamScreen from './src/screens/CreateTeam';
 import {createTeam} from './src/graphql/mutations';
 
 const Stack = createStackNavigator();
-
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Auth"
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="Auth" component={AuthScreen} />
-        <Stack.Screen name="Tabs" component={Tabs} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen
-          name="CreateLeagueScreen"
-          component={createLeagueScreen}
-        />
-        <Stack.Screen
-          name="ParticipatesScreen"
-          component={ParticipatesScreen}
-        />
-        <Stack.Screen name="createTeamScreen" component={createTeamScreen} />
-        <Stack.Screen name="createGameScreen" component={createGameScreen} />
-        <Stack.Screen name="AdminScreen" component={AdminScreen} />
-      </Stack.Navigator>
+      <ContextProvider>
+        <Stack.Navigator
+          initialRouteName="Auth"
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="Auth" component={AuthScreen} />
+          <Stack.Screen name="Tabs" component={Tabs} />
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen
+            name="CreateLeagueScreen"
+            component={createLeagueScreen}
+          />
+          <Stack.Screen
+            name="ParticipatesScreen"
+            component={ParticipatesScreen}
+          />
+          <Stack.Screen name="createTeamScreen" component={createTeamScreen} />
+          <Stack.Screen name="createGameScreen" component={createGameScreen} />
+          <Stack.Screen name="AdminScreen" component={AdminScreen} />
+        </Stack.Navigator>
+      </ContextProvider>
     </NavigationContainer>
   );
 }
+
+export const AuthContext = React.createContext([]);
+
+const ContextProvider = ({children}) => {
+  const [userInfo, setUserInfo] = React.useState('ny user info');
+  return (
+    <AuthContext.Provider value={{userInfo, setUserInfo}}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export default App;
