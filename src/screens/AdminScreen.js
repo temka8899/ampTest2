@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Image,
   View,
-  Modal,
   StatusBar,
 } from 'react-native';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -20,31 +19,13 @@ const AdminScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content" />
-      <View
-        style={{
-          width: wp(100),
-          height: hp(7),
-          // borderColor: 'red',
-          // borderWidth: 1,
-          paddingHorizontal: wp(3),
-          flexDirection: 'column',
-        }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
+      <View style={styles.backButton}>
+        <TouchableOpacity onPress={() => navigation.pop()}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
       </View>
 
-      <View
-        style={{
-          flex: 1,
-          width: wp(100),
-          alignSelf: 'center',
-          justifyContent: 'space-evenly',
-          alignItems: 'flex-end',
-          flexDirection: 'row',
-          // borderWidth: 1,
-          // borderColor: 'red',
-        }}>
+      <View style={styles.ButtonContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('createGameScreen')}
           style={styles.createBtn}>
@@ -56,17 +37,7 @@ const AdminScreen = ({navigation}) => {
           <Text style={styles.createBtnText}>Create League</Text>
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          flex: 1,
-          width: wp(100),
-          alignSelf: 'center',
-          justifyContent: 'space-evenly',
-          alignItems: 'flex-end',
-          flexDirection: 'row',
-          // borderWidth: 1,
-          // borderColor: 'red',
-        }}>
+      <View style={styles.bottomContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('createTeamScreen')}
           style={styles.createBtn}>
@@ -94,6 +65,30 @@ const styles = StyleSheet.create({
     width: wp(7.4),
     height: hp(3.2),
     borderColor: 'white',
+  },
+  backButton: {
+    width: wp(100),
+    height: hp(7),
+    paddingHorizontal: wp(3),
+    flexDirection: 'column',
+  },
+  ButtonContainer: {
+    flex: 1,
+    width: wp(100),
+    alignSelf: 'center',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+  },
+  bottomContainer: {
+    flex: 1,
+    width: wp(100),
+    alignSelf: 'center',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
 });
 export default AdminScreen;

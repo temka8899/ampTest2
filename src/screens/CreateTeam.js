@@ -12,7 +12,9 @@ import {
   StatusBar,
   ColorPropType,
 } from 'react-native';
+
 import ImagePicker from 'react-native-image-crop-picker';
+
 import {
   createGame,
   createLeague,
@@ -35,6 +37,7 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import FormInput from '../components/FormInput';
+import {AuthContext} from '../../App';
 
 Amplify.configure({
   ...awsmobile,
@@ -44,6 +47,7 @@ Amplify.configure({
 });
 
 const createTeamScreen = ({navigation}) => {
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const initialState = {name: ''};
   const [formState, setFormState] = useState(initialState);
   const [todos, setTodos] = useState([]);
@@ -139,7 +143,10 @@ const createTeamScreen = ({navigation}) => {
       );
       // const todos = leagueData.data.listTeams.items;
       // console.log('Teams>>>>>>>>>>>>>>', todos);
-      console.log('Player>>>>>>>>>>>>>>', playerData.data.listPlayers.items[0]);
+      console.log(
+        'Player>>>>>>>>>>>>>>',
+        playerData.data.listPlayers.items[0].id,
+      );
     } catch (err) {
       console.log('error fetching todos', err);
     }

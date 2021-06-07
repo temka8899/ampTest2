@@ -47,7 +47,7 @@ function App() {
 export const AuthContext = React.createContext([]);
 
 const ContextProvider = ({children}) => {
-  const [userInfo, setUserInfo] = React.useState('ny user info');
+  const [userInfo, setUserInfo] = React.useState('my user info');
   return (
     <AuthContext.Provider value={{userInfo, setUserInfo}}>
       {children}
