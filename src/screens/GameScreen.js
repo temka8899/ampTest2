@@ -60,7 +60,7 @@ async function getUserData() {
 
 const GameScreen = ({navigation}) => {
   useEffect(() => {
-    fetchLeagues();
+    // fetchLeagues();
     findGreet();
     getName();
   }, []);
@@ -125,41 +125,31 @@ const GameScreen = ({navigation}) => {
     const user = await Auth.currentUserInfo();
     setLoading(false);
     setName(user.attributes['custom:Name']);
-    // const playerData = await API.graphql(graphqlOperation(listPlayers));
-    // const todos = playerData.data.listPlayers.items;
-    // if (todos.length == 0) {
-    // }
-    checkPlayer(user, user.attributes['custom:Name'], user.username);
-
-    // if (!checkPlayer(user.username)) {
-    //   console.log('hihi');
-    // }
-  }
-
-  async function checkPlayer(user, username, p_id) {
-    // try {
-    const playerData = await API.graphql(graphqlOperation(listPlayers));
-    const todos = playerData.data.listPlayers.items;
-    console.log('Players>>>>>>>>>>>>>>', todos);
-    console.log(todos.length);
-    if (todos.length == 0) {
+    let existing = await checkPlayer(user.username);
+    console.log(existing);
+    if (existing) {
+      console.log('unen uu', existing);
       addPlayer(user.attributes['custom:Name'], user.username);
     }
-    for (var i = 0; i <= todos.length; i++) {
-      if (todos[i].c_id === p_id) {
-        console.log('found>>>>>>>>>>>>>>');
-        console.log(todos[i].c_id);
-        console.log(p_id);
-      } else {
-        addPlayer(user.attributes['custom:Name'], user.username);
-        console.log('taarsangui', i);
-        console.log(todos[i].c_id);
-        console.log(p_id);
+  }
+
+  async function checkPlayer(p_id) {
+    try {
+      const playerData = await API.graphql(graphqlOperation(listPlayers));
+      const todos = playerData.data.listPlayers.items;
+      console.log('Players>>>>>>>>>>>>>>', todos);
+      var result = true;
+      for (var i = 0; i < todos.length; i++) {
+        console.log('p', p_id);
+        console.log('c', todos[i].c_id);
+        if (todos[i].c_id == p_id) {
+          return false;
+        }
       }
+      return true;
+    } catch (err) {
+      console.log('error fetching todos', err);
     }
-    // } catch (err) {
-    //   console.log('error fetching todos', err);
-    // }
   }
 
   async function addPlayer(username, p_id) {
