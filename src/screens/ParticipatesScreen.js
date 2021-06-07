@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   SafeAreaView,
@@ -11,6 +11,24 @@ import {
   StatusBar,
 } from 'react-native';
 // import {DATA} from './GameScreen';
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+import {
+  createGame,
+  createLeague,
+  createTeam,
+  createTeamPlayer,
+  createLeaguePlayer,
+} from '../graphql/mutations';
+import {
+  listGames,
+  listLeagues,
+  listPlayers,
+  listTeamPlayers,
+  listTeams,
+  listLeaguePlayers,
+  getTeam,
+} from '../graphql/queries';
+
 import AppBar from '../components/AppBar';
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
@@ -18,6 +36,7 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {DATA} from '../data/DATA';
 import {userData} from '../data/Players';
 import Modal from 'react-native-modal';
+import {AuthContext} from '../../App';
 
 const Player = ({item, index}) => (
   <View
@@ -60,6 +79,23 @@ const Player = ({item, index}) => (
 );
 
 const ParticipatesScreen = ({navigation, route}) => {
+  const [leagueId, setLeagueId] = useState('');
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
+
+  const fetchTeamPlayers = async () => {
+    try {
+      const leagueData = await API.graphql(graphqlOperation(listTeamPlayers));
+      const todos = leagueData.data.listTeamPlayers.items;
+      setLeagueId(todos.id);
+      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  };
+  useEffect(() => {
+    fetchTeamPlayers();
+  }, []);
+
   const sorted = userData.sort((a, b) => b.level - a.level);
 
   const renderPlayers = ({item, index}) => <Player item={item} index={index} />;
@@ -78,6 +114,23 @@ const ParticipatesScreen = ({navigation, route}) => {
   const changeInLeague = bool => {
     setInLeague(bool);
   };
+
+  const addPlayerBtn = async () => {
+    try {
+      await API.graphql(
+        graphqlOperation(createLeaguePlayer, {
+          input: {
+            leaguePlayerLeagueId: leagueId,
+            leaguePlayerPlayerId: userInfo.c_id,
+          },
+        }),
+      );
+      console.log('League Player Created');
+    } catch (err) {
+      console.log('error creating League Player:', err);
+    }
+    fetchTeamPlayers();
+  };
   function bottomModal() {
     return (
       <View style={styles.modalContainer}>
@@ -85,15 +138,15 @@ const ParticipatesScreen = ({navigation, route}) => {
           visible={isModalVisible}
           animationType="fade"
           transparent={true}
-          onSwipeComplete={() => changeModalVisible(fasle)}
+          onSwipeComplete={() => changeModalVisible(false)}
           swipeDirection="down"
           style={{margin: 0}}>
           <View style={styles.modalBody}>
             <TouchableOpacity
               style={styles.closeBtn}
-              onPress={() =>
-                setModalVisible(!isModalVisible)
-              }></TouchableOpacity>
+              onPress={() => {
+                setModalVisible(!isModalVisible);
+              }}></TouchableOpacity>
             <Text
               style={{
                 fontFamily: FONTS.brandFont,
@@ -117,13 +170,14 @@ const ParticipatesScreen = ({navigation, route}) => {
                 marginTop: hp(3),
               }}
               onPress={() => {
-                [
+                {
                   inLeague ? changeInLeague(false) : changeInLeague(true),
-                  setModalVisible(false),
-                ];
+                    setModalVisible(false),
+                    addPlayerBtn();
+                }
               }}>
               <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-                {!inLeague ? "Yes, I'am in" : "Yes, I'am out"}
+                {!inLeague ? "Yes, I'm in" : "Yes, I'm out"}
               </Text>
             </TouchableOpacity>
           </View>

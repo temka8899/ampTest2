@@ -128,7 +128,7 @@ const GameScreen = ({navigation}) => {
     const user = await Auth.currentUserInfo();
     const playerData = await API.graphql(graphqlOperation(listPlayers));
     setLoading(false);
-    console.log(`userInfo`, userInfo);
+    console.log('userInfo', userInfo);
     setName(user.attributes['custom:Name']);
     let existing = await checkPlayer(playerData, user.username);
     if (existing) {
@@ -140,8 +140,8 @@ const GameScreen = ({navigation}) => {
   }
 
   async function findUser(users, user) {
-    console.log(`users`, users.data.listPlayers.items);
-    console.log(`user`, user);
+    console.log('users', users.data.listPlayers.items);
+    console.log('user', user);
     let finded = users.data.listPlayers.items.find((item, index) => {
       if (user.username === item.c_id) {
         return item;

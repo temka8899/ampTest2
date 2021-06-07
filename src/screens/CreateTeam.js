@@ -12,7 +12,9 @@ import {
   StatusBar,
   ColorPropType,
 } from 'react-native';
+
 import ImagePicker from 'react-native-image-crop-picker';
+
 import {
   createGame,
   createLeague,
@@ -35,6 +37,7 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import FormInput from '../components/FormInput';
+import {AuthContext} from '../../App';
 
 Amplify.configure({
   ...awsmobile,
@@ -44,6 +47,7 @@ Amplify.configure({
 });
 
 const createTeamScreen = ({navigation}) => {
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const initialState = {name: ''};
   const [formState, setFormState] = useState(initialState);
   const [todos, setTodos] = useState([]);
@@ -97,7 +101,7 @@ const createTeamScreen = ({navigation}) => {
         graphqlOperation(createLeaguePlayer, {
           input: {
             leaguePlayerLeagueId: 'fbe1219f-7eec-4f34-b3b2-5a520fb05991',
-            leaguePlayerPlayerId: '9cd492d9-e35a-470a-a4a8-e280c0f7df5e',
+            leaguePlayerPlayerId: userInfo.c_id,
           },
         }),
       );
