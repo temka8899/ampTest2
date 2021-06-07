@@ -228,7 +228,7 @@ export const getLeaguePlayer = /* GraphQL */ `
   query GetLeaguePlayer($id: ID!) {
     getLeaguePlayer(id: $id) {
       id
-      league_id {
+      league {
         id
         startDate
         game {
@@ -265,7 +265,7 @@ export const listLeaguePlayers = /* GraphQL */ `
     listLeaguePlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        league_id {
+        league {
           id
           startDate
           description

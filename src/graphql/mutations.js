@@ -356,7 +356,7 @@ export const createLeaguePlayer = /* GraphQL */ `
   ) {
     createLeaguePlayer(input: $input, condition: $condition) {
       id
-      league_id {
+      league {
         id
         startDate
         game {
@@ -391,7 +391,7 @@ export const updateLeaguePlayer = /* GraphQL */ `
   ) {
     updateLeaguePlayer(input: $input, condition: $condition) {
       id
-      league_id {
+      league {
         id
         startDate
         game {
@@ -426,7 +426,7 @@ export const deleteLeaguePlayer = /* GraphQL */ `
   ) {
     deleteLeaguePlayer(input: $input, condition: $condition) {
       id
-      league_id {
+      league {
         id
         startDate
         game {

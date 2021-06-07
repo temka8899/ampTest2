@@ -308,7 +308,7 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
   subscription OnCreateLeaguePlayer {
     onCreateLeaguePlayer {
       id
-      league_id {
+      league {
         id
         startDate
         game {
@@ -340,7 +340,7 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
   subscription OnUpdateLeaguePlayer {
     onUpdateLeaguePlayer {
       id
-      league_id {
+      league {
         id
         startDate
         game {
@@ -372,7 +372,7 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
   subscription OnDeleteLeaguePlayer {
     onDeleteLeaguePlayer {
       id
-      league_id {
+      league {
         id
         startDate
         game {
