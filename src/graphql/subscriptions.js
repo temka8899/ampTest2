@@ -400,3 +400,123 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
     }
   }
 `;
+export const onCreateSchedule = /* GraphQL */ `
+  subscription OnCreateSchedule {
+    onCreateSchedule {
+      id
+      home {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      away {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      date
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateSchedule = /* GraphQL */ `
+  subscription OnUpdateSchedule {
+    onUpdateSchedule {
+      id
+      home {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      away {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      date
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteSchedule = /* GraphQL */ `
+  subscription OnDeleteSchedule {
+    onDeleteSchedule {
+      id
+      home {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      away {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      date
+      createdAt
+      updatedAt
+    }
+  }
+`;

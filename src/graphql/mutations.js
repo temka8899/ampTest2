@@ -454,3 +454,132 @@ export const deleteLeaguePlayer = /* GraphQL */ `
     }
   }
 `;
+export const createSchedule = /* GraphQL */ `
+  mutation CreateSchedule(
+    $input: CreateScheduleInput!
+    $condition: ModelScheduleConditionInput
+  ) {
+    createSchedule(input: $input, condition: $condition) {
+      id
+      home {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      away {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      date
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateSchedule = /* GraphQL */ `
+  mutation UpdateSchedule(
+    $input: UpdateScheduleInput!
+    $condition: ModelScheduleConditionInput
+  ) {
+    updateSchedule(input: $input, condition: $condition) {
+      id
+      home {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      away {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      date
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteSchedule = /* GraphQL */ `
+  mutation DeleteSchedule(
+    $input: DeleteScheduleInput!
+    $condition: ModelScheduleConditionInput
+  ) {
+    deleteSchedule(input: $input, condition: $condition) {
+      id
+      home {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      away {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      date
+      createdAt
+      updatedAt
+    }
+  }
+`;

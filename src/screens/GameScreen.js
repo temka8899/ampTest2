@@ -139,11 +139,12 @@ const GameScreen = ({navigation}) => {
     try {
       const playerData = await API.graphql(graphqlOperation(listPlayers));
       const todos = playerData.data.listPlayers.items;
-      console.log('Players>>>>>>>>>>>>>>', todos[0].name);
-
+      console.log('Players>>>>>>>>>>>>>>', todos);
+      console.log(todos.length);
       for (var i = 0; i < todos.length; i++) {
         if (todos[i].c_id == p_id) {
           console.log('found>>>>>>>>>>>>>>');
+<<<<<<< HEAD
           console.log(todos[i].c_id);
           console.log(p_id);
           return false;
@@ -153,8 +154,11 @@ const GameScreen = ({navigation}) => {
           console.log('taarsangui', i);
           console.log(todos[i].c_id);
           console.log(p_id);
+=======
+        } else {
+          console.log('NOTFOUND>>>>>>>>>>>');
+>>>>>>> 7610a62d46aeb3062e597d784fd1fb9cc06af5bf
         }
-        console.log('>>>>>>>>>>>>>>>>');
       }
       return true;
     } catch (err) {

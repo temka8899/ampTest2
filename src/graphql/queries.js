@@ -288,3 +288,76 @@ export const listLeaguePlayers = /* GraphQL */ `
     }
   }
 `;
+export const getSchedule = /* GraphQL */ `
+  query GetSchedule($id: ID!) {
+    getSchedule(id: $id) {
+      id
+      home {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      away {
+        id
+        league {
+          id
+          startDate
+          description
+          createdAt
+          updatedAt
+        }
+        name
+        win
+        lose
+        createdAt
+        updatedAt
+      }
+      date
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listSchedules = /* GraphQL */ `
+  query ListSchedules(
+    $filter: ModelScheduleFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSchedules(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        home {
+          id
+          name
+          win
+          lose
+          createdAt
+          updatedAt
+        }
+        away {
+          id
+          name
+          win
+          lose
+          createdAt
+          updatedAt
+        }
+        date
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
