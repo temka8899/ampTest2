@@ -146,6 +146,13 @@ const ScheduleScreen = ({navigation, route}) => {
           </Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        style={{margin: wp(10)}}
+        onPress={() => navigation.replace('CountScreen')}>
+        <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+          START
+        </Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
