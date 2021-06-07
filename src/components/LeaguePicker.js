@@ -20,23 +20,11 @@ const LeaguePicker = props => {
   1;
 
   async function fetchLeagues() {
-    // const user = await Auth.currentUserInfo();
-    // console.log('Attributes =======', user);
     try {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       const leagueList = leagueData.data.listLeagues.items;
       setLeagueList(leagueList);
       console.log('Leagues>>>>', leagueList);
-      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-      // const user2 = await Auth.currentAuthenticatedUser();
-      // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
-      // const result = await Auth.updateUserAttributes(user2, {
-      //   'custom:IntLevel': `5`,
-      //   'custom:Xp': `390`,
-      //   'custom:Name': `Mkoogii`,
-      //   'custom:Admin': `1`,
-      // });
-      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -53,6 +41,7 @@ const LeaguePicker = props => {
   });
   const onPressItem = option => {
     props.changeModalVisible(false);
+    console.log(option);
     props.setData(option);
   };
   return (

@@ -92,6 +92,7 @@ export const onCreatePlayer = /* GraphQL */ `
   subscription OnCreatePlayer {
     onCreatePlayer {
       id
+      admin
       c_id
       name
       level
@@ -105,6 +106,7 @@ export const onUpdatePlayer = /* GraphQL */ `
   subscription OnUpdatePlayer {
     onUpdatePlayer {
       id
+      admin
       c_id
       name
       level
@@ -118,6 +120,7 @@ export const onDeletePlayer = /* GraphQL */ `
   subscription OnDeletePlayer {
     onDeletePlayer {
       id
+      admin
       c_id
       name
       level
@@ -226,6 +229,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -259,6 +263,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -292,6 +297,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -324,6 +330,7 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -356,6 +363,7 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -388,6 +396,7 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level

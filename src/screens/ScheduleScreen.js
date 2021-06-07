@@ -53,6 +53,7 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const setData = option => {
     setChooseData(option);
+    console.log('dataa', option.name);
   };
 
   const [chooseDay, setChooseDay] = useState('1');
@@ -72,7 +73,7 @@ const ScheduleScreen = ({navigation, route}) => {
           borderWidth: 1,
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData}
+          {chooseData.game.name}
         </Text>
         <Image
           source={icons.drop}

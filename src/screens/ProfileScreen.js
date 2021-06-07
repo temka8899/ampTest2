@@ -69,24 +69,14 @@ const Profile = ({navigation}) => {
   }
   async function getUser() {
     console.log('object');
-    // let userInfo = JSON.parse(await AsyncStorage.getItem('__user_key__'));
     console.log(`userInfo`, userInfo);
-    // const user = await API.graphql(graphqlOperation(listPlayers));
-    // const playerData = await API.graphql(graphqlOperation(listPlayers));
-    // const players = playerData.data.listPlayers.items;
-
-    // console.log(user); // const user = await Auth.currentUserInfo();
-    // // .log('USER =======', user);
-    // setCurrentUser(userInfo);
     setLoading(false);
   }
   async function isAdmin() {
     if (userInfo.attributes['custom:Admin'] == 1) {
-      // console.log('yeas');
       setAdminVisible(true);
     } else {
       setAdminVisible(false);
-      // console.log('nooo');
     }
   }
   if (isLoading) {
@@ -209,7 +199,7 @@ const Profile = ({navigation}) => {
           borderWidth: 1,
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData}
+          {chooseData.name}
         </Text>
         <Image
           source={icons.drop}

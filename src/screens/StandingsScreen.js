@@ -52,7 +52,7 @@ const StandingsScreen = ({navigation, route}) => {
           borderWidth: 1,
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData}
+          {chooseData.name}
         </Text>
         <Image
           source={icons.drop}
