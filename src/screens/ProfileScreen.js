@@ -26,11 +26,8 @@ const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  // const [currentUser, setCurrentUser] = useState();
   const [adminVisible, setAdminVisible] = useState();
   const [xpPercent, setXpPercent] = useState('');
-  const [xp, setXp] = useState('1');
-  const [level, setLevel] = useState('1');
   const {userInfo} = React.useContext(AuthContext);
 
   useEffect(() => {
@@ -49,11 +46,9 @@ const Profile = ({navigation}) => {
 
   async function getXp() {
     try {
-      let max = userInfo.level * 100;
+      let max = userInfo.level * 50;
       let xp = userInfo.xp;
       setXpPercent((xp * 100) / max);
-      console.log(max, xp);
-      console.log(xpPercent);
     } catch (err) {
       console.log('aldaa', err);
     }
