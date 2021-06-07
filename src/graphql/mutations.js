@@ -113,6 +113,7 @@ export const createPlayer = /* GraphQL */ `
   ) {
     createPlayer(input: $input, condition: $condition) {
       id
+      admin
       c_id
       name
       level
@@ -129,6 +130,7 @@ export const updatePlayer = /* GraphQL */ `
   ) {
     updatePlayer(input: $input, condition: $condition) {
       id
+      admin
       c_id
       name
       level
@@ -145,6 +147,7 @@ export const deletePlayer = /* GraphQL */ `
   ) {
     deletePlayer(input: $input, condition: $condition) {
       id
+      admin
       c_id
       name
       level
@@ -265,6 +268,7 @@ export const createTeamPlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -301,6 +305,7 @@ export const updateTeamPlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -337,6 +342,7 @@ export const deleteTeamPlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -372,6 +378,7 @@ export const createLeaguePlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -407,6 +414,7 @@ export const updateLeaguePlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -442,6 +450,7 @@ export const deleteLeaguePlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level

@@ -178,6 +178,7 @@ const GameScreen = ({navigation}) => {
             name: username,
             xp: 1,
             level: 1,
+            admin: true,
           },
         }),
       );

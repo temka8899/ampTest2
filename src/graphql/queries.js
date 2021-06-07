@@ -77,6 +77,7 @@ export const getPlayer = /* GraphQL */ `
   query GetPlayer($id: ID!) {
     getPlayer(id: $id) {
       id
+      admin
       c_id
       name
       level
@@ -95,6 +96,7 @@ export const listPlayers = /* GraphQL */ `
     listPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        admin
         c_id
         name
         level
@@ -179,6 +181,7 @@ export const getTeamPlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -210,6 +213,7 @@ export const listTeamPlayers = /* GraphQL */ `
         }
         player {
           id
+          admin
           c_id
           name
           level
@@ -244,6 +248,7 @@ export const getLeaguePlayer = /* GraphQL */ `
       }
       player {
         id
+        admin
         c_id
         name
         level
@@ -274,6 +279,7 @@ export const listLeaguePlayers = /* GraphQL */ `
         }
         player {
           id
+          admin
           c_id
           name
           level
