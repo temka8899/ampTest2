@@ -54,7 +54,7 @@ const Player = ({item, index}) => (
     <Text style={[{color: COLORS.greyText, marginLeft: wp(4)}, styles.player]}>
       {index + 1}
     </Text>
-    {/* <Image source={} style={styles.avatar} /> */}
+    <Image source={item.image} style={styles.avatar} />
     <View
       style={{
         flexDirection: 'row',
@@ -103,9 +103,7 @@ const ParticipatesScreen = ({navigation, route}) => {
 
   const sorted = userData.sort((a, b) => b.level - a.level);
 
-  const renderPlayers = ({item, index}) => (
-    <Player item={participants} index={index} />
-  );
+  const renderPlayers = ({item, index}) => <Player item={item} index={index} />;
 
   let itemID = 0;
 
