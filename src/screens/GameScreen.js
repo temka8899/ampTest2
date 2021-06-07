@@ -135,8 +135,8 @@ const GameScreen = ({navigation}) => {
     try {
       const playerData = await API.graphql(graphqlOperation(listPlayers));
       const todos = playerData.data.listPlayers.items;
-      console.log('Players>>>>>>>>>>>>>>', todos[0].name);
-
+      console.log('Players>>>>>>>>>>>>>>', todos);
+      console.log(todos.length);
       for (var i = 0; i < todos.length; i++) {
         if (todos[i].c_id == p_id) {
           console.log('found>>>>>>>>>>>>>>');

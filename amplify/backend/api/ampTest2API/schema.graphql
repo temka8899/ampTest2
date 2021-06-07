@@ -38,3 +38,9 @@ type LeaguePlayer @model {
   league_id: League @connection
   player: Player @connection
 }
+
+type Schedule @model {
+  home: Team! @connection
+  away: Team! @connection
+  date: String!
+}
