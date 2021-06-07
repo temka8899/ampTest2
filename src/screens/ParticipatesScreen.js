@@ -54,7 +54,7 @@ const Player = ({item, index}) => (
     <Text style={[{color: COLORS.greyText, marginLeft: wp(4)}, styles.player]}>
       {index + 1}
     </Text>
-    <Image source={item.image} style={styles.avatar} />
+    {/* <Image source={} style={styles.avatar} /> */}
     <View
       style={{
         flexDirection: 'row',
@@ -82,28 +82,30 @@ const Player = ({item, index}) => (
 const ParticipatesScreen = ({navigation, route}) => {
   const [leagueId, setLeagueId] = useState('');
   const [PlayerID, setPlayerID] = useState('');
+  const [participants, setParticipants] = useState([]);
   const {userInfo} = React.useContext(AuthContext);
 
-  const fetchTeamPlayers = async () => {
+  const fetchLeague = async () => {
     try {
-      const TeamPlayerData = await API.graphql(
-        graphqlOperation(listTeamPlayers),
-      );
-      const todos = TeamPlayerData.data.listTeamPlayers.items;
-      setLeagueId(todos.id);
-      console.log('League Players', todos);
+      const leagueData = await API.graphql(graphqlOperation(listLeagues));
+      // const todos = leagueData.data.listTeams.items;
+      // console.log('Teams>>>>>>>>>>>>>>', todos);
+      console.log('Leagues>>>>>>>>>>>>>>', leagueData.data.listLeagues.items);
+      setLeagueId(leagueData.data.listLeagues.items[0].id);
     } catch (err) {
       console.log('error fetching todos', err);
     }
   };
   useEffect(() => {
-    fetchTeamPlayers();
+    fetchLeague();
     getPlayerId();
   }, []);
 
   const sorted = userData.sort((a, b) => b.level - a.level);
 
-  const renderPlayers = ({item, index}) => <Player item={item} index={index} />;
+  const renderPlayers = ({item, index}) => (
+    <Player item={participants} index={index} />
+  );
 
   let itemID = 0;
 
@@ -124,7 +126,7 @@ const ParticipatesScreen = ({navigation, route}) => {
     try {
       const playerData = await API.graphql(
         graphqlOperation(listPlayers, {
-          filter: {c_id: {eq: '37e2f195-76f1-4d68-8ee1-bd453b8185c4'}},
+          filter: {c_id: {eq: userInfo.c_id}},
         }),
       );
       // const todos = leagueData.data.listTeams.items;
@@ -150,8 +152,22 @@ const ParticipatesScreen = ({navigation, route}) => {
     } catch (err) {
       console.log('error creating League Player:', err);
     }
-    fetchTeamPlayers();
+    LeaguePlayers();
   };
+
+  const LeaguePlayers = async () => {
+    try {
+      const leaguePlayerData = await API.graphql(
+        graphqlOperation(listLeaguePlayers),
+      );
+      const data = leaguePlayerData.data.listLeaguePlayers.items;
+      console.log('League Player>>>>>>>>>>>>>>', data);
+      setParticipants(data.player);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  };
+
   function bottomModal() {
     return (
       <View style={styles.modalContainer}>
@@ -271,7 +287,7 @@ const ParticipatesScreen = ({navigation, route}) => {
         <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
           In League
         </Text>
-        <Button title="test fetch" onPress={() => fetchTeamPlayers()} />
+        <Button title="test fetch" onPress={() => fetchLeague()} />
       </View>
       <FlatList data={sorted} renderItem={renderPlayers} />
       {bottomModal()}
