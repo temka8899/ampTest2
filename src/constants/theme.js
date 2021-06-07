@@ -37,6 +37,7 @@ export const COLORS = {
   background: '#000325',
   green: '#97D729',
   red: '#FB2B3A',
+  count: '#1A1C3B',
 };
 
 export const SIZES = {
