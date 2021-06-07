@@ -130,6 +130,21 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function fetchPlayer() {
+    try {
+      const playerData = await API.graphql(
+        graphqlOperation(listPlayers, {
+          filter: {c_id: {eq: '37e2f195-76f1-4d68-8ee1-bd453b8185c4'}},
+        }),
+      );
+      // const todos = leagueData.data.listTeams.items;
+      // console.log('Teams>>>>>>>>>>>>>>', todos);
+      console.log('Player>>>>>>>>>>>>>>', playerData.data.listPlayers.items[0]);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
   async function fetchTeamPlayers() {
     try {
       const leagueData = await API.graphql(graphqlOperation(listTeamPlayers));
@@ -165,6 +180,7 @@ const createTeamScreen = ({navigation}) => {
           onPress={() => fetchLeaguePlayers()}
           title="Fetch League Player"
         />
+        <Button onPress={() => fetchPlayer()} title="Fetch Players" />
       </View>
     </SafeAreaView>
   );
