@@ -156,8 +156,6 @@ const GameScreen = ({navigation}) => {
       const players = playerData.data.listPlayers.items;
       console.log('Players>>>>>>>>>>>>>>', players);
       for (var i = 0; i < players.length; i++) {
-        console.log('p', p_id);
-        console.log('c', players[i].c_id);
         if (players[i].c_id == p_id) {
           return false;
         }

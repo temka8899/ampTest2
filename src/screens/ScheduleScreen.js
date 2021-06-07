@@ -45,7 +45,7 @@ const ScheduleScreen = ({navigation, route}) => {
     itemID = route.params.itemId;
   }
 
-  const [chooseData, setChooseData] = useState('Table Soccer');
+  const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -53,7 +53,7 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const setData = option => {
     setChooseData(option);
-    console.log('dataa', option.name);
+    console.log('League bainuu', option);
   };
 
   const [chooseDay, setChooseDay] = useState('1');
@@ -73,7 +73,8 @@ const ScheduleScreen = ({navigation, route}) => {
           borderWidth: 1,
         }}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData.game.name}
+          {chooseData == '' ? 'Select' : chooseData.game.name}
+          {/* {chooseData.game.name} */}
         </Text>
         <Image
           source={icons.drop}
