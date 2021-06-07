@@ -27,6 +27,7 @@ import {
   listTeamPlayers,
   listTeams,
   listLeaguePlayers,
+  getTeam,
 } from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
@@ -109,11 +110,22 @@ const createTeamScreen = ({navigation}) => {
 
   async function fetchTeam() {
     try {
+      // let filter = {
+      //   or: [
+      //     {
+      //       name: {eq: 'team2'},
+      //     },
+      //     {
+      //       name: {eq: 'team2'},
+      //     },
+      //   ],
+      // };
       const leagueData = await API.graphql(
-        graphqlOperation(listTeams, {name: 'team2'}),
+        graphqlOperation(listTeams, {filter: {name: {eq: 'team3'}}}),
       );
-      const todos = leagueData.data.listTeams.items;
-      console.log('Teams>>>>>>>>>>>>>>', todos);
+      // const todos = leagueData.data.listTeams.items;
+      // console.log('Teams>>>>>>>>>>>>>>', todos);
+      console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items[0]);
     } catch (err) {
       console.log('error fetching todos', err);
     }
