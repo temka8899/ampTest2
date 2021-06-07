@@ -128,10 +128,14 @@ const GameScreen = ({navigation}) => {
     const user = await Auth.currentUserInfo();
     setLoading(false);
     setName(user.attributes['custom:Name']);
-    addPlayer(user.attributes['custom:Name'], user.username);
+
+    if (!checkPlayer(user.username)) {
+      console.log('hihi');
+      addPlayer(user.attributes['custom:Name'], user.username);
+    }
   }
 
-  async function addPlayer(username, p_id) {
+  async function checkPlayer(p_id) {
     try {
       const playerData = await API.graphql(graphqlOperation(listPlayers));
       const todos = playerData.data.listPlayers.items;
@@ -142,17 +146,24 @@ const GameScreen = ({navigation}) => {
           console.log('found>>>>>>>>>>>>>>');
           console.log(todos[i].c_id);
           console.log(p_id);
+          return false;
+          // break;
         } else {
           // addPlayer();
+          console.log('taarsangui', i);
           console.log(todos[i].c_id);
           console.log(p_id);
         }
         console.log('>>>>>>>>>>>>>>>>');
       }
+      return true;
     } catch (err) {
       console.log('error fetching todos', err);
     }
+  }
 
+  async function addPlayer(username, p_id) {
+    console.log('uuslee');
     try {
       await API.graphql(
         graphqlOperation(createPlayer, {

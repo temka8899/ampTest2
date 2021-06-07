@@ -40,29 +40,29 @@ const GamePicker = props => {
       console.log('error fetching todos', err);
     }
   }
-  // const option = GameList.map((item, index) => {
-  //   return (
-  //     <TouchableOpacity
-  //       style={styles.option}
-  //       key={index}
-  //       onPress={() => onPressItem(item)}>
-  //       <Text style={styles.text}>{item.name}</Text>
-  //     </TouchableOpacity>
-  //   );
-  // });
-  // const onPressItem = option => {
-  //   props.changeModalVisible(false);
-  //   props.setData(option);
-  // };
-  // return (
-  //   <TouchableOpacity
-  //     onPress={() => props.changeModalVisible(false)}
-  //     style={styles.container}>
-  //     <View style={styles.modal}>
-  //       <ScrollView>{option}</ScrollView>
-  //     </View>
-  //   </TouchableOpacity>
-  // );
+  const option = GameList.map((item, index) => {
+    return (
+      <TouchableOpacity
+        style={styles.option}
+        key={index}
+        onPress={() => onPressItem(item)}>
+        <Text style={styles.text}>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  });
+  const onPressItem = option => {
+    props.changeModalVisible(false);
+    props.setData(option);
+  };
+  return (
+    <TouchableOpacity
+      onPress={() => props.changeModalVisible(false)}
+      style={styles.container}>
+      <View style={styles.modal}>
+        <ScrollView>{option}</ScrollView>
+      </View>
+    </TouchableOpacity>
+  );
 };
 
 const styles = StyleSheet.create({
