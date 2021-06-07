@@ -61,6 +61,8 @@ async function getUserData() {
 const GameScreen = ({navigation}) => {
   useEffect(() => {
     fetchLeagues();
+    findGreet();
+    getName();
   }, []);
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
@@ -119,55 +121,49 @@ const GameScreen = ({navigation}) => {
     setGreet('Evening');
   };
 
-  useEffect(() => {
-    findGreet();
-    getName();
-  }, []);
-
   async function getName() {
     const user = await Auth.currentUserInfo();
     setLoading(false);
     setName(user.attributes['custom:Name']);
+    // const playerData = await API.graphql(graphqlOperation(listPlayers));
+    // const todos = playerData.data.listPlayers.items;
+    // if (todos.length == 0) {
+    // }
+    checkPlayer(user, user.attributes['custom:Name'], user.username);
 
-    if (!checkPlayer(user.username)) {
-      console.log('hihi');
-      addPlayer(user.attributes['custom:Name'], user.username);
-    }
+    // if (!checkPlayer(user.username)) {
+    //   console.log('hihi');
+    // }
   }
 
-  async function checkPlayer(p_id) {
-    try {
-      const playerData = await API.graphql(graphqlOperation(listPlayers));
-      const todos = playerData.data.listPlayers.items;
-      console.log('Players>>>>>>>>>>>>>>', todos);
-      console.log(todos.length);
-      for (var i = 0; i < todos.length; i++) {
-        if (todos[i].c_id == p_id) {
-          console.log('found>>>>>>>>>>>>>>');
-<<<<<<< HEAD
-          console.log(todos[i].c_id);
-          console.log(p_id);
-          return false;
-          // break;
-        } else {
-          // addPlayer();
-          console.log('taarsangui', i);
-          console.log(todos[i].c_id);
-          console.log(p_id);
-=======
-        } else {
-          console.log('NOTFOUND>>>>>>>>>>>');
->>>>>>> 7610a62d46aeb3062e597d784fd1fb9cc06af5bf
-        }
-      }
-      return true;
-    } catch (err) {
-      console.log('error fetching todos', err);
+  async function checkPlayer(user, username, p_id) {
+    // try {
+    const playerData = await API.graphql(graphqlOperation(listPlayers));
+    const todos = playerData.data.listPlayers.items;
+    console.log('Players>>>>>>>>>>>>>>', todos);
+    console.log(todos.length);
+    if (todos.length == 0) {
+      addPlayer(user.attributes['custom:Name'], user.username);
     }
+    for (var i = 0; i <= todos.length; i++) {
+      if (todos[i].c_id === p_id) {
+        console.log('found>>>>>>>>>>>>>>');
+        console.log(todos[i].c_id);
+        console.log(p_id);
+      } else {
+        addPlayer(user.attributes['custom:Name'], user.username);
+        console.log('taarsangui', i);
+        console.log(todos[i].c_id);
+        console.log(p_id);
+      }
+    }
+    // } catch (err) {
+    //   console.log('error fetching todos', err);
+    // }
   }
 
   async function addPlayer(username, p_id) {
-    console.log('uuslee');
+    console.log('uuslee', username, p_id);
     try {
       await API.graphql(
         graphqlOperation(createPlayer, {

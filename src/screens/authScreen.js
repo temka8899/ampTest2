@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
-import {listGames, listLeagues} from '../graphql/queries';
+// import {listGames, listLeagues} from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
 import FormInput from '../components/FormInput';
@@ -25,6 +25,7 @@ import {SignUp} from 'aws-amplify-react-native/dist/Auth';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {icons, images, index, theme} from '../constants';
 import {wp, hp, ft, FONTS, COLORS} from '../constants/theme';
+import {listPlayers, listLeagues, listTeams} from '../graphql/queries';
 
 import FlashMessage, {
   showMessage,
@@ -272,6 +273,7 @@ const SignInScreen = ({navigation, onPress}) => {
       //   'response:>>',
       //   response.signInUserSession.accessToken.jwtToken,
       // );
+
       navigation.replace('Tabs');
       console.log('✅ Sign In Success');
       setUsername('');
