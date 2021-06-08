@@ -269,11 +269,7 @@ const SignInScreen = ({navigation, onPress}) => {
     try {
       setLoading(true);
       let response = await Auth.signIn(username, password);
-      console.log('response:>>', response);
-      // console.log(
-      //   'response:>>',
-      //   response.signInUserSession.accessToken.jwtToken,
-      // );
+      //console.log('response:>>', response);
 
       navigation.replace('Tabs');
       console.log('✅ Sign In Success');

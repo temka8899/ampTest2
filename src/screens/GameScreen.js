@@ -140,19 +140,19 @@ const GameScreen = ({navigation}) => {
   }
 
   async function findUser(user) {
-    console.log(`user`, user);
+    console.log(`cognito data`, user);
     const playerData = await API.graphql(graphqlOperation(listPlayers));
-    console.log(
-      `playerData.data.listPlayers.items`,
-      playerData.data.listPlayers.items,
-    );
+    // console.log(
+    //   `playerData.data.listPlayers.items`,
+    //   playerData.data.listPlayers.items,
+    // );
     let finded = playerData.data.listPlayers.items.find((item, index) => {
       if (user.username === item.c_id) {
         return item;
       }
     });
     setUserInfo(finded);
-    console.log('finded set hiilee', finded);
+    console.log('context player model data', finded);
   }
 
   async function checkPlayer(playerData, p_id) {

@@ -41,7 +41,7 @@ type LeaguePlayer @model {
 }
 
 type Schedule @model {
-  home: Team! @connection
-  away: Team! @connection
+  home: TeamPlayer! @connection
+  away: TeamPlayer! @connection
   date: String!
 }
