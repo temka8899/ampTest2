@@ -178,12 +178,14 @@ const ParticipatesScreen = ({navigation, route}) => {
     return (
       <View style={styles.modalContainer}>
         <Modal
-          visible={isModalVisible}
+          isVisible={isModalVisible}
           animationType="fade"
           transparent={true}
           onSwipeComplete={() => changeModalVisible(false)}
           swipeDirection="down"
-          style={{margin: 0}}>
+          onBackdropPress={() => {
+            setModalVisible(false);
+          }}>
           <View style={styles.modalBody}>
             <TouchableOpacity
               style={styles.closeBtn}
