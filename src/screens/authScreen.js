@@ -11,8 +11,8 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   StatusBar,
-  ColorPropType,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
@@ -50,7 +50,6 @@ const SwitchView = ({value, onPress}) => {
   const [Xp, setXp] = useState('1');
 
   const [currentUser, setCurrentUser] = useState();
-  // export default currentUser;
 
   async function signUp() {
     console.log(email);
@@ -83,7 +82,6 @@ const SwitchView = ({value, onPress}) => {
       console.log(temp);
       console.log('✅ Code confirmed');
       onPress(1);
-      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     } catch (error) {
       console.log('❌ Verification code does not match.', error.code);
     }
@@ -145,22 +143,7 @@ const SwitchView = ({value, onPress}) => {
               placeholder="Email"
               keyboardType="email-address"
             />
-            {/* <TextInput
-              
 
-              leftIcon="account"
-              placeholder="Enter sign up email"
-              placeholderTextColor="white"
-              autoCorrect={false}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              style={{
-                color: 'white',
-                borderColor: 'white',
-                borderWidth: 3,
-              }}
-            /> */}
             <FormInput
               autoCorrect={false}
               // value={signUpPassword}
@@ -269,7 +252,6 @@ const SignInScreen = ({navigation, onPress}) => {
     try {
       setLoading(true);
       let response = await Auth.signIn(username, password);
-      //console.log('response:>>', response);
 
       navigation.replace('Tabs');
       console.log('✅ Sign In Success');
@@ -306,7 +288,6 @@ const SignInScreen = ({navigation, onPress}) => {
           autoCorrect={false}
           placeholder="Email"
           keyboardType="email-address"
-          autoCorrect={false}
           value={username}
           onChangeText={text => setUsername(text)}
         />
@@ -314,7 +295,6 @@ const SignInScreen = ({navigation, onPress}) => {
           autoCorrect={false}
           placeholder="Password"
           keyboardType="email-address"
-          autoCorrect={false}
           value={password}
           onChangeText={text => setPassword(text)}
           textContentType="password"
@@ -326,8 +306,6 @@ const SignInScreen = ({navigation, onPress}) => {
             style={{
               width: wp(50),
               height: hp(5.29),
-              // borderColor: 'white',
-              // borderWidth: 1,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -398,32 +376,6 @@ export default function AuthScreen() {
             />
           </View>
         </SafeAreaView>
-        {/* <SafeAreaView>
-          <View style={{marginTop: 450}}>
-            <TouchableOpacity onPress={() => setWhichScreen(1)}>
-              <ImageBackground
-                source={images.button}
-                style={{
-                  height: 100,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text style={{color: 'white'}}>Sign In</Text>
-              </ImageBackground>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <ImageBackground
-                source={images.button}
-                style={{
-                  height: 100,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text style={{color: 'white'}}>Sign Up</Text>
-              </ImageBackground>
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView> */}
       </ImageBackground>
     </TouchableWithoutFeedback>
   );
