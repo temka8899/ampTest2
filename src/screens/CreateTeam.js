@@ -21,6 +21,7 @@ import {
   createTeam,
   createTeamPlayer,
   createLeaguePlayer,
+  deleteLeaguePlayer,
 } from '../graphql/mutations';
 import {
   listGames,
@@ -100,14 +101,29 @@ const createTeamScreen = ({navigation}) => {
       await API.graphql(
         graphqlOperation(createLeaguePlayer, {
           input: {
-            leaguePlayerLeagueId: 'fbe1219f-7eec-4f34-b3b2-5a520fb05991',
-            leaguePlayerPlayerId: '5d6d8039-934e-4e9c-a8b8-63ae58715e98',
+            leaguePlayerLeagueId: '0a0fa76f-af84-4f75-bc16-142f4176be58',
+            leaguePlayerPlayerId: '52a263dc-6098-48fc-a268-60cf8b585c39',
           },
         }),
       );
       console.log('League Player Created');
     } catch (err) {
       console.log('error creating League Player:', err);
+    }
+  }
+
+  async function DeleteLeaguePlayer() {
+    try {
+      await API.graphql(
+        graphqlOperation(deleteLeaguePlayer, {
+          input: {
+            id: '120c0db5-2912-42ad-a653-a07eb8c5b9cf',
+          },
+        }),
+      );
+      console.log('League Player deleted');
+    } catch (err) {
+      console.log('error deleting League Player:', err);
     }
   }
 
@@ -200,6 +216,10 @@ const createTeamScreen = ({navigation}) => {
         />
         <Button onPress={() => fetchPlayer()} title="Fetch Players" />
         <Button onPress={() => fetchLeague()} title="Fetch League" />
+        <Button
+          onPress={() => DeleteLeaguePlayer()}
+          title="Delete LeaguePlayer"
+        />
       </View>
     </SafeAreaView>
   );
