@@ -39,6 +39,10 @@ const ParticipatesScreen = ({navigation, route}) => {
   const {userInfo} = React.useContext(AuthContext);
   const [refreshing, setRefreshing] = React.useState(false);
 
+  const [inLeague, setInLeague] = useState(false);
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const onRefresh = React.useCallback(() => {
     LeaguePlayers();
     setRefreshing(true);
@@ -46,10 +50,11 @@ const ParticipatesScreen = ({navigation, route}) => {
   }, [LeaguePlayers]);
 
   useEffect(() => {
+    checkInLeague();
     LeaguePlayers();
     fetchLeague();
     getPlayerId();
-  }, [LeaguePlayers, fetchLeague, getPlayerId]);
+  }, [LeaguePlayers, checkInLeague, fetchLeague, getPlayerId]);
 
   const sorted = leaguePlayers.sort((a, b) => b.player.level - a.player.level);
 
@@ -61,14 +66,8 @@ const ParticipatesScreen = ({navigation, route}) => {
 
   console.log('LeagueInfo', gameInfo);
 
-  const [inLeague, setInLeague] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-
   const changeModalVisible = bool => {
     setModalVisible(bool);
-  };
-  const changeInLeague = bool => {
-    setInLeague(bool);
   };
 
   const addPlayerBtn = async () => {
@@ -104,6 +103,24 @@ const ParticipatesScreen = ({navigation, route}) => {
       console.log('error deleting League Player:', err);
     }
   }
+  const checkInLeague = React.useCallback(async () => {
+    try {
+      const leaguePlayerData = await API.graphql(
+        graphqlOperation(listLeaguePlayers, {
+          filter: {
+            playerID: {eq: PlayerID},
+          },
+        }),
+      );
+      const todos = leaguePlayerData.data.listLeaguePlayers.items;
+      if (todos.length > 0) {
+        setInLeague(true);
+      }
+      console.log('check>>>>>>>>>>>>>>', todos);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }, [PlayerID]);
 
   const getPlayerId = React.useCallback(async () => {
     try {
@@ -194,13 +211,13 @@ const ParticipatesScreen = ({navigation, route}) => {
                 {
                   inLeague
                     ? [
-                        changeInLeague(!inLeague),
+                        setInLeague(!inLeague),
                         DeleteLeaguePlayer(),
                         setModalVisible(false),
                       ]
                     : [
                         addPlayerBtn(),
-                        changeInLeague(!inLeague),
+                        setInLeague(!inLeague),
                         setModalVisible(false),
                       ];
                 }
