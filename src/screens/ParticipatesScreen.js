@@ -78,7 +78,7 @@ const ParticipatesScreen = ({navigation, route}) => {
           input: {
             leaguePlayerLeagueId: LeagueId,
             leaguePlayerPlayerId: PlayerID,
-            playerId: PlayerID,
+            playerID: PlayerID,
             leagueID: LeagueId,
           },
         }),

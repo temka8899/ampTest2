@@ -262,6 +262,7 @@ export const getLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerID
       createdAt
       updatedAt
     }
@@ -295,6 +296,7 @@ export const listLeaguePlayers = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerID
         createdAt
         updatedAt
       }

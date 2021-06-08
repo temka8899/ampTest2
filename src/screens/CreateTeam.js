@@ -206,6 +206,22 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function checkLeaguePlayers() {
+    try {
+      const leaguePlayerData = await API.graphql(
+        graphqlOperation(listLeaguePlayers, {
+          filter: {
+            playerID: {eq: 'e3a0bb17-c3ca-4fd1-bbfe-44de4b267159'},
+          },
+        }),
+      );
+      const todos = leaguePlayerData.data.listLeaguePlayers.items;
+      console.log('League Player>>>>>>>>>>>>>>', todos);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content"></StatusBar>
@@ -224,6 +240,10 @@ const createTeamScreen = ({navigation}) => {
         <Button
           onPress={() => DeleteLeaguePlayer()}
           title="Delete LeaguePlayer"
+        />
+        <Button
+          onPress={() => checkLeaguePlayers()}
+          title="check LeaguePlayer"
         />
       </View>
     </SafeAreaView>
