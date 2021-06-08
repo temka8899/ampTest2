@@ -6,7 +6,6 @@ import {
   Image,
   View,
   TouchableOpacity,
-  ScrollView,
   FlatList,
   StatusBar,
   ImageBackground,
