@@ -123,7 +123,7 @@ const GameScreen = ({navigation}) => {
     const user = await Auth.currentUserInfo();
     const playerData = await API.graphql(graphqlOperation(listPlayers));
     setLoading(false);
-    console.log('userInfo', userInfo);
+    //console.log('userInfo', userInfo);
     setName(user.attributes['custom:Name']);
     let existing = await checkPlayer(playerData, user.username);
     if (existing) {
