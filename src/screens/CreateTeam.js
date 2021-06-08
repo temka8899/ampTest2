@@ -98,7 +98,7 @@ const createTeamScreen = ({navigation}) => {
 
   async function addLeaguePlayer() {
     try {
-      await API.graphql(
+      const temp = await API.graphql(
         graphqlOperation(createLeaguePlayer, {
           input: {
             leaguePlayerLeagueId: '0a0fa76f-af84-4f75-bc16-142f4176be58',
@@ -106,7 +106,7 @@ const createTeamScreen = ({navigation}) => {
           },
         }),
       );
-      console.log('League Player Created');
+      console.log('League Player Created', temp);
     } catch (err) {
       console.log('error creating League Player:', err);
     }
