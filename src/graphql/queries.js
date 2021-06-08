@@ -250,6 +250,7 @@ export const getLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       player {
         id
         avatar
@@ -282,6 +283,7 @@ export const listLeaguePlayers = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         player {
           id
           avatar
@@ -352,6 +354,8 @@ export const getSchedule = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      homeScore
+      awayScore
       date
       createdAt
       updatedAt
@@ -377,6 +381,8 @@ export const listSchedules = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        homeScore
+        awayScore
         date
         createdAt
         updatedAt

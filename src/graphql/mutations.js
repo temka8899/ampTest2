@@ -382,6 +382,7 @@ export const createLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       player {
         id
         avatar
@@ -419,6 +420,7 @@ export const updateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       player {
         id
         avatar
@@ -456,6 +458,7 @@ export const deleteLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       player {
         id
         avatar
@@ -527,6 +530,8 @@ export const createSchedule = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      homeScore
+      awayScore
       date
       createdAt
       updatedAt
@@ -588,6 +593,8 @@ export const updateSchedule = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      homeScore
+      awayScore
       date
       createdAt
       updatedAt
@@ -649,6 +656,8 @@ export const deleteSchedule = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      homeScore
+      awayScore
       date
       createdAt
       updatedAt

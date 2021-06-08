@@ -347,6 +347,18 @@ const SignInScreen = ({navigation, onPress}) => {
             )}
           </ImageBackground>
         </TouchableOpacity>
+        <TouchableOpacity>
+          <Text
+            style={{
+              fontFamily: FONTS.brandFont,
+              color: COLORS.white,
+              paddingTop: hp(0.6),
+              margin: hp(1),
+              fontSize: RFPercentage(1.7),
+            }}>
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
