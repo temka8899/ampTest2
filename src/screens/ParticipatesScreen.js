@@ -193,13 +193,13 @@ const ParticipatesScreen = ({navigation, route}) => {
                 {
                   inLeague
                     ? [
-                        changeInLeague(false),
+                        changeInLeague(!inLeague),
                         DeleteLeaguePlayer(),
                         setModalVisible(false),
                       ]
                     : [
                         addPlayerBtn(),
-                        changeInLeague(true),
+                        changeInLeague(!inLeague),
                         setModalVisible(false),
                       ];
                 }
