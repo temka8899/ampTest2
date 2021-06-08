@@ -102,6 +102,7 @@ const createTeamScreen = ({navigation}) => {
         graphqlOperation(createLeaguePlayer, {
           input: {
             leaguePlayerLeagueId: '0a0fa76f-af84-4f75-bc16-142f4176be58',
+            leagueID: '0a0fa76f-af84-4f75-bc16-142f4176be58',
             leaguePlayerPlayerId: '52a263dc-6098-48fc-a268-60cf8b585c39',
           },
         }),
@@ -192,7 +193,11 @@ const createTeamScreen = ({navigation}) => {
   async function fetchLeaguePlayers() {
     try {
       const leaguePlayerData = await API.graphql(
-        graphqlOperation(listLeaguePlayers),
+        graphqlOperation(listLeaguePlayers, {
+          filter: {
+            leagueID: {eq: '3d6a38a1-a788-4adf-b4ee-44e3d1a479be'},
+          },
+        }),
       );
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       console.log('League Player>>>>>>>>>>>>>>', todos);
