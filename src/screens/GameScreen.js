@@ -229,7 +229,6 @@ const GameScreen = ({navigation}) => {
               {name}
             </Text>
           </View>
-
           <View>
             <TouchableOpacity>
               <Image

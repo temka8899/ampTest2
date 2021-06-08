@@ -13,6 +13,7 @@ type League @model {
 
 type Player @model {
   id: ID!
+  avatar: String
   admin: Boolean
   c_id: String!
   name: String!
@@ -41,6 +42,7 @@ type LeaguePlayer @model {
 }
 
 type Schedule @model {
+  id: ID!
   home: TeamPlayer! @connection
   away: TeamPlayer! @connection
   date: String!
