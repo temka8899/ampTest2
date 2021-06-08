@@ -9,6 +9,7 @@ import {
   ScrollView,
   FlatList,
   StatusBar,
+  ImageBackground,
   Button,
 } from 'react-native';
 // import {DATA} from './GameScreen';
@@ -20,6 +21,7 @@ import {
   createTeamPlayer,
   createLeaguePlayer,
 } from '../graphql/mutations';
+import LinearGradient from 'react-native-linear-gradient';
 import {
   listGames,
   listLeagues,
@@ -96,6 +98,7 @@ const ParticipatesScreen = ({navigation, route}) => {
       console.log('error fetching todos', err);
     }
   };
+
   useEffect(() => {
     fetchLeague();
     getPlayerId();
@@ -105,11 +108,10 @@ const ParticipatesScreen = ({navigation, route}) => {
 
   const renderPlayers = ({item, index}) => <Player item={item} index={index} />;
 
-  let itemID = 0;
+  const gameInfo = route.params.itemId;
 
-  if (route.params?.itemId) {
-    itemID = route.params.itemId;
-  }
+  console.log('gameInfo', gameInfo);
+
   const [inLeague, setInLeague] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -127,8 +129,6 @@ const ParticipatesScreen = ({navigation, route}) => {
           filter: {c_id: {eq: userInfo.c_id}},
         }),
       );
-      // const todos = leagueData.data.listTeams.items;
-      // console.log('Teams>>>>>>>>>>>>>>', todos);
       setPlayerID(playerData.data.listPlayers.items[0].id);
       console.log('Player ID', playerData.data.listPlayers.items[0].id);
     } catch (err) {
@@ -256,7 +256,7 @@ const ParticipatesScreen = ({navigation, route}) => {
               fontSize: RFPercentage(1.7),
               color: COLORS.white,
             }}>
-            {!inLeague ? "I'am in" : "I'am out"}
+            {!inLeague ? "I'm in" : "I'm out"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -264,26 +264,59 @@ const ParticipatesScreen = ({navigation, route}) => {
         style={{
           width: wp(100),
           height: hp(40),
-          justifyContent: 'center',
-          alignItems: 'center',
-          // borderColor: 'red',
-          // borderWidth: 1,
+          borderWidth: 1,
         }}>
-        <Image
-          source={DATA[itemID].image}
-          style={{resizeMode: 'contain', height: hp(42)}}
-        />
+        <ImageBackground
+          source={{
+            uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${gameInfo.game.image}`,
+          }}
+          style={{
+            alignSelf: 'center',
+            width: wp(63.3),
+            height: hp(39),
+          }}
+          imageStyle={{borderRadius: 40}}>
+          <LinearGradient
+            style={{flex: 1, borderRadius: 40}}
+            start={{x: 1, y: 0}}
+            end={{x: 1, y: 1}}
+            colors={['#00000000', '#000']}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-end',
+                marginBottom: hp(5),
+                marginHorizontal: wp(5),
+              }}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: FONTS.brandFont,
+                  paddingVertical: hp(1),
+                }}>
+                {gameInfo.game.name}
+              </Text>
+              <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
+                {gameInfo.startDate}
+              </Text>
+            </View>
+          </LinearGradient>
+        </ImageBackground>
       </View>
       <View
         style={{
           height: hp(5),
-          // borderColor: 'red',
-          // borderWidth: 1,
           justifyContent: 'center',
           paddingLeft: wp(7),
+          marginVertical: hp(1),
         }}>
-        <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
-          In League
+        <Text
+          style={{
+            color: COLORS.white,
+            fontFamily: FONTS.brandFont,
+            alignSelf: 'center',
+          }}>
+          {gameInfo.description}
         </Text>
         <Button title="test fetch" onPress={() => fetchLeague()} />
       </View>
@@ -329,7 +362,6 @@ const styles = StyleSheet.create({
     borderLeftColor: COLORS.white,
     borderRightColor: COLORS.white,
     borderWidth: 1,
-    // justifyContent: 'space-evenly',
   },
   closeBtn: {
     marginVertical: hp(1),
