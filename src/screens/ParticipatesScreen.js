@@ -11,6 +11,7 @@ import {
   ImageBackground,
   Button,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 // import {DATA} from './GameScreen';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
@@ -18,7 +19,12 @@ import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createLeaguePlayer, deleteLeaguePlayer} from '../graphql/mutations';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {listPlayers, listLeaguePlayers, getTeam} from '../graphql/queries';
+import {
+  listPlayers,
+  listLeaguePlayers,
+  getTeam,
+  getLeague,
+} from '../graphql/queries';
 
 import AppBar from '../components/AppBar';
 import {COLORS, FONTS, icons} from '../constants';
@@ -27,27 +33,32 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {userData} from '../data/Players';
 import Modal from 'react-native-modal';
 import {AuthContext} from '../../App';
+import {useScrollToTop} from '@react-navigation/native';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 const ParticipatesScreen = ({navigation, route}) => {
+  const [isLoading, setLoading] = useState(true);
   const [deleteID, setDeleteID] = useState('');
   const [PlayerID, setPlayerID] = useState('');
   const [leaguePlayers, setLeaguePlayers] = useState([]);
   const {userInfo} = React.useContext(AuthContext);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const [inLeague, setInLeague] = useState(false);
+  const [inLeague, setInLeague] = useState();
 
   const [isModalVisible, setModalVisible] = useState(false);
 
   const onRefresh = React.useCallback(() => {
+    checkInLeague();
     LeaguePlayers();
+    fetchLeague();
+    getPlayerId();
     setRefreshing(true);
     wait(500).then(() => setRefreshing(false));
-  }, [LeaguePlayers]);
+  }, [LeaguePlayers, checkInLeague, fetchLeague, getPlayerId]);
 
   useEffect(() => {
     checkInLeague();
@@ -61,10 +72,6 @@ const ParticipatesScreen = ({navigation, route}) => {
   const gameInfo = route.params.itemId;
 
   const LeagueId = route.params.itemId.id;
-
-  console.log('leagueId :>-------------------> ', LeagueId);
-
-  console.log('LeagueInfo', gameInfo);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -82,14 +89,15 @@ const ParticipatesScreen = ({navigation, route}) => {
           },
         }),
       );
-      setDeleteID(temp.data.createLeaguePlayer.id);
-      console.log('delete id', temp.data.createLeaguePlayer.id);
+      setTimeout(() => {
+        onRefresh();
+      }, 1000);
     } catch (err) {
       console.log('error creating League Player:', err);
     }
   };
 
-  async function DeleteLeaguePlayer() {
+  const DeleteLeaguePlayer = async () => {
     try {
       await API.graphql(
         graphqlOperation(deleteLeaguePlayer, {
@@ -99,10 +107,15 @@ const ParticipatesScreen = ({navigation, route}) => {
         }),
       );
       console.log('League Player deleted');
+      // setLeaguePlayers(leaguePlayers.splice(1, 1));
+      setTimeout(() => {
+        onRefresh();
+      }, 1000);
     } catch (err) {
       console.log('error deleting League Player:', err);
     }
-  }
+  };
+
   const checkInLeague = React.useCallback(async () => {
     try {
       const leaguePlayerData = await API.graphql(
@@ -112,14 +125,18 @@ const ParticipatesScreen = ({navigation, route}) => {
           },
         }),
       );
-      const todos = leaguePlayerData.data.listLeaguePlayers.items;
+      const todos = await leaguePlayerData.data.listLeaguePlayers.items;
+      console.log('check - league>', todos);
+      setDeleteID(todos[0].id);
       if (todos.length > 0) {
         setInLeague(true);
+      } else {
+        setInLeague(false);
       }
-      console.log('check>>>>>>>>>>>>>>', todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
+    setLoading(false);
   }, [PlayerID]);
 
   const getPlayerId = React.useCallback(async () => {
@@ -146,7 +163,7 @@ const ParticipatesScreen = ({navigation, route}) => {
         }),
       );
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
-      console.log('League Player>>>>>>>>>>>>>>', todos);
+      console.log('Fetch league -->', todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -161,7 +178,7 @@ const ParticipatesScreen = ({navigation, route}) => {
           },
         }),
       );
-      const data = leaguePlayerData.data.listLeaguePlayers.items;
+      const data = await leaguePlayerData.data.listLeaguePlayers.items;
       console.log('League players ->', data);
       setLeaguePlayers(data);
     } catch (err) {
@@ -198,6 +215,7 @@ const ParticipatesScreen = ({navigation, route}) => {
                 ? 'Do you agree to participate in the league?'
                 : 'Do you agree to out from the league?'}
             </Text>
+
             <TouchableOpacity
               style={{
                 width: wp(85),
@@ -211,19 +229,19 @@ const ParticipatesScreen = ({navigation, route}) => {
                 {
                   inLeague
                     ? [
-                        setInLeague(!inLeague),
+                        setInLeague(false),
                         DeleteLeaguePlayer(),
                         setModalVisible(false),
                       ]
                     : [
                         addPlayerBtn(),
-                        setInLeague(!inLeague),
+                        setInLeague(true),
                         setModalVisible(false),
                       ];
                 }
               }}>
               <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-                {!inLeague ? "Yes, I'm in" : "Yes, I'm out"}
+                {inLeague ? "Yes, I'm out" : "Yes, I'm in"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -253,23 +271,27 @@ const ParticipatesScreen = ({navigation, route}) => {
         <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            {
-              backgroundColor: !inLeague ? COLORS.green : COLORS.red,
-            },
-            styles.btnContainer,
-          ]}
-          onPress={() => changeModalVisible(true)}>
-          <Text
-            style={{
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.7),
-              color: COLORS.white,
-            }}>
-            {!inLeague ? "I'm in" : "I'm out"}
-          </Text>
-        </TouchableOpacity>
+        {isLoading ? (
+          <ActivityIndicator size={'small'} color={'white'} />
+        ) : (
+          <TouchableOpacity
+            style={[
+              {
+                backgroundColor: !inLeague ? COLORS.green : COLORS.red,
+              },
+              styles.btnContainer,
+            ]}
+            onPress={() => changeModalVisible(true)}>
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                color: COLORS.white,
+              }}>
+              {inLeague ? "I'm out" : "I'm in"}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View
         style={{
@@ -329,7 +351,6 @@ const ParticipatesScreen = ({navigation, route}) => {
           }}>
           {gameInfo.description}
         </Text>
-        <Button title="test fetch" onPress={() => fetchLeague()} />
       </View>
       <FlatList
         refreshControl={
