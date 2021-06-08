@@ -40,6 +40,7 @@ type LeaguePlayer @model {
   league: League @connection
   leagueID: String
   player: Player @connection
+  playerID: String
 }
 
 type Schedule @model {

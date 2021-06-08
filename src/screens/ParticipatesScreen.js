@@ -11,6 +11,7 @@ import {
   ImageBackground,
   Button,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 // import {DATA} from './GameScreen';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
@@ -18,7 +19,12 @@ import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createLeaguePlayer, deleteLeaguePlayer} from '../graphql/mutations';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {listPlayers, listLeaguePlayers, getTeam} from '../graphql/queries';
+import {
+  listPlayers,
+  listLeaguePlayers,
+  getTeam,
+  getLeague,
+} from '../graphql/queries';
 
 import AppBar from '../components/AppBar';
 import {COLORS, FONTS, icons} from '../constants';
@@ -27,29 +33,39 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {userData} from '../data/Players';
 import Modal from 'react-native-modal';
 import {AuthContext} from '../../App';
+import {useScrollToTop} from '@react-navigation/native';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 const ParticipatesScreen = ({navigation, route}) => {
+  const [isLoading, setLoading] = useState(true);
   const [deleteID, setDeleteID] = useState('');
   const [PlayerID, setPlayerID] = useState('');
+  const [myID, setMyID] = useState('');
   const [leaguePlayers, setLeaguePlayers] = useState([]);
   const {userInfo} = React.useContext(AuthContext);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(() => {
-    LeaguePlayers();
-    setRefreshing(true);
-    wait(500).then(() => setRefreshing(false));
-  }, [LeaguePlayers]);
+  const [inLeague, setInLeague] = useState();
 
-  useEffect(() => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    // checkInLeague();
     LeaguePlayers();
     fetchLeague();
     getPlayerId();
+    setRefreshing(true);
+    wait(500).then(() => setRefreshing(false));
   }, [LeaguePlayers, fetchLeague, getPlayerId]);
+
+  useEffect(() => {
+    getPlayerId();
+    LeaguePlayers();
+    fetchLeague();
+  }, [LeaguePlayers, checkInLeague, fetchLeague, getPlayerId]);
 
   const sorted = leaguePlayers.sort((a, b) => b.player.level - a.player.level);
 
@@ -57,39 +73,29 @@ const ParticipatesScreen = ({navigation, route}) => {
 
   const LeagueId = route.params.itemId.id;
 
-  console.log('leagueId :>-------------------> ', LeagueId);
-
-  console.log('LeagueInfo', gameInfo);
-
-  const [inLeague, setInLeague] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-
   const changeModalVisible = bool => {
     setModalVisible(bool);
-  };
-  const changeInLeague = bool => {
-    setInLeague(bool);
   };
 
   const addPlayerBtn = async () => {
     try {
-      const temp = await API.graphql(
+      await API.graphql(
         graphqlOperation(createLeaguePlayer, {
           input: {
             leaguePlayerLeagueId: LeagueId,
-            leaguePlayerPlayerId: PlayerID,
+            leaguePlayerPlayerId: myID,
+            playerID: myID,
             leagueID: LeagueId,
           },
         }),
       );
-      setDeleteID(temp.data.createLeaguePlayer.id);
-      console.log('delete id', temp.data.createLeaguePlayer.id);
-    } catch (err) {
-      console.log('error creating League Player:', err);
-    }
+      setTimeout(() => {
+        onRefresh();
+      }, 1000);
+    } catch (err) {}
   };
 
-  async function DeleteLeaguePlayer() {
+  const DeleteLeaguePlayer = async () => {
     try {
       await API.graphql(
         graphqlOperation(deleteLeaguePlayer, {
@@ -98,11 +104,34 @@ const ParticipatesScreen = ({navigation, route}) => {
           },
         }),
       );
-      console.log('League Player deleted');
-    } catch (err) {
-      console.log('error deleting League Player:', err);
-    }
-  }
+      // setLeaguePlayers(leaguePlayers.splice(1, 1));
+      setTimeout(() => {
+        onRefresh();
+      }, 1000);
+    } catch (err) {}
+  };
+
+  const checkInLeague = React.useCallback(async my_id => {
+    try {
+      setMyID(my_id);
+      const leaguePlayerData = await API.graphql(
+        graphqlOperation(listLeaguePlayers, {
+          filter: {
+            playerID: {eq: my_id},
+          },
+        }),
+      );
+      console.log('CHECK IF IM IN :>> ', leaguePlayerData);
+      const todos = await leaguePlayerData.data.listLeaguePlayers.items;
+      if (todos.length === 0) {
+        setInLeague(false);
+      } else {
+        setDeleteID(todos[0].id);
+        setInLeague(true);
+      }
+    } catch (err) {}
+    setLoading(false);
+  }, []);
 
   const getPlayerId = React.useCallback(async () => {
     try {
@@ -111,12 +140,12 @@ const ParticipatesScreen = ({navigation, route}) => {
           filter: {c_id: {eq: userInfo.c_id}},
         }),
       );
-      setPlayerID(playerData.data.listPlayers.items[0].id);
-      console.log('Player ID', playerData.data.listPlayers.items[0].id);
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
-  }, [userInfo.c_id]);
+      let my_id = playerData.data.listPlayers.items[0].id;
+      console.log('my_id :>> ', my_id);
+      // await setPlayerID(playerData.data.listPlayers.items[0].id);
+      checkInLeague(my_id);
+    } catch (err) {}
+  }, [checkInLeague, userInfo.c_id]);
 
   const fetchLeague = React.useCallback(async () => {
     try {
@@ -128,10 +157,7 @@ const ParticipatesScreen = ({navigation, route}) => {
         }),
       );
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
-      console.log('League Player>>>>>>>>>>>>>>', todos);
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    } catch (err) {}
   }, [LeagueId]);
 
   const LeaguePlayers = React.useCallback(async () => {
@@ -143,24 +169,23 @@ const ParticipatesScreen = ({navigation, route}) => {
           },
         }),
       );
-      const data = leaguePlayerData.data.listLeaguePlayers.items;
-      console.log('League players ->', data);
+      const data = await leaguePlayerData.data.listLeaguePlayers.items;
       setLeaguePlayers(data);
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    } catch (err) {}
   }, [LeagueId]);
 
   function bottomModal() {
     return (
       <View style={styles.modalContainer}>
         <Modal
-          visible={isModalVisible}
+          isVisible={isModalVisible}
           animationType="fade"
           transparent={true}
           onSwipeComplete={() => changeModalVisible(false)}
           swipeDirection="down"
-          style={{margin: 0}}>
+          onBackdropPress={() => {
+            setModalVisible(false);
+          }}>
           <View style={styles.modalBody}>
             <TouchableOpacity
               style={styles.closeBtn}
@@ -180,6 +205,7 @@ const ParticipatesScreen = ({navigation, route}) => {
                 ? 'Do you agree to participate in the league?'
                 : 'Do you agree to out from the league?'}
             </Text>
+
             <TouchableOpacity
               style={{
                 width: wp(85),
@@ -193,19 +219,19 @@ const ParticipatesScreen = ({navigation, route}) => {
                 {
                   inLeague
                     ? [
-                        changeInLeague(!inLeague),
+                        setInLeague(false),
                         DeleteLeaguePlayer(),
                         setModalVisible(false),
                       ]
                     : [
                         addPlayerBtn(),
-                        changeInLeague(!inLeague),
+                        setInLeague(true),
                         setModalVisible(false),
                       ];
                 }
               }}>
               <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-                {!inLeague ? "Yes, I'm in" : "Yes, I'm out"}
+                {inLeague ? "Yes, I'm out" : "Yes, I'm in"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -235,23 +261,27 @@ const ParticipatesScreen = ({navigation, route}) => {
         <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            {
-              backgroundColor: !inLeague ? COLORS.green : COLORS.red,
-            },
-            styles.btnContainer,
-          ]}
-          onPress={() => changeModalVisible(true)}>
-          <Text
-            style={{
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.7),
-              color: COLORS.white,
-            }}>
-            {!inLeague ? "I'm in" : "I'm out"}
-          </Text>
-        </TouchableOpacity>
+        {isLoading ? (
+          <ActivityIndicator size={'small'} color={'white'} />
+        ) : (
+          <TouchableOpacity
+            style={[
+              {
+                backgroundColor: !inLeague ? COLORS.green : COLORS.red,
+              },
+              styles.btnContainer,
+            ]}
+            onPress={() => changeModalVisible(true)}>
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                color: COLORS.white,
+              }}>
+              {inLeague ? "I'm out" : "I'm in"}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View
         style={{
@@ -311,7 +341,6 @@ const ParticipatesScreen = ({navigation, route}) => {
           }}>
           {gameInfo.description}
         </Text>
-        <Button title="test fetch" onPress={() => fetchLeague()} />
       </View>
       <FlatList
         refreshControl={
@@ -319,54 +348,65 @@ const ParticipatesScreen = ({navigation, route}) => {
         }
         data={sorted}
         renderItem={({item, index}) => (
-          <View
-            style={{
-              width: wp(95),
-              height: hp(6),
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingRight: wp(4),
-              borderBottomWidth: 1,
-              borderBottomColor: COLORS.greyText,
-              alignSelf: 'center',
-            }}>
-            <Text
-              style={[
-                {color: COLORS.greyText, marginLeft: wp(4)},
-                styles.player,
-              ]}>
-              {index + 1}
-            </Text>
-            <Image source={userData.image} style={styles.avatar} />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                flex: 1,
-              }}>
-              <Text
-                style={[
-                  {color: COLORS.greyText, marginLeft: wp(4)},
-                  styles.player,
-                ]}>
-                {item.player.name}
-              </Text>
+          <>
+            {leaguePlayers.length != 0 ? (
               <View
                 style={{
-                  justifyContent: 'space-between',
+                  width: wp(95),
+                  height: hp(6),
                   flexDirection: 'row',
                   alignItems: 'center',
-                  width: wp(21),
+                  paddingRight: wp(4),
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.greyText,
+                  alignSelf: 'center',
                 }}>
-                <Text style={[{color: COLORS.greyText}, styles.player]}>
-                  lvl{' '}
+                <Text
+                  style={[
+                    {color: COLORS.greyText, marginLeft: wp(4)},
+                    styles.player,
+                  ]}>
+                  {index + 1}
                 </Text>
-                <Text style={[{color: COLORS.brand}, styles.player]}>
-                  {item.player.level}
-                </Text>
+                <Image source={userData.image} style={styles.avatar} />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    flex: 1,
+                  }}>
+                  <Text
+                    style={[
+                      {color: COLORS.greyText, marginLeft: wp(4)},
+                      styles.player,
+                    ]}>
+                    {item.player.name}
+                  </Text>
+                  <View
+                    style={{
+                      justifyContent: 'space-between',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      width: wp(21),
+                    }}>
+                    <Text style={[{color: COLORS.greyText}, styles.player]}>
+                      lvl{' '}
+                    </Text>
+                    <Text style={[{color: COLORS.brand}, styles.player]}>
+                      {item.player.level}
+                    </Text>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
+            ) : (
+              <View
+                style={{
+                  alignSelf: 'center',
+                }}>
+                <Text> Join the league! </Text>
+              </View>
+            )}
+          </>
         )}
       />
       {bottomModal()}

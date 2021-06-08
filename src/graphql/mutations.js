@@ -394,6 +394,7 @@ export const createLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerID
       createdAt
       updatedAt
     }
@@ -432,6 +433,7 @@ export const updateLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerID
       createdAt
       updatedAt
     }
@@ -470,6 +472,7 @@ export const deleteLeaguePlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerID
       createdAt
       updatedAt
     }
