@@ -55,9 +55,10 @@ const ParticipatesScreen = ({navigation, route}) => {
     checkInLeague();
     LeaguePlayers();
     fetchLeague();
+    getPlayerId();
     setRefreshing(true);
     wait(500).then(() => setRefreshing(false));
-  }, [LeaguePlayers, checkInLeague, fetchLeague]);
+  }, [LeaguePlayers, checkInLeague, fetchLeague, getPlayerId]);
 
   useEffect(() => {
     checkInLeague();
@@ -124,7 +125,7 @@ const ParticipatesScreen = ({navigation, route}) => {
           },
         }),
       );
-      console.log('PlayerID', PlayerID);
+      console.log('PlayerID', todos);
       const todos = await leaguePlayerData.data.listLeaguePlayers.items;
       console.log('check - league>', todos);
       setDeleteID(todos[0].id);
@@ -134,7 +135,7 @@ const ParticipatesScreen = ({navigation, route}) => {
         setInLeague(false);
       }
     } catch (err) {
-      console.log('CheckInLeague error', err);
+      console.log('error fetching todos', err);
     }
     setLoading(false);
   }, [PlayerID]);
