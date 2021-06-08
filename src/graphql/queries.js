@@ -77,6 +77,7 @@ export const getPlayer = /* GraphQL */ `
   query GetPlayer($id: ID!) {
     getPlayer(id: $id) {
       id
+      avatar
       admin
       c_id
       name
@@ -96,6 +97,7 @@ export const listPlayers = /* GraphQL */ `
     listPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        avatar
         admin
         c_id
         name
@@ -181,6 +183,7 @@ export const getTeamPlayer = /* GraphQL */ `
       }
       player {
         id
+        avatar
         admin
         c_id
         name
@@ -213,6 +216,7 @@ export const listTeamPlayers = /* GraphQL */ `
         }
         player {
           id
+          avatar
           admin
           c_id
           name
@@ -248,6 +252,7 @@ export const getLeaguePlayer = /* GraphQL */ `
       }
       player {
         id
+        avatar
         admin
         c_id
         name
@@ -279,6 +284,7 @@ export const listLeaguePlayers = /* GraphQL */ `
         }
         player {
           id
+          avatar
           admin
           c_id
           name
@@ -300,31 +306,49 @@ export const getSchedule = /* GraphQL */ `
       id
       home {
         id
-        league {
+        team {
           id
-          startDate
-          description
+          name
+          win
+          lose
           createdAt
           updatedAt
         }
-        name
-        win
-        lose
+        player {
+          id
+          avatar
+          admin
+          c_id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       away {
         id
-        league {
+        team {
           id
-          startDate
-          description
+          name
+          win
+          lose
           createdAt
           updatedAt
         }
-        name
-        win
-        lose
+        player {
+          id
+          avatar
+          admin
+          c_id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -345,17 +369,11 @@ export const listSchedules = /* GraphQL */ `
         id
         home {
           id
-          name
-          win
-          lose
           createdAt
           updatedAt
         }
         away {
           id
-          name
-          win
-          lose
           createdAt
           updatedAt
         }

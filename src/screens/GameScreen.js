@@ -10,9 +10,9 @@ import {
   Image,
   ImageBackground,
   View,
-  TextBase,
   ActivityIndicator,
 } from 'react-native';
+
 import {icons, images, index, theme} from '../constants';
 import {wp, hp, ft, COLORS, FONTS} from '../constants/theme';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
@@ -35,7 +35,9 @@ const Item = ({item, onPress, backgroundColor, textColor}) => (
   <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <ImageBackground
-        source={item.image}
+        source={{
+          uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
+        }}
         style={{
           width: wp(63.3),
           height: hp(39),
@@ -46,7 +48,25 @@ const Item = ({item, onPress, backgroundColor, textColor}) => (
           start={{x: 1, y: 0}}
           end={{x: 1, y: 1}}
           colors={['#00000000', '#000']}>
-          {/* <Text>dsfgh</Text> */}
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              marginBottom: hp(5),
+              marginHorizontal: wp(5),
+            }}>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontFamily: FONTS.brandFont,
+                paddingVertical: hp(1),
+              }}>
+              {item.game.name}
+            </Text>
+            <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
+              {item.startDate}
+            </Text>
+          </View>
         </LinearGradient>
       </ImageBackground>
     </TouchableOpacity>
@@ -62,7 +82,7 @@ const GameScreen = ({navigation}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
 
   useEffect(() => {
-    // fetchLeagues();
+    fetchLeague();
     findGreet();
     getName();
   }, []);
@@ -75,29 +95,6 @@ const GameScreen = ({navigation}) => {
   const [greet, setGreet] = useState('');
   const [name2, setName2] = useState('');
 
-  async function fetchLeagues() {
-    // const user = await Auth.currentUserInfo();
-    // console.log('Attributes =======', user);
-    try {
-      const leagueData = await API.graphql(graphqlOperation(listLeagues));
-      const leagueList = leagueData.data.listLeagues.items;
-      setLeagueList(leagueList);
-      console.log('Leagues>>>>', leagueList);
-      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-      // const user2 = await Auth.currentAuthenticatedUser();
-      // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
-      // const result = await Auth.updateUserAttributes(user2, {
-      //   'custom:IntLevel': `5`,
-      //   'custom:Xp': `390`,
-      //   'custom:Name': `Mkoogii`,
-      //   'custom:Admin': `1`,
-      // });
-      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    } catch (err) {
-      console.log('error fetching players', err);
-    }
-  }
-
   const renderItem = ({item}) => {
     // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
@@ -107,11 +104,9 @@ const GameScreen = ({navigation}) => {
         item={item}
         onPress={() =>
           navigation.navigate('ParticipatesScreen', {
-            data: DATA,
-            itemId: item.id,
+            itemId: item,
           })
         }
-        // backgroundColor={{backgroundColor}}
         textColor={{color}}
       />
     );
@@ -140,20 +135,32 @@ const GameScreen = ({navigation}) => {
   }
 
   async function findUser(user) {
-    console.log(`user`, user);
+    console.log(`cognito data`, user);
     const playerData = await API.graphql(graphqlOperation(listPlayers));
-    console.log(
-      `playerData.data.listPlayers.items`,
-      playerData.data.listPlayers.items,
-    );
+    // console.log(
+    //   `playerData.data.listPlayers.items`,
+    //   playerData.data.listPlayers.items,
+    // );
     let finded = playerData.data.listPlayers.items.find((item, index) => {
       if (user.username === item.c_id) {
         return item;
       }
     });
     setUserInfo(finded);
-    console.log('finded set hiilee', finded);
+    console.log('context player model data', finded);
   }
+
+  const fetchLeague = async () => {
+    try {
+      const leagueData = await API.graphql(graphqlOperation(listLeagues));
+      // const todos = leagueData.data.listTeams.items;
+      // console.log('Teams>>>>>>>>>>>>>>', todos);
+      console.log('Leagues>>>>>>>>>>>>>>', leagueData.data.listLeagues.items);
+      setLeagueList(leagueData.data.listLeagues.items);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  };
 
   async function checkPlayer(playerData, p_id) {
     try {
@@ -222,7 +229,6 @@ const GameScreen = ({navigation}) => {
               {name}
             </Text>
           </View>
-
           <View>
             <TouchableOpacity>
               <Image
@@ -238,13 +244,13 @@ const GameScreen = ({navigation}) => {
         </View>
         <View>
           <FlatList
-            // showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={DATA}
+            data={LeagueList}
             renderItem={renderItem}
             keyExtractor={item => item.id}
             extraData={selectedId}
+            onPress={() => {}}
           />
         </View>
       </SafeAreaView>
@@ -261,21 +267,11 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    // paddingLeft: 10,
-    // paddingRight: 10,
     marginVertical: 8,
-    // marginHorizontal: 16,
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
   title: {
     fontSize: 32,
   },
-  // image: {
-  //   shadowColor: 'red',
-  //   shadowOpacity: 0.5,
-  //   shadowRadius: 20,
-  // },
 });
 
 export default GameScreen;
