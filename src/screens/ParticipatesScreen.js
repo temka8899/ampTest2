@@ -43,6 +43,7 @@ const ParticipatesScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [deleteID, setDeleteID] = useState('');
   const [PlayerID, setPlayerID] = useState('');
+  const [myID, setMyID] = useState('');
   const [leaguePlayers, setLeaguePlayers] = useState([]);
   const {userInfo} = React.useContext(AuthContext);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -52,19 +53,18 @@ const ParticipatesScreen = ({navigation, route}) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const onRefresh = React.useCallback(() => {
-    checkInLeague();
+    // checkInLeague();
     LeaguePlayers();
     fetchLeague();
     getPlayerId();
     setRefreshing(true);
     wait(500).then(() => setRefreshing(false));
-  }, [LeaguePlayers, checkInLeague, fetchLeague, getPlayerId]);
+  }, [LeaguePlayers, fetchLeague, getPlayerId]);
 
   useEffect(() => {
-    checkInLeague();
+    getPlayerId();
     LeaguePlayers();
     fetchLeague();
-    getPlayerId();
   }, [LeaguePlayers, checkInLeague, fetchLeague, getPlayerId]);
 
   const sorted = leaguePlayers.sort((a, b) => b.player.level - a.player.level);
@@ -79,12 +79,12 @@ const ParticipatesScreen = ({navigation, route}) => {
 
   const addPlayerBtn = async () => {
     try {
-      const temp = await API.graphql(
+      await API.graphql(
         graphqlOperation(createLeaguePlayer, {
           input: {
             leaguePlayerLeagueId: LeagueId,
-            leaguePlayerPlayerId: PlayerID,
-            playerID: PlayerID,
+            leaguePlayerPlayerId: myID,
+            playerID: myID,
             leagueID: LeagueId,
           },
         }),
@@ -92,9 +92,7 @@ const ParticipatesScreen = ({navigation, route}) => {
       setTimeout(() => {
         onRefresh();
       }, 1000);
-    } catch (err) {
-      console.log('error creating League Player:', err);
-    }
+    } catch (err) {}
   };
 
   const DeleteLeaguePlayer = async () => {
@@ -106,39 +104,34 @@ const ParticipatesScreen = ({navigation, route}) => {
           },
         }),
       );
-      console.log('League Player deleted');
       // setLeaguePlayers(leaguePlayers.splice(1, 1));
       setTimeout(() => {
         onRefresh();
       }, 1000);
-    } catch (err) {
-      console.log('error deleting League Player:', err);
-    }
+    } catch (err) {}
   };
 
-  const checkInLeague = React.useCallback(async () => {
+  const checkInLeague = React.useCallback(async my_id => {
     try {
+      setMyID(my_id);
       const leaguePlayerData = await API.graphql(
         graphqlOperation(listLeaguePlayers, {
           filter: {
-            playerID: {eq: PlayerID},
+            playerID: {eq: my_id},
           },
         }),
       );
-      console.log('PlayerID', todos);
+      console.log('CHECK IF IM IN :>> ', leaguePlayerData);
       const todos = await leaguePlayerData.data.listLeaguePlayers.items;
-      console.log('check - league>', todos);
-      setDeleteID(todos[0].id);
-      if (todos.length > 0) {
-        setInLeague(true);
-      } else {
+      if (todos.length === 0) {
         setInLeague(false);
+      } else {
+        setDeleteID(todos[0].id);
+        setInLeague(true);
       }
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    } catch (err) {}
     setLoading(false);
-  }, [PlayerID]);
+  }, []);
 
   const getPlayerId = React.useCallback(async () => {
     try {
@@ -147,12 +140,12 @@ const ParticipatesScreen = ({navigation, route}) => {
           filter: {c_id: {eq: userInfo.c_id}},
         }),
       );
-      setPlayerID(playerData.data.listPlayers.items[0].id);
-      console.log('Player ID', playerData.data.listPlayers.items[0].id);
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
-  }, [userInfo.c_id]);
+      let my_id = playerData.data.listPlayers.items[0].id;
+      console.log('my_id :>> ', my_id);
+      // await setPlayerID(playerData.data.listPlayers.items[0].id);
+      checkInLeague(my_id);
+    } catch (err) {}
+  }, [checkInLeague, userInfo.c_id]);
 
   const fetchLeague = React.useCallback(async () => {
     try {
@@ -164,10 +157,7 @@ const ParticipatesScreen = ({navigation, route}) => {
         }),
       );
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
-      console.log('Fetch league -->', todos);
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    } catch (err) {}
   }, [LeagueId]);
 
   const LeaguePlayers = React.useCallback(async () => {
@@ -180,11 +170,8 @@ const ParticipatesScreen = ({navigation, route}) => {
         }),
       );
       const data = await leaguePlayerData.data.listLeaguePlayers.items;
-      console.log('League players ->', data);
       setLeaguePlayers(data);
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    } catch (err) {}
   }, [LeagueId]);
 
   function bottomModal() {
@@ -359,54 +346,65 @@ const ParticipatesScreen = ({navigation, route}) => {
         }
         data={sorted}
         renderItem={({item, index}) => (
-          <View
-            style={{
-              width: wp(95),
-              height: hp(6),
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingRight: wp(4),
-              borderBottomWidth: 1,
-              borderBottomColor: COLORS.greyText,
-              alignSelf: 'center',
-            }}>
-            <Text
-              style={[
-                {color: COLORS.greyText, marginLeft: wp(4)},
-                styles.player,
-              ]}>
-              {index + 1}
-            </Text>
-            <Image source={userData.image} style={styles.avatar} />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                flex: 1,
-              }}>
-              <Text
-                style={[
-                  {color: COLORS.greyText, marginLeft: wp(4)},
-                  styles.player,
-                ]}>
-                {item.player.name}
-              </Text>
+          <>
+            {leaguePlayers.length != 0 ? (
               <View
                 style={{
-                  justifyContent: 'space-between',
+                  width: wp(95),
+                  height: hp(6),
                   flexDirection: 'row',
                   alignItems: 'center',
-                  width: wp(21),
+                  paddingRight: wp(4),
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.greyText,
+                  alignSelf: 'center',
                 }}>
-                <Text style={[{color: COLORS.greyText}, styles.player]}>
-                  lvl{' '}
+                <Text
+                  style={[
+                    {color: COLORS.greyText, marginLeft: wp(4)},
+                    styles.player,
+                  ]}>
+                  {index + 1}
                 </Text>
-                <Text style={[{color: COLORS.brand}, styles.player]}>
-                  {item.player.level}
-                </Text>
+                <Image source={userData.image} style={styles.avatar} />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    flex: 1,
+                  }}>
+                  <Text
+                    style={[
+                      {color: COLORS.greyText, marginLeft: wp(4)},
+                      styles.player,
+                    ]}>
+                    {item.player.name}
+                  </Text>
+                  <View
+                    style={{
+                      justifyContent: 'space-between',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      width: wp(21),
+                    }}>
+                    <Text style={[{color: COLORS.greyText}, styles.player]}>
+                      lvl{' '}
+                    </Text>
+                    <Text style={[{color: COLORS.brand}, styles.player]}>
+                      {item.player.level}
+                    </Text>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
+            ) : (
+              <View
+                style={{
+                  alignSelf: 'center',
+                }}>
+                <Text> Join the league! </Text>
+              </View>
+            )}
+          </>
         )}
       />
       {bottomModal()}
