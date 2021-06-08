@@ -195,7 +195,7 @@ const createTeamScreen = ({navigation}) => {
       const leaguePlayerData = await API.graphql(
         graphqlOperation(listLeaguePlayers, {
           filter: {
-            leagueID: {eq: '0a0fa76f-af84-4f75-bc16-142f4176be58'},
+            leagueID: {eq: '3d6a38a1-a788-4adf-b4ee-44e3d1a479be'},
           },
         }),
       );
