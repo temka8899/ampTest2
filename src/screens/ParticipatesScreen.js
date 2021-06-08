@@ -10,11 +10,12 @@ import {
   StatusBar,
   ImageBackground,
   Button,
+  RefreshControl,
 } from 'react-native';
 // import {DATA} from './GameScreen';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
-import {createLeaguePlayer} from '../graphql/mutations';
+import {createLeaguePlayer, deleteLeaguePlayer} from '../graphql/mutations';
 
 import LinearGradient from 'react-native-linear-gradient';
 import {listPlayers, listLeaguePlayers, getTeam} from '../graphql/queries';
@@ -27,10 +28,22 @@ import {userData} from '../data/Players';
 import Modal from 'react-native-modal';
 import {AuthContext} from '../../App';
 
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const ParticipatesScreen = ({navigation, route}) => {
+  const [deleteID, setDeleteID] = useState('');
   const [PlayerID, setPlayerID] = useState('');
   const [leaguePlayers, setLeaguePlayers] = useState([]);
   const {userInfo} = React.useContext(AuthContext);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    LeaguePlayers();
+    setRefreshing(true);
+    wait(500).then(() => setRefreshing(false));
+  }, [LeaguePlayers]);
 
   useEffect(() => {
     LeaguePlayers();
@@ -60,7 +73,7 @@ const ParticipatesScreen = ({navigation, route}) => {
 
   const addPlayerBtn = async () => {
     try {
-      await API.graphql(
+      const temp = await API.graphql(
         graphqlOperation(createLeaguePlayer, {
           input: {
             leaguePlayerLeagueId: LeagueId,
@@ -69,13 +82,27 @@ const ParticipatesScreen = ({navigation, route}) => {
           },
         }),
       );
-
-      console.log('League Player Created');
+      setDeleteID(temp.data.createLeaguePlayer.id);
+      console.log('delete id', temp.data.createLeaguePlayer.id);
     } catch (err) {
       console.log('error creating League Player:', err);
     }
-    LeaguePlayers();
   };
+
+  async function DeleteLeaguePlayer() {
+    try {
+      await API.graphql(
+        graphqlOperation(deleteLeaguePlayer, {
+          input: {
+            id: deleteID,
+          },
+        }),
+      );
+      console.log('League Player deleted');
+    } catch (err) {
+      console.log('error deleting League Player:', err);
+    }
+  }
 
   const getPlayerId = React.useCallback(async () => {
     try {
@@ -110,12 +137,11 @@ const ParticipatesScreen = ({navigation, route}) => {
   const LeaguePlayers = React.useCallback(async () => {
     try {
       const leaguePlayerData = await API.graphql(
-        graphqlOperation(listLeaguePlayers),
-        {
+        graphqlOperation(listLeaguePlayers, {
           filter: {
             leagueID: {eq: LeagueId},
           },
-        },
+        }),
       );
       const data = leaguePlayerData.data.listLeaguePlayers.items;
       console.log('League players ->', data);
@@ -165,9 +191,17 @@ const ParticipatesScreen = ({navigation, route}) => {
               }}
               onPress={() => {
                 {
-                  inLeague ? changeInLeague(false) : changeInLeague(true),
-                    setModalVisible(false),
-                    addPlayerBtn();
+                  inLeague
+                    ? [
+                        changeInLeague(false),
+                        DeleteLeaguePlayer(),
+                        setModalVisible(false),
+                      ]
+                    : [
+                        addPlayerBtn(),
+                        changeInLeague(true),
+                        setModalVisible(false),
+                      ];
                 }
               }}>
               <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
@@ -280,6 +314,9 @@ const ParticipatesScreen = ({navigation, route}) => {
         <Button title="test fetch" onPress={() => fetchLeague()} />
       </View>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         data={sorted}
         renderItem={({item, index}) => (
           <View
