@@ -232,6 +232,7 @@ const createTeamScreen = ({navigation}) => {
       const leaguePlayerData = await API.graphql(
         graphqlOperation(listLeaguePlayers, {
           filter: {
+            //LeagueID
             leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
@@ -248,6 +249,8 @@ const createTeamScreen = ({navigation}) => {
               graphqlOperation(createTeam, {
                 input: {
                   name: `team${i}_generated`,
+
+                  //LeagueID
                   teamLeagueId: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
                   win: 0,
                   lose: 0,
@@ -268,8 +271,7 @@ const createTeamScreen = ({navigation}) => {
     } catch (err) {
       console.log('error fetching League Players', err);
     }
-
-    addSchedule();
+    addScheduleLoop();
   }
 
   async function leagueIsStart() {
@@ -307,35 +309,41 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
-  async function addSchedule(teamplayerteam) {
+  async function addScheduleLoop() {
     const teamData = await API.graphql(graphqlOperation(listTeams));
     const teams = teamData.data.listTeams.items;
-    console.log('Teams>>>>>>>>>>>>>>', teamData.data.listTeams.items);
     const k = teams.length;
-    var i;
-    var j;
-    for (i = 0; i < k; i++) {
-      for (j = i + 1; j < k; j++) {
-        console.log(`Team${i}: ${teams[i].name} vs Team${j}: ${teams[j].name}`);
+    var nemeh = 1;
+    var hasah = teams.length;
+
+    for (var i = 1; i < teams.length; i++) {
+      for (var j = 0; j < hasah - 1; j++) {
+        console.log(`${teams[j].name} vs ${teams[j + nemeh].name}_________`);
+        addSchedule(teams[j].id, teams[j + nemeh].id);
       }
+      hasah--;
+      nemeh++;
     }
-    // try {
-    //   await API.graphql(
-    //     graphqlOperation(createSchedule, {
-    //       input: {
-    //         scheduleHomeId: 'a59b4e48-ea33-496e-8103-db1d1ef7b8b2',
-    //         scheduleAwayId: '9cd492d9-e35a-470a-a4a8-e280c0f7df5e',
-    //         homeScore: 0,
-    //         awayScore: 0,
-    //         date: '',
-    //       },
-    //     }),
-    //   );
-    //   console.log('Team Created');
-    // } catch (err) {
-    //   console.log('error creating League:', err);
-    // }
-    // fetchTeamPlayers();
+  }
+
+  async function addSchedule(team1ID, team2ID) {
+    try {
+      await API.graphql(
+        graphqlOperation(createSchedule, {
+          input: {
+            scheduleHomeId: team1ID,
+            scheduleAwayId: team2ID,
+            homeScore: 0,
+            awayScore: 0,
+            date: '',
+          },
+        }),
+      );
+      console.log('Team Created');
+    } catch (err) {
+      console.log('error creating League:', err);
+    }
+    fetchTeamPlayers();
   }
 
   return (
@@ -363,7 +371,7 @@ const createTeamScreen = ({navigation}) => {
         />
         <Button onPress={() => startLeague()} title="Start League" />
         <Button onPress={() => leagueIsStart()} title="update League" />
-        <Button onPress={() => addSchedule()} title="add Schedule" />
+        <Button onPress={() => addScheduleLoop()} title="add Schedule" />
       </View>
     </SafeAreaView>
   );

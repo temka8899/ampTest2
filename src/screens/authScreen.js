@@ -452,13 +452,13 @@ const SignInScreen = ({navigation, onPress}) => {
 
   const _keyboardDidShow = React.useCallback(() => {
     setKeyboardStatus('Keyboard Shown');
-    fadeIn();
-  }, [fadeIn]);
+    fadeOut();
+  }, [fadeOut]);
 
   const _keyboardDidHide = React.useCallback(() => {
     setKeyboardStatus('Keyboard Hidden');
-    fadeOut();
-  }, [fadeOut]);
+    fadeIn();
+  }, [fadeIn]);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
@@ -472,19 +472,21 @@ const SignInScreen = ({navigation, onPress}) => {
     };
   }, [_keyboardDidHide, _keyboardDidShow]);
 
-  const fadeIn = React.useCallback(() => {
+  const fadeOut = React.useCallback(() => {
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(fadeAnim, {
-      toValue: 0,
+      toValue: 1,
       duration: 500,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
 
-  const fadeOut = React.useCallback(() => {
+  const fadeIn = React.useCallback(() => {
     // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 500,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
 
@@ -581,14 +583,14 @@ const SignInScreen = ({navigation, onPress}) => {
 export default function AuthScreen() {
   const [whichScreen, setWhichScreen] = useState(0);
 
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-
   const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+
+  const TopValue = useState(new Animated.Value(0))[0];
 
   const _keyboardDidShow = React.useCallback(() => {
     setKeyboardStatus('Keyboard Shown');
-    fadeIn();
-  }, [fadeIn]);
+    moveLogo();
+  }, [moveLogo]);
 
   const _keyboardDidHide = React.useCallback(() => {
     setKeyboardStatus('Keyboard Hidden');
@@ -605,21 +607,22 @@ export default function AuthScreen() {
     };
   }, [_keyboardDidHide, _keyboardDidShow]);
 
-  const fadeIn = React.useCallback(() => {
+  const moveLogo = React.useCallback(() => {
     // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 500,
+    Animated.timing(TopValue, {
+      toValue: 200,
+      duration: 300,
+      useNativeDriver: false,
     }).start();
-  }, [fadeAnim]);
+  }, [TopValue]);
 
   const fadeOut = React.useCallback(() => {
-    // Will change fadeAnim value to 0 in 3 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
+    // Will change TopValue value to 0 in 3 seconds
+    Animated.timing(TopValue, {
+      toValue: 0,
+      useNativeDriver: false,
     }).start();
-  }, [fadeAnim]);
+  }, [TopValue]);
 
   function BackButton() {
     if (whichScreen !== 0) {
@@ -660,13 +663,11 @@ export default function AuthScreen() {
               <Animated.Image
                 source={images.banner}
                 style={{
-                  opacity: fadeAnim,
                   resizeMode: 'contain',
-                  width:
-                    keyboardStatus == 'Keyboard Shown' ? wp(64.66) : wp(74.66),
-                  height:
-                    keyboardStatus == 'Keyboard Shown' ? hp(26.08) : hp(36.08),
-                  marginTop: hp(8),
+                  width: wp(64.66),
+                  height: wp(74.66),
+                  transform: [{translateY: TopValue}],
+                  marginBottom: hp(8),
                   justifyContent: 'flex-start',
                 }}
               />
