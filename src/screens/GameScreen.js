@@ -87,7 +87,7 @@ const GameScreen = ({navigation}) => {
     fetchLeague();
     findGreet();
     getName();
-  }, []);
+  }, [getName]);
 
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
@@ -100,6 +100,10 @@ const GameScreen = ({navigation}) => {
   const renderItem = ({item}) => {
     // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
+
+    const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+    const _keyboardDidShow = () => setKeyboardStatus('Keyboard Shown');
+    const _keyboardDidHide = () => setKeyboardStatus('Keyboard Hidden');
 
     return (
       <Item
