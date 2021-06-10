@@ -45,6 +45,7 @@ export default function CountScreen({navigation}) {
 
   function setFind(option) {
     setfindMistake(option);
+    console.log('suuliin onoo', allPoint);
     setEndModalVisible(true);
   }
   const cancelBtnPress = () => {
@@ -80,8 +81,6 @@ export default function CountScreen({navigation}) {
         break;
     }
     toggleEndModal(false);
-
-    console.log('fbb');
   };
   const toggleCancelModal = bool => {
     setCancelModalVisible(bool);
@@ -410,13 +409,16 @@ export default function CountScreen({navigation}) {
       <View>
         {CancelModal()}
         {/* {EndModal()} */}
-        <EndModal
-          isVisible={EndModalVisible}
-          onBackdropPress={() => setEndModalVisible(false)}
-          navigateSchedule={endMatch}
-          cancelbtn={cancelBtnPress}
-          EndBtn={EndBtnPress}
-        />
+        {EndModalVisible && (
+          <EndModal
+            isVisible={EndModalVisible}
+            onBackdropPress={() => setEndModalVisible(false)}
+            navigateSchedule={endMatch}
+            cancelbtn={cancelBtnPress}
+            EndBtn={EndBtnPress}
+            allData={allPoint}
+          />
+        )}
         {/* {checkHomeWin()} */}
       </View>
     </View>

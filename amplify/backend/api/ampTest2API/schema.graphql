@@ -5,6 +5,7 @@ type Game @model {
 }
 
 type League @model {
+  perDay: Int
   id: ID!
   isStart: Boolean!
   startDate: String!
@@ -33,7 +34,9 @@ type Team @model {
 type TeamPlayer @model {
   id: ID!
   team: Team @connection
+  teamID: String
   player: Player @connection
+  playerID: String
   playerScore: Int
 }
 
@@ -47,8 +50,8 @@ type LeaguePlayer @model {
 
 type Schedule @model {
   id: ID!
-  home: TeamPlayer! @connection
-  away: TeamPlayer! @connection
+  home: Team! @connection
+  away: Team! @connection
   homeScore: Int
   awayScore: Int
   date: String!
