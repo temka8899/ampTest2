@@ -13,6 +13,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
 import {icons, images, index, theme} from '../constants';
 import {wp, hp, ft, COLORS, FONTS} from '../constants/theme';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
@@ -198,13 +200,13 @@ const GameScreen = ({navigation}) => {
     }
   }
 
-  if (isLoading) {
-    return (
-      <View>
-        <ActivityIndicator size={'large'} />
-      </View>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <View>
+  //       <ActivityIndicator size={'large'} color={'red'} />
+  //     </View>
+  //   );
+  // }
   return (
     <View style={{flex: 1, backgroundColor: COLORS.background}}>
       <SafeAreaView style={{paddingTop: hp(2)}}>

@@ -111,28 +111,31 @@ const ParticipatesScreen = ({navigation, route}) => {
     } catch (err) {}
   };
 
-  const checkInLeague = React.useCallback(async my_id => {
-    try {
-      setMyID(my_id);
-      const leaguePlayerData = await API.graphql(
-        graphqlOperation(listLeaguePlayers, {
-          filter: {
-            playerID: {eq: my_id},
-            leagueID: {eq: LeagueId},
-          },
-        }),
-      );
-      console.log('CHECK IF IM IN :>> ', leaguePlayerData);
-      const todos = await leaguePlayerData.data.listLeaguePlayers.items;
-      if (todos.length === 0) {
-        setInLeague(false);
-      } else {
-        setDeleteID(todos[0].id);
-        setInLeague(true);
-      }
-    } catch (err) {}
-    setLoading(false);
-  }, []);
+  const checkInLeague = React.useCallback(
+    async my_id => {
+      try {
+        setMyID(my_id);
+        const leaguePlayerData = await API.graphql(
+          graphqlOperation(listLeaguePlayers, {
+            filter: {
+              playerID: {eq: my_id},
+              leagueID: {eq: LeagueId},
+            },
+          }),
+        );
+        console.log('CHECK IF IM IN :>> ', leaguePlayerData);
+        const todos = await leaguePlayerData.data.listLeaguePlayers.items;
+        if (todos.length === 0) {
+          setInLeague(false);
+        } else {
+          setDeleteID(todos[0].id);
+          setInLeague(true);
+        }
+      } catch (err) {}
+      setLoading(false);
+    },
+    [LeagueId],
+  );
 
   const getPlayerId = React.useCallback(async () => {
     try {
