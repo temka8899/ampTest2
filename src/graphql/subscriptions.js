@@ -37,6 +37,7 @@ export const onDeleteGame = /* GraphQL */ `
 export const onCreateLeague = /* GraphQL */ `
   subscription OnCreateLeague {
     onCreateLeague {
+      perDay
       id
       isStart
       startDate
@@ -56,6 +57,7 @@ export const onCreateLeague = /* GraphQL */ `
 export const onUpdateLeague = /* GraphQL */ `
   subscription OnUpdateLeague {
     onUpdateLeague {
+      perDay
       id
       isStart
       startDate
@@ -75,6 +77,7 @@ export const onUpdateLeague = /* GraphQL */ `
 export const onDeleteLeague = /* GraphQL */ `
   subscription OnDeleteLeague {
     onDeleteLeague {
+      perDay
       id
       isStart
       startDate
@@ -141,6 +144,7 @@ export const onCreateTeam = /* GraphQL */ `
     onCreateTeam {
       id
       league {
+        perDay
         id
         isStart
         startDate
@@ -168,6 +172,7 @@ export const onUpdateTeam = /* GraphQL */ `
     onUpdateTeam {
       id
       league {
+        perDay
         id
         isStart
         startDate
@@ -195,6 +200,7 @@ export const onDeleteTeam = /* GraphQL */ `
     onDeleteTeam {
       id
       league {
+        perDay
         id
         isStart
         startDate
@@ -224,6 +230,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          perDay
           id
           isStart
           startDate
@@ -237,6 +244,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      teamID
       player {
         id
         avatar
@@ -248,6 +256,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerID
       playerScore
       createdAt
       updatedAt
@@ -261,6 +270,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          perDay
           id
           isStart
           startDate
@@ -274,6 +284,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      teamID
       player {
         id
         avatar
@@ -285,6 +296,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerID
       playerScore
       createdAt
       updatedAt
@@ -298,6 +310,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          perDay
           id
           isStart
           startDate
@@ -311,6 +324,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      teamID
       player {
         id
         avatar
@@ -322,6 +336,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerID
       playerScore
       createdAt
       updatedAt
@@ -333,6 +348,7 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
     onCreateLeaguePlayer {
       id
       league {
+        perDay
         id
         isStart
         startDate
@@ -370,6 +386,7 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
     onUpdateLeaguePlayer {
       id
       league {
+        perDay
         id
         isStart
         startDate
@@ -407,6 +424,7 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
     onDeleteLeaguePlayer {
       id
       league {
+        perDay
         id
         isStart
         startDate
@@ -445,51 +463,35 @@ export const onCreateSchedule = /* GraphQL */ `
       id
       home {
         id
-        team {
+        league {
+          perDay
           id
-          name
-          win
-          lose
+          isStart
+          startDate
+          description
           createdAt
           updatedAt
         }
-        player {
-          id
-          avatar
-          admin
-          c_id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        playerScore
+        name
+        win
+        lose
         createdAt
         updatedAt
       }
       away {
         id
-        team {
+        league {
+          perDay
           id
-          name
-          win
-          lose
+          isStart
+          startDate
+          description
           createdAt
           updatedAt
         }
-        player {
-          id
-          avatar
-          admin
-          c_id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        playerScore
+        name
+        win
+        lose
         createdAt
         updatedAt
       }
@@ -507,51 +509,35 @@ export const onUpdateSchedule = /* GraphQL */ `
       id
       home {
         id
-        team {
+        league {
+          perDay
           id
-          name
-          win
-          lose
+          isStart
+          startDate
+          description
           createdAt
           updatedAt
         }
-        player {
-          id
-          avatar
-          admin
-          c_id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        playerScore
+        name
+        win
+        lose
         createdAt
         updatedAt
       }
       away {
         id
-        team {
+        league {
+          perDay
           id
-          name
-          win
-          lose
+          isStart
+          startDate
+          description
           createdAt
           updatedAt
         }
-        player {
-          id
-          avatar
-          admin
-          c_id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        playerScore
+        name
+        win
+        lose
         createdAt
         updatedAt
       }
@@ -569,51 +555,35 @@ export const onDeleteSchedule = /* GraphQL */ `
       id
       home {
         id
-        team {
+        league {
+          perDay
           id
-          name
-          win
-          lose
+          isStart
+          startDate
+          description
           createdAt
           updatedAt
         }
-        player {
-          id
-          avatar
-          admin
-          c_id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        playerScore
+        name
+        win
+        lose
         createdAt
         updatedAt
       }
       away {
         id
-        team {
+        league {
+          perDay
           id
-          name
-          win
-          lose
+          isStart
+          startDate
+          description
           createdAt
           updatedAt
         }
-        player {
-          id
-          avatar
-          admin
-          c_id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        playerScore
+        name
+        win
+        lose
         createdAt
         updatedAt
       }

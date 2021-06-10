@@ -33,6 +33,7 @@ export const listGames = /* GraphQL */ `
 export const getLeague = /* GraphQL */ `
   query GetLeague($id: ID!) {
     getLeague(id: $id) {
+      perDay
       id
       isStart
       startDate
@@ -57,6 +58,7 @@ export const listLeagues = /* GraphQL */ `
   ) {
     listLeagues(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        perDay
         id
         isStart
         startDate
@@ -117,6 +119,7 @@ export const getTeam = /* GraphQL */ `
     getTeam(id: $id) {
       id
       league {
+        perDay
         id
         isStart
         startDate
@@ -149,6 +152,7 @@ export const listTeams = /* GraphQL */ `
       items {
         id
         league {
+          perDay
           id
           isStart
           startDate
@@ -173,6 +177,7 @@ export const getTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          perDay
           id
           isStart
           startDate
@@ -186,6 +191,7 @@ export const getTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      teamID
       player {
         id
         avatar
@@ -197,6 +203,7 @@ export const getTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerID
       playerScore
       createdAt
       updatedAt
@@ -220,6 +227,7 @@ export const listTeamPlayers = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        teamID
         player {
           id
           avatar
@@ -231,6 +239,7 @@ export const listTeamPlayers = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerID
         playerScore
         createdAt
         updatedAt
@@ -244,6 +253,7 @@ export const getLeaguePlayer = /* GraphQL */ `
     getLeaguePlayer(id: $id) {
       id
       league {
+        perDay
         id
         isStart
         startDate
@@ -286,6 +296,7 @@ export const listLeaguePlayers = /* GraphQL */ `
       items {
         id
         league {
+          perDay
           id
           isStart
           startDate
@@ -319,51 +330,35 @@ export const getSchedule = /* GraphQL */ `
       id
       home {
         id
-        team {
+        league {
+          perDay
           id
-          name
-          win
-          lose
+          isStart
+          startDate
+          description
           createdAt
           updatedAt
         }
-        player {
-          id
-          avatar
-          admin
-          c_id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        playerScore
+        name
+        win
+        lose
         createdAt
         updatedAt
       }
       away {
         id
-        team {
+        league {
+          perDay
           id
-          name
-          win
-          lose
+          isStart
+          startDate
+          description
           createdAt
           updatedAt
         }
-        player {
-          id
-          avatar
-          admin
-          c_id
-          name
-          level
-          xp
-          createdAt
-          updatedAt
-        }
-        playerScore
+        name
+        win
+        lose
         createdAt
         updatedAt
       }
@@ -386,13 +381,17 @@ export const listSchedules = /* GraphQL */ `
         id
         home {
           id
-          playerScore
+          name
+          win
+          lose
           createdAt
           updatedAt
         }
         away {
           id
-          playerScore
+          name
+          win
+          lose
           createdAt
           updatedAt
         }

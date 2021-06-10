@@ -10,7 +10,10 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
+
 import {RFPercentage} from 'react-native-responsive-fontsize';
+
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
@@ -34,7 +37,7 @@ const Profile = ({navigation}) => {
     getUser();
     // isAdmin();
     getXp();
-  }, []);
+  }, [getUser, getXp]);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -44,7 +47,7 @@ const Profile = ({navigation}) => {
     setChooseData(option);
   };
 
-  async function getXp() {
+  const getXp = React.useCallback(async () => {
     try {
       let max = userInfo.level * 50;
       let xp = userInfo.xp;
@@ -52,12 +55,14 @@ const Profile = ({navigation}) => {
     } catch (err) {
       console.log('aldaa', err);
     }
-  }
-  async function getUser() {
+  }, [userInfo.level, userInfo.xp]);
+
+  const getUser = React.useCallback(async () => {
     console.log('object');
     console.log(`userInfo`, userInfo);
     setLoading(false);
-  }
+  }, [userInfo]);
+
   async function isAdmin() {
     if (userInfo.attributes['custom:Admin'] == 1) {
       setAdminVisible(true);
@@ -65,11 +70,20 @@ const Profile = ({navigation}) => {
       setAdminVisible(false);
     }
   }
+
   if (isLoading) {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <ActivityIndicator color={'red'} size={'large'} />
-      </View>
+      <SkeletonPlaceholder>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{width: 60, height: 60, borderRadius: 50}} />
+          <View style={{marginLeft: 20}}>
+            <View style={{width: 120, height: 20, borderRadius: 4}} />
+            <View
+              style={{marginTop: 6, width: 80, height: 20, borderRadius: 4}}
+            />
+          </View>
+        </View>
+      </SkeletonPlaceholder>
     );
   }
   return (

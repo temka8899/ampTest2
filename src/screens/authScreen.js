@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
   StatusBar,
   ActivityIndicator,
   Platform,
+  Animated,
 } from 'react-native';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
@@ -51,6 +52,46 @@ const SwitchView = ({value, onPress}) => {
   const [Xp, setXp] = useState('1');
 
   const [currentUser, setCurrentUser] = useState();
+
+  const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+
+  const _keyboardDidShow = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Shown');
+    fadeIn();
+  }, [fadeIn]);
+
+  const _keyboardDidHide = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Hidden');
+    fadeOut();
+  }, [fadeOut]);
+
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, [_keyboardDidHide, _keyboardDidShow]);
+
+  const fadeIn = React.useCallback(() => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
+  const fadeOut = React.useCallback(() => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
 
   async function signUp() {
     console.log(email);
@@ -123,6 +164,7 @@ const SwitchView = ({value, onPress}) => {
               height: hp(35),
               backgroundColor: '#00032590',
               borderRadius: 15,
+              marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(10) : 0,
               alignItems: 'center',
               justifyContent: 'space-evenly',
               paddingVertical: hp(2),
@@ -405,6 +447,47 @@ const SignInScreen = ({navigation, onPress}) => {
   const [username, setUsername] = useState('moogii67890@gmail.com');
   const [password, setPassword] = useState('12345678');
   const [loading, setLoading] = useState(false);
+
+  const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+
+  const _keyboardDidShow = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Shown');
+    fadeIn();
+  }, [fadeIn]);
+
+  const _keyboardDidHide = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Hidden');
+    fadeOut();
+  }, [fadeOut]);
+
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, [_keyboardDidHide, _keyboardDidShow]);
+
+  const fadeIn = React.useCallback(() => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
+  const fadeOut = React.useCallback(() => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
   const signIn = async () => {
     try {
       setLoading(true);
@@ -430,16 +513,12 @@ const SignInScreen = ({navigation, onPress}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View
-        style={{
-          width: wp(75.5),
-          height: hp(30),
-          backgroundColor: '#00032590',
-          borderRadius: 15,
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
-
-          paddingVertical: hp(2),
-        }}>
+        style={[
+          styles.signInModal,
+          {
+            marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(5) : 0,
+          },
+        ]}>
         <FormInput
           autoCapitalize="none"
           autoCorrect={false}
@@ -502,6 +581,46 @@ const SignInScreen = ({navigation, onPress}) => {
 export default function AuthScreen() {
   const [whichScreen, setWhichScreen] = useState(0);
 
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+
+  const _keyboardDidShow = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Shown');
+    fadeIn();
+  }, [fadeIn]);
+
+  const _keyboardDidHide = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Hidden');
+    fadeOut();
+  }, [fadeOut]);
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, [_keyboardDidHide, _keyboardDidShow]);
+
+  const fadeIn = React.useCallback(() => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
+  const fadeOut = React.useCallback(() => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
   function BackButton() {
     if (whichScreen !== 0) {
       setWhichScreen(0);
@@ -512,7 +631,7 @@ export default function AuthScreen() {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ImageBackground
         source={images.backgroundImage}
-        style={styles.backgroundImage}>
+        style={styles.backgroundImg}>
         <FlashMessage position="top" />
         <SafeAreaView style={{flex: 1}}>
           <StatusBar barStyle="light-content" />
@@ -537,18 +656,21 @@ export default function AuthScreen() {
             style={{
               alignItems: 'center',
             }}>
-            <View style={{flex: 3}}>
-              <Image
+            <Animated.View style={{flex: 3}}>
+              <Animated.Image
                 source={images.banner}
                 style={{
+                  opacity: fadeAnim,
                   resizeMode: 'contain',
-                  width: wp(74.66),
-                  height: hp(36.08),
+                  width:
+                    keyboardStatus == 'Keyboard Shown' ? wp(64.66) : wp(74.66),
+                  height:
+                    keyboardStatus == 'Keyboard Shown' ? hp(26.08) : hp(36.08),
                   marginTop: hp(8),
                   justifyContent: 'flex-start',
                 }}
               />
-            </View>
+            </Animated.View>
             <SwitchView
               value={whichScreen}
               onPress={val => setWhichScreen(val)}
@@ -564,7 +686,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  backgroundImage: {
+  backgroundImg: {
     flex: 1,
     resizeMode: 'cover',
     alignItems: 'center',
@@ -597,5 +719,15 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(1.7),
     textAlign: 'center',
     width: wp(50),
+  },
+  signInModal: {
+    width: wp(75.5),
+    height: hp(30),
+    backgroundColor: '#00032590',
+    borderRadius: 15,
+    alignItems: 'center',
+
+    justifyContent: 'space-evenly',
+    paddingVertical: hp(2),
   },
 });
