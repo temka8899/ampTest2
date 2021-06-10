@@ -28,12 +28,12 @@ export const EndModal = props => {
           }}>
           <TouchableOpacity
             style={styles.modalBtnContainer}
-            onPress={props.navigateSchedule}>
+            onPress={props.EndBtn}>
             <Text style={styles.modalBtnText}>End Match</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.modalBtnContainer}
-            onPress={props.cancelbtn}>
+            onPress={props.cancelBtn}>
             <Text style={styles.modalBtnText}>Cancel</Text>
           </TouchableOpacity>
         </View>
