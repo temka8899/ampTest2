@@ -164,7 +164,7 @@ const SwitchView = ({value, onPress}) => {
               height: hp(35),
               backgroundColor: '#00032590',
               borderRadius: 15,
-              marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(10) : 0,
+              marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(2) : 0,
               alignItems: 'center',
               justifyContent: 'space-evenly',
               paddingVertical: hp(2),

@@ -101,10 +101,6 @@ const GameScreen = ({navigation}) => {
     // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
 
-    const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
-    const _keyboardDidShow = () => setKeyboardStatus('Keyboard Shown');
-    const _keyboardDidHide = () => setKeyboardStatus('Keyboard Hidden');
-
     return (
       <Item
         item={item}
@@ -125,7 +121,7 @@ const GameScreen = ({navigation}) => {
     setGreet('Evening');
   };
 
-  async function getName() {
+  const getName = React.useCallback(async () => {
     const user = await Auth.currentUserInfo();
     const playerData = await API.graphql(graphqlOperation(listPlayers));
     setLoading(false);
@@ -138,23 +134,26 @@ const GameScreen = ({navigation}) => {
       // user baigaa nuhtsul
     }
     findUser(user);
-  }
+  }, [findUser]);
 
-  async function findUser(user) {
-    console.log(`cognito data`, user);
-    const playerData = await API.graphql(graphqlOperation(listPlayers));
-    // console.log(
-    //   `playerData.data.listPlayers.items`,
-    //   playerData.data.listPlayers.items,
-    // );
-    let finded = playerData.data.listPlayers.items.find((item, index) => {
-      if (user.username === item.c_id) {
-        return item;
-      }
-    });
-    setUserInfo(finded);
-    console.log('context player model data', finded);
-  }
+  const findUser = React.useCallback(
+    async user => {
+      console.log(`cognito data`, user);
+      const playerData = await API.graphql(graphqlOperation(listPlayers));
+      // console.log(
+      //   `playerData.data.listPlayers.items`,
+      //   playerData.data.listPlayers.items,
+      // );
+      let finded = playerData.data.listPlayers.items.find((item, index) => {
+        if (user.username === item.c_id) {
+          return item;
+        }
+      });
+      setUserInfo(finded);
+      console.log('context player model data', finded);
+    },
+    [setUserInfo],
+  );
 
   const fetchLeague = async () => {
     try {
