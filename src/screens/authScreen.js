@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
   StatusBar,
   ActivityIndicator,
   Platform,
+  Animated,
 } from 'react-native';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague, createPlayer} from '../graphql/mutations';
@@ -31,6 +32,7 @@ import FlashMessage, {
   hideMessage,
 } from 'react-native-flash-message';
 import {userData} from '../data/Players';
+import {useBackButton} from '@react-navigation/native';
 
 Amplify.configure({
   ...awsmobile,
@@ -50,6 +52,46 @@ const SwitchView = ({value, onPress}) => {
   const [Xp, setXp] = useState('1');
 
   const [currentUser, setCurrentUser] = useState();
+
+  const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+
+  const _keyboardDidShow = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Shown');
+    fadeIn();
+  }, [fadeIn]);
+
+  const _keyboardDidHide = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Hidden');
+    fadeOut();
+  }, [fadeOut]);
+
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, [_keyboardDidHide, _keyboardDidShow]);
+
+  const fadeIn = React.useCallback(() => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
+  const fadeOut = React.useCallback(() => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
 
   async function signUp() {
     console.log(email);
@@ -122,6 +164,7 @@ const SwitchView = ({value, onPress}) => {
               height: hp(35),
               backgroundColor: '#00032590',
               borderRadius: 15,
+              marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(10) : 0,
               alignItems: 'center',
               justifyContent: 'space-evenly',
               paddingVertical: hp(2),
@@ -239,6 +282,162 @@ const SwitchView = ({value, onPress}) => {
           </View>
         </KeyboardAvoidingView>
       );
+    //Forgot password1
+    case 4:
+      return (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View
+            style={{
+              width: wp(75.5),
+              height: hp(26),
+              backgroundColor: '#00032590',
+              borderRadius: 15,
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              paddingVertical: hp(2),
+            }}>
+            <FlashMessage position="top" />
+            <Text style={styles.text}>Enter your email </Text>
+
+            <FormInput
+              value={authCode}
+              autoCorrect={false}
+              placeholder="Email"
+              onChangeText={text2 => setConfirmCode(text2)}
+              keyboardType="email-address"
+            />
+
+            <TouchableOpacity onPress={() => onPress(5)}>
+              <ImageBackground
+                source={images.button}
+                style={{
+                  width: wp(50),
+                  height: hp(5.29),
+                  // borderColor: 'white',
+                  // borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS.brandFont,
+                    color: COLORS.white,
+                    paddingTop: hp(0.6),
+                    margin: hp(1),
+                    fontSize: RFPercentage(1.7),
+                  }}>
+                  SEND
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      );
+    //Forgot password2
+    case 5:
+      return (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View
+            style={{
+              width: wp(75.5),
+              height: hp(26),
+              backgroundColor: '#00032590',
+              borderRadius: 15,
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              paddingVertical: hp(2),
+            }}>
+            <FlashMessage position="top" />
+            <Text style={styles.text}>Enter your code from email</Text>
+
+            <FormInput
+              value={authCode}
+              autoCorrect={false}
+              placeholder="Code"
+              onChangeText={text2 => setConfirmCode(text2)}
+              keyboardType="number-pad"
+            />
+
+            <TouchableOpacity onPress={() => onPress(6)}>
+              <ImageBackground
+                source={images.button}
+                style={{
+                  width: wp(50),
+                  height: hp(5.29),
+                  // borderColor: 'white',
+                  // borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS.brandFont,
+                    color: COLORS.white,
+                    paddingTop: hp(0.6),
+                    margin: hp(1),
+                    fontSize: RFPercentage(1.7),
+                  }}>
+                  CONFIRM
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      );
+    //Forgot password3
+    case 6:
+      return (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View
+            style={{
+              width: wp(75.5),
+              height: hp(26),
+              backgroundColor: '#00032590',
+              borderRadius: 15,
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              paddingVertical: hp(2),
+            }}>
+            <FlashMessage position="top" />
+            <Text style={styles.text}>Enter new password</Text>
+
+            <FormInput
+              value={authCode}
+              autoCorrect={false}
+              onChangeText={text2 => setConfirmCode(text2)}
+              placeholder="Password"
+              secureTextEntry
+            />
+
+            <TouchableOpacity onPress={() => onPress(1)}>
+              <ImageBackground
+                source={images.button}
+                style={{
+                  width: wp(50),
+                  height: hp(5.29),
+                  // borderColor: 'white',
+                  // borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS.brandFont,
+                    color: COLORS.white,
+                    paddingTop: hp(0.6),
+                    margin: hp(1),
+                    fontSize: RFPercentage(1.7),
+                  }}>
+                  CONFIRM
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      );
     default:
       return;
   }
@@ -248,6 +447,47 @@ const SignInScreen = ({navigation, onPress}) => {
   const [username, setUsername] = useState('moogii67890@gmail.com');
   const [password, setPassword] = useState('12345678');
   const [loading, setLoading] = useState(false);
+
+  const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+
+  const _keyboardDidShow = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Shown');
+    fadeIn();
+  }, [fadeIn]);
+
+  const _keyboardDidHide = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Hidden');
+    fadeOut();
+  }, [fadeOut]);
+
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, [_keyboardDidHide, _keyboardDidShow]);
+
+  const fadeIn = React.useCallback(() => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
+  const fadeOut = React.useCallback(() => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
   const signIn = async () => {
     try {
       setLoading(true);
@@ -273,16 +513,12 @@ const SignInScreen = ({navigation, onPress}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View
-        style={{
-          width: wp(75.5),
-          height: hp(30),
-          backgroundColor: '#00032590',
-          borderRadius: 15,
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
-
-          paddingVertical: hp(2),
-        }}>
+        style={[
+          styles.signInModal,
+          {
+            marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(5) : 0,
+          },
+        ]}>
         <FormInput
           autoCapitalize="none"
           autoCorrect={false}
@@ -325,7 +561,7 @@ const SignInScreen = ({navigation, onPress}) => {
             )}
           </ImageBackground>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => onPress(4)}>
           <Text
             style={{
               fontFamily: FONTS.brandFont,
@@ -345,31 +581,96 @@ const SignInScreen = ({navigation, onPress}) => {
 export default function AuthScreen() {
   const [whichScreen, setWhichScreen] = useState(0);
 
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+
+  const _keyboardDidShow = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Shown');
+    fadeIn();
+  }, [fadeIn]);
+
+  const _keyboardDidHide = React.useCallback(() => {
+    setKeyboardStatus('Keyboard Hidden');
+    fadeOut();
+  }, [fadeOut]);
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, [_keyboardDidHide, _keyboardDidShow]);
+
+  const fadeIn = React.useCallback(() => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
+  const fadeOut = React.useCallback(() => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+    }).start();
+  }, [fadeAnim]);
+
+  function BackButton() {
+    if (whichScreen !== 0) {
+      setWhichScreen(0);
+    }
+  }
   //SignIn Home screen
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ImageBackground
         source={images.backgroundImage}
-        style={styles.backgroundImage}>
+        style={styles.backgroundImg}>
         <FlashMessage position="top" />
         <SafeAreaView style={{flex: 1}}>
           <StatusBar barStyle="light-content" />
+          {whichScreen ? (
+            <TouchableOpacity
+              style={{position: 'absolute', zIndex: 2}}
+              onPress={() => BackButton()}>
+              <Image
+                source={icons.signBackBtn}
+                style={{
+                  width: wp(14),
+                  height: hp(5.4),
+                  marginTop: hp(7),
+                  // borderColor: 'red',
+                  // borderWidth: 1,
+                  marginLeft: -wp(5),
+                }}
+              />
+            </TouchableOpacity>
+          ) : null}
           <View
             style={{
               alignItems: 'center',
             }}>
-            <View style={{flex: 3}}>
-              <Image
+            <Animated.View style={{flex: 3}}>
+              <Animated.Image
                 source={images.banner}
                 style={{
+                  opacity: fadeAnim,
                   resizeMode: 'contain',
-                  width: wp(74.66),
-                  height: hp(36.08),
+                  width:
+                    keyboardStatus == 'Keyboard Shown' ? wp(64.66) : wp(74.66),
+                  height:
+                    keyboardStatus == 'Keyboard Shown' ? hp(26.08) : hp(36.08),
                   marginTop: hp(8),
                   justifyContent: 'flex-start',
                 }}
               />
-            </View>
+            </Animated.View>
             <SwitchView
               value={whichScreen}
               onPress={val => setWhichScreen(val)}
@@ -385,7 +686,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  backgroundImage: {
+  backgroundImg: {
     flex: 1,
     resizeMode: 'cover',
     alignItems: 'center',
@@ -418,5 +719,15 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(1.7),
     textAlign: 'center',
     width: wp(50),
+  },
+  signInModal: {
+    width: wp(75.5),
+    height: hp(30),
+    backgroundColor: '#00032590',
+    borderRadius: 15,
+    alignItems: 'center',
+
+    justifyContent: 'space-evenly',
+    paddingVertical: hp(2),
   },
 });
