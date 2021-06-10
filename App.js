@@ -11,6 +11,7 @@ import createGameScreen from './src/screens/CreateGame';
 import AdminScreen from './src/screens/AdminScreen';
 import createTeamScreen from './src/screens/CreateTeam';
 import CountScreen from './src/screens/CountScreen';
+import ScheduleScreen from './src/screens/ScheduleScreen';
 import {createTeam} from './src/graphql/mutations';
 
 const Stack = createStackNavigator();
@@ -38,6 +39,7 @@ function App() {
           <Stack.Screen name="createGameScreen" component={createGameScreen} />
           <Stack.Screen name="AdminScreen" component={AdminScreen} />
           <Stack.Screen name="CountScreen" component={CountScreen} />
+          <Stack.Screen name="ScheduleScreen" component={ScheduleScreen} />
         </Stack.Navigator>
       </ContextProvider>
     </NavigationContainer>
