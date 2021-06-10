@@ -53,6 +53,7 @@ const createTeamScreen = ({navigation}) => {
   const [formState, setFormState] = useState(initialState);
   const [todos, setTodos] = useState([]);
   const [uploadImage, setUploadImage] = useState('');
+  const [teamPlayerID, setTeamPlayerID] = useState('');
   const [fileName123, setFileName] = useState('');
   const [file123, setFile123] = useState('');
 
@@ -222,6 +223,60 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function startLeague() {
+    try {
+      const leaguePlayerData = await API.graphql(
+        graphqlOperation(listLeaguePlayers, {
+          filter: {
+            leagueID: {eq: '0a0fa76f-af84-4f75-bc16-142f4176be58'},
+          },
+        }),
+      );
+      const todos = leaguePlayerData.data.listLeaguePlayers.items;
+      console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
+      for (i = 0; i < todos.length; i = i + 2) {
+        console.log(i);
+
+        //Add Team
+        try {
+          const temp = await API.graphql(
+            graphqlOperation(createTeam, {
+              input: {
+                name: `team${i}_generated`,
+                teamLeagueId: '0a0fa76f-af84-4f75-bc16-142f4176be58',
+                win: 0,
+                lose: 0,
+              },
+            }),
+          );
+          addStartTeamPlayer(temp.data.createTeam.id, todos[i].playerID);
+          addStartTeamPlayer(temp.data.createTeam.id, todos[i + 1].playerID);
+        } catch (err) {
+          console.log('error creating League:', err);
+        }
+      }
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
+  async function addStartTeamPlayer(teamplayerteam, teamplayerplayer) {
+    try {
+      await API.graphql(
+        graphqlOperation(createTeamPlayer, {
+          input: {
+            teamPlayerTeamId: `${teamplayerteam}`,
+            teamPlayerPlayerId: `${teamplayerplayer}`,
+          },
+        }),
+      );
+      console.log('Team Created');
+    } catch (err) {
+      console.log('error creating League:', err);
+    }
+    fetchTeamPlayers();
+  }
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content"></StatusBar>
@@ -245,6 +300,7 @@ const createTeamScreen = ({navigation}) => {
           onPress={() => checkLeaguePlayers()}
           title="check LeaguePlayer"
         />
+        <Button onPress={() => startLeague()} title="Start League" />
       </View>
     </SafeAreaView>
   );

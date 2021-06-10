@@ -118,6 +118,7 @@ const ParticipatesScreen = ({navigation, route}) => {
         graphqlOperation(listLeaguePlayers, {
           filter: {
             playerID: {eq: my_id},
+            leagueID: {eq: LeagueId},
           },
         }),
       );
