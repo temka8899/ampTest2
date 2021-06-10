@@ -13,6 +13,7 @@ export const editBtn = require('../assets/icons/editBtn.png');
 export const plus = require('../assets/icons/plus.png');
 export const removeBtn = require('../assets/icons/removeBtn.png');
 export const backWhiteBtn = require('../assets/icons/backWhiteBtn.png');
+export const signBackBtn = require('../assets/icons/signBackBtn.png');
 
 export default {
   Home,
@@ -23,6 +24,7 @@ export default {
   StandingsFill,
   Profile,
   ProfileFill,
+  signBackBtn,
   backWhiteBtn,
   removeBtn,
   plus,

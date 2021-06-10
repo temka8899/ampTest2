@@ -33,8 +33,8 @@ export const EndModal = props => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.modalBtnContainer}
-            onPress={props.cancelBtn}>
-            <Text style={styles.modalBtnText}>Cancel</Text>
+            onPress={props.cancelbtn}>
+            <Text style={styles.modalBtnText}>Cansfgcel</Text>
           </TouchableOpacity>
         </View>
       </View>
