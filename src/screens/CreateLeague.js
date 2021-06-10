@@ -119,6 +119,7 @@ const createLeagueScreen = ({navigation}) => {
             startDate: `${startDate}`,
             leagueGameId: `${leagueGameId}`,
             description: `${leagueDescription}`,
+            isStart: false,
           },
         }),
       );

@@ -55,7 +55,6 @@ export default function CountScreen({navigation}) {
       default:
         break;
     }
-    toggleEndModal(false);
   };
   const toggleCancelModal = bool => {
     setCancelModalVisible(bool);
@@ -64,23 +63,25 @@ export default function CountScreen({navigation}) {
     setEndModalVisible(bool);
   };
 
-  const checkEndMatch = () => {
-    switch (findMistake) {
-      case 1:
-        setAllPoint(prev => ({...prev, one: prev.one - 1}));
-        break;
-      case 2:
-        setAllPoint(prev => ({...prev, two: prev.two - 1}));
-        break;
-      case 3:
-        setAllPoint(prev => ({...prev, three: prev.three - 1}));
-        break;
-      case 4:
-        setAllPoint(prev => ({...prev, four: prev.four - 1}));
-        break;
-      default:
-        break;
-    }
+  const EndBtnPress = () => {
+    // switch (findMistake) {
+    //   case 1:
+    //     setAllPoint(prev => ({...prev, one: prev.one - 1}));
+    //     break;
+    //   case 2:
+    //     setAllPoint(prev => ({...prev, two: prev.two - 1}));
+    //     break;
+    //   case 3:
+    //     setAllPoint(prev => ({...prev, three: prev.three - 1}));
+    //     break;
+    //   case 4:
+    //     setAllPoint(prev => ({...prev, four: prev.four - 1}));
+    //     break;
+    //   default:
+    //     break;
+    // }
+    toggleEndModal(false);
+    console.log('allpoint', allPoint);
   };
 
   function CancelModal() {
@@ -354,7 +355,8 @@ export default function CountScreen({navigation}) {
           isVisible={EndModalVisible}
           onBackdropPress={() => setEndModalVisible(false)}
           navigateSchedule={endMatch}
-          cancelbtn={cancelBtnPress}
+          cancelBtn={cancelBtnPress}
+          EndBtn={EndBtnPress}
         />
         {/* {checkHomeWin()} */}
       </View>
