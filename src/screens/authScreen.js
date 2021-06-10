@@ -609,16 +609,17 @@ export default function AuthScreen() {
 
   const moveLogo = React.useCallback(() => {
     // Will change fadeAnim value to 1 in 5 seconds
-    Animated.spring(TopValue, {
-      toValue: 300,
+    Animated.timing(TopValue, {
+      toValue: 200,
+      duration: 300,
       useNativeDriver: false,
     }).start();
   }, [TopValue]);
 
   const fadeOut = React.useCallback(() => {
     // Will change TopValue value to 0 in 3 seconds
-    Animated.spring(TopValue, {
-      toValue: 300,
+    Animated.timing(TopValue, {
+      toValue: 0,
       useNativeDriver: false,
     }).start();
   }, [TopValue]);
@@ -665,7 +666,8 @@ export default function AuthScreen() {
                   resizeMode: 'contain',
                   width: wp(64.66),
                   height: wp(74.66),
-                  marginTop: keyboardStatus == 'Keyboard Shown' ? 0 : hp(8),
+                  transform: [{translateY: TopValue}],
+                  marginBottom: hp(8),
                   justifyContent: 'flex-start',
                 }}
               />
