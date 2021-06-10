@@ -50,6 +50,7 @@ export const createLeague = /* GraphQL */ `
   ) {
     createLeague(input: $input, condition: $condition) {
       id
+      isStart
       startDate
       game {
         id
@@ -71,6 +72,7 @@ export const updateLeague = /* GraphQL */ `
   ) {
     updateLeague(input: $input, condition: $condition) {
       id
+      isStart
       startDate
       game {
         id
@@ -92,6 +94,7 @@ export const deleteLeague = /* GraphQL */ `
   ) {
     deleteLeague(input: $input, condition: $condition) {
       id
+      isStart
       startDate
       game {
         id
@@ -169,6 +172,7 @@ export const createTeam = /* GraphQL */ `
       id
       league {
         id
+        isStart
         startDate
         game {
           id
@@ -198,6 +202,7 @@ export const updateTeam = /* GraphQL */ `
       id
       league {
         id
+        isStart
         startDate
         game {
           id
@@ -227,6 +232,7 @@ export const deleteTeam = /* GraphQL */ `
       id
       league {
         id
+        isStart
         startDate
         game {
           id
@@ -258,6 +264,7 @@ export const createTeamPlayer = /* GraphQL */ `
         id
         league {
           id
+          isStart
           startDate
           description
           createdAt
@@ -280,6 +287,7 @@ export const createTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerScore
       createdAt
       updatedAt
     }
@@ -296,6 +304,7 @@ export const updateTeamPlayer = /* GraphQL */ `
         id
         league {
           id
+          isStart
           startDate
           description
           createdAt
@@ -318,6 +327,7 @@ export const updateTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerScore
       createdAt
       updatedAt
     }
@@ -334,6 +344,7 @@ export const deleteTeamPlayer = /* GraphQL */ `
         id
         league {
           id
+          isStart
           startDate
           description
           createdAt
@@ -356,6 +367,7 @@ export const deleteTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerScore
       createdAt
       updatedAt
     }
@@ -370,6 +382,7 @@ export const createLeaguePlayer = /* GraphQL */ `
       id
       league {
         id
+        isStart
         startDate
         game {
           id
@@ -409,6 +422,7 @@ export const updateLeaguePlayer = /* GraphQL */ `
       id
       league {
         id
+        isStart
         startDate
         game {
           id
@@ -448,6 +462,7 @@ export const deleteLeaguePlayer = /* GraphQL */ `
       id
       league {
         id
+        isStart
         startDate
         game {
           id
@@ -506,6 +521,7 @@ export const createSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
@@ -530,6 +546,7 @@ export const createSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
@@ -569,6 +586,7 @@ export const updateSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
@@ -593,6 +611,7 @@ export const updateSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
@@ -632,6 +651,7 @@ export const deleteSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
@@ -656,6 +676,7 @@ export const deleteSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
