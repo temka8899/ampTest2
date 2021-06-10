@@ -224,6 +224,7 @@ const createTeamScreen = ({navigation}) => {
   }
 
   async function startLeague() {
+    // Get Soccer League Players
     try {
       const leaguePlayerData = await API.graphql(
         graphqlOperation(listLeaguePlayers, {
@@ -234,29 +235,33 @@ const createTeamScreen = ({navigation}) => {
       );
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
-      for (i = 0; i < todos.length; i = i + 2) {
-        console.log(i);
+      if (todos.length % 2 == 0 && todos.length >= 4) {
+        for (i = 0; i < todos.length; i = i + 2) {
+          console.log(i);
 
-        //Add Team
-        try {
-          const temp = await API.graphql(
-            graphqlOperation(createTeam, {
-              input: {
-                name: `team${i}_generated`,
-                teamLeagueId: '0a0fa76f-af84-4f75-bc16-142f4176be58',
-                win: 0,
-                lose: 0,
-              },
-            }),
-          );
-          addStartTeamPlayer(temp.data.createTeam.id, todos[i].playerID);
-          addStartTeamPlayer(temp.data.createTeam.id, todos[i + 1].playerID);
-        } catch (err) {
-          console.log('error creating League:', err);
+          // Add Team
+          try {
+            const temp = await API.graphql(
+              graphqlOperation(createTeam, {
+                input: {
+                  name: `team${i}_generated`,
+                  teamLeagueId: '0a0fa76f-af84-4f75-bc16-142f4176be58',
+                  win: 0,
+                  lose: 0,
+                },
+              }),
+            );
+            addStartTeamPlayer(temp.data.createTeam.id, todos[i].playerID);
+            addStartTeamPlayer(temp.data.createTeam.id, todos[i + 1].playerID);
+          } catch (err) {
+            console.log('error creating League:', err);
+          }
         }
+      } else {
+        console.log('Soccer League Players not even or not enough');
       }
     } catch (err) {
-      console.log('error fetching todos', err);
+      console.log('error fetching League Players', err);
     }
   }
 

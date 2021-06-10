@@ -34,6 +34,7 @@ export const getLeague = /* GraphQL */ `
   query GetLeague($id: ID!) {
     getLeague(id: $id) {
       id
+      isStart
       startDate
       game {
         id
@@ -57,6 +58,7 @@ export const listLeagues = /* GraphQL */ `
     listLeagues(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        isStart
         startDate
         game {
           id
@@ -116,6 +118,7 @@ export const getTeam = /* GraphQL */ `
       id
       league {
         id
+        isStart
         startDate
         game {
           id
@@ -147,6 +150,7 @@ export const listTeams = /* GraphQL */ `
         id
         league {
           id
+          isStart
           startDate
           description
           createdAt
@@ -170,6 +174,7 @@ export const getTeamPlayer = /* GraphQL */ `
         id
         league {
           id
+          isStart
           startDate
           description
           createdAt
@@ -192,6 +197,7 @@ export const getTeamPlayer = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      playerScore
       createdAt
       updatedAt
     }
@@ -225,6 +231,7 @@ export const listTeamPlayers = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
@@ -238,6 +245,7 @@ export const getLeaguePlayer = /* GraphQL */ `
       id
       league {
         id
+        isStart
         startDate
         game {
           id
@@ -279,6 +287,7 @@ export const listLeaguePlayers = /* GraphQL */ `
         id
         league {
           id
+          isStart
           startDate
           description
           createdAt
@@ -329,6 +338,7 @@ export const getSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
@@ -353,6 +363,7 @@ export const getSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        playerScore
         createdAt
         updatedAt
       }
@@ -375,11 +386,13 @@ export const listSchedules = /* GraphQL */ `
         id
         home {
           id
+          playerScore
           createdAt
           updatedAt
         }
         away {
           id
+          playerScore
           createdAt
           updatedAt
         }

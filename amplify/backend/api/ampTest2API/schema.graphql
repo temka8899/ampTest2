@@ -6,6 +6,7 @@ type Game @model {
 
 type League @model {
   id: ID!
+  isStart: Boolean!
   startDate: String!
   game: Game @connection
   description: String
@@ -33,6 +34,7 @@ type TeamPlayer @model {
   id: ID!
   team: Team @connection
   player: Player @connection
+  playerScore: Int
 }
 
 type LeaguePlayer @model {
