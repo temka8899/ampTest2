@@ -21,10 +21,22 @@ export default function CountScreen({navigation}) {
   // const [CancelPress, setCancelPress] = useState(false);
 
   const [allPoint, setAllPoint] = useState({
-    one: 0,
-    two: 0,
-    three: 0,
-    four: 0,
+    one: {
+      point: 0,
+      name: 'Moogii',
+    },
+    two: {
+      point: 0,
+      name: 'Temuulen',
+    },
+    three: {
+      point: 0,
+      name: 'Buynaa',
+    },
+    four: {
+      point: 0,
+      name: 'Amaraa',
+    },
   });
 
   // useEffect(() => {
@@ -41,20 +53,35 @@ export default function CountScreen({navigation}) {
     console.log(`findMistake`, findMistake);
     switch (findMistake) {
       case 1:
-        setAllPoint(prev => ({...prev, one: prev.one - 1}));
+        setAllPoint(prev => ({
+          ...prev,
+          one: {point: allPoint.one.point - 1, name: 'Moogii'},
+        }));
         break;
       case 2:
-        setAllPoint(prev => ({...prev, two: prev.two - 1}));
+        setAllPoint(prev => ({
+          ...prev,
+          two: {point: allPoint.two.point - 1, name: 'Temuulen'},
+        }));
         break;
       case 3:
-        setAllPoint(prev => ({...prev, three: prev.three - 1}));
+        setAllPoint(prev => ({
+          ...prev,
+          three: {point: allPoint.three.point - 1, name: 'Buynaa'},
+        }));
         break;
       case 4:
-        setAllPoint(prev => ({...prev, four: prev.four - 1}));
+        setAllPoint(prev => ({
+          ...prev,
+          four: {point: allPoint.four.point - 1, name: 'Amaraa'},
+        }));
         break;
       default:
         break;
     }
+    toggleEndModal(false);
+
+    console.log('fbb');
   };
   const toggleCancelModal = bool => {
     setCancelModalVisible(bool);
@@ -72,7 +99,7 @@ export default function CountScreen({navigation}) {
     //     setAllPoint(prev => ({...prev, two: prev.two - 1}));
     //     break;
     //   case 3:
-    //     setAllPoint(prev => ({...prev, three: prev.three - 1}));
+    //     setAllPoint(prev => ({...prev, three.point: prev.three.point - 1}));
     //     break;
     //   case 4:
     //     setAllPoint(prev => ({...prev, four: prev.four - 1}));
@@ -110,7 +137,7 @@ export default function CountScreen({navigation}) {
               }}>
               <TouchableOpacity
                 style={styles.modalBtnContainer}
-                onPress={() => navigation.replace('ScheduleScreen')}>
+                onPress={() => navigation.replace('Tabs')}>
                 <Text style={styles.modalBtnText}>End Match</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -139,7 +166,9 @@ export default function CountScreen({navigation}) {
       <StatusBar hidden />
       <View style={[styles.topContainer, {transform: [{rotate: '180deg'}]}]}>
         <View style={styles.teamScoreContainer}>
-          <Text style={styles.teamScore}>{allPoint.three + allPoint.four}</Text>
+          <Text style={styles.teamScore}>
+            {allPoint.three.point + allPoint.four.point}
+          </Text>
         </View>
         <View
           style={{
@@ -153,8 +182,11 @@ export default function CountScreen({navigation}) {
           }}>
           <TouchableOpacity
             onPress={() =>
-              allPoint.three !== 0
-                ? setAllPoint(prev => ({...prev, three: prev.three - 1}))
+              allPoint.three.point !== 0
+                ? setAllPoint(prev => ({
+                    ...prev,
+                    three: {point: allPoint.three.point - 1, name: 'Buynaa'},
+                  }))
                 : null
             }>
             <Image
@@ -164,8 +196,11 @@ export default function CountScreen({navigation}) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              allPoint.four !== 0
-                ? setAllPoint(prev => ({...prev, four: prev.four - 1}))
+              allPoint.four.point !== 0
+                ? setAllPoint(prev => ({
+                    ...prev,
+                    four: {point: allPoint.four.point - 1, name: 'Amaraa'},
+                  }))
                 : null
             }>
             <Image
@@ -177,12 +212,17 @@ export default function CountScreen({navigation}) {
         <TouchableOpacity
           style={styles.touch}
           onPress={() => {
-            allPoint.three + allPoint.four !== 9 ? null : setFind(3);
-            setAllPoint(prev => ({...prev, three: prev.three + 1}));
+            allPoint.three.point + allPoint.four.point !== 9
+              ? null
+              : setFind(3);
+            setAllPoint(prev => ({
+              ...prev,
+              three: {point: allPoint.three.point + 1, name: 'Buynaa'},
+            }));
           }}>
           <View style={[styles.avatarScore, {marginLeft: wp(2)}]}>
             <Text style={{color: COLORS.greyText, fontFamily: FONTS.brandFont}}>
-              Moogii
+              {allPoint.three.name}
             </Text>
             <View style={{flexDirection: 'row'}}>
               <Image source={images.men} style={[styles.image]} />
@@ -195,7 +235,7 @@ export default function CountScreen({navigation}) {
                   marginTop: wp(4.5),
                   marginLeft: wp(2),
                 }}>
-                {allPoint.three}
+                {allPoint.three.point}
               </Text>
             </View>
           </View>
@@ -203,8 +243,13 @@ export default function CountScreen({navigation}) {
         <TouchableOpacity
           style={styles.touch}
           onPress={() => {
-            allPoint.three + allPoint.four !== 9 ? null : setFind(4);
-            setAllPoint(prev => ({...prev, four: prev.four + 1}));
+            allPoint.three.point + allPoint.four.point !== 9
+              ? null
+              : setFind(4);
+            setAllPoint(prev => ({
+              ...prev,
+              four: {point: allPoint.four.point + 1, name: 'Amaraa'},
+            }));
           }}
           style={[styles.touch, {overflow: 'hidden'}]}>
           <View
@@ -221,7 +266,7 @@ export default function CountScreen({navigation}) {
                 alignSelf: 'flex-end',
                 marginRight: wp(2),
               }}>
-              buyna
+              {allPoint.four.name}
             </Text>
             <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
               <Text
@@ -233,7 +278,7 @@ export default function CountScreen({navigation}) {
                   marginTop: wp(4.5),
                   marginRight: wp(2),
                 }}>
-                {allPoint.four}
+                {allPoint.four.point}
               </Text>
               <Image
                 source={images.men}
@@ -245,7 +290,9 @@ export default function CountScreen({navigation}) {
       </View>
       <View style={styles.topContainer}>
         <View style={styles.teamScoreContainer}>
-          <Text style={styles.teamScore}>{allPoint.two + allPoint.one}</Text>
+          <Text style={styles.teamScore}>
+            {allPoint.two.point + allPoint.one.point}
+          </Text>
         </View>
         <View
           style={{
@@ -259,8 +306,11 @@ export default function CountScreen({navigation}) {
           }}>
           <TouchableOpacity
             onPress={() =>
-              allPoint.one !== 0
-                ? setAllPoint(prev => ({...prev, one: prev.one - 1}))
+              allPoint.one.point !== 0
+                ? setAllPoint(prev => ({
+                    ...prev,
+                    one: {point: allPoint.one.point - 1, name: 'Moogii'},
+                  }))
                 : null
             }>
             <Image
@@ -270,8 +320,11 @@ export default function CountScreen({navigation}) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              allPoint.two !== 0
-                ? setAllPoint(prev => ({...prev, two: prev.two - 1}))
+              allPoint.two.point !== 0
+                ? setAllPoint(prev => ({
+                    ...prev,
+                    two: {point: allPoint.two.point - 1, name: 'Temuulen'},
+                  }))
                 : null
             }>
             <Image
@@ -283,12 +336,15 @@ export default function CountScreen({navigation}) {
         <TouchableOpacity
           style={styles.touch}
           onPress={() => {
-            allPoint.one + allPoint.two !== 9 ? null : setFind(1);
-            setAllPoint(prev => ({...prev, one: prev.one + 1}));
+            allPoint.one.point + allPoint.two.point !== 9 ? null : setFind(1);
+            setAllPoint(prev => ({
+              ...prev,
+              one: {point: allPoint.one.point + 1, name: 'Moogii'},
+            }));
           }}>
           <View style={[styles.avatarScore, {marginLeft: wp(2)}]}>
             <Text style={{color: COLORS.greyText, fontFamily: FONTS.brandFont}}>
-              Temuulen
+              {allPoint.one.name}
             </Text>
             <View style={{flexDirection: 'row'}}>
               <Image source={images.men} style={[styles.image]} />
@@ -301,15 +357,18 @@ export default function CountScreen({navigation}) {
                   marginTop: wp(4.5),
                   marginLeft: wp(2),
                 }}>
-                {allPoint.one}
+                {allPoint.one.point}
               </Text>
             </View>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            allPoint.one + allPoint.two !== 9 ? null : setFind(2);
-            setAllPoint(prev => ({...prev, two: prev.two + 1}));
+            allPoint.one.point + allPoint.two.point !== 9 ? null : setFind(2);
+            setAllPoint(prev => ({
+              ...prev,
+              two: {point: allPoint.two.point + 1, name: 'Temuulen'},
+            }));
           }}
           style={[styles.touch, {overflow: 'hidden'}]}>
           <View
@@ -326,7 +385,7 @@ export default function CountScreen({navigation}) {
                 alignSelf: 'flex-end',
                 marginRight: wp(2),
               }}>
-              namsrai
+              {allPoint.two.name}
             </Text>
             <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
               <Text
@@ -338,7 +397,7 @@ export default function CountScreen({navigation}) {
                   marginTop: wp(4.5),
                   marginRight: wp(2),
                 }}>
-                {allPoint.two}
+                {allPoint.two.point}
               </Text>
               <Image
                 source={images.men}
@@ -355,7 +414,7 @@ export default function CountScreen({navigation}) {
           isVisible={EndModalVisible}
           onBackdropPress={() => setEndModalVisible(false)}
           navigateSchedule={endMatch}
-          cancelBtn={cancelBtnPress}
+          cancelbtn={cancelBtnPress}
           EndBtn={EndBtnPress}
         />
         {/* {checkHomeWin()} */}
