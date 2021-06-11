@@ -26,6 +26,7 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {icons, images, index, theme} from '../constants';
 import {wp, hp, ft, FONTS, COLORS} from '../constants/theme';
 import {listPlayers, listLeagues, listTeams} from '../graphql/queries';
+import RadioButton from '../components/RadioButton';
 
 import FlashMessage, {
   showMessage,
@@ -129,6 +130,18 @@ const SwitchView = ({value, onPress}) => {
     }
   }
 
+  const [gender, setGender] = useState([
+    {id: 1, value: true, name: 'Female', selected: false},
+    {id: 2, value: false, name: 'Male', selected: false},
+  ]);
+  const onRadioBtnClick = item => {
+    let updateState = gender.map(genderItem =>
+      genderItem.id == item.id
+        ? {...genderItem, selected: true}
+        : {...genderItem, selected: false},
+    );
+    setGender(updateState);
+  };
   switch (value) {
     case 0:
       return (
@@ -161,7 +174,7 @@ const SwitchView = ({value, onPress}) => {
           <View
             style={{
               width: wp(75.5),
-              height: hp(35),
+              height: hp(40),
               backgroundColor: '#00032590',
               borderRadius: 15,
               marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(2) : 0,
@@ -203,6 +216,17 @@ const SwitchView = ({value, onPress}) => {
               placeholder="Phone number"
               keyboardType="number-pad"
             />
+            <View style={styles.radioContainer}>
+              {gender.map(item => (
+                <RadioButton
+                  onPress={() => onRadioBtnClick(item)}
+                  selected={item.selected}
+                  value={item.value}
+                  key={item.id}>
+                  {item.name}
+                </RadioButton>
+              ))}
+            </View>
 
             <TouchableOpacity onPress={() => signUp()}>
               <ImageBackground
@@ -730,5 +754,14 @@ const styles = StyleSheet.create({
 
     justifyContent: 'space-evenly',
     paddingVertical: hp(2),
+  },
+  radioContainer: {
+    // borderWidth: 1,
+    // borderColor: 'red',
+    width: wp(55),
+    height: hp(4),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 });
