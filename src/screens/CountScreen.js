@@ -136,7 +136,7 @@ export default function CountScreen({navigation}) {
               }}>
               <TouchableOpacity
                 style={styles.modalBtnContainer}
-                onPress={() => navigation.replace('Tabs')}>
+                onPress={() => navigation.pop()}>
                 <Text style={styles.modalBtnText}>End Match</Text>
               </TouchableOpacity>
               <TouchableOpacity

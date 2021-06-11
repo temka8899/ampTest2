@@ -148,7 +148,7 @@ const ScheduleScreen = ({navigation, route}) => {
       </View>
       <TouchableOpacity
         style={{margin: wp(10)}}
-        onPress={() => navigation.replace('CountScreen')}>
+        onPress={() => navigation.navigate('CountScreen')}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
           START
         </Text>
