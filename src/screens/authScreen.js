@@ -53,46 +53,6 @@ const SwitchView = ({value, onPress}) => {
 
   const [currentUser, setCurrentUser] = useState();
 
-  const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
-
-  const _keyboardDidShow = React.useCallback(() => {
-    setKeyboardStatus('Keyboard Shown');
-    fadeIn();
-  }, [fadeIn]);
-
-  const _keyboardDidHide = React.useCallback(() => {
-    setKeyboardStatus('Keyboard Hidden');
-    fadeOut();
-  }, [fadeOut]);
-
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-
-    return () => {
-      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
-      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
-    };
-  }, [_keyboardDidHide, _keyboardDidShow]);
-
-  const fadeIn = React.useCallback(() => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 500,
-    }).start();
-  }, [fadeAnim]);
-
-  const fadeOut = React.useCallback(() => {
-    // Will change fadeAnim value to 0 in 3 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-    }).start();
-  }, [fadeAnim]);
-
   async function signUp() {
     console.log(email);
     console.log(password);
@@ -157,181 +117,191 @@ const SwitchView = ({value, onPress}) => {
     case 2:
       return (
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View
-            style={{
-              width: wp(75.5),
-              height: hp(35),
-              backgroundColor: '#00032590',
-              borderRadius: 15,
-              marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(2) : 0,
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              paddingVertical: hp(2),
-            }}>
-            <FormInput
-              autoCorrect={false}
-              // value={signUpPassword}
-              onChangeText={text => [setSignUpName(text)]}
-              placeholder="Name"
-            />
-            <FormInput
-              autoCorrect={false}
-              autoCapitalize="none"
-              // value={signUpEmail}
-              onChangeText={text => [
-                setSignUpEmail(text),
-                setSignUpUsername(text),
-              ]}
-              placeholder="Email"
-              keyboardType="email-address"
-            />
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View
+              style={{
+                width: wp(75.5),
+                height: hp(35),
+                backgroundColor: '#00032590',
+                borderRadius: 15,
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                paddingVertical: hp(2),
+                paddingBottom: hp(4),
+              }}>
+              <FormInput
+                autoCorrect={false}
+                // value={signUpPassword}
+                onChangeText={text => [setSignUpName(text)]}
+                placeholder="Name"
+              />
+              <FormInput
+                autoCorrect={false}
+                autoCapitalize="none"
+                // value={signUpEmail}
+                onChangeText={text => [
+                  setSignUpEmail(text),
+                  setSignUpUsername(text),
+                ]}
+                placeholder="Email"
+                keyboardType="email-address"
+              />
 
-            <FormInput
-              autoCorrect={false}
-              // value={signUpPassword}
-              onChangeText={text => setSignUpPassword(text)}
-              placeholder="Password"
-              secureTextEntry
-            />
+              <FormInput
+                autoCorrect={false}
+                // value={signUpPassword}
+                onChangeText={text => setSignUpPassword(text)}
+                placeholder="Password"
+                secureTextEntry
+              />
 
-            <FormInput
-              autoCorrect={false}
-              whichScreen
-              // value={signUpPassword}
-              onChangeText={text => [setPhoneNumber(`+976${text}`)]}
-              placeholder="Phone number"
-              keyboardType="number-pad"
-            />
+              <FormInput
+                autoCorrect={false}
+                whichScreen
+                // value={signUpPassword}
+                onChangeText={text => [setPhoneNumber(`+976${text}`)]}
+                placeholder="Phone number"
+                keyboardType="number-pad"
+              />
 
-            <TouchableOpacity onPress={() => signUp()}>
-              <ImageBackground
-                source={images.button}
-                style={{
-                  width: wp(50),
-                  height: hp(5.29),
-                  // borderColor: 'white',
-                  // borderWidth: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text
+              <TouchableOpacity onPress={() => signUp()}>
+                <ImageBackground
+                  source={images.button}
                   style={{
-                    fontFamily: FONTS.brandFont,
-                    color: COLORS.white,
-                    paddingTop: hp(0.6),
-                    margin: hp(1),
-                    fontSize: RFPercentage(1.7),
+                    width: wp(50),
+                    height: hp(5.29),
+                    // borderColor: 'white',
+                    // borderWidth: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  SIGN UP
-                </Text>
-              </ImageBackground>
-            </TouchableOpacity>
-          </View>
+                  <Text
+                    style={{
+                      fontFamily: FONTS.brandFont,
+                      color: COLORS.white,
+                      paddingTop: hp(0.6),
+                      margin: hp(1),
+                      fontSize: RFPercentage(1.7),
+                    }}>
+                    SIGN UP
+                  </Text>
+                </ImageBackground>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
       );
     //SignUp
     case 3:
       return (
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View
-            style={{
-              width: wp(75.5),
-              height: hp(26),
-              backgroundColor: '#00032590',
-              borderRadius: 15,
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              paddingVertical: hp(2),
-            }}>
-            <FlashMessage position="top" />
-            <Text style={styles.text}>Enter your code from email</Text>
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View
+              style={{
+                width: wp(75.5),
+                height: hp(26),
+                backgroundColor: '#00032590',
+                borderRadius: 15,
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                paddingVertical: hp(2),
+              }}>
+              <FlashMessage position="top" />
+              <Text style={styles.text}>Enter your code from email</Text>
 
-            <FormInput
-              value={authCode}
-              autoCorrect={false}
-              placeholder="Code"
-              onChangeText={text2 => setConfirmCode(text2)}
-              keyboardType="number-pad"
-            />
+              <FormInput
+                value={authCode}
+                autoCorrect={false}
+                placeholder="Code"
+                onChangeText={text2 => setConfirmCode(text2)}
+                keyboardType="number-pad"
+              />
 
-            <TouchableOpacity onPress={() => confirmSignUp()}>
-              <ImageBackground
-                source={images.button}
-                style={{
-                  width: wp(50),
-                  height: hp(5.29),
-                  // borderColor: 'white',
-                  // borderWidth: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text
+              <TouchableOpacity onPress={() => confirmSignUp()}>
+                <ImageBackground
+                  source={images.button}
                   style={{
-                    fontFamily: FONTS.brandFont,
-                    color: COLORS.white,
-                    paddingTop: hp(0.6),
-                    margin: hp(1),
-                    fontSize: RFPercentage(1.7),
+                    width: wp(50),
+                    height: hp(5.29),
+                    // borderColor: 'white',
+                    // borderWidth: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  CONFIRM
-                </Text>
-              </ImageBackground>
-            </TouchableOpacity>
-          </View>
+                  <Text
+                    style={{
+                      fontFamily: FONTS.brandFont,
+                      color: COLORS.white,
+                      paddingTop: hp(0.6),
+                      margin: hp(1),
+                      fontSize: RFPercentage(1.7),
+                    }}>
+                    CONFIRM
+                  </Text>
+                </ImageBackground>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
       );
     //Forgot password1
     case 4:
       return (
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View
-            style={{
-              width: wp(75.5),
-              height: hp(26),
-              backgroundColor: '#00032590',
-              borderRadius: 15,
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              paddingVertical: hp(2),
-            }}>
-            <FlashMessage position="top" />
-            <Text style={styles.text}>Enter your email </Text>
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View
+              style={{
+                width: wp(75.5),
+                height: hp(26),
+                backgroundColor: '#00032590',
+                borderRadius: 15,
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                paddingVertical: hp(2),
+                paddingBottom: hp(3),
+              }}>
+              <FlashMessage position="top" />
+              <Text style={styles.text}>Enter your email </Text>
 
-            <FormInput
-              value={authCode}
-              autoCorrect={false}
-              placeholder="Email"
-              onChangeText={text2 => setConfirmCode(text2)}
-              keyboardType="email-address"
-            />
+              <FormInput
+                value={authCode}
+                autoCorrect={false}
+                placeholder="Email"
+                onChangeText={text2 => setConfirmCode(text2)}
+                keyboardType="email-address"
+              />
 
-            <TouchableOpacity onPress={() => onPress(5)}>
-              <ImageBackground
-                source={images.button}
-                style={{
-                  width: wp(50),
-                  height: hp(5.29),
-                  // borderColor: 'white',
-                  // borderWidth: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text
+              <TouchableOpacity onPress={() => onPress(5)}>
+                <ImageBackground
+                  source={images.button}
                   style={{
-                    fontFamily: FONTS.brandFont,
-                    color: COLORS.white,
-                    paddingTop: hp(0.6),
-                    margin: hp(1),
-                    fontSize: RFPercentage(1.7),
+                    width: wp(50),
+                    height: hp(5.29),
+                    // borderColor: 'white',
+                    // borderWidth: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  SEND
-                </Text>
-              </ImageBackground>
-            </TouchableOpacity>
-          </View>
+                  <Text
+                    style={{
+                      fontFamily: FONTS.brandFont,
+                      color: COLORS.white,
+                      paddingTop: hp(0.6),
+                      margin: hp(1),
+                      fontSize: RFPercentage(1.7),
+                    }}>
+                    SEND
+                  </Text>
+                </ImageBackground>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
       );
     //Forgot password2
@@ -448,48 +418,6 @@ const SignInScreen = ({navigation, onPress}) => {
   const [password, setPassword] = useState('12345678');
   const [loading, setLoading] = useState(false);
 
-  const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
-
-  const _keyboardDidShow = React.useCallback(() => {
-    setKeyboardStatus('Keyboard Shown');
-    fadeOut();
-  }, [fadeOut]);
-
-  const _keyboardDidHide = React.useCallback(() => {
-    setKeyboardStatus('Keyboard Hidden');
-    fadeIn();
-  }, [fadeIn]);
-
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-
-    return () => {
-      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
-      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
-    };
-  }, [_keyboardDidHide, _keyboardDidShow]);
-
-  const fadeOut = React.useCallback(() => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
-
-  const fadeIn = React.useCallback(() => {
-    // Will change fadeAnim value to 0 in 3 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
-
   const signIn = async () => {
     try {
       setLoading(true);
@@ -513,69 +441,66 @@ const SignInScreen = ({navigation, onPress}) => {
   };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <View
-        style={[
-          styles.signInModal,
-          {
-            marginBottom: keyboardStatus == 'Keyboard Shown' ? hp(5) : 0,
-          },
-        ]}>
-        <FormInput
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Email"
-          keyboardType="email-address"
-          value={username}
-          onChangeText={text => setUsername(text)}
-        />
-        <FormInput
-          autoCorrect={false}
-          placeholder="Password"
-          keyboardType="email-address"
-          value={password}
-          onChangeText={text => setPassword(text)}
-          textContentType="password"
-          secureTextEntry
-        />
-        <TouchableOpacity disabled={loading} onPress={signIn}>
-          <ImageBackground
-            source={images.button}
-            style={{
-              width: wp(50),
-              height: hp(5.29),
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            {!loading ? (
-              <Text
-                style={{
-                  fontFamily: FONTS.brandFont,
-                  color: COLORS.white,
-                  paddingTop: hp(0.6),
-                  margin: hp(1),
-                  fontSize: RFPercentage(1.7),
-                }}>
-                SIGN IN
-              </Text>
-            ) : (
-              <ActivityIndicator size="small" color={'#fff'} />
-            )}
-          </ImageBackground>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPress(4)}>
-          <Text
-            style={{
-              fontFamily: FONTS.brandFont,
-              color: COLORS.white,
-              paddingTop: hp(0.6),
-              margin: hp(1),
-              fontSize: RFPercentage(1.7),
-            }}>
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-      </View>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={[styles.signInModal, {paddingBottom: hp(4)}]}>
+          <FormInput
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="Email"
+            keyboardType="email-address"
+            value={username}
+            onChangeText={text => setUsername(text)}
+          />
+          <FormInput
+            autoCorrect={false}
+            placeholder="Password"
+            keyboardType="email-address"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            textContentType="password"
+            secureTextEntry
+          />
+          <TouchableOpacity disabled={loading} onPress={signIn}>
+            <ImageBackground
+              source={images.button}
+              style={{
+                width: wp(50),
+                height: hp(5.29),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {!loading ? (
+                <Text
+                  style={{
+                    fontFamily: FONTS.brandFont,
+                    color: COLORS.white,
+                    paddingTop: hp(0.6),
+                    margin: hp(1),
+                    fontSize: RFPercentage(1.7),
+                  }}>
+                  SIGN IN
+                </Text>
+              ) : (
+                <ActivityIndicator size="small" color={'#fff'} />
+              )}
+            </ImageBackground>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onPress(4)}>
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                color: COLORS.white,
+                paddingTop: hp(0.6),
+                margin: hp(1),
+                fontSize: RFPercentage(1.7),
+              }}>
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };
@@ -585,17 +510,15 @@ export default function AuthScreen() {
 
   const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
 
-  const TopValue = useState(new Animated.Value(0))[0];
-
   const _keyboardDidShow = React.useCallback(() => {
     setKeyboardStatus('Keyboard Shown');
-    moveLogo();
-  }, [moveLogo]);
+    imgScale();
+  }, [imgScale]);
 
   const _keyboardDidHide = React.useCallback(() => {
     setKeyboardStatus('Keyboard Hidden');
-    fadeOut();
-  }, [fadeOut]);
+    imgScaleBack();
+  }, [imgScaleBack]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
@@ -607,22 +530,24 @@ export default function AuthScreen() {
     };
   }, [_keyboardDidHide, _keyboardDidShow]);
 
-  const moveLogo = React.useCallback(() => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(TopValue, {
-      toValue: 200,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  }, [TopValue]);
+  const startValue = useRef(new Animated.Value(1)).current;
+  const endValue = 0.8;
 
-  const fadeOut = React.useCallback(() => {
-    // Will change TopValue value to 0 in 3 seconds
-    Animated.timing(TopValue, {
-      toValue: 0,
-      useNativeDriver: false,
+  const imgScale = React.useCallback(() => {
+    Animated.timing(startValue, {
+      toValue: endValue,
+      duration: 100,
+      useNativeDriver: true,
     }).start();
-  }, [TopValue]);
+  }, [startValue]);
+
+  const imgScaleBack = React.useCallback(() => {
+    Animated.timing(startValue, {
+      toValue: 1,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  }, [startValue]);
 
   function BackButton() {
     if (whichScreen !== 0) {
@@ -666,8 +591,11 @@ export default function AuthScreen() {
                   resizeMode: 'contain',
                   width: wp(64.66),
                   height: wp(74.66),
-                  transform: [{translateY: TopValue}],
-                  marginBottom: hp(8),
+                  transform: [
+                    {
+                      scale: startValue,
+                    },
+                  ],
                   justifyContent: 'flex-start',
                 }}
               />
