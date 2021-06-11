@@ -189,7 +189,8 @@ const ParticipatesScreen = ({navigation, route}) => {
           swipeDirection="down"
           onBackdropPress={() => {
             setModalVisible(false);
-          }}>
+          }}
+          style={{margin: 0}}>
           <View style={styles.modalBody}>
             <TouchableOpacity
               style={styles.closeBtn}
@@ -291,7 +292,7 @@ const ParticipatesScreen = ({navigation, route}) => {
         style={{
           width: wp(100),
           height: hp(40),
-          borderWidth: 1,
+          marginTop: hp(1),
         }}>
         <ImageBackground
           source={{

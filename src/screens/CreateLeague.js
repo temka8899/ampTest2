@@ -224,7 +224,7 @@ const createLeagueScreen = ({navigation}) => {
           placeholderTextColor={COLORS.purpleText}
         />
       </View>
-      <View style={{marginHorizontal: wp(3), marginTop: hp(3)}}>
+      <View style={{marginHorizontal: wp(4), marginTop: hp(3)}}>
         <Text style={[styles.text, {color: COLORS.purpleText}]}>Start</Text>
         {/* <Text style={[styles.text, {color: COLORS.greyText}]}>{hrs}</Text> */}
         <DatePicker
@@ -303,9 +303,11 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
     fontSize: RFPercentage(1.5),
-    padding: 0,
-    // borderColor: 'red',
-    // borderWidth: 1,
+    padding: wp(1),
+    // padding: 0,
+    borderColor: COLORS.purpleText,
+    borderWidth: 1,
+    borderRadius: 5,
     justifyContent: 'center',
     // textAlign: 'center',
     alignItems: 'center',

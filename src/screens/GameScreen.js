@@ -261,6 +261,16 @@ const GameScreen = ({navigation}) => {
             onPress={() => {}}
           />
         </View>
+        <Text
+          style={{
+            color: COLORS.greyText,
+            fontFamily: FONTS.brandFont,
+            fontSize: RFPercentage(1.7),
+            marginLeft: wp(4),
+            marginVertical: hp(2),
+          }}>
+          COMING MATCHES
+        </Text>
       </SafeAreaView>
     </View>
   );
