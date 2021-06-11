@@ -537,12 +537,14 @@ export default function AuthScreen() {
   const _keyboardDidShow = React.useCallback(() => {
     setKeyboardStatus('Keyboard Shown');
     imgScale();
-  }, [imgScale]);
+    imgMove();
+  }, [imgMove, imgScale]);
 
   const _keyboardDidHide = React.useCallback(() => {
     setKeyboardStatus('Keyboard Hidden');
     imgScaleBack();
-  }, [imgScaleBack]);
+    imgMoveBack();
+  }, [imgMoveBack, imgScaleBack]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
@@ -555,6 +557,7 @@ export default function AuthScreen() {
   }, [_keyboardDidHide, _keyboardDidShow]);
 
   const startValue = useRef(new Animated.Value(1)).current;
+  const moveValue = useState(new Animated.Value(0))[0];
   const endValue = 0.8;
 
   const imgScale = React.useCallback(() => {
@@ -572,6 +575,22 @@ export default function AuthScreen() {
       useNativeDriver: true,
     }).start();
   }, [startValue]);
+
+  const imgMove = React.useCallback(() => {
+    Animated.timing(moveValue, {
+      toValue: -80,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  }, [moveValue]);
+
+  const imgMoveBack = React.useCallback(() => {
+    Animated.timing(moveValue, {
+      toValue: 1,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  }, [moveValue]);
 
   function BackButton() {
     if (whichScreen !== 0) {
@@ -597,8 +616,7 @@ export default function AuthScreen() {
                   width: wp(14),
                   height: hp(5.4),
                   marginTop: hp(7),
-                  // borderColor: 'red',
-                  // borderWidth: 1,
+
                   marginLeft: -wp(5),
                 }}
               />
@@ -612,6 +630,7 @@ export default function AuthScreen() {
               <Animated.Image
                 source={images.banner}
                 style={{
+                  marginTop: hp(7),
                   resizeMode: 'contain',
                   width: wp(64.66),
                   height: wp(74.66),
@@ -619,8 +638,10 @@ export default function AuthScreen() {
                     {
                       scale: startValue,
                     },
+                    {
+                      translateY: moveValue,
+                    },
                   ],
-                  justifyContent: 'flex-start',
                 }}
               />
             </Animated.View>
