@@ -13,11 +13,21 @@ import {COLORS, FONTS, icons, images} from '../constants';
 import {hp, wp} from '../constants/theme';
 import Modal from 'react-native-modal';
 import {EndModal} from '../components/EndModal';
+
 export default function CountScreen({navigation}) {
   const [CancelModalVisible, setCancelModalVisible] = useState(false);
   const [EndModalVisible, setEndModalVisible] = useState(false);
+  const [BestOneModal, setBestOneModal] = useState(true);
   const [endModal, setEndModal] = useState(false);
   const [findMistake, setfindMistake] = useState(0);
+  const [isBestOne, setBestOne] = useState(true);
+  const [Round, setRound] = useState(1);
+  const [HomeWin, setHomeWin] = useState(false);
+  const [AwayWin, setAwayWin] = useState(false);
+
+  const [FirstRound, setFirstRound] = useState();
+  const [SecoundRound, setSecoundRound] = useState();
+  const [LastRound, setLastRound] = useState();
   // const [CancelPress, setCancelPress] = useState(false);
 
   const [allPoint, setAllPoint] = useState({
@@ -88,24 +98,47 @@ export default function CountScreen({navigation}) {
   const toggleEndModal = bool => {
     setEndModalVisible(bool);
   };
+  const toggleBestModal = bool => {
+    setBestOneModal(bool);
+  };
 
+  const setBest = bool => {
+    setBestOne(bool);
+    setBestOneModal(false);
+  };
+  const NextBtnPress = () => {
+    if (allPoint.one.point + allPoint.two.point == 10) {
+      console.log('esdfhbgrn');
+      setHomeWin(true);
+    } else {
+      setAwayWin(true);
+    }
+    switch (Round) {
+      case 1:
+        setFirstRound(allPoint);
+        break;
+      case 2:
+        setSecoundRound(allPoint);
+        break;
+      case 3:
+        setLastRound(allPoint);
+        break;
+      default:
+        break;
+    }
+    setRound(Round + 1);
+    setAllPoint(prev => ({
+      ...prev,
+      one: {point: 0, name: 'Moogii'},
+      two: {point: 0, name: 'Temuulen'},
+      three: {point: 0, name: 'Buynaa'},
+      four: {point: 0, name: 'Amaraa'},
+    }));
+
+    toggleEndModal(false);
+    console.log('allpoint', allPoint);
+  };
   const EndBtnPress = () => {
-    // switch (findMistake) {
-    //   case 1:
-    //     setAllPoint(prev => ({...prev, one: prev.one - 1}));
-    //     break;
-    //   case 2:
-    //     setAllPoint(prev => ({...prev, two: prev.two - 1}));
-    //     break;
-    //   case 3:
-    //     setAllPoint(prev => ({...prev, three.point: prev.three.point - 1}));
-    //     break;
-    //   case 4:
-    //     setAllPoint(prev => ({...prev, four: prev.four - 1}));
-    //     break;
-    //   default:
-    //     break;
-    // }
     toggleEndModal(false);
     console.log('allpoint', allPoint);
   };
@@ -150,6 +183,53 @@ export default function CountScreen({navigation}) {
       </View>
     );
   }
+  function BestOne() {
+    return (
+      <View>
+        <Modal
+          animationIn="rubberBand"
+          isVisible={BestOneModal}
+          // onBackdropPress={() => toggleBestModal(false)}
+          style={{justifyContent: 'center', alignItems: 'center'}}>
+          <View
+            style={{
+              width: wp(70),
+              height: hp(20),
+              backgroundColor: COLORS.background,
+              borderColor: COLORS.brand,
+              borderWidth: 2,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                height: hp(11),
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  style={styles.chooseType}
+                  onPress={() => setBest(true)}>
+                  <Text style={styles.chooseTypeText}>1 round</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.chooseType}
+                  onPress={() => setBest(false)}>
+                  <Text style={styles.chooseTypeText}>3 round</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                style={styles.modalBtnContainer}
+                onPress={() => navigation.pop()}>
+                <Text style={styles.modalBtnText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  }
 
   const endMatch = () => {
     let response = '';
@@ -168,6 +248,17 @@ export default function CountScreen({navigation}) {
           <Text style={styles.teamScore}>
             {allPoint.three.point + allPoint.four.point}
           </Text>
+          {!isBestOne && AwayWin ? (
+            <Image
+              source={icons.star}
+              style={{
+                width: wp(5),
+                height: wp(5),
+                position: 'absolute',
+                left: wp(16),
+              }}
+            />
+          ) : null}
         </View>
         <View
           style={{
@@ -292,6 +383,17 @@ export default function CountScreen({navigation}) {
           <Text style={styles.teamScore}>
             {allPoint.two.point + allPoint.one.point}
           </Text>
+          {!isBestOne && HomeWin ? (
+            <Image
+              source={icons.star}
+              style={{
+                width: wp(5),
+                height: wp(5),
+                position: 'absolute',
+                left: wp(16),
+              }}
+            />
+          ) : null}
         </View>
         <View
           style={{
@@ -408,7 +510,7 @@ export default function CountScreen({navigation}) {
       </View>
       <View>
         {CancelModal()}
-        {/* {EndModal()} */}
+        {BestOne()}
         {EndModalVisible && (
           <EndModal
             isVisible={EndModalVisible}
@@ -416,7 +518,12 @@ export default function CountScreen({navigation}) {
             navigateSchedule={endMatch}
             cancelbtn={cancelBtnPress}
             EndBtn={EndBtnPress}
+            NextBtn={NextBtnPress}
             allData={allPoint}
+            isBestOne={isBestOne}
+            Round={Round}
+            HomeWin={HomeWin}
+            AwayWin={AwayWin}
           />
         )}
         {/* {checkHomeWin()} */}
@@ -441,6 +548,17 @@ const styles = StyleSheet.create({
     height: hp(4),
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  chooseType: {
+    // borderColor: 'red',
+    // borderWidth: 1,
+    width: wp(25),
+  },
+  chooseTypeText: {
+    fontFamily: FONTS.brandFont,
+    color: COLORS.white,
+    fontSize: RFPercentage(2),
+    textAlign: 'center',
   },
   touch: {
     flex: 1,
@@ -486,6 +604,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1,
     overflow: 'visible',
+    flexDirection: 'row',
     backgroundColor: COLORS.brand,
     width: wp(22),
     height: hp(5),

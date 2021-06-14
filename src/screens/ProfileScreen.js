@@ -63,8 +63,9 @@ const Profile = ({navigation}) => {
   }, [userInfo]);
 
   async function isAdmin() {
-    if (userInfo.attributes['custom:Admin'] == 1) {
+    if (userInfo.admin) {
       setAdminVisible(true);
+      console.log('admin');
     } else {
       setAdminVisible(false);
     }
@@ -355,6 +356,8 @@ const styles = StyleSheet.create({
   profileText: {
     fontFamily: FONTS.brandFont,
     color: COLORS.white,
+    // borderColor: 'red',
+    // borderWidth: 1,
   },
   input: {
     height: 40,

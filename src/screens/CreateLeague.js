@@ -157,7 +157,7 @@ const createLeagueScreen = ({navigation}) => {
                 // borderColor: 'red',
                 // borderWidth: 1,
               }}
-              source={require('../../assets/images/men1.png')}
+              source={require('../assets/images/avatars/men1.png')}
               resizeMode="contain"
             />
           ) : (
