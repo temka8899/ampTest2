@@ -563,7 +563,7 @@ export default function AuthScreen() {
   const imgScale = React.useCallback(() => {
     Animated.timing(startValue, {
       toValue: endValue,
-      duration: 100,
+      duration: 500,
       useNativeDriver: true,
     }).start();
   }, [startValue]);
@@ -571,7 +571,7 @@ export default function AuthScreen() {
   const imgScaleBack = React.useCallback(() => {
     Animated.timing(startValue, {
       toValue: 1,
-      duration: 100,
+      duration: 500,
       useNativeDriver: true,
     }).start();
   }, [startValue]);
@@ -579,7 +579,7 @@ export default function AuthScreen() {
   const imgMove = React.useCallback(() => {
     Animated.timing(moveValue, {
       toValue: -80,
-      duration: 100,
+      duration: 500,
       useNativeDriver: true,
     }).start();
   }, [moveValue]);
@@ -587,7 +587,7 @@ export default function AuthScreen() {
   const imgMoveBack = React.useCallback(() => {
     Animated.timing(moveValue, {
       toValue: 1,
-      duration: 100,
+      duration: 500,
       useNativeDriver: true,
     }).start();
   }, [moveValue]);
