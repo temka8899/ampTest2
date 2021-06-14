@@ -126,14 +126,13 @@ const GameScreen = ({navigation}) => {
   const getName = React.useCallback(async () => {
     const user = await Auth.currentUserInfo();
     const playerData = await API.graphql(graphqlOperation(listPlayers));
-    setLoading(false);
-    //console.log('userInfo', userInfo);
     setName(user.attributes['custom:Name']);
+    console.log('user medeelel ireed loading set hiih gej bn');
+    setLoading(false);
     let existing = await checkPlayer(playerData, user.username);
     if (existing) {
       await addPlayer(user.attributes['custom:Name'], user.username);
     } else {
-      // user baigaa nuhtsul
     }
     findUser(user);
   }, [findUser]);
@@ -142,10 +141,7 @@ const GameScreen = ({navigation}) => {
     async user => {
       console.log(`cognito data`, user);
       const playerData = await API.graphql(graphqlOperation(listPlayers));
-      // console.log(
-      //   `playerData.data.listPlayers.items`,
-      //   playerData.data.listPlayers.items,
-      // );
+
       let finded = playerData.data.listPlayers.items.find((item, index) => {
         if (user.username === item.c_id) {
           return item;
@@ -205,74 +201,124 @@ const GameScreen = ({navigation}) => {
     }
   }
 
-  // if (isLoading) {
-  //   return (
-  //     <View>
-  //       <ActivityIndicator size={'large'} color={'red'} />
-  //     </View>
-  //   );
-  // }
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.background}}>
-      <SafeAreaView style={{paddingTop: hp(2)}}>
-        <StatusBar barStyle="light-content" />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: wp(4),
-          }}>
-          <View>
-            <Text
-              style={[
-                styles.greeting,
-                {fontSize: RFPercentage(1.8), color: COLORS.greyText},
-              ]}>{`Good ${greet} `}</Text>
-            <Text
-              style={[
-                styles.greeting,
-                {marginTop: hp(1), fontSize: RFPercentage(2.5)},
-              ]}>
-              {name}
-            </Text>
-          </View>
-          <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Tabs', {screen: 'Profile'})}>
-              <Image
-                source={images.profilePic}
+    <SafeAreaView
+      style={{flex: 1, backgroundColor: COLORS.background, paddingTop: hp(2)}}>
+      <StatusBar barStyle="light-content" />
+      {isLoading ? (
+        <SkeletonPlaceholder
+          speed={800}
+          backgroundColor={'#E1E9EE'}
+          highlightColor={'#F2F8FC'}>
+          <View style={{paddingHorizontal: wp(4)}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{marginHorizontal: wp(5)}}>
+                <View style={{width: 150, height: 20, borderRadius: 4}} />
+                <View
+                  style={{
+                    marginTop: 6,
+                    width: 100,
+                    height: 20,
+                    borderRadius: 4,
+                  }}
+                />
+              </View>
+              <View style={{width: 60, height: 60}} />
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginVertical: 8,
+                marginTop: hp(3),
+              }}>
+              <View
+                style={{width: wp(63.3), height: hp(39), borderRadius: 40}}
+              />
+              <View
                 style={{
-                  resizeMode: 'contain',
-                  width: wp(14.4),
-                  height: hp(6.65),
+                  width: wp(63.3),
+                  height: hp(39),
+                  borderRadius: 40,
+                  marginHorizontal: hp(2),
                 }}
               />
-            </TouchableOpacity>
+              <View
+                style={{width: wp(63.3), height: hp(39), borderRadius: 40}}
+              />
+            </View>
+            <View
+              style={{
+                marginTop: hp(1),
+                width: 200,
+                height: 20,
+                borderRadius: 4,
+              }}
+            />
           </View>
-        </View>
+        </SkeletonPlaceholder>
+      ) : (
         <View>
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={LeagueList}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            extraData={selectedId}
-            onPress={() => {}}
-          />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: wp(4),
+            }}>
+            <View>
+              <Text
+                style={[
+                  styles.greeting,
+                  {fontSize: RFPercentage(1.8), color: COLORS.greyText},
+                ]}>{`Good ${greet} `}</Text>
+              <Text
+                style={[
+                  styles.greeting,
+                  {marginTop: hp(1), fontSize: RFPercentage(2.5)},
+                ]}>
+                {name}
+              </Text>
+            </View>
+            <View>
+              <TouchableOpacity>
+                <Image
+                  source={images.profilePic}
+                  style={{
+                    resizeMode: 'contain',
+                    width: wp(14.4),
+                    height: hp(6.65),
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={LeagueList}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+              extraData={selectedId}
+              onPress={() => {}}
+            />
+          </View>
+          <Text
+            style={{
+              color: COLORS.greyText,
+              fontFamily: FONTS.brandFont,
+              fontSize: RFPercentage(1.7),
+              marginLeft: wp(4),
+              marginVertical: hp(2),
+            }}>
+            COMING MATCHES
+          </Text>
         </View>
-        <Text
-          style={{
-            color: COLORS.greyText,
-            fontFamily: FONTS.brandFont,
-            fontSize: RFPercentage(1.7),
-            marginLeft: wp(4),
-            marginVertical: hp(2),
-          }}>
-          COMING MATCHES
-        </Text>
-      </SafeAreaView>
-    </View>
+      )}
+    </SafeAreaView>
   );
 };
 
