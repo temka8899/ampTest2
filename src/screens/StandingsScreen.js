@@ -16,6 +16,8 @@ import {
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
+import LottieView from 'lottie-react-native';
+
 import {DATA} from './GameScreen';
 import AppBar from '../components/AppBar';
 import {COLORS, FONTS, icons} from '../constants';
