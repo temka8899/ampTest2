@@ -38,7 +38,11 @@ function App() {
           <Stack.Screen name="createTeamScreen" component={createTeamScreen} />
           <Stack.Screen name="createGameScreen" component={createGameScreen} />
           <Stack.Screen name="AdminScreen" component={AdminScreen} />
-          <Stack.Screen name="CountScreen" component={CountScreen} />
+          <Stack.Screen
+            name="CountScreen"
+            component={CountScreen}
+            options={{gestureEnabled: false}}
+          />
           <Stack.Screen name="ScheduleScreen" component={ScheduleScreen} />
         </Stack.Navigator>
       </ContextProvider>

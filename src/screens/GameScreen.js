@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {Icon} from 'react-native-elements';
 import {
   FlatList,
   SafeAreaView,
@@ -238,7 +237,8 @@ const GameScreen = ({navigation}) => {
             </Text>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Tabs', {screen: 'Profile'})}>
               <Image
                 source={images.profilePic}
                 style={{

@@ -35,7 +35,7 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     getUser();
-    // isAdmin();
+    isAdmin();
     getXp();
   }, [getUser, getXp]);
 
@@ -64,8 +64,9 @@ const Profile = ({navigation}) => {
   }, [userInfo]);
 
   async function isAdmin() {
-    if (userInfo.attributes['custom:Admin'] == 1) {
+    if (userInfo.admin) {
       setAdminVisible(true);
+      console.log('admin');
     } else {
       setAdminVisible(false);
     }
@@ -117,57 +118,61 @@ const Profile = ({navigation}) => {
           height: hp(16),
           // borderColor: 'red',
           // borderWidth: 1,
-          justifyContent: 'center',
+          // justifyContent: 'center',
+          paddingLeft: wp(7),
           alignItems: 'center',
+          flexDirection: 'row',
         }}>
-        <View
+        {/* <View
           style={{
             width: wp(80),
             height: hp(16),
-            // borderColor: 'red',
-            // borderWidth: 1,
+            borderColor: 'red',
+            borderWidth: 1,
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-evenly',
-          }}>
-          <CircleXp fill={xpPercent} />
-          <View style={{flexDirection: 'column', marginLeft: wp(3)}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                // borderColor: 'red',
-                // borderWidth: 1,
-              }}>
-              <Text style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
-                {userInfo.name}
-              </Text>
-              <TouchableOpacity>
-                <Image
-                  source={icons.editBtn}
-                  style={{
-                    width: wp(7.53),
-                    height: hp(6.09),
-                    resizeMode: 'contain',
-                    marginLeft: wp(2),
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                // borderColor: 'red',
-                // borderWidth: 1,
-              }}>
-              <Text style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
-                Level
-              </Text>
-              <Text style={styles.level}>{userInfo.level}</Text>
-            </View>
+            justifyContent: 'center',
+          }}> */}
+        <CircleXp fill={xpPercent} />
+        <View style={{flexDirection: 'column', marginLeft: wp(3)}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              // borderColor: 'red',
+              // borderWidth: 1,
+              width: wp(44),
+              marginBottom: hp(1),
+            }}>
+            <Text style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
+              {userInfo.name}
+            </Text>
+            <TouchableOpacity>
+              <Image
+                source={icons.editBtn}
+                style={{
+                  width: wp(7.53),
+                  height: hp(6.09),
+                  resizeMode: 'contain',
+                  marginLeft: wp(2),
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              // borderColor: 'red',
+              // borderWidth: 1,
+            }}>
+            <Text style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
+              Level
+            </Text>
+            <Text style={styles.level}>{userInfo.level}</Text>
           </View>
         </View>
+        {/* </View> */}
       </View>
       <View
         style={{
@@ -230,6 +235,8 @@ const styles = StyleSheet.create({
   profileText: {
     fontFamily: FONTS.brandFont,
     color: COLORS.white,
+    // borderColor: 'red',
+    // borderWidth: 1,
   },
   input: {
     height: 40,

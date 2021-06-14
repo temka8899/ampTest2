@@ -194,7 +194,7 @@ const Home = ({navigation}) => {
         {uploadImage == '' ? (
           <Image
             style={{width: 195, height: 107}}
-            source={require('../../assets/images/men1.png')}
+            source={require('../assets/images/avatars/men1.png')}
             resizeMode="contain"
           />
         ) : (
