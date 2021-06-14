@@ -35,10 +35,6 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     getUser();
-<<<<<<< HEAD
-    isAdmin();
-=======
->>>>>>> 7426a99ee6c5ffd3ca4f4238abd3b08ca423f256
     getXp();
   }, [getUser, getXp]);
 
@@ -239,17 +235,6 @@ const Profile = ({navigation}) => {
           </View>
           <View
             style={{
-<<<<<<< HEAD
-              flexDirection: 'row',
-              alignItems: 'center',
-              // borderColor: 'red',
-              // borderWidth: 1,
-            }}>
-            <Text style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
-              Level
-            </Text>
-            <Text style={styles.level}>{userInfo.level}</Text>
-=======
               width: wp(100),
               height: hp(16),
               // borderColor: 'red',
@@ -307,7 +292,6 @@ const Profile = ({navigation}) => {
                 </View>
               </View>
             </View>
->>>>>>> 7426a99ee6c5ffd3ca4f4238abd3b08ca423f256
           </View>
           <View
             style={{
@@ -357,59 +341,7 @@ const Profile = ({navigation}) => {
             />
           </Modal>
         </View>
-<<<<<<< HEAD
-        {/* </View> */}
-      </View>
-      <View
-        style={{
-          marginTop: hp(8),
-          marginBottom: hp(2),
-          // borderColor: 'red',
-          // borderWidth: 1,
-        }}>
-        <Text
-          style={{
-            color: COLORS.greyText,
-            fontFamily: FONTS.brandFont,
-            fontSize: RFPercentage(1.7),
-            marginLeft: wp(3),
-          }}>
-          RECENT MATCHES
-        </Text>
-      </View>
-      <TouchableOpacity
-        onPress={() => changeModalVisible(true)}
-        style={{
-          height: hp(6),
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingHorizontal: wp(3),
-          borderBottomColor: COLORS.brand,
-          borderTopColor: COLORS.brand,
-          borderWidth: 1,
-        }}>
-        <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData == '' ? 'Select' : chooseData.game.name}
-        </Text>
-        <Image
-          source={icons.drop}
-          style={{resizeMode: 'contain', height: hp(1.7), width: wp(4.53)}}
-        />
-      </TouchableOpacity>
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={modalVisible}
-        nRequestClose={() => changeModalVisible(false)}>
-        <LeaguePicker
-          changeModalVisible={changeModalVisible}
-          setData={setData}
-        />
-      </Modal>
-=======
       )}
->>>>>>> 7426a99ee6c5ffd3ca4f4238abd3b08ca423f256
     </SafeAreaView>
   );
 };
