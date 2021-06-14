@@ -301,7 +301,7 @@ const GameScreen = ({navigation}) => {
             </View>
           </View>
           <View>
-            {LeagueList.length == 0 ? (
+            {LeagueList.length != 0 ? (
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 horizontal
