@@ -12,6 +12,9 @@ import {
   Modal,
   StatusBar,
 } from 'react-native';
+
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
 import {DATA} from './GameScreen';
 import AppBar from '../components/AppBar';
 import {COLORS, FONTS, icons} from '../constants';
@@ -39,14 +42,11 @@ export const ScheduleData = [
 ];
 
 const ScheduleScreen = ({navigation, route}) => {
-  let itemID = 0;
-
-  if (route.params?.itemId) {
-    itemID = route.params.itemId;
-  }
-
+  const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [chooseDay, setChooseDay] = useState('1');
+
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
@@ -56,7 +56,12 @@ const ScheduleScreen = ({navigation, route}) => {
     console.log('League bainuu', option);
   };
 
-  const [chooseDay, setChooseDay] = useState('1');
+  let itemID = 0;
+
+  if (route.params?.itemId) {
+    itemID = route.params.itemId;
+  }
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content" />

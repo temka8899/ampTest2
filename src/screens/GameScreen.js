@@ -207,7 +207,10 @@ const GameScreen = ({navigation}) => {
       style={{flex: 1, backgroundColor: COLORS.background, paddingTop: hp(2)}}>
       <StatusBar barStyle="light-content" />
       {isLoading ? (
-        <SkeletonPlaceholder>
+        <SkeletonPlaceholder
+          speed={800}
+          backgroundColor={'#E1E9EE'}
+          highlightColor={'#F2F8FC'}>
           <View style={{paddingHorizontal: wp(4)}}>
             <View
               style={{
