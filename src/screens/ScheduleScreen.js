@@ -42,7 +42,7 @@ export const ScheduleData = [
 ];
 
 const ScheduleScreen = ({navigation, route}) => {
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [chooseDay, setChooseDay] = useState('1');
@@ -53,6 +53,7 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const setData = option => {
     setChooseData(option);
+    setLoading(false);
     console.log('League bainuu', option);
   };
 
@@ -65,99 +66,226 @@ const ScheduleScreen = ({navigation, route}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content" />
-      <AppBar />
-      <TouchableOpacity
-        onPress={() => changeModalVisible(true)}
-        style={{
-          height: hp(6),
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingHorizontal: wp(3),
-          borderBottomColor: COLORS.brand,
-          borderWidth: 1,
-        }}>
-        <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData == '' ? 'Select' : chooseData.game.name}
-        </Text>
-        <Image
-          source={icons.drop}
-          style={{resizeMode: 'contain', height: hp(1.7), width: wp(4.53)}}
-        />
-      </TouchableOpacity>
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={modalVisible}
-        nRequestClose={() => changeModalVisible(false)}>
-        <LeaguePicker
-          changeModalVisible={changeModalVisible}
-          setData={setData}
-        />
-      </Modal>
-      <View
-        style={{
-          width: wp(100),
-          height: hp(6),
-          borderWidth: 1,
-          borderBottomColor: COLORS.brand,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-        }}>
-        <TouchableOpacity onPress={() => setChooseDay(1)}>
-          <Text
-            style={[
-              {color: chooseDay == 1 ? COLORS.brand : COLORS.greyText},
-              styles.dayBtn,
-            ]}>
-            Mon
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setChooseDay(2)}>
-          <Text
-            style={[
-              {color: chooseDay == 2 ? COLORS.brand : COLORS.greyText},
-              styles.dayBtn,
-            ]}>
-            Tue
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setChooseDay(3)}>
-          <Text
-            style={[
-              {color: chooseDay == 3 ? COLORS.brand : COLORS.greyText},
-              styles.dayBtn,
-            ]}>
-            Wed
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setChooseDay(4)}>
-          <Text
-            style={[
-              {color: chooseDay == 4 ? COLORS.brand : COLORS.greyText},
-              styles.dayBtn,
-            ]}>
-            Thu
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setChooseDay(5)}>
-          <Text
-            style={[
-              {color: chooseDay == 5 ? COLORS.brand : COLORS.greyText},
-              styles.dayBtn,
-            ]}>
-            Fri
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity
-        style={{margin: wp(10)}}
-        onPress={() => navigation.navigate('CountScreen')}>
-        <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          START
-        </Text>
-      </TouchableOpacity>
+      {isLoading ? (
+        <SkeletonPlaceholder
+          speed={800}
+          backgroundColor={'#E1E9EE'}
+          highlightColor={'#F2F8FC'}>
+          <View>
+            <View>
+              <View style={{width: wp(100), height: hp(4)}} />
+              <View
+                style={{width: wp(100), height: hp(3), marginVertical: hp(1)}}
+              />
+              <View style={{width: wp(100), height: hp(3)}} />
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: hp(10),
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+            </View>
+            <View
+              style={{
+                width: wp(80),
+                height: 1,
+                alignSelf: 'center',
+                marginTop: hp(1),
+              }}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: hp(2),
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+            </View>
+            <View
+              style={{
+                width: wp(80),
+                height: 1,
+                alignSelf: 'center',
+                marginTop: hp(1),
+              }}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: hp(2),
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+            </View>
+            <View
+              style={{
+                width: wp(80),
+                height: 1,
+                alignSelf: 'center',
+                marginTop: hp(1),
+              }}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: hp(2),
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+            </View>
+            <View
+              style={{
+                width: wp(80),
+                height: 1,
+                alignSelf: 'center',
+                marginTop: hp(1),
+              }}
+            />
+          </View>
+        </SkeletonPlaceholder>
+      ) : (
+        <View>
+          <AppBar />
+          <TouchableOpacity
+            onPress={() => changeModalVisible(true)}
+            style={{
+              height: hp(6),
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: wp(3),
+              borderBottomColor: COLORS.brand,
+              borderWidth: 1,
+            }}>
+            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+              {chooseData == '' ? 'Select' : chooseData.game.name}
+            </Text>
+            <Image
+              source={icons.drop}
+              style={{resizeMode: 'contain', height: hp(1.7), width: wp(4.53)}}
+            />
+          </TouchableOpacity>
+          <Modal
+            transparent={true}
+            animationType="fade"
+            visible={modalVisible}
+            nRequestClose={() => changeModalVisible(false)}>
+            <LeaguePicker
+              changeModalVisible={changeModalVisible}
+              setData={setData}
+            />
+          </Modal>
+          <View
+            style={{
+              width: wp(100),
+              height: hp(6),
+              borderWidth: 1,
+              borderBottomColor: COLORS.brand,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            }}>
+            <TouchableOpacity onPress={() => setChooseDay(1)}>
+              <Text
+                style={[
+                  {color: chooseDay == 1 ? COLORS.brand : COLORS.greyText},
+                  styles.dayBtn,
+                ]}>
+                Mon
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setChooseDay(2)}>
+              <Text
+                style={[
+                  {color: chooseDay == 2 ? COLORS.brand : COLORS.greyText},
+                  styles.dayBtn,
+                ]}>
+                Tue
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setChooseDay(3)}>
+              <Text
+                style={[
+                  {color: chooseDay == 3 ? COLORS.brand : COLORS.greyText},
+                  styles.dayBtn,
+                ]}>
+                Wed
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setChooseDay(4)}>
+              <Text
+                style={[
+                  {color: chooseDay == 4 ? COLORS.brand : COLORS.greyText},
+                  styles.dayBtn,
+                ]}>
+                Thu
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setChooseDay(5)}>
+              <Text
+                style={[
+                  {color: chooseDay == 5 ? COLORS.brand : COLORS.greyText},
+                  styles.dayBtn,
+                ]}>
+                Fri
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={{margin: wp(10)}}
+            onPress={() => navigation.navigate('CountScreen')}>
+            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+              START
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
