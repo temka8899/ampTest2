@@ -20,19 +20,38 @@ import {createGame, createLeague, createPlayer} from '../graphql/mutations';
 import {listPlayers, listLeagues, listTeams} from '../graphql/queries';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import awsmobile from '../aws-exports';
-import {DATA} from '../data/DATA';
+import {Avatars} from '../data/Avatars';
 import LinearGradient from 'react-native-linear-gradient';
 import Amplify, {API, graphqlOperation, Auth, Storage, JS} from 'aws-amplify';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../App';
+
+import Modal from 'react-native-modal';
 Amplify.configure({
   ...awsmobile,
   Analytics: {
     disabled: true,
   },
 });
+const Avatar = ({item, onPress, backgroundColor, textColor}) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={[
+      {
+        width: wp(16),
+        height: wp(16),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: wp(1),
+        marginVertical: wp(1),
+      },
+      backgroundColor,
+    ]}>
+    <Image source={item.image} style={{width: wp(14), height: wp(14)}} />
+  </TouchableOpacity>
+);
 
-const Item = ({item, onPress, backgroundColor, textColor}) => (
+const Item = ({item, onPress, backgroundColor}) => (
   <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <ImageBackground
@@ -81,21 +100,105 @@ async function getUserData() {
 
 const GameScreen = ({navigation}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
+  const [AvatarModal, setAvatarModal] = useState(true);
 
   useEffect(() => {
+    chooseAvatarFunc();
     fetchLeague();
     findGreet();
     getName();
   }, [getName]);
 
+  const chooseAvatarFunc = () => {
+    return (
+      <Modal
+        animationIn="rubberBand"
+        isVisible={AvatarModal}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: 0,
+        }}>
+        <View
+          style={{
+            backgroundColor: COLORS.background,
+            borderColor: COLORS.brand,
+            borderWidth: 2,
+            width: wp(80),
+            height: hp(57),
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              fontSize: RFPercentage(1.8),
+              marginTop: hp(3),
+              marginBottom: hp(2),
+            }}>
+            Choose your avatar
+          </Text>
+          <FlatList
+            data={Avatars}
+            renderItem={avatarsRender}
+            keyExtractor={item => item.id}
+            extraData={selectedId}
+            numColumns={4}
+            showsHorizontalScrollIndicator={false}
+          />
+          <TouchableOpacity
+            onPress={() => setAvatar()}
+            style={{
+              backgroundColor: COLORS.brand,
+              width: wp(30),
+              height: hp(4),
+              marginBottom: hp(2),
+              marginTop: hp(2),
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.8),
+              }}>
+              OK
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    );
+  };
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [playerId, setId] = useState('');
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
-  const [name2, setName2] = useState('');
+  const [chooseAvatar, setChooseAvatar] = useState();
 
+  const press = item => {
+    setSelectedId(item.id);
+    // console.log(item.id);
+  };
+
+  const avatarsRender = ({item}) => {
+    const backgroundColor =
+      item.id === selectedId ? COLORS.brand : COLORS.background;
+
+    return (
+      <Avatar
+        item={item}
+        onPress={
+          () => press(item)
+          // setSelectedId(item.id)
+          // console.log('zurag', item.id)
+        }
+        backgroundColor={{backgroundColor}}
+      />
+    );
+  };
   const renderItem = ({item}) => {
     // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
@@ -111,6 +214,11 @@ const GameScreen = ({navigation}) => {
         textColor={{color}}
       />
     );
+  };
+
+  const setAvatar = () => {
+    setChooseAvatar(selectedId);
+    console.log('taniii zurag', selectedId);
   };
 
   const findGreet = () => {
@@ -191,6 +299,7 @@ const GameScreen = ({navigation}) => {
             xp: 1,
             level: 1,
             admin: true,
+            avatar: Avatars.chooseAvatar.image,
           },
         }),
       );
@@ -318,6 +427,63 @@ const GameScreen = ({navigation}) => {
           </Text>
         </View>
       )}
+      <Modal
+        animationIn="rubberBand"
+        isVisible={AvatarModal}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: 0,
+        }}>
+        <View
+          style={{
+            backgroundColor: COLORS.background,
+            borderColor: COLORS.brand,
+            borderWidth: 2,
+            width: wp(80),
+            height: hp(57),
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              fontSize: RFPercentage(1.8),
+              marginTop: hp(3),
+              marginBottom: hp(2),
+            }}>
+            Choose your avatar
+          </Text>
+          <FlatList
+            data={Avatars}
+            renderItem={avatarsRender}
+            keyExtractor={item => item.id}
+            extraData={selectedId}
+            numColumns={4}
+            showsHorizontalScrollIndicator={false}
+          />
+          <TouchableOpacity
+            onPress={() => setAvatar()}
+            style={{
+              backgroundColor: COLORS.brand,
+              width: wp(30),
+              height: hp(4),
+              marginBottom: hp(2),
+              marginTop: hp(2),
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.8),
+              }}>
+              OK
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
