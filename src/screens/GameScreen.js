@@ -19,11 +19,19 @@ import {AuthContext} from '../../App';
 import awsmobile from '../aws-exports';
 import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
+
+import {
+  showNotification,
+  handleScheduleNotification,
+  handleCancel,
+} from '../functions/notification';
+
 import {createPlayer} from '../graphql/mutations';
 import LinearGradient from 'react-native-linear-gradient';
 import {listPlayers, listLeagues} from '../graphql/queries';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
 import Amplify, {API, graphqlOperation, Auth, Storage, JS} from 'aws-amplify';
 
 Amplify.configure({
@@ -46,14 +54,7 @@ async function getUserData() {
 const GameScreen = ({navigation}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [AvatarModal, setAvatarModal] = useState(false);
-
-  useEffect(() => {
-    fetchLeague();
-    findGreet();
-    getName();
-    // getAvatar();
-  }, [getName]);
-
+  const [permissions, setPermissions] = useState({});
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -61,6 +62,13 @@ const GameScreen = ({navigation}) => {
   const [playerId, setId] = useState('');
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
+
+  useEffect(() => {
+    fetchLeague();
+    findGreet();
+    getName();
+    // getAvatar();
+  }, [getName]);
 
   const press = item => {
     console.log(`item`, item);
@@ -85,6 +93,7 @@ const GameScreen = ({navigation}) => {
       />
     );
   };
+
   const Item = ({item, onPress, backgroundColor, textColor}) => (
     <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
       <TouchableOpacity
@@ -319,16 +328,66 @@ const GameScreen = ({navigation}) => {
               </View>
             )}
           </View>
-          <Text
-            style={{
-              color: COLORS.greyText,
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.7),
-              marginLeft: wp(4),
-              marginVertical: hp(2),
+          <TouchableOpacity>
+            <Text
+              style={{
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                marginLeft: wp(4),
+                marginVertical: hp(2),
+              }}>
+              COMING MATCHES
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              showNotification(
+                'Hippo League ehleh gej baina!',
+                'burtguulne uu!',
+              );
             }}>
-            COMING MATCHES
-          </Text>
+            <Text
+              style={{
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                marginLeft: wp(4),
+                marginVertical: hp(2),
+              }}>
+              Test notification
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              handleScheduleNotification(
+                'Hippo League ehleh gej baina!',
+                'burtguulne uu!',
+              )
+            }>
+            <Text
+              style={{
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                marginLeft: wp(4),
+                marginVertical: hp(2),
+              }}>
+              Test scheduled notification
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleCancel()}>
+            <Text
+              style={{
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                marginLeft: wp(4),
+                marginVertical: hp(2),
+              }}>
+              Cancel all notification
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
       <Modal
