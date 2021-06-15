@@ -1,29 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import {
   Text,
-  SafeAreaView,
-  TouchableOpacity,
-  ActivityIndicator,
-  Image,
   View,
   Modal,
+  Image,
   StatusBar,
   StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 
-import {RFPercentage} from 'react-native-responsive-fontsize';
-
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-
-import {COLORS, FONTS, icons} from '../constants';
-import {hp, wp} from '../constants/theme';
-import {userData} from '../data/Players';
-import LeaguePicker from '../components/LeaguePicker';
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import CircleXp from '../components/CircleXp';
-import {listPlayers} from '../graphql/queries';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../App';
+import {hp, wp} from '../constants/theme';
+import CircleXp from '../components/CircleXp';
+import {COLORS, FONTS, icons} from '../constants';
+
+import LeaguePicker from '../components/LeaguePicker';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
@@ -72,7 +66,7 @@ const Profile = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
+    <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
       {isLoading ? (
         <SkeletonPlaceholder
@@ -81,56 +75,17 @@ const Profile = ({navigation}) => {
           highlightColor={'#F2F8FC'}>
           <View>
             <View style={{paddingHorizontal: hp(2)}}>
-              <View
-                style={{
-                  alignSelf: 'flex-end',
-                  width: wp(10),
-                  height: hp(8),
-                }}
-              />
+              <View style={styles.skeleton1} />
             </View>
-            <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-              <View
-                style={{
-                  width: wp(30),
-                  height: wp(30),
-                  borderRadius: 60,
-                  marginRight: wp(4),
-                }}
-              />
-              <View style={{justifyContent: 'center'}}>
-                <View
-                  style={{
-                    width: wp(40),
-                    height: hp(4),
-                    borderRadius: 10,
-                  }}
-                />
-                <View
-                  style={{
-                    marginTop: hp(1),
-                    width: wp(30),
-                    height: hp(4),
-                    borderRadius: 10,
-                  }}
-                />
+            <View style={styles.skeleton2}>
+              <View style={styles.skeleton2_1} />
+              <View style={styles.skeleton2_2}>
+                <View style={styles.skeleton2_2_1} />
+                <View style={styles.skeleton2_2_2} />
               </View>
             </View>
-            <View
-              style={{
-                alignSelf: 'center',
-                marginTop: hp(20),
-                width: wp(90),
-                height: hp(4),
-                borderRadius: 10,
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                marginTop: hp(2),
-              }}>
+            <View style={styles.skeleton3} />
+            <View style={styles.skeleton4}>
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
@@ -144,20 +99,8 @@ const Profile = ({navigation}) => {
                 <View style={{width: wp(15), height: wp(15)}} />
               </View>
             </View>
-            <View
-              style={{
-                width: wp(80),
-                height: 1,
-                alignSelf: 'center',
-                marginTop: hp(1),
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                marginTop: hp(2),
-              }}>
+            <View style={styles.skeleton5} />
+            <View style={styles.skeleton6}>
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
@@ -171,20 +114,8 @@ const Profile = ({navigation}) => {
                 <View style={{width: wp(15), height: wp(15)}} />
               </View>
             </View>
-            <View
-              style={{
-                width: wp(80),
-                height: 1,
-                alignSelf: 'center',
-                marginTop: hp(1),
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                marginTop: hp(2),
-              }}>
+            <View style={styles.skeleton7} />
+            <View style={styles.skeleton8}>
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
@@ -198,29 +129,12 @@ const Profile = ({navigation}) => {
                 <View style={{width: wp(15), height: wp(15)}} />
               </View>
             </View>
-            <View
-              style={{
-                width: wp(80),
-                height: 1,
-                alignSelf: 'center',
-                marginTop: hp(1),
-              }}
-            />
+            <View style={styles.skeleton9} />
           </View>
         </SkeletonPlaceholder>
       ) : (
         <View>
-          <View
-            style={{
-              width: wp(100),
-              height: hp(7),
-              // borderColor: 'red',
-              // borderWidth: 1,
-              paddingHorizontal: wp(3),
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
+          <View style={styles.header}>
             <View>
               {/* {adminVisible ? ( */}
               <TouchableOpacity
@@ -233,57 +147,20 @@ const Profile = ({navigation}) => {
               <Image source={icons.logOut} style={styles.plusBtn} />
             </TouchableOpacity>
           </View>
-          <View
-            style={{
-              width: wp(100),
-              height: hp(16),
-              // borderColor: 'red',
-              // borderWidth: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                width: wp(80),
-                height: hp(16),
-                // borderColor: 'red',
-                // borderWidth: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-              }}>
+          <View style={styles.subContainer}>
+            <View style={styles.subSubContainer}>
               <CircleXp fill={xpPercent} />
-              <View style={{flexDirection: 'column', marginLeft: wp(3)}}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    // borderColor: 'red',
-                    // borderWidth: 1,
-                  }}>
+              <View style={styles.statusMain}>
+                <View style={styles.statusSub}>
                   <Text
                     style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
                     {userInfo.name}
                   </Text>
                   <TouchableOpacity>
-                    <Image
-                      source={icons.editBtn}
-                      style={{
-                        width: wp(7.53),
-                        height: hp(6.09),
-                        resizeMode: 'contain',
-                        marginLeft: wp(2),
-                      }}
-                    />
+                    <Image source={icons.editBtn} style={styles.editButton} />
                   </TouchableOpacity>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    // borderColor: 'red',
-                    // borderWidth: 1,
-                  }}>
+                <View style={styles.levelContainer}>
                   <Text
                     style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
                     Level
@@ -297,8 +174,6 @@ const Profile = ({navigation}) => {
             style={{
               marginTop: hp(8),
               marginBottom: hp(2),
-              // borderColor: 'red',
-              // borderWidth: 1,
             }}>
             <Text
               style={{
@@ -312,23 +187,11 @@ const Profile = ({navigation}) => {
           </View>
           <TouchableOpacity
             onPress={() => changeModalVisible(true)}
-            style={{
-              height: hp(6),
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingHorizontal: wp(3),
-              borderBottomColor: COLORS.brand,
-              borderTopColor: COLORS.brand,
-              borderWidth: 1,
-            }}>
+            style={styles.chooseButton}>
             <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData == '' ? 'Select' : chooseData.game.name}
+              {chooseData === '' ? 'Select' : chooseData.game.name}
             </Text>
-            <Image
-              source={icons.drop}
-              style={{resizeMode: 'contain', height: hp(1.7), width: wp(4.53)}}
-            />
+            <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
           <Modal
             transparent={true}
@@ -347,6 +210,133 @@ const Profile = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  header: {
+    width: wp(100),
+    height: hp(7),
+    paddingHorizontal: wp(3),
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  subContainer: {
+    width: wp(100),
+    height: hp(16),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  subSubContainer: {
+    width: wp(80),
+    height: hp(16),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  statusMain: {
+    flexDirection: 'column',
+    marginLeft: wp(3),
+  },
+  statusSub: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  levelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  editButton: {
+    width: wp(7.53),
+    height: hp(6.09),
+    resizeMode: 'contain',
+    marginLeft: wp(2),
+  },
+  dropButton: {
+    resizeMode: 'contain',
+    height: hp(1.7),
+    width: wp(4.53),
+  },
+  skeleton1: {
+    alignSelf: 'flex-end',
+    width: wp(10),
+    height: hp(8),
+  },
+  skeleton2: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+  },
+  skeleton2_1: {
+    width: wp(30),
+    height: wp(30),
+    borderRadius: 60,
+    marginRight: wp(4),
+  },
+  skeleton2_2: {
+    justifyContent: 'center',
+  },
+  skeleton2_2_1: {
+    width: wp(40),
+    height: hp(4),
+    borderRadius: 10,
+  },
+  skeleton2_2_2: {
+    marginTop: hp(1),
+    width: wp(30),
+    height: hp(4),
+    borderRadius: 10,
+  },
+  skeleton3: {
+    alignSelf: 'center',
+    marginTop: hp(20),
+    width: wp(90),
+    height: hp(4),
+    borderRadius: 10,
+  },
+  skeleton4: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: hp(2),
+  },
+  skeleton5: {
+    width: wp(80),
+    height: 1,
+    alignSelf: 'center',
+    marginTop: hp(1),
+  },
+  skeleton6: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: hp(2),
+  },
+  skeleton7: {
+    width: wp(80),
+    height: 1,
+    alignSelf: 'center',
+    marginTop: hp(1),
+  },
+  skeleton8: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: hp(2),
+  },
+  skeleton9: {
+    width: wp(80),
+    height: 1,
+    alignSelf: 'center',
+    marginTop: hp(1),
+  },
+  chooseButton: {
+    height: hp(6),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(3),
+    borderBottomColor: COLORS.brand,
+    borderTopColor: COLORS.brand,
+    borderWidth: 1,
+  },
   level: {
     fontFamily: FONTS.brandFont,
     color: COLORS.brand,
@@ -356,13 +346,10 @@ const styles = StyleSheet.create({
   profileText: {
     fontFamily: FONTS.brandFont,
     color: COLORS.white,
-    // borderColor: 'red',
-    // borderWidth: 1,
   },
   input: {
     height: 40,
     margin: 12,
-    // borderWidth: 1,
   },
   plusBtn: {
     resizeMode: 'contain',

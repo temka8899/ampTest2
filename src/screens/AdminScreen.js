@@ -1,23 +1,22 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Text,
+  View,
+  Image,
+  StatusBar,
+  StyleSheet,
   SafeAreaView,
   TouchableOpacity,
-  StyleSheet,
-  Image,
-  View,
-  StatusBar,
 } from 'react-native';
-import {RFPercentage} from 'react-native-responsive-fontsize';
 
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
-import {userData} from '../data/Players';
-import GamePicker from '../components/GamePicker';
+
+import {RFPercentage} from 'react-native-responsive-fontsize';
 
 const AdminScreen = ({navigation}) => {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
+    <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
       <View style={styles.backButton}>
         <TouchableOpacity onPress={() => navigation.pop()}>
@@ -48,6 +47,10 @@ const AdminScreen = ({navigation}) => {
   );
 };
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
   createBtn: {
     width: wp(45),
     height: hp(5),
@@ -87,8 +90,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'flex-end',
     flexDirection: 'row',
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
 });
 export default AdminScreen;

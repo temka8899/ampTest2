@@ -5,7 +5,7 @@ const scale = SCREEN_WIDTH / 320;
 export const actOpacity = Platform.OS == 'ios' ? 0.2 : 0.4;
 export function ft(size) {
   const newSize = size * scale;
-  if (Platform.OS == 'ios') {
+  if (Platform.OS === 'ios') {
     return Math.round(PixelRatio.roundToNearestPixel(newSize));
   } else {
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;

@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import React from 'react';
+import {StyleSheet, Image, View, Text} from 'react-native';
 
-import GameScreen from '../screens/GameScreen';
-import ScheduleScreen from '../screens/ScheduleScreen';
-import Standings from '../screens/StandingsScreen';
-import Profile from '../screens/ProfileScreen';
-import {Image, View, Text} from 'react-native';
-import {COLORS, FONTS, icons, images, index, theme, SIZES} from '../constants';
 import {hp, wp} from '../constants/theme';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {COLORS, FONTS, icons} from '../constants';
+import GameScreen from '../screens/GameScreen';
+import Profile from '../screens/ProfileScreen';
+import Standings from '../screens/StandingsScreen';
+import ScheduleScreen from '../screens/ScheduleScreen';
+
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
@@ -25,18 +25,6 @@ const Tabs = () => {
           width: wp(100),
           height: hp(11),
           backgroundColor: COLORS.background,
-          // position: 'absolute',
-          // bottom: 25,
-          // left: 20,
-          // right: 20,
-          // elevation: 0,
-          // borderRadius: 15,
-          // height: 90,
-          // shadowColor: COLORS.white,
-          // shadowOffset: {width: 0, height: 10},
-          // shadowOpacity: 0.25,
-          // shadowRadius: 3.5,
-          // elevation: 5,
         },
       }}>
       <Tab.Screen
@@ -48,10 +36,7 @@ const Tabs = () => {
               <Image
                 source={focused ? icons.HomeFill : icons.Home}
                 resizeMode="contain"
-                style={{
-                  width: 25,
-                  height: 25,
-                }}
+                style={styles.icon}
               />
               <Text
                 style={[
@@ -73,10 +58,7 @@ const Tabs = () => {
               <Image
                 source={focused ? icons.ScheduleFill : icons.Schedule}
                 resizeMode="contain"
-                style={{
-                  width: 25,
-                  height: 25,
-                }}
+                style={styles.icon}
               />
               <Text
                 style={[
@@ -98,10 +80,7 @@ const Tabs = () => {
               <Image
                 source={focused ? icons.StandingsFill : icons.Standings}
                 resizeMode="contain"
-                style={{
-                  width: 25,
-                  height: 25,
-                }}
+                style={styles.icon}
               />
               <Text
                 style={[
@@ -123,10 +102,7 @@ const Tabs = () => {
               <Image
                 source={focused ? icons.ProfileFill : icons.Profile}
                 resizeMode="contain"
-                style={{
-                  width: 25,
-                  height: 25,
-                }}
+                style={styles.icon}
               />
               <Text
                 style={[
@@ -145,6 +121,10 @@ const Tabs = () => {
 export default Tabs;
 
 const styles = StyleSheet.create({
+  icon: {
+    width: 25,
+    height: 25,
+  },
   tabItems: {
     alignItems: 'center',
     justifyContent: 'center',

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet,
-  SafeAreaView,
   Text,
-  StatusBar,
   View,
   Image,
+  StatusBar,
+  StyleSheet,
+  SafeAreaView,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {RFPercentage} from 'react-native-responsive-fontsize';

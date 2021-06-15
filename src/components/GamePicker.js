@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {
-  StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   ScrollView,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {COLORS, FONTS, hp, wp} from '../constants/theme';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {listGames, listLeagues} from '../graphql/queries';
+import {listGames} from '../graphql/queries';
 
 const GamePicker = props => {
   const [GameList, setGameList] = useState([]);

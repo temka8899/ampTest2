@@ -1,28 +1,21 @@
 import React, {useState} from 'react';
 import {
-  Text,
-  SafeAreaView,
-  TextInput,
-  StyleSheet,
-  Button,
-  Image,
   View,
-  TouchableOpacity,
-  Touchable,
+  Text,
   Modal,
-  TextBase,
+  Image,
   StatusBar,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-
-import LottieView from 'lottie-react-native';
-
-import {DATA} from './GameScreen';
 import AppBar from '../components/AppBar';
+import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
-import {hp, wp} from '../constants/theme';
+
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const StandingsScreen = ({navigation, route}) => {
   // let itemID = 0;
@@ -43,7 +36,7 @@ const StandingsScreen = ({navigation, route}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
+    <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
       {isLoading ? (
         <SkeletonPlaceholder
@@ -56,174 +49,47 @@ const StandingsScreen = ({navigation, route}) => {
 
               <View style={{width: wp(100), height: hp(3), marginTop: hp(1)}} />
             </View>
-            <View style={{alignItems: 'center'}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: hp(10),
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <View
-                    style={{
-                      width: wp(15),
-                      height: wp(15),
-                      borderRadius: 40,
-                      marginRight: hp(1),
-                    }}
-                  />
-                  <View
-                    style={{
-                      width: wp(15),
-                      height: wp(15),
-                      borderRadius: 40,
-                      marginRight: hp(1),
-                    }}
-                  />
+            <View style={styles.skeletonMain}>
+              <View style={styles.skeleton1}>
+                <View style={styles.skeletonSubMain}>
+                  <View style={styles.skeletonSub} />
+                  <View style={styles.skeletonSub} />
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: wp(20),
-                      height: hp(5),
-                    }}
-                  />
+                <View style={styles.skeletonSubMain}>
+                  <View style={styles.skeletonInner} />
                 </View>
               </View>
-              <View
-                style={{
-                  width: wp(80),
-                  height: 1,
-                  alignSelf: 'center',
-                  marginTop: hp(1),
-                }}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: hp(2),
-                  alignItems: 'center',
-                }}>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: wp(15),
-                      height: wp(15),
-                      borderRadius: 40,
-                      marginRight: hp(1),
-                    }}
-                  />
-                  <View
-                    style={{
-                      width: wp(15),
-                      height: wp(15),
-                      borderRadius: 40,
-                      marginRight: hp(1),
-                    }}
-                  />
+              <View style={styles.skeletonAnotherSub} />
+              <View style={styles.skeleton3}>
+                <View style={styles.skeletonSubMain}>
+                  <View style={styles.skeletonSub} />
+                  <View style={styles.skeletonSub} />
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: wp(20),
-                      height: hp(5),
-                    }}
-                  />
+                <View style={styles.skeletonSubMain}>
+                  <View style={styles.skeletonInner} />
                 </View>
               </View>
-              <View
-                style={{
-                  width: wp(80),
-                  height: 1,
-                  alignSelf: 'center',
-                  marginTop: hp(1),
-                }}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: hp(2),
-                  alignItems: 'center',
-                }}>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: wp(15),
-                      height: wp(15),
-                      borderRadius: 40,
-                      marginRight: hp(1),
-                    }}
-                  />
-                  <View
-                    style={{
-                      width: wp(15),
-                      height: wp(15),
-                      borderRadius: 40,
-                      marginRight: hp(1),
-                    }}
-                  />
+              <View style={styles.skeletonAnotherSub} />
+              <View style={styles.skeleton}>
+                <View style={styles.skeletonSubMain}>
+                  <View style={styles.skeletonSub} />
+                  <View style={styles.skeletonSub} />
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: wp(20),
-                      height: hp(5),
-                    }}
-                  />
+                <View style={styles.skeletonSubMain}>
+                  <View style={styles.skeletonInner} />
                 </View>
               </View>
-              <View
-                style={{
-                  width: wp(80),
-                  height: 1,
-                  alignSelf: 'center',
-                  marginTop: hp(1),
-                }}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: hp(2),
-                  alignItems: 'center',
-                }}>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: wp(15),
-                      height: wp(15),
-                      borderRadius: 40,
-                      marginRight: hp(1),
-                    }}
-                  />
-                  <View
-                    style={{
-                      width: wp(15),
-                      height: wp(15),
-                      borderRadius: 40,
-                      marginRight: hp(1),
-                    }}
-                  />
+              <View style={styles.skeletonAnotherSub} />
+              <View style={styles.skeleton3}>
+                <View style={styles.skeletonSubMain}>
+                  <View style={styles.skeletonSub} />
+                  <View style={styles.skeletonSub} />
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: wp(20),
-                      height: hp(5),
-                    }}
-                  />
+                <View style={styles.skeletonSubMain}>
+                  <View style={styles.skeletonInner} />
                 </View>
               </View>
-              <View
-                style={{
-                  width: wp(80),
-                  height: 1,
-                  alignSelf: 'center',
-                  marginTop: hp(1),
-                }}
-              />
+              <View style={styles.skeletonAnotherSub} />
             </View>
           </View>
         </SkeletonPlaceholder>
@@ -232,22 +98,11 @@ const StandingsScreen = ({navigation, route}) => {
           <AppBar />
           <TouchableOpacity
             onPress={() => changeModalVisible(true)}
-            style={{
-              height: hp(6),
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingHorizontal: wp(3),
-              borderBottomColor: COLORS.brand,
-              borderWidth: 1,
-            }}>
+            style={styles.chooseButton}>
             <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData == '' ? 'Select' : chooseData.game.name}
+              {chooseData === '' ? 'Select' : chooseData.game.name}
             </Text>
-            <Image
-              source={icons.drop}
-              style={{resizeMode: 'contain', height: hp(1.7), width: wp(4.53)}}
-            />
+            <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
           <Modal
             transparent={true}
@@ -266,8 +121,55 @@ const StandingsScreen = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  dayBtn: {
-    fontFamily: FONTS.brandFont,
+  mainContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  skeletonMain: {
+    alignItems: 'center',
+  },
+  skeletonAnotherSub: {
+    width: wp(80),
+    height: 1,
+    alignSelf: 'center',
+    marginTop: hp(1),
+  },
+  skeletonInner: {
+    width: wp(20),
+    height: hp(5),
+  },
+  skeleton1: {
+    flexDirection: 'row',
+    marginTop: hp(10),
+    alignItems: 'center',
+  },
+  skeleton3: {
+    flexDirection: 'row',
+    marginTop: hp(2),
+    alignItems: 'center',
+  },
+  skeletonSub: {
+    width: wp(15),
+    height: wp(15),
+    borderRadius: 40,
+    marginRight: hp(1),
+  },
+  skeletonSubMain: {
+    flexDirection: 'row',
+  },
+  chooseButton: {
+    height: hp(6),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(3),
+    borderBottomColor: COLORS.brand,
+    borderWidth: 1,
+  },
+  dropButton: {
+    resizeMode: 'contain',
+    height: hp(1.7),
+    width: wp(4.53),
   },
   input: {
     height: 40,

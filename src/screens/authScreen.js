@@ -2,38 +2,34 @@ import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  Image,
+  Keyboard,
+  Platform,
+  Animated,
+  StatusBar,
   StyleSheet,
   SafeAreaView,
   ImageBackground,
-  Keyboard,
-  Image,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  StatusBar,
+  TouchableOpacity,
   ActivityIndicator,
-  Platform,
-  Animated,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {createGame, createLeague, createPlayer} from '../graphql/mutations';
-// import {listGames, listLeagues} from '../graphql/queries';
+
+import {icons, images} from '../constants';
+import {wp, hp, FONTS, COLORS} from '../constants/theme';
+import FormInput from '../components/FormInput';
+import RadioButton from '../components/RadioButton';
+
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
-import FormInput from '../components/FormInput';
-import {SignUp} from 'aws-amplify-react-native/dist/Auth';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import {icons, images, index, theme} from '../constants';
-import {wp, hp, ft, FONTS, COLORS} from '../constants/theme';
-import {listPlayers, listLeagues, listTeams} from '../graphql/queries';
-import RadioButton from '../components/RadioButton';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
 import FlashMessage, {
   showMessage,
   hideMessage,
 } from 'react-native-flash-message';
-import {userData} from '../data/Players';
-import {useBackButton} from '@react-navigation/native';
 
 Amplify.configure({
   ...awsmobile,
@@ -49,11 +45,10 @@ const SwitchView = ({value, onPress}) => {
   const [name, setSignUpName] = useState('');
   const [phone_number, setPhoneNumber] = useState('+97688888888');
   const [authCode, setConfirmCode] = useState('');
-  const [Level, setLevel] = useState('1');
-  const [Xp, setXp] = useState('1');
-
-  const [currentUser, setCurrentUser] = useState();
-
+  const [gender, setGender] = useState([
+    {id: 1, value: true, name: 'Female', selected: false},
+    {id: 2, value: false, name: 'Male', selected: false},
+  ]);
   async function signUp() {
     console.log(email);
     console.log(password);
@@ -90,10 +85,6 @@ const SwitchView = ({value, onPress}) => {
     }
   }
 
-  const [gender, setGender] = useState([
-    {id: 1, value: true, name: 'Female', selected: false},
-    {id: 2, value: false, name: 'Male', selected: false},
-  ]);
   const onRadioBtnClick = item => {
     let updateState = gender.map(genderItem =>
       genderItem.id == item.id
@@ -105,7 +96,7 @@ const SwitchView = ({value, onPress}) => {
   switch (value) {
     case 0:
       return (
-        <View style={{flex: 1}}>
+        <View style={styles.twoButtonContainer}>
           <TouchableOpacity
             style={styles.btnContainer}
             onPress={() => onPress(1)}>
@@ -133,17 +124,7 @@ const SwitchView = ({value, onPress}) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.container}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View
-              style={{
-                width: wp(75.5),
-                height: hp(40),
-                backgroundColor: '#00032590',
-                borderRadius: 15,
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                paddingVertical: hp(2),
-                marginBottom: hp(3),
-              }}>
+            <View style={styles.signupContainer}>
               <FormInput
                 autoCorrect={false}
                 // value={signUpPassword}
@@ -193,14 +174,7 @@ const SwitchView = ({value, onPress}) => {
               <TouchableOpacity onPress={() => signUp()}>
                 <ImageBackground
                   source={images.button}
-                  style={{
-                    width: wp(50),
-                    height: hp(5.29),
-                    // borderColor: 'white',
-                    // borderWidth: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+                  style={styles.signupButton}>
                   <Text
                     style={{
                       fontFamily: FONTS.brandFont,
@@ -217,23 +191,14 @@ const SwitchView = ({value, onPress}) => {
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
       );
-    //SignUp
+    //Verify email
     case 3:
       return (
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.container}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View
-              style={{
-                width: wp(75.5),
-                height: hp(26),
-                backgroundColor: '#00032590',
-                borderRadius: 15,
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                paddingVertical: hp(2),
-              }}>
+            <View style={styles.confirmCodeContainer}>
               <FlashMessage position="top" />
               <Text style={styles.text}>Enter your code from email</Text>
 
@@ -248,14 +213,7 @@ const SwitchView = ({value, onPress}) => {
               <TouchableOpacity onPress={() => confirmSignUp()}>
                 <ImageBackground
                   source={images.button}
-                  style={{
-                    width: wp(50),
-                    height: hp(5.29),
-                    // borderColor: 'white',
-                    // borderWidth: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+                  style={styles.smallButton}>
                   <Text
                     style={{
                       fontFamily: FONTS.brandFont,
@@ -279,17 +237,7 @@ const SwitchView = ({value, onPress}) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.container}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View
-              style={{
-                width: wp(75.5),
-                height: hp(26),
-                backgroundColor: '#00032590',
-                borderRadius: 15,
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                paddingVertical: hp(2),
-                paddingBottom: hp(3),
-              }}>
+            <View style={styles.forgotPassContainer}>
               <FlashMessage position="top" />
               <Text style={styles.text}>Enter your email </Text>
 
@@ -304,14 +252,7 @@ const SwitchView = ({value, onPress}) => {
               <TouchableOpacity onPress={() => onPress(5)}>
                 <ImageBackground
                   source={images.button}
-                  style={{
-                    width: wp(50),
-                    height: hp(5.29),
-                    // borderColor: 'white',
-                    // borderWidth: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+                  style={styles.smallButton}>
                   <Text
                     style={{
                       fontFamily: FONTS.brandFont,
@@ -333,16 +274,7 @@ const SwitchView = ({value, onPress}) => {
       return (
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View
-            style={{
-              width: wp(75.5),
-              height: hp(26),
-              backgroundColor: '#00032590',
-              borderRadius: 15,
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              paddingVertical: hp(2),
-            }}>
+          <View style={styles.forgotPassContainer}>
             <FlashMessage position="top" />
             <Text style={styles.text}>Enter your code from email</Text>
 
@@ -357,14 +289,7 @@ const SwitchView = ({value, onPress}) => {
             <TouchableOpacity onPress={() => onPress(6)}>
               <ImageBackground
                 source={images.button}
-                style={{
-                  width: wp(50),
-                  height: hp(5.29),
-                  // borderColor: 'white',
-                  // borderWidth: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+                style={styles.smallButton}>
                 <Text
                   style={{
                     fontFamily: FONTS.brandFont,
@@ -385,16 +310,7 @@ const SwitchView = ({value, onPress}) => {
       return (
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View
-            style={{
-              width: wp(75.5),
-              height: hp(26),
-              backgroundColor: '#00032590',
-              borderRadius: 15,
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              paddingVertical: hp(2),
-            }}>
+          <View style={styles.forgotPassContainer}>
             <FlashMessage position="top" />
             <Text style={styles.text}>Enter new password</Text>
 
@@ -409,14 +325,7 @@ const SwitchView = ({value, onPress}) => {
             <TouchableOpacity onPress={() => onPress(1)}>
               <ImageBackground
                 source={images.button}
-                style={{
-                  width: wp(50),
-                  height: hp(5.29),
-                  // borderColor: 'white',
-                  // borderWidth: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+                style={styles.smallButton}>
                 <Text
                   style={{
                     fontFamily: FONTS.brandFont,
@@ -487,14 +396,7 @@ const SignInScreen = ({navigation, onPress}) => {
             secureTextEntry
           />
           <TouchableOpacity disabled={loading} onPress={signIn}>
-            <ImageBackground
-              source={images.button}
-              style={{
-                width: wp(50),
-                height: hp(5.29),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+            <ImageBackground source={images.button} style={styles.smallButton}>
               {!loading ? (
                 <Text
                   style={{
@@ -531,8 +433,10 @@ const SignInScreen = ({navigation, onPress}) => {
 
 export default function AuthScreen() {
   const [whichScreen, setWhichScreen] = useState(0);
-
   const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+  const startValue = useRef(new Animated.Value(1)).current;
+  const moveValue = useState(new Animated.Value(0))[0];
+  const endValue = 0.8;
 
   const _keyboardDidShow = React.useCallback(() => {
     setKeyboardStatus('Keyboard Shown');
@@ -555,10 +459,6 @@ export default function AuthScreen() {
       Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
     };
   }, [_keyboardDidHide, _keyboardDidShow]);
-
-  const startValue = useRef(new Animated.Value(1)).current;
-  const moveValue = useState(new Animated.Value(0))[0];
-  const endValue = 0.8;
 
   const imgScale = React.useCallback(() => {
     Animated.timing(startValue, {
@@ -604,11 +504,11 @@ export default function AuthScreen() {
         source={images.backgroundImage}
         style={styles.backgroundImg}>
         <FlashMessage position="top" />
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={styles.mainContainer}>
           <StatusBar barStyle="light-content" />
           {whichScreen ? (
             <TouchableOpacity
-              style={{position: 'absolute', zIndex: 2}}
+              style={styles.backButton}
               onPress={() => BackButton()}>
               <Image
                 source={icons.signBackBtn}
@@ -622,27 +522,23 @@ export default function AuthScreen() {
               />
             </TouchableOpacity>
           ) : null}
-          <View
-            style={{
-              alignItems: 'center',
-            }}>
-            <Animated.View style={{flex: 3}}>
+          <View style={styles.mainSubContainer}>
+            <Animated.View style={styles.animatedContainer}>
               <Animated.Image
                 source={images.banner}
-                style={{
-                  marginTop: hp(7),
-                  resizeMode: 'contain',
-                  width: wp(64.66),
-                  height: wp(74.66),
-                  transform: [
-                    {
-                      scale: startValue,
-                    },
-                    {
-                      translateY: moveValue,
-                    },
-                  ],
-                }}
+                style={[
+                  {
+                    transform: [
+                      {
+                        scale: startValue,
+                      },
+                      {
+                        translateY: moveValue,
+                      },
+                    ],
+                  },
+                  styles.banner,
+                ]}
               />
             </Animated.View>
             <SwitchView
@@ -656,6 +552,15 @@ export default function AuthScreen() {
   );
 }
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
+  mainSubContainer: {
+    alignItems: 'center',
+  },
+  twoButtonContainer: {
+    flex: 1,
+  },
   backgroundImage: {
     flex: 1,
     alignItems: 'center',
@@ -674,6 +579,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  smallButton: {
+    width: wp(50),
+    height: hp(5.29),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  banner: {
+    marginTop: hp(7),
+    resizeMode: 'contain',
+    width: wp(64.66),
+    height: wp(74.66),
+  },
   btnText: {
     marginTop: hp(1),
     fontFamily: FONTS.brandFont,
@@ -687,12 +604,54 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(1.5),
     padding: 0,
   },
+  signupContainer: {
+    width: wp(75.5),
+    height: hp(40),
+    backgroundColor: '#00032590',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    paddingVertical: hp(2),
+    marginBottom: hp(3),
+  },
+  signupButton: {
+    width: wp(50),
+    height: hp(5.29),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirmCodeContainer: {
+    width: wp(75.5),
+    height: hp(26),
+    backgroundColor: '#00032590',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    paddingVertical: hp(2),
+  },
+  animatedContainer: {
+    flex: 3,
+  },
   text: {
     fontFamily: FONTS.brandFont,
     color: COLORS.greyText,
     fontSize: RFPercentage(1.7),
     textAlign: 'center',
     width: wp(50),
+  },
+  backButton: {
+    position: 'absolute',
+    zIndex: 2,
+  },
+  forgotPassContainer: {
+    width: wp(75.5),
+    height: hp(26),
+    backgroundColor: '#00032590',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    paddingVertical: hp(2),
+    paddingBottom: hp(3),
   },
   signInModal: {
     width: wp(75.5),
@@ -705,8 +664,6 @@ const styles = StyleSheet.create({
     paddingVertical: hp(2),
   },
   radioContainer: {
-    // borderWidth: 1,
-    // borderColor: 'red',
     width: wp(55),
     height: hp(4),
     flexDirection: 'row',

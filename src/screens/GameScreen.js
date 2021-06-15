@@ -1,60 +1,90 @@
 import React, {useState, useEffect} from 'react';
 import {
+  Text,
+  View,
+  Image,
   FlatList,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  Image,
+  SafeAreaView,
   ImageBackground,
-  View,
-  ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 
-import LottieView from 'lottie-react-native';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {wp, hp, COLORS, FONTS} from '../constants/theme';
 
-import {icons, images, index, theme} from '../constants';
-import {wp, hp, ft, COLORS, FONTS} from '../constants/theme';
-import {createGame, createLeague, createPlayer} from '../graphql/mutations';
-import {listPlayers, listLeagues, listTeams} from '../graphql/queries';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import awsmobile from '../aws-exports';
-import {DATA} from '../data/DATA';
-import LinearGradient from 'react-native-linear-gradient';
-import Amplify, {API, graphqlOperation, Auth, Storage, JS} from 'aws-amplify';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Avatars} from '../data/Avatars';
 import {AuthContext} from '../../App';
+
+import awsmobile from '../aws-exports';
+import Modal from 'react-native-modal';
+import LottieView from 'lottie-react-native';
+import {createPlayer} from '../graphql/mutations';
+import LinearGradient from 'react-native-linear-gradient';
+import {listPlayers, listLeagues} from '../graphql/queries';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import Amplify, {API, graphqlOperation, Auth, Storage, JS} from 'aws-amplify';
+
 Amplify.configure({
   ...awsmobile,
   Analytics: {
     disabled: true,
   },
 });
+const Avatar = ({item, onPress, backgroundColor, textColor}) => (
+  <TouchableOpacity onPress={onPress} style={[styles.avatars, backgroundColor]}>
+    <Image source={item.image} style={{width: wp(14), height: wp(14)}} />
+  </TouchableOpacity>
+);
 
 async function getUserData() {
   const user = Auth.currentUserInfo();
-  console.log(user);
+  // console.log(user);
 }
 
 const GameScreen = ({navigation}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
+  const [AvatarModal, setAvatarModal] = useState(false);
 
   useEffect(() => {
     fetchLeague();
     findGreet();
     getName();
+    // getAvatar();
   }, [getName]);
 
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [playerId, setId] = useState('');
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
-  const [name2, setName2] = useState('');
 
+  const press = item => {
+    console.log(`item`, item);
+    setSelectedItem(item.id);
+    setSelectedId(item.image);
+    // console.log(item.id);
+  };
+
+  const avatarsRender = ({item}) => {
+    const backgroundColor =
+      item.id === selectedItem ? COLORS.brand : COLORS.background;
+
+    return (
+      <Avatar
+        item={item}
+        onPress={
+          () => press(item)
+          // setSelectedId(item.id)
+          // console.log('zurag', item.id)
+        }
+        backgroundColor={{backgroundColor}}
+      />
+    );
+  };
   const Item = ({item, onPress, backgroundColor, textColor}) => (
     <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
       <TouchableOpacity
@@ -74,13 +104,7 @@ const GameScreen = ({navigation}) => {
             start={{x: 1, y: 0}}
             end={{x: 1, y: 1}}
             colors={['#00000000', '#000']}>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'flex-end',
-                marginBottom: hp(5),
-                marginHorizontal: wp(5),
-              }}>
+            <View style={styles.leagueStatus}>
               <Text
                 style={{
                   color: COLORS.white,
@@ -118,10 +142,22 @@ const GameScreen = ({navigation}) => {
     );
   };
 
+  const setAvatar = () => {
+    console.log('taniii zurag', selectedId);
+    console.log('zurag', selectedId);
+    setUserInfo(prev => ({
+      ...prev,
+      avatar: selectedId,
+    }));
+    // (userInfo.avatarAvatars[selectedId]));
+    // console.log(`userInfo`, userInfo);
+    setAvatarModal(false);
+  };
+
   const findGreet = () => {
     const hrs = new Date().getHours();
     const day = new Date().getDay();
-    console.log(day);
+    // console.log(day);
     if (hrs === 0 || hrs < 12) return setGreet('Morning');
     if (hrs === 1 || hrs < 17) return setGreet('Afternoon');
 
@@ -140,11 +176,12 @@ const GameScreen = ({navigation}) => {
     } else {
     }
     findUser(user);
+    getAvatar();
   }, [findUser]);
 
   const findUser = React.useCallback(
     async user => {
-      console.log(`cognito data`, user);
+      // console.log(`cognito data`, user);
       const playerData = await API.graphql(graphqlOperation(listPlayers));
 
       let finded = playerData.data.listPlayers.items.find((item, index) => {
@@ -163,7 +200,7 @@ const GameScreen = ({navigation}) => {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       // const todos = leagueData.data.listTeams.items;
       // console.log('Teams>>>>>>>>>>>>>>', todos);
-      console.log('Leagues>>>>>>>>>>>>>>', leagueData.data.listLeagues.items);
+      // console.log('Leagues>>>>>>>>>>>>>>', leagueData.data.listLeagues.items);
       setLeagueList(leagueData.data.listLeagues.items);
     } catch (err) {
       console.log('error fetching todos', err);
@@ -173,9 +210,9 @@ const GameScreen = ({navigation}) => {
   async function checkPlayer(playerData, p_id) {
     try {
       const players = playerData.data.listPlayers.items;
-      console.log('Players>>>>>>>>>>>>>>', players);
+      // console.log('Players>>>>>>>>>>>>>>', players);
       for (var i = 0; i < players.length; i++) {
-        if (players[i].c_id == p_id) {
+        if (players[i].c_id === p_id) {
           return false;
         }
       }
@@ -205,10 +242,15 @@ const GameScreen = ({navigation}) => {
       console.log('error creating Player:', err);
     }
   }
-
+  const getAvatar = () => {
+    if (userInfo.avatar == null) {
+      console.log(`userInfo bainuu `, userInfo);
+      console.log(userInfo.avatar);
+      setAvatarModal(true);
+    }
+  };
   return (
-    <SafeAreaView
-      style={{flex: 1, backgroundColor: COLORS.background, paddingTop: hp(2)}}>
+    <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
       {isLoading ? (
         <SkeletonPlaceholder
@@ -216,63 +258,24 @@ const GameScreen = ({navigation}) => {
           backgroundColor={'#E1E9EE'}
           highlightColor={'#F2F8FC'}>
           <View style={{paddingHorizontal: wp(4)}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
+            <View style={styles.skeletonFirstContainer}>
               <View style={{marginHorizontal: wp(5)}}>
-                <View style={{width: 150, height: 20, borderRadius: 4}} />
-                <View
-                  style={{
-                    marginTop: 6,
-                    width: 100,
-                    height: 20,
-                    borderRadius: 4,
-                  }}
-                />
+                <View style={styles.skeletonFirstSub} />
+                <View style={styles.skeletonFirstSub} />
               </View>
-              <View style={{width: 60, height: 60}} />
+              <View style={styles.skeletonFirstSubSub} />
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginVertical: 8,
-                marginTop: hp(3),
-              }}>
-              <View
-                style={{width: wp(63.3), height: hp(39), borderRadius: 40}}
-              />
-              <View
-                style={{
-                  width: wp(63.3),
-                  height: hp(39),
-                  borderRadius: 40,
-                  marginHorizontal: hp(2),
-                }}
-              />
-              <View
-                style={{width: wp(63.3), height: hp(39), borderRadius: 40}}
-              />
+            <View style={styles.skeletonSecondContainer}>
+              <View style={styles.skeletonSecondFirstSub} />
+              <View style={styles.skeletonSecondSecondSub} />
+              <View style={styles.skeletonSecondThirdSub} />
             </View>
-            <View
-              style={{
-                marginTop: hp(1),
-                width: 200,
-                height: 20,
-                borderRadius: 4,
-              }}
-            />
+            <View style={styles.skeletonThirdContainer} />
           </View>
         </SkeletonPlaceholder>
       ) : (
         <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: wp(4),
-            }}>
+          <View style={styles.header}>
             <View>
               <Text
                 style={[
@@ -289,19 +292,12 @@ const GameScreen = ({navigation}) => {
             </View>
             <View>
               <TouchableOpacity>
-                <Image
-                  source={images.profilePic}
-                  style={{
-                    resizeMode: 'contain',
-                    width: wp(14.4),
-                    height: hp(6.65),
-                  }}
-                />
+                <Image source={selectedId} style={styles.profileImage} />
               </TouchableOpacity>
             </View>
           </View>
           <View>
-            {LeagueList.length != 0 ? (
+            {LeagueList.length !== 0 ? (
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 horizontal
@@ -318,16 +314,7 @@ const GameScreen = ({navigation}) => {
                     autoPlay
                     source={require('../assets/Lottie/game-loading.json')}
                   />
-                  <Text
-                    style={{
-                      color: COLORS.brand,
-                      fontFamily: FONTS.brandFont,
-                      fontSize: RFPercentage(1.7),
-                      alignSelf: 'center',
-                      marginTop: hp(5),
-                    }}>
-                    LEAGUE CREATING...
-                  </Text>
+                  <Text style={styles.lottieText}>LEAGUE CREATING...</Text>
                 </View>
               </View>
             )}
@@ -344,11 +331,147 @@ const GameScreen = ({navigation}) => {
           </Text>
         </View>
       )}
+      <Modal
+        animationIn="rubberBand"
+        isVisible={AvatarModal}
+        style={styles.modal}>
+        <View style={styles.modalContainer}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              fontSize: RFPercentage(1.8),
+              marginTop: hp(3),
+              marginBottom: hp(2),
+            }}>
+            Choose your avatar
+          </Text>
+          <FlatList
+            data={Avatars}
+            renderItem={avatarsRender}
+            keyExtractor={item => item.id}
+            extraData={selectedId}
+            numColumns={4}
+            showsHorizontalScrollIndicator={false}
+          />
+          <TouchableOpacity
+            onPress={() => setAvatar()}
+            style={styles.modalButton}>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.8),
+              }}>
+              OK
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    paddingTop: hp(2),
+  },
+  skeletonFirstContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  skeletonFirstSub: {
+    marginTop: 6,
+    width: 100,
+    height: 20,
+    borderRadius: 4,
+  },
+  skeletonFirstSubSub: {
+    width: 60,
+    height: 60,
+  },
+  skeletonSecondContainer: {
+    flexDirection: 'row',
+    marginVertical: 8,
+    marginTop: hp(3),
+  },
+  skeletonSecondFirstSub: {
+    width: wp(63.3),
+    height: hp(39),
+    borderRadius: 40,
+  },
+  skeletonSecondSecondSub: {
+    width: wp(63.3),
+    height: hp(39),
+    borderRadius: 40,
+    marginHorizontal: hp(2),
+  },
+  skeletonSecondThirdSub: {
+    width: wp(63.3),
+    height: hp(39),
+    borderRadius: 40,
+  },
+  skeletonThirdContainer: {
+    marginTop: hp(1),
+    width: 200,
+    height: 20,
+    borderRadius: 4,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(4),
+  },
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0,
+  },
+  modalContainer: {
+    backgroundColor: COLORS.background,
+    borderColor: COLORS.brand,
+    borderWidth: 2,
+    width: wp(80),
+    height: hp(57),
+    alignItems: 'center',
+  },
+  modalButton: {
+    backgroundColor: COLORS.brand,
+    width: wp(30),
+    height: hp(4),
+    marginBottom: hp(2),
+    marginTop: hp(2),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lottieText: {
+    color: COLORS.brand,
+    fontFamily: FONTS.brandFont,
+    fontSize: RFPercentage(1.7),
+    alignSelf: 'center',
+    marginTop: hp(5),
+  },
+  profileImage: {
+    resizeMode: 'contain',
+    width: wp(14.4),
+    height: hp(6.65),
+  },
+  leagueStatus: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: hp(5),
+    marginHorizontal: wp(5),
+  },
+  avatars: {
+    width: wp(16),
+    height: wp(16),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: wp(1),
+    marginVertical: wp(1),
+  },
   greeting: {
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
