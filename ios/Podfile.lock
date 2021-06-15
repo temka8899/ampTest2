@@ -440,19 +440,8 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
-<<<<<<< HEAD
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: 82ef8cf81badac66e6ea7a1e2fe52500ba74a597
-=======
-  FBLazyVector: 7b423f9e248eae65987838148c36eec1dbfe0b53
-  FBReactNativeSpec: 1d53172e4df2e5e022687d3735ecd518b3744961
-<<<<<<< HEAD
-=======
-=======
-  FBReactNativeSpec: 1c36aa9568270100255cdeb09fd32f505edd1900
->>>>>>> 7426a99ee6c5ffd3ca4f4238abd3b08ca423f256
->>>>>>> 38027fca486ac74f3e4ef8af40950842be15983e
->>>>>>> a90174214b1e081a3050591361609c5353754be5
+  FBReactNativeSpec: b8c7a89c1b3f6085acc90b38e4a104b51047c009
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
   lottie-react-native: 4dff8fe8d10ddef9e7880e770080f4a56121397e

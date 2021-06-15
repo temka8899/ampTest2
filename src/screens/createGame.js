@@ -1,25 +1,23 @@
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-  TextInput,
-  Button,
-  TouchableOpacity,
   Image,
-  SafeAreaView,
   StatusBar,
-  ColorPropType,
+  TextInput,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import {createGame, createLeague} from '../graphql/mutations';
-import {listGames, listLeagues} from '../graphql/queries';
-import awsmobile from '../aws-exports';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import {COLORS, FONTS, icons} from '../constants';
+
 import {hp, wp} from '../constants/theme';
-import FormInput from '../components/FormInput';
+import {COLORS, FONTS, icons} from '../constants';
+
+import awsmobile from '../aws-exports';
+import {createGame} from '../graphql/mutations';
+import ImagePicker from 'react-native-image-crop-picker';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
 Amplify.configure({
   ...awsmobile,
@@ -95,26 +93,16 @@ const createGameScreen = ({navigation}) => {
     }
   }
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
-      <StatusBar barStyle="light-content"></StatusBar>
-      <View
-        style={{
-          width: wp(100),
-          height: hp(7),
-          // borderColor: 'red',
-          // borderWidth: 1,
-          paddingHorizontal: wp(3),
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
+    <SafeAreaView style={styles.Container}>
+      <StatusBar barStyle="light-content" />
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
       </View>
       <View>
-        <View style={{alignItems: 'center'}}>
-          {uploadImage == '' ? (
+        <View style={styles.imageContainer}>
+          {uploadImage === '' ? (
             <Image
               style={{
                 width: wp(80),
@@ -139,19 +127,11 @@ const createGameScreen = ({navigation}) => {
             />
           )}
         </View>
-        <View
-          style={{
-            marginTop: hp(2),
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          {/* <Text>Enter game name</Text> */}
+        <View style={styles.formContainer}>
           <TextInput
             onChangeText={val => setInput('name', val)}
             value={formState.name}
             style={styles.input}
-            // onChangeText={onChangeNumber}
-            // value={number}
             placeholder="Enter name"
             placeholderTextColor={COLORS.purpleText}
           />
@@ -159,7 +139,6 @@ const createGameScreen = ({navigation}) => {
             style={{
               height: hp(0.3),
               width: wp(70),
-              // marginTop: -hp(1),
               backgroundColor: COLORS.purpleText,
             }}
           />
@@ -175,16 +154,30 @@ const createGameScreen = ({navigation}) => {
           <Text style={styles.btnText}>Create game</Text>
         </TouchableOpacity>
       </View>
-      {/* <Button
-        style={styles.btnContainer}
-        onPress={choosePhotoFromLibrary}
-        title="Choose an image"
-      />
-      <Button title="Create game" onPress={addGame} /> */}
     </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
+  Container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  imageContainer: {
+    alignItems: 'center',
+  },
+  header: {
+    width: wp(100),
+    height: hp(7),
+    paddingHorizontal: wp(3),
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  formContainer: {
+    marginTop: hp(2),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   input: {
     height: hp(4),
     width: wp(70),
@@ -201,16 +194,12 @@ const styles = StyleSheet.create({
     height: hp(10),
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    // borderColor: 'red',
-    // borderWidth: 1,
     flex: 1,
     alignItems: 'flex-end',
   },
   button: {
     width: wp(45),
     height: hp(5),
-    // borderColor: 'red',
-    // borderWidth: 1,
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,39 +1,36 @@
 import React, {useState, useEffect} from 'react';
 import {
   Text,
-  SafeAreaView,
-  StyleSheet,
-  Image,
   View,
-  TouchableOpacity,
+  Image,
   FlatList,
   StatusBar,
-  ImageBackground,
-  Button,
+  StyleSheet,
+  SafeAreaView,
   RefreshControl,
+  ImageBackground,
+  TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-// import {DATA} from './GameScreen';
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
-import {createLeaguePlayer, deleteLeaguePlayer} from '../graphql/mutations';
+import {AuthContext} from '../../App';
+import AppBar from '../components/AppBar';
+import {hp, wp} from '../constants/theme';
+import {COLORS, FONTS, icons} from '../constants';
 
-import LinearGradient from 'react-native-linear-gradient';
+import {userData} from '../data/Players';
+
 import {
   listPlayers,
   listLeaguePlayers,
   getTeam,
   getLeague,
 } from '../graphql/queries';
-
-import AppBar from '../components/AppBar';
-import {COLORS, FONTS, icons} from '../constants';
-import {hp, wp} from '../constants/theme';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-import {userData} from '../data/Players';
 import Modal from 'react-native-modal';
-import {AuthContext} from '../../App';
-import {useScrollToTop} from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+import {createLeaguePlayer, deleteLeaguePlayer} from '../graphql/mutations';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -190,36 +187,22 @@ const ParticipatesScreen = ({navigation, route}) => {
           onBackdropPress={() => {
             setModalVisible(false);
           }}
-          style={{margin: 0}}>
+          style={styles.modal}>
           <View style={styles.modalBody}>
             <TouchableOpacity
               style={styles.closeBtn}
               onPress={() => {
                 setModalVisible(!isModalVisible);
-              }}></TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: FONTS.brandFont,
-                textAlign: 'center',
-                color: COLORS.white,
-                width: wp(70),
-                lineHeight: hp(2),
-                marginTop: hp(2),
-              }}>
+              }}
+            />
+            <Text style={styles.modalText}>
               {!inLeague
                 ? 'Do you agree to participate in the league?'
                 : 'Do you agree to out from the league?'}
             </Text>
 
             <TouchableOpacity
-              style={{
-                width: wp(85),
-                height: hp(6),
-                backgroundColor: COLORS.brand,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: hp(3),
-              }}
+              style={styles.modalButton}
               onPress={() => {
                 {
                   inLeague
@@ -246,23 +229,10 @@ const ParticipatesScreen = ({navigation, route}) => {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.background,
-        flexDirection: 'column',
-      }}>
+    <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
       <AppBar />
-      <View
-        style={{
-          width: wp(100),
-          height: hp(6),
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingHorizontal: wp(2),
-        }}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
@@ -298,24 +268,14 @@ const ParticipatesScreen = ({navigation, route}) => {
           source={{
             uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${gameInfo.game.image}`,
           }}
-          style={{
-            alignSelf: 'center',
-            width: wp(63.3),
-            height: hp(39),
-          }}
-          imageStyle={{borderRadius: 40}}>
+          style={styles.backgroundImage}
+          imageStyle={styles.backgroundImageSub}>
           <LinearGradient
-            style={{flex: 1, borderRadius: 40}}
+            style={styles.linear}
             start={{x: 1, y: 0}}
             end={{x: 1, y: 1}}
             colors={['#00000000', '#000']}>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'flex-end',
-                marginBottom: hp(5),
-                marginHorizontal: wp(5),
-              }}>
+            <View style={styles.linearText}>
               <Text
                 style={{
                   color: COLORS.white,
@@ -331,21 +291,8 @@ const ParticipatesScreen = ({navigation, route}) => {
           </LinearGradient>
         </ImageBackground>
       </View>
-      <View
-        style={{
-          height: hp(5),
-          justifyContent: 'center',
-          paddingLeft: wp(7),
-          marginVertical: hp(1),
-        }}>
-        <Text
-          style={{
-            color: COLORS.white,
-            fontFamily: FONTS.brandFont,
-            alignSelf: 'center',
-          }}>
-          {gameInfo.description}
-        </Text>
+      <View style={styles.descriptionContainer}>
+        <Text style={styles.description}>{gameInfo.description}</Text>
       </View>
       <FlatList
         refreshControl={
@@ -354,18 +301,8 @@ const ParticipatesScreen = ({navigation, route}) => {
         data={sorted}
         renderItem={({item, index}) => (
           <>
-            {leaguePlayers.length != 0 ? (
-              <View
-                style={{
-                  width: wp(95),
-                  height: hp(6),
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingRight: wp(4),
-                  borderBottomWidth: 1,
-                  borderBottomColor: COLORS.greyText,
-                  alignSelf: 'center',
-                }}>
+            {leaguePlayers.length !== 0 ? (
+              <View style={styles.playerContainer}>
                 <Text
                   style={[
                     {color: COLORS.greyText, marginLeft: wp(4)},
@@ -374,12 +311,7 @@ const ParticipatesScreen = ({navigation, route}) => {
                   {index + 1}
                 </Text>
                 <Image source={userData.image} style={styles.avatar} />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    flex: 1,
-                  }}>
+                <View style={styles.playerSubContainer}>
                   <Text
                     style={[
                       {color: COLORS.greyText, marginLeft: wp(4)},
@@ -387,13 +319,7 @@ const ParticipatesScreen = ({navigation, route}) => {
                     ]}>
                     {item.player.name}
                   </Text>
-                  <View
-                    style={{
-                      justifyContent: 'space-between',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      width: wp(21),
-                    }}>
+                  <View style={styles.playerSubSub}>
                     <Text style={[{color: COLORS.greyText}, styles.player]}>
                       lvl{' '}
                     </Text>
@@ -404,10 +330,7 @@ const ParticipatesScreen = ({navigation, route}) => {
                 </View>
               </View>
             ) : (
-              <View
-                style={{
-                  alignSelf: 'center',
-                }}>
+              <View style={styles.playerZeroText}>
                 <Text> Join the league! </Text>
               </View>
             )}
@@ -420,8 +343,93 @@ const ParticipatesScreen = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    flexDirection: 'column',
+  },
+  header: {
+    width: wp(100),
+    height: hp(6),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: wp(2),
+  },
+  backgroundImage: {
+    alignSelf: 'center',
+    width: wp(63.3),
+    height: hp(39),
+  },
+  backgroundImageSub: {
+    borderRadius: 40,
+  },
+  modal: {
+    margin: 0,
+  },
+  modalText: {
+    fontFamily: FONTS.brandFont,
+    textAlign: 'center',
+    color: COLORS.white,
+    width: wp(70),
+    lineHeight: hp(2),
+    marginTop: hp(2),
+  },
+  modalButton: {
+    width: wp(85),
+    height: hp(6),
+    backgroundColor: COLORS.brand,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: hp(3),
+  },
+  linear: {
+    flex: 1,
+    borderRadius: 40,
+  },
+  linearText: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: hp(5),
+    marginHorizontal: wp(5),
+  },
+  descriptionContainer: {
+    height: hp(5),
+    justifyContent: 'center',
+    paddingLeft: wp(7),
+    marginVertical: hp(1),
+  },
+  description: {
+    color: COLORS.white,
+    fontFamily: FONTS.brandFont,
+    alignSelf: 'center',
+  },
+  playerContainer: {
+    width: wp(95),
+    height: hp(6),
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: wp(4),
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.greyText,
+    alignSelf: 'center',
+  },
+  playerSubContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  playerSubSub: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: wp(21),
+  },
   player: {
     fontFamily: FONTS.brandFont,
+  },
+  playerZeroText: {
+    alignSelf: 'center',
   },
   avatar: {
     width: wp(9.6),
@@ -462,16 +470,6 @@ const styles = StyleSheet.create({
     width: wp(25),
     height: hp(1),
     backgroundColor: COLORS.white,
-  },
-  modalBtn: {
-    width: wp(84.53),
-    height: hp(5.43),
-    borderRadius: 12,
-    backgroundColor: COLORS.brand,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: wp(7.735),
-    marginTop: hp(2),
   },
 });
 

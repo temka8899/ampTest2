@@ -13,8 +13,11 @@ import {COLORS, images} from '../constants';
 import {hp, wp} from '../constants/theme';
 import {userData} from '../data/Players';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import {AuthContext} from '../../App';
 
 const CircleXp = props => {
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
+
   console.log(props.fill);
   return (
     <View>
@@ -35,23 +38,17 @@ const CircleXp = props => {
         backgroundColor="#F74C1130">
         {fill => (
           <View>
-            {userData.map((item, index) => (
-              <View key={index}>
-                {item.id === 1 && (
-                  <Image
-                    source={item.image}
-                    style={{
-                      width: wp(26.6),
-                      height: hp(12.3),
-                      resizeMode: 'contain',
-                      borderRadius: wp(26.6),
-                      // position: 'absolute',
-                      // zIndex: 2,
-                    }}
-                  />
-                )}
-              </View>
-            ))}
+            <Image
+              source={userInfo.avatar}
+              style={{
+                width: wp(26.6),
+                height: hp(12.3),
+                resizeMode: 'contain',
+                borderRadius: wp(26.6),
+                // position: 'absolute',
+                // zIndex: 2,
+              }}
+            />
           </View>
         )}
       </AnimatedCircularProgress>

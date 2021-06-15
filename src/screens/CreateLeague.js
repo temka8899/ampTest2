@@ -10,30 +10,17 @@ import {
   SafeAreaView,
   Modal,
 } from 'react-native';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-
-import ImagePicker from 'react-native-image-crop-picker';
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {createGame, createLeague, createTeam} from '../graphql/mutations';
-import {
-  listGames,
-  listLeagues,
-  listPlayers,
-  listTeamPlayers,
-} from '../graphql/queries';
-import awsmobile from '../aws-exports';
-import {withAuthenticator} from 'aws-amplify-react-native';
-import GamePicker from '../components/GamePicker';
-import DatePicker from 'react-native-datepicker';
-
-import {S3Image} from 'aws-amplify-react-native/dist/Storage';
-import {userData} from '../data/Players';
-import {CognitoIdToken, CognitoUser} from 'amazon-cognito-identity-js';
-import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import GamePicker from '../components/GamePicker';
+
+import awsmobile from '../aws-exports';
+import DatePicker from 'react-native-datepicker';
+import {createLeague} from '../graphql/mutations';
+import {listGames, listLeagues} from '../graphql/queries';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
 Amplify.configure({
   ...awsmobile,
@@ -130,26 +117,16 @@ const createLeagueScreen = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
-      <StatusBar barStyle="light-content"></StatusBar>
-      <View
-        style={{
-          width: wp(100),
-          height: hp(7),
-          // borderColor: 'red',
-          // borderWidth: 1,
-          paddingHorizontal: wp(3),
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
       </View>
       <View>
-        <View style={{alignItems: 'center'}}>
-          {uploadImage == '' ? (
+        <View style={styles.imageContainer}>
+          {uploadImage === '' ? (
             <Image
               style={{
                 width: wp(70),
@@ -177,23 +154,11 @@ const createLeagueScreen = ({navigation}) => {
       </View>
       <TouchableOpacity
         onPress={() => changeModalVisible(true)}
-        style={{
-          height: hp(6),
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingHorizontal: wp(3),
-          borderBottomColor: COLORS.brand,
-          borderTopColor: COLORS.brand,
-          borderWidth: 1,
-        }}>
+        style={styles.chooseButton}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
           {chooseData.name}
         </Text>
-        <Image
-          source={icons.drop}
-          style={{resizeMode: 'contain', height: hp(1.7), width: wp(4.53)}}
-        />
+        <Image source={icons.drop} style={styles.dropImage} />
       </TouchableOpacity>
       <Modal
         transparent={true}
@@ -202,14 +167,7 @@ const createLeagueScreen = ({navigation}) => {
         nRequestClose={() => changeModalVisible(false)}>
         <GamePicker changeModalVisible={changeModalVisible} setData={setData} />
       </Modal>
-      <View
-        style={{
-          // borderColor: 'red',
-          // borderWidth: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: hp(3),
-        }}>
+      <View style={styles.formContainer}>
         <TextInput
           multiline
           numberOfLines={4}
@@ -259,38 +217,53 @@ const createLeagueScreen = ({navigation}) => {
           }}
         />
       </View>
-      <View
-        style={{
-          flex: 1,
-          width: wp(90),
-          alignSelf: 'center',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          flexDirection: 'column',
-          // borderColor: 'red',
-          // borderWidth: 1,
-        }}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => addLeague()} style={styles.createBtn}>
           <Text style={styles.createBtnText}>Create League</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-    // <View>
-    //   <SafeAreaView>
-    //     <Text>addLeague screen</Text>
-    //     {GameList.map((todo, index) => {
-    //       return (
-    //         <View>
-    //           <Text key={index}>{[index, '. ', todo.name]}</Text>
-    //         </View>
-    //       );
-    //     })}
-    //     <Button title="Add League" onPress={() => addLeague()} />
-    //   </SafeAreaView>
-    // </View>
   );
 };
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  header: {
+    width: wp(100),
+    height: hp(7),
+    paddingHorizontal: wp(3),
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    alignItems: 'center',
+  },
+  chooseButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: hp(3),
+  },
+  dropImage: {
+    resizeMode: 'contain',
+    height: hp(1.7),
+    width: wp(4.53),
+  },
+  formContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: hp(3),
+  },
+  buttonContainer: {
+    flex: 1,
+    width: wp(90),
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flexDirection: 'column',
+  },
   backBtn: {
     resizeMode: 'contain',
     width: wp(7.4),
@@ -304,12 +277,10 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.brandFont,
     fontSize: RFPercentage(1.5),
     padding: wp(1),
-    // padding: 0,
     borderColor: COLORS.purpleText,
     borderWidth: 1,
     borderRadius: 5,
     justifyContent: 'center',
-    // textAlign: 'center',
     alignItems: 'center',
   },
   createBtn: {

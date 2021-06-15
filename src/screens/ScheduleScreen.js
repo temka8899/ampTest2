@@ -1,45 +1,21 @@
 import React, {useState} from 'react';
 import {
   Text,
-  SafeAreaView,
-  TextInput,
-  StyleSheet,
-  Button,
-  Image,
   View,
-  TouchableOpacity,
-  Touchable,
   Modal,
+  Image,
   StatusBar,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-
-import {DATA} from './GameScreen';
 import AppBar from '../components/AppBar';
-import {COLORS, FONTS, icons} from '../constants';
-import GamePicker from '../components/GamePicker';
 import {hp, wp} from '../constants/theme';
-import color from 'color';
+import {COLORS, FONTS, icons} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
-export const ScheduleData = [
-  {
-    id: '0',
-    title: 'NBA 2K21',
-    image: require('../assets/images/nba.png'),
-  },
-  {
-    id: '1',
-    title: 'FIFA 2021',
-    image: require('../assets/images/fifa.png'),
-  },
-  {
-    id: '2',
-    title: 'Table Soccer',
-    image: require('../assets/images/table.png'),
-  },
-];
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
@@ -79,12 +55,7 @@ const ScheduleScreen = ({navigation, route}) => {
               />
               <View style={{width: wp(100), height: hp(3)}} />
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                marginTop: hp(10),
-              }}>
+            <View style={styles.skeleton1}>
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
@@ -98,20 +69,8 @@ const ScheduleScreen = ({navigation, route}) => {
                 <View style={{width: wp(15), height: wp(15)}} />
               </View>
             </View>
-            <View
-              style={{
-                width: wp(80),
-                height: 1,
-                alignSelf: 'center',
-                marginTop: hp(1),
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                marginTop: hp(2),
-              }}>
+            <View style={styles.skeleton2} />
+            <View style={styles.skeleton3}>
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
@@ -125,20 +84,8 @@ const ScheduleScreen = ({navigation, route}) => {
                 <View style={{width: wp(15), height: wp(15)}} />
               </View>
             </View>
-            <View
-              style={{
-                width: wp(80),
-                height: 1,
-                alignSelf: 'center',
-                marginTop: hp(1),
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                marginTop: hp(2),
-              }}>
+            <View style={styles.skeleton4} />
+            <View style={styles.skeleton5}>
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
@@ -152,20 +99,8 @@ const ScheduleScreen = ({navigation, route}) => {
                 <View style={{width: wp(15), height: wp(15)}} />
               </View>
             </View>
-            <View
-              style={{
-                width: wp(80),
-                height: 1,
-                alignSelf: 'center',
-                marginTop: hp(1),
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                marginTop: hp(2),
-              }}>
+            <View style={styles.skeleton4} />
+            <View style={styles.skeleton7}>
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
@@ -179,14 +114,7 @@ const ScheduleScreen = ({navigation, route}) => {
                 <View style={{width: wp(15), height: wp(15)}} />
               </View>
             </View>
-            <View
-              style={{
-                width: wp(80),
-                height: 1,
-                alignSelf: 'center',
-                marginTop: hp(1),
-              }}
-            />
+            <View style={styles.skeleton4} />
           </View>
         </SkeletonPlaceholder>
       ) : (
@@ -194,22 +122,11 @@ const ScheduleScreen = ({navigation, route}) => {
           <AppBar />
           <TouchableOpacity
             onPress={() => changeModalVisible(true)}
-            style={{
-              height: hp(6),
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingHorizontal: wp(3),
-              borderBottomColor: COLORS.brand,
-              borderWidth: 1,
-            }}>
+            style={styles.chooseButton}>
             <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData == '' ? 'Select' : chooseData.game.name}
+              {chooseData === '' ? 'Select' : chooseData.game.name}
             </Text>
-            <Image
-              source={icons.drop}
-              style={{resizeMode: 'contain', height: hp(1.7), width: wp(4.53)}}
-            />
+            <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
           <Modal
             transparent={true}
@@ -221,20 +138,11 @@ const ScheduleScreen = ({navigation, route}) => {
               setData={setData}
             />
           </Modal>
-          <View
-            style={{
-              width: wp(100),
-              height: hp(6),
-              borderWidth: 1,
-              borderBottomColor: COLORS.brand,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-            }}>
+          <View style={styles.daysContainer}>
             <TouchableOpacity onPress={() => setChooseDay(1)}>
               <Text
                 style={[
-                  {color: chooseDay == 1 ? COLORS.brand : COLORS.greyText},
+                  {color: chooseDay === 1 ? COLORS.brand : COLORS.greyText},
                   styles.dayBtn,
                 ]}>
                 Mon
@@ -243,7 +151,7 @@ const ScheduleScreen = ({navigation, route}) => {
             <TouchableOpacity onPress={() => setChooseDay(2)}>
               <Text
                 style={[
-                  {color: chooseDay == 2 ? COLORS.brand : COLORS.greyText},
+                  {color: chooseDay === 2 ? COLORS.brand : COLORS.greyText},
                   styles.dayBtn,
                 ]}>
                 Tue
@@ -252,7 +160,7 @@ const ScheduleScreen = ({navigation, route}) => {
             <TouchableOpacity onPress={() => setChooseDay(3)}>
               <Text
                 style={[
-                  {color: chooseDay == 3 ? COLORS.brand : COLORS.greyText},
+                  {color: chooseDay === 3 ? COLORS.brand : COLORS.greyText},
                   styles.dayBtn,
                 ]}>
                 Wed
@@ -261,7 +169,7 @@ const ScheduleScreen = ({navigation, route}) => {
             <TouchableOpacity onPress={() => setChooseDay(4)}>
               <Text
                 style={[
-                  {color: chooseDay == 4 ? COLORS.brand : COLORS.greyText},
+                  {color: chooseDay === 4 ? COLORS.brand : COLORS.greyText},
                   styles.dayBtn,
                 ]}>
                 Thu
@@ -270,7 +178,7 @@ const ScheduleScreen = ({navigation, route}) => {
             <TouchableOpacity onPress={() => setChooseDay(5)}>
               <Text
                 style={[
-                  {color: chooseDay == 5 ? COLORS.brand : COLORS.greyText},
+                  {color: chooseDay === 5 ? COLORS.brand : COLORS.greyText},
                   styles.dayBtn,
                 ]}>
                 Fri
@@ -291,6 +199,60 @@ const ScheduleScreen = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  skeleton1: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: hp(10),
+  },
+  skeleton2: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: hp(10),
+  },
+  skeleton3: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: hp(2),
+  },
+  skeleton4: {
+    width: wp(80),
+    height: 1,
+    alignSelf: 'center',
+    marginTop: hp(1),
+  },
+  skeleton5: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: hp(2),
+  },
+  skeleton7: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: hp(2),
+  },
+  chooseButton: {
+    height: hp(6),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(3),
+    borderBottomColor: COLORS.brand,
+    borderWidth: 1,
+  },
+  dropButton: {
+    resizeMode: 'contain',
+    height: hp(1.7),
+    width: wp(4.53),
+  },
+  daysContainer: {
+    width: wp(100),
+    height: hp(6),
+    borderWidth: 1,
+    borderBottomColor: COLORS.brand,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
   dayBtn: {
     fontFamily: FONTS.brandFont,
   },
