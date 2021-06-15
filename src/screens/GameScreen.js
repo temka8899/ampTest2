@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
+import LottieView from 'lottie-react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import {icons, images, index, theme} from '../constants';
@@ -49,48 +50,6 @@ const Avatar = ({item, onPress, backgroundColor, textColor}) => (
     ]}>
     <Image source={item.image} style={{width: wp(14), height: wp(14)}} />
   </TouchableOpacity>
-);
-
-const Item = ({item, onPress, backgroundColor}) => (
-  <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
-    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-      <ImageBackground
-        source={{
-          uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
-        }}
-        style={{
-          width: wp(63.3),
-          height: hp(39),
-        }}
-        imageStyle={{borderRadius: 40}}>
-        <LinearGradient
-          style={{flex: 1, borderRadius: 40}}
-          start={{x: 1, y: 0}}
-          end={{x: 1, y: 1}}
-          colors={['#00000000', '#000']}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'flex-end',
-              marginBottom: hp(5),
-              marginHorizontal: wp(5),
-            }}>
-            <Text
-              style={{
-                color: COLORS.white,
-                fontFamily: FONTS.brandFont,
-                paddingVertical: hp(1),
-              }}>
-              {item.game.name}
-            </Text>
-            <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
-              {item.startDate}
-            </Text>
-          </View>
-        </LinearGradient>
-      </ImageBackground>
-    </TouchableOpacity>
-  </View>
 );
 
 async function getUserData() {
@@ -199,20 +158,66 @@ const GameScreen = ({navigation}) => {
       />
     );
   };
+  const Item = ({item, onPress, backgroundColor, textColor}) => (
+    <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={[styles.item, backgroundColor]}>
+        <ImageBackground
+          source={{
+            uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
+          }}
+          style={{
+            width: wp(63.3),
+            height: hp(39),
+          }}
+          imageStyle={{borderRadius: 40}}>
+          <LinearGradient
+            style={{flex: 1, borderRadius: 40}}
+            start={{x: 1, y: 0}}
+            end={{x: 1, y: 1}}
+            colors={['#00000000', '#000']}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-end',
+                marginBottom: hp(5),
+                marginHorizontal: wp(5),
+              }}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: FONTS.brandFont,
+                  paddingVertical: hp(1),
+                }}>
+                {item.game.name}
+              </Text>
+              <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
+                {item.startDate}
+              </Text>
+            </View>
+          </LinearGradient>
+        </ImageBackground>
+      </TouchableOpacity>
+    </View>
+  );
+
   const renderItem = ({item}) => {
     // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
 
     return (
-      <Item
-        item={item}
-        onPress={() =>
-          navigation.navigate('ParticipatesScreen', {
-            itemId: item,
-          })
-        }
-        textColor={{color}}
-      />
+      <>
+        <Item
+          item={item}
+          onPress={() =>
+            navigation.navigate('ParticipatesScreen', {
+              itemId: item,
+            })
+          }
+          textColor={{color}}
+        />
+      </>
     );
   };
 
@@ -405,15 +410,36 @@ const GameScreen = ({navigation}) => {
             </View>
           </View>
           <View>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              data={LeagueList}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-              extraData={selectedId}
-              onPress={() => {}}
-            />
+            {LeagueList.length != 0 ? (
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={LeagueList}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+                extraData={selectedId}
+                onPress={() => {}}
+              />
+            ) : (
+              <View>
+                <View style={styles.lottie}>
+                  <LottieView
+                    autoPlay
+                    source={require('../assets/Lottie/game-loading.json')}
+                  />
+                  <Text
+                    style={{
+                      color: COLORS.brand,
+                      fontFamily: FONTS.brandFont,
+                      fontSize: RFPercentage(1.7),
+                      alignSelf: 'center',
+                      marginTop: hp(5),
+                    }}>
+                    LEAGUE CREATING...
+                  </Text>
+                </View>
+              </View>
+            )}
           </View>
           <Text
             style={{
@@ -501,6 +527,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  lottie: {
+    width: wp(80),
+    height: wp(80),
+    alignSelf: 'center',
   },
 });
 

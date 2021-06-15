@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		5DAA38772677643D0016B391 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAA38762677643D0016B391 /* File.swift */; };
 		65EC43B9C6639276886CE2E2 /* libPods-ampTest2-ampTest2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15EB0C0C7E6741FDB9D694F9 /* libPods-ampTest2-ampTest2Tests.a */; };
 		66D4383132AA6E8202D2C4E7 /* libPods-ampTest2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1521AA0BBC74D057DCA9095A /* libPods-ampTest2.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -31,7 +32,7 @@
 		00E356EE1AD99517003FC87E /* ampTest2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ampTest2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* ampTest2Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ampTest2Tests.m; sourceTree = "<group>"; };
-		072ABBB944B94BADABE0DDD8 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "PressStart2P-Regular.ttf"; path = "../src/assets/fonts/PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
+		072ABBB944B94BADABE0DDD8 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PressStart2P-Regular.ttf"; path = "../src/assets/fonts/PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* ampTest2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ampTest2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ampTest2/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ampTest2/AppDelegate.m; sourceTree = "<group>"; };
@@ -41,6 +42,8 @@
 		1521AA0BBC74D057DCA9095A /* libPods-ampTest2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ampTest2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15EB0C0C7E6741FDB9D694F9 /* libPods-ampTest2-ampTest2Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ampTest2-ampTest2Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		279F8434ADEF26F8E06BDA8A /* Pods-ampTest2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2.debug.xcconfig"; path = "Target Support Files/Pods-ampTest2/Pods-ampTest2.debug.xcconfig"; sourceTree = "<group>"; };
+		5DAA38752677643D0016B391 /* ampTest2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ampTest2-Bridging-Header.h"; sourceTree = "<group>"; };
+		5DAA38762677643D0016B391 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		64B1748D70948D65615E82B9 /* Pods-ampTest2-ampTest2Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2-ampTest2Tests.debug.xcconfig"; path = "Target Support Files/Pods-ampTest2-ampTest2Tests/Pods-ampTest2-ampTest2Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ampTest2/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		99F646BA033BCAF2388AEF4A /* Pods-ampTest2-ampTest2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2-ampTest2Tests.release.xcconfig"; path = "Target Support Files/Pods-ampTest2-ampTest2Tests/Pods-ampTest2-ampTest2Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -129,6 +132,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				5DAA38762677643D0016B391 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* ampTest2 */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ampTest2Tests */,
@@ -136,6 +140,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				6465853CE22ABF139795CC45 /* Pods */,
 				D2F42C67CF7E4FAAA8A23814 /* Resources */,
+				5DAA38752677643D0016B391 /* ampTest2-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -216,7 +221,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1240;
 					};
 				};
 			};
@@ -387,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				5DAA38772677643D0016B391 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,6 +412,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 64B1748D70948D65615E82B9 /* Pods-ampTest2-ampTest2Tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -433,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 99F646BA033BCAF2388AEF4A /* Pods-ampTest2-ampTest2Tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = ampTest2Tests/Info.plist;
@@ -473,6 +481,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ampTest2;
+				SWIFT_OBJC_BRIDGING_HEADER = "ampTest2-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -498,6 +507,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ampTest2;
+				SWIFT_OBJC_BRIDGING_HEADER = "ampTest2-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
