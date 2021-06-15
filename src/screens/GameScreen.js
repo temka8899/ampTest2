@@ -300,7 +300,10 @@ const GameScreen = ({navigation}) => {
               </Text>
             </View>
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Tabs', {screen: 'Profile'})
+                }>
                 <Image source={selectedId} style={styles.profileImage} />
               </TouchableOpacity>
             </View>
