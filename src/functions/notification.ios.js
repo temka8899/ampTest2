@@ -2,7 +2,7 @@ import PushNotificationIOS from 'react-native-push-notification';
 
 const showNotification = (title, message) => {
   PushNotificationIOS.presentLocalNotification({
-    alerTitle: title,
+    alertTitle: title,
     alertBody: message,
   });
 };
