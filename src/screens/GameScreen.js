@@ -186,7 +186,7 @@ const GameScreen = ({navigation}) => {
     }
     findUser(user);
     getAvatar();
-  }, [findUser]);
+  }, [findUser, getAvatar]);
 
   const findUser = React.useCallback(
     async user => {
