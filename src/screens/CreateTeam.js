@@ -240,7 +240,7 @@ const createTeamScreen = ({navigation}) => {
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
       if (todos.length % 2 == 0 && todos.length >= 8) {
-        for (i = 0; i < todos.length; i = i + 2) {
+        for (var i = 0; i < todos.length; i = i + 2) {
           console.log(i);
 
           // Add Team loop

@@ -9,6 +9,7 @@ import createTeamScreen from './src/screens/CreateTeam';
 import createGameScreen from './src/screens/CreateGame';
 import ScheduleScreen from './src/screens/ScheduleScreen';
 import createLeagueScreen from './src/screens/CreateLeague';
+import EditProfileScreen from './src/screens/EditProfileScreen';
 import ParticipatesScreen from './src/screens/ParticipatesScreen';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -29,6 +30,11 @@ function App() {
           <Stack.Screen
             name="CreateLeagueScreen"
             component={createLeagueScreen}
+          />
+          <Stack.Screen
+            name="EditProfileScreen"
+            component={EditProfileScreen}
+            options={{gestureEnabled: false}}
           />
           <Stack.Screen
             name="ParticipatesScreen"
