@@ -92,7 +92,7 @@ const createTeamScreen = ({navigation}) => {
           },
         }),
       );
-      console.log('Team Created');
+      console.log('TeamPlayer Created');
     } catch (err) {
       console.log('error creating League:', err);
     }
@@ -240,9 +240,13 @@ const createTeamScreen = ({navigation}) => {
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
       if (todos.length % 2 == 0 && todos.length >= 8) {
+<<<<<<< HEAD
         for (var i = 0; i < todos.length; i = i + 2) {
           console.log(i);
 
+=======
+        for (i = 0; i < todos.length; i = i + 2) {
+>>>>>>> 1bb82a5bbec523a985e77c435e72a3b7807d1bb6
           // Add Team loop
           try {
             const temp = await API.graphql(
@@ -257,10 +261,16 @@ const createTeamScreen = ({navigation}) => {
                 },
               }),
             );
-
+            console.log(`Team${i} created `);
             //Add Team Player
-            addStartTeamPlayer(temp.data.createTeam.id, todos[i].playerID);
-            addStartTeamPlayer(temp.data.createTeam.id, todos[i + 1].playerID);
+            await addStartTeamPlayer(
+              temp.data.createTeam.id,
+              todos[i].playerID,
+            );
+            await addStartTeamPlayer(
+              temp.data.createTeam.id,
+              todos[i + 1].playerID,
+            );
           } catch (err) {
             console.log('error creating League:', err);
           }
@@ -303,7 +313,7 @@ const createTeamScreen = ({navigation}) => {
           },
         }),
       );
-      console.log('Team Created');
+      console.log('TeamPlayer Created');
     } catch (err) {
       console.log('error creating League:', err);
     }
@@ -315,18 +325,40 @@ const createTeamScreen = ({navigation}) => {
     const k = teams.length;
     var nemeh = 1;
     var hasah = teams.length;
-
+    var date = new Date();
+    var date2 = date.getDay();
+    var numberOfDaysToAdd = 0;
+    dateNemeh = 0;
+    // date.setDate(date.getDate() + numberOfDaysToAdd);
+    date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {
       for (var j = 0; j < hasah - 1; j++) {
-        console.log(`${teams[j].name} vs ${teams[j + nemeh].name}_________`);
-        addSchedule(teams[j].id, teams[j + nemeh].id);
+        if (dateNemeh % 4 == 0) {
+          date.setDate(date.getDate() + 1);
+          var date2 = date.getDay();
+          if (date2 == 6) {
+            date.setDate(date.getDate() + 2);
+          }
+        }
+
+        console.log(
+          `${teams[j].name} vs ${
+            teams[j + nemeh].name
+          }___at ${date.toLocaleDateString()}____`,
+        );
+        addSchedule(
+          teams[j].id,
+          teams[j + nemeh].id,
+          date.toLocaleDateString(),
+        );
+        dateNemeh++;
       }
       hasah--;
       nemeh++;
     }
   }
 
-  async function addSchedule(team1ID, team2ID) {
+  async function addSchedule(team1ID, team2ID, date) {
     try {
       await API.graphql(
         graphqlOperation(createSchedule, {
@@ -335,15 +367,21 @@ const createTeamScreen = ({navigation}) => {
             scheduleAwayId: team2ID,
             homeScore: 0,
             awayScore: 0,
-            date: '',
+            date: `${date}`,
           },
         }),
       );
-      console.log('Team Created');
+      // console.log('Schedule Created');
     } catch (err) {
-      console.log('error creating League:', err);
+      console.log('error creating Schedule:', err);
     }
-    fetchTeamPlayers();
+  }
+
+  async function getDate() {
+    var date = new Date();
+    var numberOfDaysToAdd = 0;
+    dateNemeh = 0;
+    date.setDate(date.getDate() + numberOfDaysToAdd);
   }
 
   return (
@@ -372,6 +410,7 @@ const createTeamScreen = ({navigation}) => {
         <Button onPress={() => startLeague()} title="Start League" />
         <Button onPress={() => leagueIsStart()} title="update League" />
         <Button onPress={() => addScheduleLoop()} title="add Schedule" />
+        <Button onPress={() => getDate()} title="get Date" />
       </View>
     </SafeAreaView>
   );
