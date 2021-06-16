@@ -33,6 +33,7 @@ import {
   listTeams,
   listLeaguePlayers,
   getTeam,
+  listSchedules,
 } from '../graphql/queries';
 import awsmobile from '../aws-exports';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
@@ -373,6 +374,16 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function getSchedule() {
+    try {
+      const scheduleData = await API.graphql(graphqlOperation(listSchedules));
+      const todos = scheduleData.data.listSchedules.items;
+      console.log('Schedule>>>>>>>>>>>>>>', todos);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
   async function getDate() {
     var date = new Date();
     var numberOfDaysToAdd = 0;
@@ -407,6 +418,7 @@ const createTeamScreen = ({navigation}) => {
         <Button onPress={() => leagueIsStart()} title="update League" />
         <Button onPress={() => addScheduleLoop()} title="add Schedule" />
         <Button onPress={() => getDate()} title="get Date" />
+        <Button onPress={() => getSchedule()} title="get Schedule" />
       </View>
     </SafeAreaView>
   );
