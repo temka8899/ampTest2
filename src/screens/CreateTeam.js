@@ -240,13 +240,9 @@ const createTeamScreen = ({navigation}) => {
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
       if (todos.length % 2 == 0 && todos.length >= 8) {
-<<<<<<< HEAD
         for (var i = 0; i < todos.length; i = i + 2) {
           console.log(i);
 
-=======
-        for (i = 0; i < todos.length; i = i + 2) {
->>>>>>> 1bb82a5bbec523a985e77c435e72a3b7807d1bb6
           // Add Team loop
           try {
             const temp = await API.graphql(

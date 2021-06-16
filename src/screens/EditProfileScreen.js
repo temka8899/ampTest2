@@ -38,12 +38,13 @@ export default function EditProfileScreen({navigation}) {
 
   useEffect(() => {
     setImage();
-  });
+  }, []);
   const setImage = () => {
     setNewImage(userInfo.avatar);
   };
   const press = item => {
     setSelectedId(item.id);
+    console.log(item.image);
     setSelectedItem(item.image);
   };
 
