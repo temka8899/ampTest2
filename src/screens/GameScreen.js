@@ -275,7 +275,7 @@ const GameScreen = ({navigation}) => {
                   styles.greeting,
                   {marginTop: hp(1), fontSize: RFPercentage(2.5)},
                 ]}>
-                {userInfo.name}
+                {userInfo === null ? 'Hello' : `${userInfo.name}`}
               </Text>
             </View>
             <View>
@@ -283,7 +283,9 @@ const GameScreen = ({navigation}) => {
                 onPress={() =>
                   navigation.navigate('Tabs', {screen: 'Profile'})
                 }>
-                <Image source={userInfo.avatar} style={styles.profileImage} />
+                {userInfo === null ? null : (
+                  <Image source={userInfo.avatar} style={styles.profileImage} />
+                )}
               </TouchableOpacity>
             </View>
           </View>
