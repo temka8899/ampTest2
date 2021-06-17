@@ -243,7 +243,6 @@ const createTeamScreen = ({navigation}) => {
       if (todos.length % 2 == 0 && todos.length >= 8) {
         for (var i = 0; i < todos.length; i = i + 2) {
           console.log(i);
-
           // Add Team loop
           try {
             const temp = await API.graphql(
@@ -282,12 +281,15 @@ const createTeamScreen = ({navigation}) => {
   }
 
   async function leagueIsStart() {
+    var date = new Date();
+    date.setDate(date.getDate() + 1);
     try {
       const temp = await API.graphql(
         graphqlOperation(updateLeague, {
           input: {
             id: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
             isStart: true,
+            startedDate: `${date.toLocaleDateString()}`,
           },
         }),
       );

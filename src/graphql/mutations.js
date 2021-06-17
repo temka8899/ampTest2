@@ -49,6 +49,7 @@ export const createLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     createLeague(input: $input, condition: $condition) {
+      startedDate
       perDay
       id
       isStart
@@ -72,6 +73,7 @@ export const updateLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     updateLeague(input: $input, condition: $condition) {
+      startedDate
       perDay
       id
       isStart
@@ -95,6 +97,7 @@ export const deleteLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     deleteLeague(input: $input, condition: $condition) {
+      startedDate
       perDay
       id
       isStart
@@ -174,6 +177,7 @@ export const createTeam = /* GraphQL */ `
     createTeam(input: $input, condition: $condition) {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -205,6 +209,7 @@ export const updateTeam = /* GraphQL */ `
     updateTeam(input: $input, condition: $condition) {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -236,6 +241,7 @@ export const deleteTeam = /* GraphQL */ `
     deleteTeam(input: $input, condition: $condition) {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -269,6 +275,7 @@ export const createTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -312,6 +319,7 @@ export const updateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -355,6 +363,7 @@ export const deleteTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -396,6 +405,7 @@ export const createLeaguePlayer = /* GraphQL */ `
     createLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -437,6 +447,7 @@ export const updateLeaguePlayer = /* GraphQL */ `
     updateLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -478,6 +489,7 @@ export const deleteLeaguePlayer = /* GraphQL */ `
     deleteLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -521,6 +533,7 @@ export const createSchedule = /* GraphQL */ `
       home {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -538,6 +551,7 @@ export const createSchedule = /* GraphQL */ `
       away {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -570,6 +584,7 @@ export const updateSchedule = /* GraphQL */ `
       home {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -587,6 +602,7 @@ export const updateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -619,6 +635,7 @@ export const deleteSchedule = /* GraphQL */ `
       home {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -636,6 +653,7 @@ export const deleteSchedule = /* GraphQL */ `
       away {
         id
         league {
+          startedDate
           perDay
           id
           isStart
