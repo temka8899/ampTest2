@@ -372,6 +372,7 @@ const createTeamScreen = ({navigation}) => {
       // console.log('Schedule Created');
     } catch (err) {
       console.log('error creating Schedule:', err);
+      console.log('error creating Schedule:', err);
     }
   }
 
