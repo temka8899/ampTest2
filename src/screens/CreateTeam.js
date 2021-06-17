@@ -377,7 +377,13 @@ const createTeamScreen = ({navigation}) => {
 
   async function getSchedule() {
     try {
-      const scheduleData = await API.graphql(graphqlOperation(listSchedules));
+      const scheduleData = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            date: {eq: '6/17/2021'},
+          },
+        }),
+      );
       const todos = scheduleData.data.listSchedules.items;
       console.log('Schedule>>>>>>>>>>>>>>', todos);
     } catch (err) {
