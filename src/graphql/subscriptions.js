@@ -37,6 +37,7 @@ export const onDeleteGame = /* GraphQL */ `
 export const onCreateLeague = /* GraphQL */ `
   subscription OnCreateLeague {
     onCreateLeague {
+      startedDate
       perDay
       id
       isStart
@@ -57,6 +58,7 @@ export const onCreateLeague = /* GraphQL */ `
 export const onUpdateLeague = /* GraphQL */ `
   subscription OnUpdateLeague {
     onUpdateLeague {
+      startedDate
       perDay
       id
       isStart
@@ -77,6 +79,7 @@ export const onUpdateLeague = /* GraphQL */ `
 export const onDeleteLeague = /* GraphQL */ `
   subscription OnDeleteLeague {
     onDeleteLeague {
+      startedDate
       perDay
       id
       isStart
@@ -144,6 +147,7 @@ export const onCreateTeam = /* GraphQL */ `
     onCreateTeam {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -172,6 +176,7 @@ export const onUpdateTeam = /* GraphQL */ `
     onUpdateTeam {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -200,6 +205,7 @@ export const onDeleteTeam = /* GraphQL */ `
     onDeleteTeam {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -230,6 +236,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -270,6 +277,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -310,6 +318,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -348,6 +357,7 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
     onCreateLeaguePlayer {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -386,6 +396,7 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
     onUpdateLeaguePlayer {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -424,6 +435,7 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
     onDeleteLeaguePlayer {
       id
       league {
+        startedDate
         perDay
         id
         isStart
@@ -464,6 +476,7 @@ export const onCreateSchedule = /* GraphQL */ `
       home {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -481,6 +494,7 @@ export const onCreateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -510,6 +524,7 @@ export const onUpdateSchedule = /* GraphQL */ `
       home {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -527,6 +542,7 @@ export const onUpdateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -556,6 +572,7 @@ export const onDeleteSchedule = /* GraphQL */ `
       home {
         id
         league {
+          startedDate
           perDay
           id
           isStart
@@ -573,6 +590,7 @@ export const onDeleteSchedule = /* GraphQL */ `
       away {
         id
         league {
+          startedDate
           perDay
           id
           isStart
