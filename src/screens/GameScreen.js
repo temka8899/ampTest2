@@ -211,9 +211,10 @@ const GameScreen = ({navigation}) => {
       console.log('error fetching players', err);
     }
   }
-  const getAvatar = () => {
+  const getAvatar = React.useCallback(() => {
     setAvatarModal(true);
-  };
+  }, []);
+
   async function addPlayer(username, p_id) {
     console.log('uuslee', username, p_id);
     try {
@@ -243,7 +244,7 @@ const GameScreen = ({navigation}) => {
         <SkeletonPlaceholder
           speed={800}
           backgroundColor={'#E1E9EE'}
-          highlightColor={'#F2F8FC'}>
+          highlightColor={'gray'}>
           <View style={{paddingHorizontal: wp(4)}}>
             <View style={styles.skeletonFirstContainer}>
               <View style={{marginHorizontal: wp(5)}}>

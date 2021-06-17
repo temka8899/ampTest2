@@ -63,7 +63,6 @@ const createTeamScreen = ({navigation}) => {
   function setInput(key, value) {
     setFormState({...formState, [key]: value});
   }
-  useEffect(() => {}, []);
 
   async function addTeam() {
     try {
@@ -327,7 +326,7 @@ const createTeamScreen = ({navigation}) => {
     var date = new Date();
     var date2 = date.getDay();
     var numberOfDaysToAdd = 0;
-    dateNemeh = 0;
+    let dateNemeh = 0;
     // date.setDate(date.getDate() + numberOfDaysToAdd);
     date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {
@@ -389,7 +388,7 @@ const createTeamScreen = ({navigation}) => {
   async function getDate() {
     var date = new Date();
     var numberOfDaysToAdd = 0;
-    dateNemeh = 0;
+    let dateNemeh = 0;
     date.setDate(date.getDate() + numberOfDaysToAdd);
   }
 
