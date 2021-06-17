@@ -5,6 +5,7 @@ type Game @model {
 }
 
 type League @model {
+  startedDate: String
   perDay: Int
   id: ID!
   isStart: Boolean!
