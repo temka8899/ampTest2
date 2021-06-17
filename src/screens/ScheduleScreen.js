@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 
 import AppBar from '../components/AppBar';
@@ -21,26 +22,61 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {listTeams} from '../graphql/queries';
 import API, {graphqlOperation} from '@aws-amplify/api';
 
+const Item = ({item, onPress, selectedId}) => {
+  const color = item === selectedId ? COLORS.brand : COLORS.greyText;
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        width: wp(20),
+        height: hp(6),
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Text style={[styles.dayText, {color: color}]}>
+        {item.split(' ')[2].substring(0, 3)}
+        {'\n'}
+        {item.split(' ')[1]}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [chooseDay, setChooseDay] = useState('1');
   const [month, setMonth] = useState('June');
   const [year, setYear] = useState('2021');
-  const [duration, setDuration] = useState();
-  const dayData = [];
-  useEffect(() => {}, []);
+  const [dayData, setDayData] = useState([]);
 
-  async function getTeamNumber() {
+  const [selectedId, setSelectedId] = useState(null);
+  useEffect(() => {}, []);
+  const getDay = item => {
+    setSelectedId(item);
+    console.log('manai', item);
+  };
+  const renderItem = ({item}) => {
+    console.log(`item`, item);
+    return (
+      <Item item={item} onPress={() => getDay(item)} selectedId={selectedId} />
+    );
+  };
+
+  async function getTeamNumber(option) {
     const leagueData = await API.graphql(graphqlOperation(listTeams));
     console.log(`leagueData >>>>>`, leagueData);
     let teamNumber = 0;
+    console.log(leagueData.data.listTeams.items.length);
     for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
-      if (leagueData.data.listTeams.items[i].league.id === chooseData.id) {
+      console.log(leagueData.data.listTeams.items[i].league.id);
+      console.log(option.id);
+
+      if (leagueData.data.listTeams.items[i].league.id === option.id) {
         teamNumber = teamNumber + 1;
       }
     }
+    console.log(`team`, teamNumber);
     return teamNumber;
   }
 
@@ -64,14 +100,21 @@ const ScheduleScreen = ({navigation, route}) => {
   function getDayData(number, date) {
     console.log(`number`, number);
     console.log(`date`, date);
+    setDayData([]);
     let newDate = new Date(date);
+    let odor;
     console.log(`newDate`, newDate);
     for (let i = 0; i < number; i++) {
-      dayData.push(
-        new Date(newDate.setDate(newDate.getDate() + 1)).toString('MMMM yyyy'),
-      );
-      // date = new Date(date).getDay() + 1;
-      // date = moment(date).add(1, 'days');
+      odor = moment(date).format('dddd');
+      if (odor === 'Saturday') {
+        date = new Date(newDate.setDate(newDate.getDate() + 2));
+      } else if (odor === 'Sunday') {
+        date = new Date(newDate.setDate(newDate.getDate() + 1));
+      }
+      date = moment(date).format('MMMM D dddd YY');
+      console.log(`odor`, odor);
+      setDayData(prev => [...prev, date]);
+      date = new Date(newDate.setDate(newDate.getDate() + 1));
     }
     console.log(`dayData >>>>>`, dayData);
   }
@@ -80,27 +123,12 @@ const ScheduleScreen = ({navigation, route}) => {
     setModalVisible(bool);
   };
 
-  const onSelectedDay = d => {
-    console.log(d);
-  };
-
   const setData = async option => {
     setChooseData(option);
     setLoading(false);
     console.log('League bainuu', option);
-    // console.log(`hezee ehlesen`, option.startedDate);
-    // const gang = option.startedDate;
-    // var tomorrow = moment(gang).add(1, 'days');
-    // console.log(`hezee duusah`, tomorrow);
-    // var day = moment(`${option.startedDate}`);
-    // var date = moment(`${option.startedDate}`).format('dddd');
-    // var garag = moment().format('[Today is] dddd');
-    // console.log(`date`, date);
-    // console.log(`day`, day);
-    // console.log(`garag`, garag);
-    let teamNumber = await getTeamNumber();
-    // setDuration(getDuration(teamNumber, option.perDay));
-    let duration = await getDuration(teamNumber, 4);
+    let teamNumber = await getTeamNumber(option);
+    let duration = await getDuration(teamNumber, 2);
     getDayData(duration, option.startedDate);
   };
 
@@ -203,15 +231,13 @@ const ScheduleScreen = ({navigation, route}) => {
               setData={setData}
             />
           </Modal>
-
           <View>
-            <View
+            {/* <View
               style={{
                 flexDirection: 'row',
-                borderColor: 'red',
-                borderWidth: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
+                marginVertical: hp(0.5),
               }}>
               <Text
                 style={{
@@ -231,56 +257,26 @@ const ScheduleScreen = ({navigation, route}) => {
                 }}>
                 {year}
               </Text>
+            </View> */}
+            <View>
+              {dayData.length === 0 ? (
+                <View>
+                  <Text style={{color: 'white'}}>hooosoon</Text>
+                </View>
+              ) : (
+                <FlatList
+                  data={dayData}
+                  horizontal
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id}
+                  style={{
+                    borderBottomColor: COLORS.brand,
+                    borderBottomWidth: 1,
+                  }}
+                />
+              )}
             </View>
-            <View></View>
           </View>
-          {/* <View style={styles.daysContainer}>
-            <TouchableOpacity onPress={() => setChooseDay(1)}>
-              <Text
-                style={[
-                  {color: chooseDay === 1 ? COLORS.brand : COLORS.greyText},
-                  styles.dayBtn,
-                ]}>
-                Mon
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setChooseDay(2)}>
-              <Text
-                style={[
-                  {color: chooseDay === 2 ? COLORS.brand : COLORS.greyText},
-                  styles.dayBtn,
-                ]}>
-                Tue
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setChooseDay(3)}>
-              <Text
-                style={[
-                  {color: chooseDay === 3 ? COLORS.brand : COLORS.greyText},
-                  styles.dayBtn,
-                ]}>
-                Wed
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setChooseDay(4)}>
-              <Text
-                style={[
-                  {color: chooseDay === 4 ? COLORS.brand : COLORS.greyText},
-                  styles.dayBtn,
-                ]}>
-                Thu
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setChooseDay(5)}>
-              <Text
-                style={[
-                  {color: chooseDay === 5 ? COLORS.brand : COLORS.greyText},
-                  styles.dayBtn,
-                ]}>
-                Fri
-              </Text>
-            </TouchableOpacity>
-          </View> */}
           <TouchableOpacity
             style={{margin: wp(10)}}
             onPress={() => navigation.navigate('CountScreen')}>
@@ -335,22 +331,16 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.brand,
     borderWidth: 1,
   },
+  dayText: {
+    fontFamily: FONTS.brandFont,
+    fontSize: RFPercentage(1.7),
+    textAlign: 'center',
+    lineHeight: hp(2),
+  },
   dropButton: {
     resizeMode: 'contain',
     height: hp(1.7),
     width: wp(4.53),
-  },
-  daysContainer: {
-    width: wp(100),
-    height: hp(6),
-    borderWidth: 1,
-    borderBottomColor: COLORS.brand,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  dayBtn: {
-    fontFamily: FONTS.brandFont,
   },
   input: {
     height: 40,
