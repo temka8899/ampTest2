@@ -32,7 +32,7 @@ import {listPlayers, listLeagues} from '../graphql/queries';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
-import Amplify, {API, graphqlOperation, Auth, Storage, JS} from 'aws-amplify';
+import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
 
 Amplify.configure({
   ...awsmobile,
@@ -40,16 +40,12 @@ Amplify.configure({
     disabled: true,
   },
 });
-const Avatar = ({item, onPress, backgroundColor, textColor}) => (
+
+const Avatar = ({item, onPress, backgroundColor}) => (
   <TouchableOpacity onPress={onPress} style={[styles.avatars, backgroundColor]}>
     <Image source={item.image} style={{width: wp(14), height: wp(14)}} />
   </TouchableOpacity>
 );
-
-async function getUserData() {
-  const user = Auth.currentUserInfo();
-  // console.log(user);
-}
 
 const GameScreen = ({navigation}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
@@ -67,28 +63,21 @@ const GameScreen = ({navigation}) => {
     fetchLeague();
     findGreet();
     getName();
-    // getAvatar();
   }, [getName]);
 
   const press = item => {
-    console.log(`item`, item);
-    setSelectedItem(item.id);
-    setSelectedId(item.image);
-    // console.log(item.id);
+    setSelectedId(item.id);
+    setSelectedItem(item.image);
   };
 
   const avatarsRender = ({item}) => {
     const backgroundColor =
-      item.id === selectedItem ? COLORS.brand : COLORS.background;
+      item.id === selectedId ? COLORS.brand : COLORS.background;
 
     return (
       <Avatar
         item={item}
-        onPress={
-          () => press(item)
-          // setSelectedId(item.id)
-          // console.log('zurag', item.id)
-        }
+        onPress={() => press(item)}
         backgroundColor={{backgroundColor}}
       />
     );
@@ -133,7 +122,6 @@ const GameScreen = ({navigation}) => {
   );
 
   const renderItem = ({item}) => {
-    // const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
 
     return (
@@ -151,22 +139,16 @@ const GameScreen = ({navigation}) => {
     );
   };
 
-  const setAvatar = () => {
-    console.log('taniii zurag', selectedId);
-    console.log('zurag', selectedId);
-    setUserInfo(prev => ({
-      ...prev,
-      avatar: selectedId,
-    }));
-    // (userInfo.avatarAvatars[selectedId]));
-    // console.log(`userInfo`, userInfo);
+  const setAvatar = async () => {
+    const user = await Auth.currentUserInfo();
     setAvatarModal(false);
+    await addPlayer(user.attributes['custom:Name'], user.username);
+    findUser(user);
   };
 
   const findGreet = () => {
     const hrs = new Date().getHours();
     const day = new Date().getDay();
-    // console.log(day);
     if (hrs === 0 || hrs < 12) return setGreet('Morning');
     if (hrs === 1 || hrs < 17) return setGreet('Afternoon');
 
@@ -181,8 +163,9 @@ const GameScreen = ({navigation}) => {
     setLoading(false);
     let existing = await checkPlayer(playerData, user.username);
     if (existing) {
-      await addPlayer(user.attributes['custom:Name'], user.username);
+      getAvatar();
     } else {
+      findUser(user);
     }
     findUser(user);
     getAvatar();
@@ -190,9 +173,7 @@ const GameScreen = ({navigation}) => {
 
   const findUser = React.useCallback(
     async user => {
-      // console.log(`cognito data`, user);
       const playerData = await API.graphql(graphqlOperation(listPlayers));
-
       let finded = playerData.data.listPlayers.items.find((item, index) => {
         if (user.username === item.c_id) {
           return item;
@@ -230,7 +211,9 @@ const GameScreen = ({navigation}) => {
       console.log('error fetching players', err);
     }
   }
-
+  const getAvatar = () => {
+    setAvatarModal(true);
+  };
   async function addPlayer(username, p_id) {
     console.log('uuslee', username, p_id);
     try {
@@ -242,6 +225,7 @@ const GameScreen = ({navigation}) => {
             xp: 1,
             level: 1,
             admin: true,
+            avatar: selectedItem,
           },
         }),
       );
@@ -251,13 +235,7 @@ const GameScreen = ({navigation}) => {
       console.log('error creating Player:', err);
     }
   }
-  const getAvatar = () => {
-    if (userInfo.avatar == null) {
-      console.log(`userInfo bainuu `, userInfo);
-      console.log(userInfo.avatar);
-      setAvatarModal(true);
-    }
-  };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
@@ -296,7 +274,7 @@ const GameScreen = ({navigation}) => {
                   styles.greeting,
                   {marginTop: hp(1), fontSize: RFPercentage(2.5)},
                 ]}>
-                {name}
+                {userInfo.name}
               </Text>
             </View>
             <View>
@@ -304,7 +282,7 @@ const GameScreen = ({navigation}) => {
                 onPress={() =>
                   navigation.navigate('Tabs', {screen: 'Profile'})
                 }>
-                <Image source={selectedId} style={styles.profileImage} />
+                <Image source={userInfo.avatar} style={styles.profileImage} />
               </TouchableOpacity>
             </View>
           </View>
@@ -331,18 +309,16 @@ const GameScreen = ({navigation}) => {
               </View>
             )}
           </View>
-          <TouchableOpacity>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.7),
-                marginLeft: wp(4),
-                marginVertical: hp(2),
-              }}>
-              COMING MATCHES
-            </Text>
-          </TouchableOpacity>
+          <Text
+            style={{
+              color: COLORS.greyText,
+              fontFamily: FONTS.brandFont,
+              fontSize: RFPercentage(1.7),
+              marginLeft: wp(4),
+              marginVertical: hp(2),
+            }}>
+            COMING MATCHES
+          </Text>
           <TouchableOpacity
             onPress={() => {
               showNotification(

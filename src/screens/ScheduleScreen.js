@@ -14,7 +14,7 @@ import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
-
+import DatePicker from 'react-horizontal-datepicker';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const ScheduleScreen = ({navigation, route}) => {
@@ -25,6 +25,10 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
+  };
+
+  const onSelectedDay = d => {
+    console.log(d);
   };
 
   const setData = option => {
@@ -138,6 +142,7 @@ const ScheduleScreen = ({navigation, route}) => {
               setData={setData}
             />
           </Modal>
+
           <View style={styles.daysContainer}>
             <TouchableOpacity onPress={() => setChooseDay(1)}>
               <Text

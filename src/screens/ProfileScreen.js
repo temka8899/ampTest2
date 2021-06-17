@@ -156,7 +156,8 @@ const Profile = ({navigation}) => {
                     style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
                     {userInfo.name}
                   </Text>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('EditProfileScreen')}>
                     <Image source={icons.editBtn} style={styles.editButton} />
                   </TouchableOpacity>
                 </View>
