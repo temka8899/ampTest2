@@ -14,7 +14,8 @@ import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
-// import DatePicker from 'react-horizontal-datepicker';
+
+import moment from 'moment';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const ScheduleScreen = ({navigation, route}) => {
@@ -35,6 +36,13 @@ const ScheduleScreen = ({navigation, route}) => {
     setChooseData(option);
     setLoading(false);
     console.log('League bainuu', option);
+    console.log(`hezee ehlesen`, option.startedDate);
+    var day = moment(`${option.startedDate}`);
+    var date = moment(`${option.startedDate}`).format('dddd');
+    var garag = moment().format('[Today is] dddd');
+    console.log(`date`, date);
+    console.log(`day`, day);
+    console.log(`garag`, garag);
   };
 
   let itemID = 0;

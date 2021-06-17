@@ -22,6 +22,7 @@
     "aws-amplify": "^4.0.2",
     "aws-amplify-react-native": "^5.0.0",
     "lottie-react-native": "^4.0.2",
+    "moment": "^2.29.1",
     "react": "17.0.1",
     "react-horizontal-datepicker": "^2.0.3",
     "react-horizontal-strip-datepicker": "^3.0.2",
