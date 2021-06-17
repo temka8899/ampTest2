@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -17,12 +17,64 @@ import LeaguePicker from '../components/LeaguePicker';
 
 import moment from 'moment';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import {listTeams} from '../graphql/queries';
+import API, {graphqlOperation} from '@aws-amplify/api';
 
 const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [chooseDay, setChooseDay] = useState('1');
+  const [month, setMonth] = useState('June');
+  const [year, setYear] = useState('2021');
+  const [duration, setDuration] = useState();
+  const dayData = [];
+  useEffect(() => {}, []);
+
+  async function getTeamNumber() {
+    const leagueData = await API.graphql(graphqlOperation(listTeams));
+    console.log(`leagueData >>>>>`, leagueData);
+    let teamNumber = 0;
+    for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
+      if (leagueData.data.listTeams.items[i].league.id === chooseData.id) {
+        teamNumber = teamNumber + 1;
+      }
+    }
+    return teamNumber;
+  }
+
+  // ene league heden odor urgejlehiin avah function
+
+  async function getDuration(number, perDay) {
+    console.log(`number get`, number);
+    console.log(`perDay get`, perDay);
+    let s = 0,
+      count;
+    for (var i = 1; i < number; i++) {
+      s = s + i;
+    }
+    count = (s - (s % perDay)) / perDay;
+    if (s % perDay !== 0) {
+      count++;
+    }
+    return count;
+  }
+
+  function getDayData(number, date) {
+    console.log(`number`, number);
+    console.log(`date`, date);
+    let newDate = new Date(date);
+    console.log(`newDate`, newDate);
+    for (let i = 0; i < number; i++) {
+      dayData.push(
+        new Date(newDate.setDate(newDate.getDate() + 1)).toString('MMMM yyyy'),
+      );
+      // date = new Date(date).getDay() + 1;
+      // date = moment(date).add(1, 'days');
+    }
+    console.log(`dayData >>>>>`, dayData);
+  }
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -32,24 +84,25 @@ const ScheduleScreen = ({navigation, route}) => {
     console.log(d);
   };
 
-  const setData = option => {
+  const setData = async option => {
     setChooseData(option);
     setLoading(false);
     console.log('League bainuu', option);
-    console.log(`hezee ehlesen`, option.startedDate);
-    var day = moment(`${option.startedDate}`);
-    var date = moment(`${option.startedDate}`).format('dddd');
-    var garag = moment().format('[Today is] dddd');
-    console.log(`date`, date);
-    console.log(`day`, day);
-    console.log(`garag`, garag);
+    // console.log(`hezee ehlesen`, option.startedDate);
+    // const gang = option.startedDate;
+    // var tomorrow = moment(gang).add(1, 'days');
+    // console.log(`hezee duusah`, tomorrow);
+    // var day = moment(`${option.startedDate}`);
+    // var date = moment(`${option.startedDate}`).format('dddd');
+    // var garag = moment().format('[Today is] dddd');
+    // console.log(`date`, date);
+    // console.log(`day`, day);
+    // console.log(`garag`, garag);
+    let teamNumber = await getTeamNumber();
+    // setDuration(getDuration(teamNumber, option.perDay));
+    let duration = await getDuration(teamNumber, 4);
+    getDayData(duration, option.startedDate);
   };
-
-  let itemID = 0;
-
-  if (route.params?.itemId) {
-    itemID = route.params.itemId;
-  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
@@ -151,7 +204,37 @@ const ScheduleScreen = ({navigation, route}) => {
             />
           </Modal>
 
-          <View style={styles.daysContainer}>
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                borderColor: 'red',
+                borderWidth: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.8),
+                  marginRight: wp(1),
+                }}>
+                {month}
+              </Text>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.8),
+                  marginLeft: wp(1),
+                }}>
+                {year}
+              </Text>
+            </View>
+            <View></View>
+          </View>
+          {/* <View style={styles.daysContainer}>
             <TouchableOpacity onPress={() => setChooseDay(1)}>
               <Text
                 style={[
@@ -197,7 +280,7 @@ const ScheduleScreen = ({navigation, route}) => {
                 Fri
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
           <TouchableOpacity
             style={{margin: wp(10)}}
             onPress={() => navigation.navigate('CountScreen')}>
