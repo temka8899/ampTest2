@@ -20,17 +20,24 @@ import {COLORS, FONTS, icons} from '../constants';
 
 import {userData} from '../data/Players';
 
+import Modal from 'react-native-modal';
+import LinearGradient from 'react-native-linear-gradient';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+
 import {
   listPlayers,
   listLeaguePlayers,
   getTeam,
   getLeague,
 } from '../graphql/queries';
-import Modal from 'react-native-modal';
-import LinearGradient from 'react-native-linear-gradient';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {createLeaguePlayer, deleteLeaguePlayer} from '../graphql/mutations';
+
+import {
+  createLeaguePlayer,
+  deleteLeaguePlayer,
+  deleteLeague,
+} from '../graphql/mutations';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -105,6 +112,19 @@ const ParticipatesScreen = ({navigation, route}) => {
       setTimeout(() => {
         onRefresh();
       }, 1000);
+    } catch (err) {}
+  };
+
+  const DeleteLeague = async () => {
+    try {
+      await API.graphql(
+        graphqlOperation(deleteLeague, {
+          input: {
+            leagueID: LeagueId,
+          },
+        }),
+      );
+      // setLeaguePlayers(leaguePlayers.splice(1, 1));
     } catch (err) {}
   };
 

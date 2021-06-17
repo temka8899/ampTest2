@@ -167,7 +167,8 @@ const GameScreen = ({navigation}) => {
     } else {
       findUser(user);
     }
-  }, [findUser]);
+    findUser(user);
+  }, [findUser, getAvatar]);
 
   const findUser = React.useCallback(
     async user => {
@@ -209,9 +210,10 @@ const GameScreen = ({navigation}) => {
       console.log('error fetching players', err);
     }
   }
-  const getAvatar = () => {
+  const getAvatar = React.useCallback(() => {
     setAvatarModal(true);
-  };
+  }, []);
+
   async function addPlayer(username, p_id) {
     console.log('uuslee', username, p_id);
     try {
@@ -241,7 +243,7 @@ const GameScreen = ({navigation}) => {
         <SkeletonPlaceholder
           speed={800}
           backgroundColor={'#E1E9EE'}
-          highlightColor={'#F2F8FC'}>
+          highlightColor={'gray'}>
           <View style={{paddingHorizontal: wp(4)}}>
             <View style={styles.skeletonFirstContainer}>
               <View style={{marginHorizontal: wp(5)}}>
@@ -272,7 +274,7 @@ const GameScreen = ({navigation}) => {
                   styles.greeting,
                   {marginTop: hp(1), fontSize: RFPercentage(2.5)},
                 ]}>
-                {userInfo === null ? 'Hello' : `${userInfo.name}`}
+                {userInfo === undefined ? 'Hello' : `${userInfo.name}`}
               </Text>
             </View>
             <View>
@@ -280,7 +282,7 @@ const GameScreen = ({navigation}) => {
                 onPress={() =>
                   navigation.navigate('Tabs', {screen: 'Profile'})
                 }>
-                {userInfo === null ? null : (
+                {userInfo === undefined ? undefined : (
                   <Image source={userInfo.avatar} style={styles.profileImage} />
                 )}
               </TouchableOpacity>

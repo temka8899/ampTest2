@@ -36,6 +36,11 @@ const AdminScreen = ({navigation}) => {
           <Text style={styles.createBtnText}>Create League</Text>
         </TouchableOpacity>
       </View>
+      <View style={{alignSelf: 'center', marginTop: hp(1)}}>
+        <TouchableOpacity onPress={() => {}} style={styles.createBtn}>
+          <Text style={styles.createBtnText}>Delete League</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.bottomContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('createTeamScreen')}
@@ -63,6 +68,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.brandFont,
     fontSize: RFPercentage(1.6),
   },
+
   backBtn: {
     resizeMode: 'contain',
     width: wp(7.4),
