@@ -372,13 +372,18 @@ const createTeamScreen = ({navigation}) => {
       // console.log('Schedule Created');
     } catch (err) {
       console.log('error creating Schedule:', err);
-      console.log('error creating Schedule:', err);
     }
   }
 
   async function getSchedule() {
     try {
-      const scheduleData = await API.graphql(graphqlOperation(listSchedules));
+      const scheduleData = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            date: {eq: '6/17/2021'},
+          },
+        }),
+      );
       const todos = scheduleData.data.listSchedules.items;
       console.log('Schedule>>>>>>>>>>>>>>', todos);
     } catch (err) {
