@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 
 import {wp, hp, COLORS, FONTS} from '../constants/theme';
@@ -55,6 +56,7 @@ const Avatar = ({item, onPress, backgroundColor}) => (
 const Match = ({item, onPress, selectedId}) => {
   const [Home, setHome] = useState(undefined);
   const [Away, setAway] = useState(undefined);
+  const [imgLoad, setImgLoad] = useState(true);
   useEffect(() => {
     getPlayerData();
   }, [getPlayerData]);
@@ -64,9 +66,9 @@ const Match = ({item, onPress, selectedId}) => {
     console.log('homePlayers', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
     console.log(`awayPlayers`, awayPlayers);
-
     setHome(homePlayers);
     setAway(awayPlayers);
+    setImgLoad(false);
   }, [item.away.id, item.home.id]);
 
   async function fetchTeamPlayers(id) {
@@ -97,10 +99,16 @@ const Match = ({item, onPress, selectedId}) => {
           {Home && (
             <View style={{flexDirection: 'row'}}>
               {Home.map(_item => (
-                <Image
-                  source={_item.player.avatar}
-                  style={{width: 50, height: 50}}
-                />
+                <>
+                  {imgLoad ? (
+                    <ActivityIndicator size={'small'} color={'red'} />
+                  ) : (
+                    <Image
+                      source={_item.player.avatar}
+                      style={{width: 50, height: 50}}
+                    />
+                  )}
+                </>
               ))}
             </View>
           )}
@@ -127,10 +135,16 @@ const Match = ({item, onPress, selectedId}) => {
           {Away && (
             <View style={{flexDirection: 'row'}}>
               {Away.map(_item => (
-                <Image
-                  source={_item.player.avatar}
-                  style={{width: 50, height: 50}}
-                />
+                <>
+                  {imgLoad ? (
+                    <ActivityIndicator size={'small'} color={'red'} />
+                  ) : (
+                    <Image
+                      source={_item.player.avatar}
+                      style={{width: 50, height: 50}}
+                    />
+                  )}
+                </>
               ))}
             </View>
           )}
