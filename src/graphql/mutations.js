@@ -530,6 +530,7 @@ export const createSchedule = /* GraphQL */ `
   ) {
     createSchedule(input: $input, condition: $condition) {
       id
+      index
       leagueID
       home {
         id
@@ -582,6 +583,7 @@ export const updateSchedule = /* GraphQL */ `
   ) {
     updateSchedule(input: $input, condition: $condition) {
       id
+      index
       leagueID
       home {
         id
@@ -634,6 +636,7 @@ export const deleteSchedule = /* GraphQL */ `
   ) {
     deleteSchedule(input: $input, condition: $condition) {
       id
+      index
       leagueID
       home {
         id

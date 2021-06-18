@@ -51,6 +51,7 @@ type LeaguePlayer @model {
 
 type Schedule @model {
   id: ID!
+  index: Int
   leagueID: String
   home: Team! @connection
   away: Team! @connection

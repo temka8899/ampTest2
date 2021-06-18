@@ -335,6 +335,7 @@ export const getSchedule = /* GraphQL */ `
   query GetSchedule($id: ID!) {
     getSchedule(id: $id) {
       id
+      index
       leagueID
       home {
         id
@@ -389,6 +390,7 @@ export const listSchedules = /* GraphQL */ `
     listSchedules(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        index
         leagueID
         home {
           id
