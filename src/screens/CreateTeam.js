@@ -113,21 +113,6 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
-  async function DeleteLeaguePlayer() {
-    try {
-      await API.graphql(
-        graphqlOperation(deleteLeaguePlayer, {
-          input: {
-            id: '120c0db5-2912-42ad-a653-a07eb8c5b9cf',
-          },
-        }),
-      );
-      console.log('League Player deleted');
-    } catch (err) {
-      console.log('error deleting League Player:', err);
-    }
-  }
-
   async function fetchTeam() {
     try {
       // let filter = {
@@ -468,6 +453,38 @@ const createTeamScreen = ({navigation}) => {
     date.setDate(date.getDate() + numberOfDaysToAdd);
   }
 
+  async function DeleteLeaguePlayer() {
+    // // Player Id gaar shuuj LeaguePlayerID avah
+
+    // const leaguePlayerData = await API.graphql(
+    //   graphqlOperation(listLeaguePlayers, {
+    //     filter: {
+    //       //Player id
+    //       playerID: {eq: '685cdc3e-53a8-4771-8f12-5c13ad9a3eeb'},
+    //     },
+    //   }),
+    // );
+    // const deleteLeaguePlayerID =
+    //   leaguePlayerData.data.listLeaguePlayers.items[0].id;
+
+    //
+    // Shuud LeaguePlayerID delete hiih
+    //
+    try {
+      await API.graphql(
+        graphqlOperation(deleteLeaguePlayer, {
+          input: {
+            // id: `${deleteLeaguePlayerID}`,
+            id: '18daa655-8d65-4dbc-86a9-30e93b26b18',
+          },
+        }),
+      );
+      console.log('League Player deleted');
+    } catch (err) {
+      console.log('error deleting League Player:', err);
+    }
+  }
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content"></StatusBar>
@@ -483,10 +500,7 @@ const createTeamScreen = ({navigation}) => {
         />
         <Button onPress={() => fetchPlayer()} title="Fetch Players" />
         <Button onPress={() => fetchLeague()} title="Fetch League" />
-        <Button
-          onPress={() => DeleteLeaguePlayer()}
-          title="Delete LeaguePlayer"
-        />
+
         <Button
           onPress={() => checkLeaguePlayers()}
           title="check LeaguePlayer"
@@ -497,6 +511,10 @@ const createTeamScreen = ({navigation}) => {
         <Button onPress={() => getDate()} title="get Date" />
         <Button onPress={() => getSchedule()} title="get Schedule" />
         <Button onPress={() => UpdateSchedule()} title="update Schedule" />
+        <Button
+          onPress={() => DeleteLeaguePlayer()}
+          title="Delete LeaguePlayer"
+        />
       </View>
     </SafeAreaView>
   );
