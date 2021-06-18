@@ -311,11 +311,7 @@ const AdminScreen = ({navigation}) => {
           <Text style={styles.createBtnText}>Create League</Text>
         </TouchableOpacity>
       </View>
-      <View style={{alignSelf: 'center', marginTop: hp(1)}}>
-        <TouchableOpacity onPress={() => {}} style={styles.createBtn}>
-          <Text style={styles.createBtnText}>Delete League</Text>
-        </TouchableOpacity>
-      </View>
+
       <View style={styles.bottomContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('createTeamScreen')}
