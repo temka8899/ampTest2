@@ -19,15 +19,10 @@ import LeaguePicker from '../components/LeaguePicker';
 import moment from 'moment';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {
-  getPlayer,
-  listSchedules,
-  listTeamPlayers,
-  listTeams,
-} from '../graphql/queries';
+import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
 import API, {graphqlOperation} from '@aws-amplify/api';
 
-const Match = ({item, onPress, selectedId}) => {
+const Match = ({item, onPress}) => {
   const [Home, setHome] = useState(undefined);
   const [Away, setAway] = useState(undefined);
   useEffect(() => {
@@ -39,7 +34,6 @@ const Match = ({item, onPress, selectedId}) => {
     console.log('homePlayers', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
     console.log(`awayPlayers`, awayPlayers);
-
     setHome(homePlayers);
     setAway(awayPlayers);
   }, [item.away.id, item.home.id]);
@@ -182,8 +176,9 @@ const ScheduleScreen = ({navigation, route}) => {
         }),
       );
       const schedulePerDay = scheduleData.data.listSchedules.items;
-
-      setScheduleData(schedulePerDay);
+      const sorted = schedulePerDay.sort((a, b) => b.index - a.index);
+      console.log(`sorted`, sorted);
+      setScheduleData(sorted);
       console.log('Schedule>>>>>>>>>>>>>>', schedulePerDay);
       // return schedulePerDay;
     } catch (err) {
@@ -195,10 +190,19 @@ const ScheduleScreen = ({navigation, route}) => {
   //   renderSchedule(item);
   // };
 
+  const startMatch = item => {
+    navigation.navigate('CountScreen', {
+      scheduleId: `${item.id}`,
+    });
+  };
   function renderSchedule({item}) {
     console.log(`match`, item);
     return (
-      <Match item={item} onPress={() => alert()} selectedId={selectedId} />
+      <Match
+        item={item}
+        onPress={() => alert('item')}
+        selectedId={selectedId}
+      />
     );
   }
   const renderItem = ({item}) => {
