@@ -28,7 +28,12 @@ import {
 
 import {createPlayer} from '../graphql/mutations';
 import LinearGradient from 'react-native-linear-gradient';
-import {listPlayers, listLeagues, listSchedules} from '../graphql/queries';
+import {
+  listPlayers,
+  listLeagues,
+  listSchedules,
+  listTeamPlayers,
+} from '../graphql/queries';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
@@ -46,6 +51,112 @@ const Avatar = ({item, onPress, backgroundColor}) => (
     <Image source={item.image} style={{width: wp(14), height: wp(14)}} />
   </TouchableOpacity>
 );
+
+const Match = ({item, onPress, selectedId}) => {
+  const [Home, setHome] = useState(undefined);
+  const [Away, setAway] = useState(undefined);
+  useEffect(() => {
+    getPlayerData();
+  }, [getPlayerData]);
+
+  const getPlayerData = React.useCallback(async () => {
+    let homePlayers = await fetchTeamPlayers(item.home.id);
+    console.log('homePlayers', homePlayers);
+    let awayPlayers = await fetchTeamPlayers(item.away.id);
+    console.log(`awayPlayers`, awayPlayers);
+
+    setHome(homePlayers);
+    setAway(awayPlayers);
+  }, [item.away.id, item.home.id]);
+
+  async function fetchTeamPlayers(id) {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeamPlayers, {
+          filter: {teamID: {eq: `${id}`}},
+        }),
+      );
+      const todos = leagueData.data.listTeamPlayers.items;
+      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+      return todos;
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: wp(80),
+          justifyContent: 'space-between',
+          alignSelf: 'center',
+        }}>
+        <View>
+          {Home && (
+            <View style={{flexDirection: 'row'}}>
+              {Home.map(_item => (
+                <Image
+                  source={_item.player.avatar}
+                  style={{width: 50, height: 50}}
+                />
+              ))}
+            </View>
+          )}
+          <Text
+            style={{
+              marginTop: hp(1),
+              color: COLORS.greyText,
+              fontFamily: FONTS.brandFont,
+              textAlign: 'center',
+            }}>
+            {item.home.name}
+          </Text>
+        </View>
+        <View style={{justifyContent: 'center'}}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+            }}>
+            VS
+          </Text>
+        </View>
+        <View>
+          {Away && (
+            <View style={{flexDirection: 'row'}}>
+              {Away.map(_item => (
+                <Image
+                  source={_item.player.avatar}
+                  style={{width: 50, height: 50}}
+                />
+              ))}
+            </View>
+          )}
+          <Text
+            style={{
+              marginTop: hp(1),
+              color: COLORS.greyText,
+              fontFamily: FONTS.brandFont,
+              textAlign: 'center',
+            }}>
+            {item.away.name}
+          </Text>
+        </View>
+      </View>
+      <View
+        style={{
+          alignSelf: 'center',
+          width: wp(80),
+          backgroundColor: 'white',
+          height: 1.5,
+          marginVertical: hp(1),
+        }}
+      />
+    </TouchableOpacity>
+  );
+};
 
 const GameScreen = ({navigation}) => {
   const [schedule, setSchedule] = useState([]);
@@ -84,6 +195,17 @@ const GameScreen = ({navigation}) => {
       />
     );
   };
+
+  function renderSchedule({item}) {
+    console.log(`match`, item);
+    return (
+      <Match
+        item={item}
+        onPress={() => navigation.navigate('ScheduleScreen')}
+        selectedId={selectedId}
+      />
+    );
+  }
 
   const Item = ({item, onPress, backgroundColor, textColor}) => (
     <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
@@ -349,43 +471,7 @@ const GameScreen = ({navigation}) => {
             <FlatList
               data={schedule}
               keyExtractor={item => item.id}
-              renderItem={({item, index}) => (
-                <View>
-                  <View style={{flexDirection: 'row', width: wp(80)}}>
-                    <Text
-                      style={{
-                        color: COLORS.greyText,
-                        fontFamily: FONTS.brandFont,
-                        fontSize: RFPercentage(1.7),
-                        marginVertical: hp(2),
-                      }}
-                      ellipsizeMode="tail"
-                      numberOfLines={1}>
-                      {item.home.name}
-                    </Text>
-                    <Text
-                      style={{
-                        color: COLORS.greyText,
-                        fontFamily: FONTS.brandFont,
-                        fontSize: RFPercentage(1.7),
-                        marginVertical: hp(2),
-                      }}>
-                      {' '}
-                      VS{' '}
-                    </Text>
-                    <Text
-                      ellipsizeMode="tail"
-                      style={{
-                        color: COLORS.greyText,
-                        fontFamily: FONTS.brandFont,
-                        fontSize: RFPercentage(1.7),
-                        marginVertical: hp(2),
-                      }}>
-                      {item.away.name}
-                    </Text>
-                  </View>
-                </View>
-              )}
+              renderItem={renderSchedule}
             />
           </View>
           {/* <View>

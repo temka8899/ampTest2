@@ -43,6 +43,7 @@ const Match = ({item, onPress, selectedId}) => {
     setHome(homePlayers);
     setAway(awayPlayers);
   }, [item.away.id, item.home.id]);
+
   async function fetchTeamPlayers(id) {
     try {
       const leagueData = await API.graphql(
