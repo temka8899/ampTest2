@@ -25,6 +25,8 @@ import {
   deleteLeaguePlayer,
   updateLeague,
   updateSchedule,
+  updateTeamPlayer,
+  updateTeam,
 } from '../graphql/mutations';
 import {
   listGames,
@@ -382,10 +384,13 @@ const createTeamScreen = ({navigation}) => {
   }
 
   async function UpdateSchedule() {
+    // Updating Schedule data
+    // Bagiin avsan onoog update hiine
     try {
       await API.graphql(
         graphqlOperation(updateSchedule, {
           input: {
+            //Schedule id
             id: '4f773918-5aa7-490f-8bff-afb3853a529e',
             homeScore: 10,
             awayScore: 8,
@@ -395,6 +400,64 @@ const createTeamScreen = ({navigation}) => {
       console.log('Schedule Updated');
     } catch (err) {
       console.log('error fetching todos', err);
+    }
+
+    //getting Team win-lose data to update
+    const teamData = await API.graphql(
+      graphqlOperation(listTeams, {
+        filter: {
+          //Team id
+          id: {eq: 'f3423713-e56d-4896-9c58-581b67dfe47a'},
+        },
+      }),
+    );
+    const win = teamData.data.listTeams.items[0].win;
+    const lose = teamData.data.listTeams.items[0].lose;
+
+    // Updating Team win-lose datas
+    try {
+      await API.graphql(
+        graphqlOperation(updateTeam, {
+          input: {
+            //Team id
+            id: 'f3423713-e56d-4896-9c58-581b67dfe47a',
+            win: `${win + 1}`,
+            lose: `${lose}`,
+          },
+        }),
+      );
+      console.log('Team Updated');
+    } catch (err) {
+      console.log('error updating Teams', err);
+    }
+
+    //Getting teamPlayer PlayerScore to update
+    const teamPlayerData = await API.graphql(
+      graphqlOperation(listTeamPlayers, {
+        filter: {
+          //TeamPlayer id
+          id: {eq: '14e74619-25e1-429e-a486-f250e2995775'},
+        },
+      }),
+    );
+    const playerScore =
+      teamPlayerData.data.listTeamPlayers.items[0].playerScore;
+
+    // Updating TeamPlayer playerScore
+    // Toglogchiin onoog update hiine
+    try {
+      await API.graphql(
+        graphqlOperation(updateTeamPlayer, {
+          input: {
+            //TeamPlayer id
+            id: '14e74619-25e1-429e-a486-f250e2995775',
+            playerScore: `${playerScore + 5}`,
+          },
+        }),
+      );
+      console.log('TeamPlayer PlayerScore Updated');
+    } catch (err) {
+      console.log('error updating Teams', err);
     }
   }
 
