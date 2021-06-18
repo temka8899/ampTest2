@@ -28,7 +28,7 @@ import {
 
 import {createPlayer} from '../graphql/mutations';
 import LinearGradient from 'react-native-linear-gradient';
-import {listPlayers, listLeagues} from '../graphql/queries';
+import {listPlayers, listLeagues, listSchedules} from '../graphql/queries';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
@@ -59,10 +59,12 @@ const GameScreen = ({navigation}) => {
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
 
+  console.log('LeagueList[1] :>> ', LeagueList[1]);
   useEffect(() => {
     fetchLeague();
     findGreet();
     getName();
+    // getSchedule();
   }, [getName]);
 
   const press = item => {
@@ -189,7 +191,7 @@ const GameScreen = ({navigation}) => {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       // const todos = leagueData.data.listTeams.items;
       // console.log('Teams>>>>>>>>>>>>>>', todos);
-      // console.log('Leagues>>>>>>>>>>>>>>', leagueData.data.listLeagues.items);
+      console.log('Leagues list', leagueData.data.listLeagues.items);
       setLeagueList(leagueData.data.listLeagues.items);
     } catch (err) {
       console.log('error fetching todos', err);
@@ -233,6 +235,23 @@ const GameScreen = ({navigation}) => {
       console.log('Player Created');
     } catch (err) {
       console.log('error creating Player:', err);
+    }
+  }
+
+  async function getSchedule() {
+    try {
+      const scheduleData = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            date: {eq: '6/18/2021'},
+            leagueID: {eq: 'asd'},
+          },
+        }),
+      );
+      const todos = scheduleData.data.listSchedules.items;
+      console.log('Schedule>>>>>>>>>>>>>>', todos);
+    } catch (err) {
+      console.log('error fetching todos', err);
     }
   }
 

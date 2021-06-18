@@ -42,6 +42,21 @@ const Item = ({item, onPress, selectedId}) => {
   );
 };
 
+const LocalDay = ({item, onPress, selectedId}) => {
+  const color = item === selectedId ? COLORS.brand : COLORS.greyText;
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        width: wp(20),
+        height: hp(6),
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Text style={[styles.dayText, {color: color}]}>{item}</Text>
+    </TouchableOpacity>
+  );
+};
 const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
@@ -49,6 +64,7 @@ const ScheduleScreen = ({navigation, route}) => {
   const [month, setMonth] = useState('June');
   const [year, setYear] = useState('2021');
   const [dayData, setDayData] = useState([]);
+  const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
   const [selectedId, setSelectedId] = useState(null);
   useEffect(() => {}, []);
@@ -60,6 +76,16 @@ const ScheduleScreen = ({navigation, route}) => {
     console.log(`item`, item);
     return (
       <Item item={item} onPress={() => getDay(item)} selectedId={selectedId} />
+    );
+  };
+  const renderLocalDay = ({item}) => {
+    console.log(`item`, item);
+    return (
+      <LocalDay
+        item={item}
+        onPress={() => setSelectedId(item)}
+        selectedId={selectedId}
+      />
     );
   };
 
@@ -260,9 +286,16 @@ const ScheduleScreen = ({navigation, route}) => {
             </View> */}
             <View>
               {dayData.length === 0 ? (
-                <View>
-                  <Text style={{color: 'white'}}>hooosoon</Text>
-                </View>
+                <FlatList
+                  data={LocalDayData}
+                  horizontal
+                  renderItem={renderLocalDay}
+                  keyExtractor={item => item.id}
+                  style={{
+                    borderBottomColor: COLORS.brand,
+                    borderBottomWidth: 1,
+                  }}
+                />
               ) : (
                 <FlatList
                   data={dayData}

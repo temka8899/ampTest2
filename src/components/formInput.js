@@ -11,6 +11,7 @@ const FormInput = props => {
       <TextInput
         {...props}
         style={styles.input}
+        maxLength={props.max}
         placeholder={props.placeholder}
         keyboardType={props.keyboardType}
         placeholderTextColor={COLORS.purpleText}

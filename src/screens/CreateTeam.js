@@ -24,6 +24,9 @@ import {
   createSchedule,
   deleteLeaguePlayer,
   updateLeague,
+  updateSchedule,
+  updateTeamPlayer,
+  updateTeam,
 } from '../graphql/mutations';
 import {
   listGames,
@@ -51,14 +54,8 @@ Amplify.configure({
 });
 
 const createTeamScreen = ({navigation}) => {
-  const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const initialState = {name: ''};
   const [formState, setFormState] = useState(initialState);
-  const [todos, setTodos] = useState([]);
-  const [uploadImage, setUploadImage] = useState('');
-  const [teamPlayerID, setTeamPlayerID] = useState('');
-  const [fileName123, setFileName] = useState('');
-  const [file123, setFile123] = useState('');
 
   function setInput(key, value) {
     setFormState({...formState, [key]: value});
@@ -225,7 +222,18 @@ const createTeamScreen = ({navigation}) => {
 
   async function startLeague() {
     //Set Is Start League True
-    leagueIsStart();
+    var date = new Date();
+    date.setDate(date.getDate() + 1);
+    const temp = await API.graphql(
+      graphqlOperation(updateLeague, {
+        input: {
+          id: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
+          isStart: true,
+          startedDate: `${date.toLocaleDateString()}`,
+        },
+      }),
+    );
+    const startLeagueId = temp.data.updateLeague.id;
 
     // Get Soccer League Players
     try {
@@ -276,26 +284,7 @@ const createTeamScreen = ({navigation}) => {
     } catch (err) {
       console.log('error fetching League Players', err);
     }
-    addScheduleLoop();
-  }
-
-  async function leagueIsStart() {
-    var date = new Date();
-    date.setDate(date.getDate() + 1);
-    try {
-      const temp = await API.graphql(
-        graphqlOperation(updateLeague, {
-          input: {
-            id: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
-            isStart: true,
-            startedDate: `${date.toLocaleDateString()}`,
-          },
-        }),
-      );
-      console.log('League updated', temp);
-    } catch (err) {
-      console.log('error updating League: ', err);
-    }
+    addScheduleLoop(startLeagueId);
   }
 
   async function addStartTeamPlayer(teamplayerteam, teamplayerplayer) {
@@ -317,7 +306,7 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
-  async function addScheduleLoop() {
+  async function addScheduleLoop(startLeagueId) {
     const teamData = await API.graphql(graphqlOperation(listTeams));
     const teams = teamData.data.listTeams.items;
     const k = teams.length;
@@ -348,6 +337,7 @@ const createTeamScreen = ({navigation}) => {
           teams[j].id,
           teams[j + nemeh].id,
           date.toLocaleDateString(),
+          startLeagueId,
         );
         dateNemeh++;
       }
@@ -356,7 +346,7 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
-  async function addSchedule(team1ID, team2ID, date) {
+  async function addSchedule(team1ID, team2ID, date, startLeagueId) {
     try {
       await API.graphql(
         graphqlOperation(createSchedule, {
@@ -366,6 +356,7 @@ const createTeamScreen = ({navigation}) => {
             homeScore: 0,
             awayScore: 0,
             date: `${date}`,
+            leagueID: startLeagueId,
           },
         }),
       );
@@ -380,7 +371,8 @@ const createTeamScreen = ({navigation}) => {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
-            date: {eq: '6/17/2021'},
+            date: {eq: '6/18/2021'},
+            leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
       );
@@ -388,6 +380,84 @@ const createTeamScreen = ({navigation}) => {
       console.log('Schedule>>>>>>>>>>>>>>', todos);
     } catch (err) {
       console.log('error fetching todos', err);
+    }
+  }
+
+  async function UpdateSchedule() {
+    // Updating Schedule data
+    // Bagiin avsan onoog update hiine
+    try {
+      await API.graphql(
+        graphqlOperation(updateSchedule, {
+          input: {
+            //Schedule id
+            id: '4f773918-5aa7-490f-8bff-afb3853a529e',
+            homeScore: 10,
+            awayScore: 8,
+          },
+        }),
+      );
+      console.log('Schedule Updated');
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+
+    //getting Team win-lose data to update
+    const teamData = await API.graphql(
+      graphqlOperation(listTeams, {
+        filter: {
+          //Team id
+          id: {eq: 'f3423713-e56d-4896-9c58-581b67dfe47a'},
+        },
+      }),
+    );
+    const win = teamData.data.listTeams.items[0].win;
+    const lose = teamData.data.listTeams.items[0].lose;
+
+    // Updating Team win-lose datas
+    try {
+      await API.graphql(
+        graphqlOperation(updateTeam, {
+          input: {
+            //Team id
+            id: 'f3423713-e56d-4896-9c58-581b67dfe47a',
+            win: `${win + 1}`,
+            lose: `${lose}`,
+          },
+        }),
+      );
+      console.log('Team Updated');
+    } catch (err) {
+      console.log('error updating Teams', err);
+    }
+
+    //Getting teamPlayer PlayerScore to update
+    const teamPlayerData = await API.graphql(
+      graphqlOperation(listTeamPlayers, {
+        filter: {
+          //TeamPlayer id
+          id: {eq: '14e74619-25e1-429e-a486-f250e2995775'},
+        },
+      }),
+    );
+    const playerScore =
+      teamPlayerData.data.listTeamPlayers.items[0].playerScore;
+
+    // Updating TeamPlayer playerScore
+    // Toglogchiin onoog update hiine
+    try {
+      await API.graphql(
+        graphqlOperation(updateTeamPlayer, {
+          input: {
+            //TeamPlayer id
+            id: '14e74619-25e1-429e-a486-f250e2995775',
+            playerScore: `${playerScore + 5}`,
+          },
+        }),
+      );
+      console.log('TeamPlayer PlayerScore Updated');
+    } catch (err) {
+      console.log('error updating Teams', err);
     }
   }
 
@@ -426,6 +496,7 @@ const createTeamScreen = ({navigation}) => {
         <Button onPress={() => addScheduleLoop()} title="add Schedule" />
         <Button onPress={() => getDate()} title="get Date" />
         <Button onPress={() => getSchedule()} title="get Schedule" />
+        <Button onPress={() => UpdateSchedule()} title="update Schedule" />
       </View>
     </SafeAreaView>
   );
