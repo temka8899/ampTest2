@@ -240,7 +240,7 @@ const SwitchView = ({value, onPress}) => {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.forgotPassContainer}>
               <FlashMessage position="top" />
-              <Text style={styles.text}>Enter your email </Text>
+              <Text style={styles.text}>Enter your email</Text>
 
               <FormInput
                 value={authCode}

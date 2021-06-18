@@ -193,7 +193,7 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const startMatch = item => {
     navigation.navigate('CountScreen', {
-      scheduleId: `${item.id}`,
+      match: item,
     });
   };
   function renderSchedule({item}) {
@@ -201,7 +201,7 @@ const ScheduleScreen = ({navigation, route}) => {
     return (
       <Match
         item={item}
-        onPress={() => alert('item')}
+        onPress={() => startMatch(item)}
         selectedId={selectedId}
       />
     );

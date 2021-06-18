@@ -13,45 +13,138 @@ import {COLORS, FONTS, icons, images} from '../constants';
 import {hp, wp} from '../constants/theme';
 import Modal from 'react-native-modal';
 import {EndModal} from '../components/EndModal';
+import {
+  createGame,
+  createLeague,
+  createTeam,
+  createTeamPlayer,
+  createLeaguePlayer,
+  createSchedule,
+  deleteLeaguePlayer,
+  updateLeague,
+  updateSchedule,
+  updateTeamPlayer,
+  updateTeam,
+  deleteLeague,
+} from '../graphql/mutations';
+import {
+  listGames,
+  listLeagues,
+  listPlayers,
+  listTeamPlayers,
+  listTeams,
+  listLeaguePlayers,
+  getTeam,
+  listSchedules,
+} from '../graphql/queries';
+import API, {graphqlOperation} from '@aws-amplify/api';
 
-export default function CountScreen({navigation}) {
+export default function CountScreen({navigation, route}) {
   const [CancelModalVisible, setCancelModalVisible] = useState(false);
   const [EndModalVisible, setEndModalVisible] = useState(false);
-  // const [BestOneModal, setBestOneModal] = useState(true);
-  const [endModal, setEndModal] = useState(false);
   const [findMistake, setfindMistake] = useState(0);
-  // const [isBestOne, setBestOne] = useState(true);
-  // const [Round, setRound] = useState(1);
-  // const [HomeWin, setHomeWin] = useState(false);
-  // const [AwayWin, setAwayWin] = useState(false);
-
-  // const [FirstRound, setFirstRound] = useState();
-  // const [SecoundRound, setSecoundRound] = useState();
-  // const [LastRound, setLastRound] = useState();
-  // const [CancelPress, setCancelPress] = useState(false);
+  const [MatchData, setMatchData] = useState();
+  const [Home, setHome] = useState(undefined);
+  const [Away, setAway] = useState(undefined);
 
   const [allPoint, setAllPoint] = useState({
     one: {
       point: 0,
-      name: 'Moogii',
+      name: 'Player 1',
+      image: '',
     },
     two: {
       point: 0,
-      name: 'Temuulen',
+      name: 'Player 2',
+      image: '',
     },
     three: {
       point: 0,
-      name: 'Buynaa',
+      name: 'Player 3',
+      image: '',
     },
     four: {
       point: 0,
-      name: 'Amaraa',
+      name: 'Player 4',
+      image: '',
     },
   });
+  const [OneName, setOneName] = useState();
+  const [TwoName, setTwoName] = useState();
+  const [ThreeName, setThreeName] = useState();
+  const [FourName, setFourName] = useState();
 
-  // useEffect(() => {
-  //   checkHomeWin();
-  // }, [checkHomeWin]);
+  const [OneImage, setOneImage] = useState();
+  const [TwoImage, setTwoImage] = useState();
+  const [ThreeImage, setThreeImage] = useState();
+  const [FourImage, setFourImage] = useState();
+
+  useEffect(() => {
+    console.log(`params`, route.params.match);
+    const ScheduleData = route.params.match;
+    setMatchData(ScheduleData);
+    console.log(`ScheduleData`, ScheduleData);
+    getPlayerData(ScheduleData);
+  }, [getPlayerData, route.params.match]);
+
+  const getPlayerData = React.useCallback(async item => {
+    let homePlayers = await fetchTeamPlayers(item.home.id);
+    console.log('homePlayers>>>>>>>', homePlayers);
+    let awayPlayers = await fetchTeamPlayers(item.away.id);
+    console.log(`awayPlayers>>>>>>>`, awayPlayers);
+    // setHome(homePlayers);
+    // setAway(awayPlayers);
+    initMatch(homePlayers, awayPlayers);
+  }, []);
+
+  const initMatch = (homePlayers, awayPlayers) => {
+    setAllPoint(prev => ({
+      ...prev,
+      one: {
+        point: 0,
+        name: `${homePlayers[0].player.name}`,
+        image: `${homePlayers[0].player.avatar}`,
+      },
+      two: {
+        point: 0,
+        name: `${homePlayers[1].player.name}`,
+        image: `${homePlayers[1].player.avatar}`,
+      },
+      three: {
+        point: 0,
+        name: `${awayPlayers[0].player.name}`,
+        image: `${awayPlayers[0].player.avatar}`,
+      },
+      four: {
+        point: 0,
+        name: `${awayPlayers[1].player.name}`,
+        image: `${awayPlayers[1].player.avatar}`,
+      },
+    }));
+    setOneName(`${homePlayers[0].player.name}`);
+    setTwoName(`${homePlayers[1].player.name}`);
+    setThreeName(`${awayPlayers[0].player.name}`);
+    setFourName(`${awayPlayers[1].player.name}`);
+    setOneImage(`${homePlayers[0].player.avatar}`);
+    setTwoImage(`${homePlayers[1].player.avatar}`);
+    setThreeImage(`${awayPlayers[0].player.avatar}`);
+    setFourImage(`${awayPlayers[1].player.avatar}`);
+  };
+
+  async function fetchTeamPlayers(id) {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeamPlayers, {
+          filter: {teamID: {eq: `${id}`}},
+        }),
+      );
+      const todos = leagueData.data.listTeamPlayers.items;
+      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+      return todos;
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
 
   function setFind(option) {
     setfindMistake(option);
@@ -66,25 +159,41 @@ export default function CountScreen({navigation}) {
       case 1:
         setAllPoint(prev => ({
           ...prev,
-          one: {point: allPoint.one.point - 1, name: 'Moogii'},
+          one: {
+            point: allPoint.one.point - 1,
+            name: `${OneName}`,
+            image: `${OneImage}`,
+          },
         }));
         break;
       case 2:
         setAllPoint(prev => ({
           ...prev,
-          two: {point: allPoint.two.point - 1, name: 'Temuulen'},
+          two: {
+            point: allPoint.two.point - 1,
+            name: `${TwoName}`,
+            image: `${TwoImage}`,
+          },
         }));
         break;
       case 3:
         setAllPoint(prev => ({
           ...prev,
-          three: {point: allPoint.three.point - 1, name: 'Buynaa'},
+          three: {
+            point: allPoint.three.point - 1,
+            name: `${ThreeName}`,
+            image: `${ThreeImage}`,
+          },
         }));
         break;
       case 4:
         setAllPoint(prev => ({
           ...prev,
-          four: {point: allPoint.four.point - 1, name: 'Amaraa'},
+          four: {
+            point: allPoint.four.point - 1,
+            name: `${FourName}`,
+            image: `${FourImage}`,
+          },
         }));
         break;
       default:
@@ -98,50 +207,176 @@ export default function CountScreen({navigation}) {
   const toggleEndModal = bool => {
     setEndModalVisible(bool);
   };
-  // const toggleBestModal = bool => {
-  //   setBestOneModal(bool);
-  // };
-
-  // const setBest = bool => {
-  //   setBestOne(bool);
-  //   setBestOneModal(false);
-  // };
-  // const NextBtnPress = () => {
-  //   if (allPoint.one.point + allPoint.two.point == 10) {
-  //     console.log('esdfhbgrn');
-  //     setHomeWin(true);
-  //   } else {
-  //     setAwayWin(true);
-  //   }
-  //   switch (Round) {
-  //     case 1:
-  //       setFirstRound(allPoint);
-  //       break;
-  //     case 2:
-  //       setSecoundRound(allPoint);
-  //       break;
-  //     case 3:
-  //       setLastRound(allPoint);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   setRound(Round + 1);
-  //   setAllPoint(prev => ({
-  //     ...prev,
-  //     one: {point: 0, name: 'Moogii'},
-  //     two: {point: 0, name: 'Temuulen'},
-  //     three: {point: 0, name: 'Buynaa'},
-  //     four: {point: 0, name: 'Amaraa'},
-  //   }));
-
-  //   toggleEndModal(false);
-  //   console.log('allpoint', allPoint);
-  // };
-  const EndBtnPress = () => {
+  const EndBtnPress = async () => {
     toggleEndModal(false);
+    await UpdateSchedule();
     console.log('allpoint', allPoint);
   };
+
+  async function UpdateSchedule() {
+    // Updating Schedule data
+    // Bagiin avsan onoog update hiine
+    try {
+      await API.graphql(
+        graphqlOperation(updateSchedule, {
+          input: {
+            //Schedule id
+            id: '4f773918-5aa7-490f-8bff-afb3853a529e',
+            homeScore: `${allPoint.one.point + allPoint.two.point}`,
+            awayScore: `${allPoint.three.point + allPoint.four.point}`,
+          },
+        }),
+      );
+      console.log('Schedule Updated');
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+    if (allPoint.one.point + allPoint.two.point === 10) {
+      //getting Team win-lose data to update
+      const teamData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {
+            //Team id
+            id: {eq: `${MatchData.home.id}`},
+          },
+        }),
+      );
+      const win = teamData.data.listTeams.items[0].win;
+      const lose = teamData.data.listTeams.items[0].lose;
+
+      // Updating Team win-lose datas
+      try {
+        await API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              //Team id
+              id: `${MatchData.home.id}`,
+              win: `${win + 1}`,
+              lose: `${lose}`,
+            },
+          }),
+        );
+        console.log('Team Updated');
+      } catch (err) {
+        console.log('error updating Teams', err);
+      }
+
+      //getting Team win-lose data to update
+      const teamData1 = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {
+            //Team id
+            id: {eq: `${MatchData.away.id}`},
+          },
+        }),
+      );
+      const win1 = teamData1.data.listTeams.items[0].win;
+      const lose1 = teamData1.data.listTeams.items[0].lose;
+
+      // Updating Team win-lose datas
+      try {
+        await API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              //Team id
+              id: `${MatchData.away.id}`,
+              win: `${win1}`,
+              lose: `${lose1 + 1}`,
+            },
+          }),
+        );
+        console.log('Team Updated');
+      } catch (err) {
+        console.log('error updating Teams', err);
+      }
+    } else {
+      //getting Team win-lose data to update
+      const teamData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {
+            //Team id
+            id: {eq: `${MatchData.away.id}`},
+          },
+        }),
+      );
+      const win = teamData.data.listTeams.items[0].win;
+      const lose = teamData.data.listTeams.items[0].lose;
+
+      // Updating Team win-lose datas
+      try {
+        await API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              //Team id
+              id: `${MatchData.away.id}`,
+              win: `${win + 1}`,
+              lose: `${lose}`,
+            },
+          }),
+        );
+        console.log('Team Updated');
+      } catch (err) {
+        console.log('error updating Teams', err);
+      }
+    }
+
+    const teamData1 = await API.graphql(
+      graphqlOperation(listTeams, {
+        filter: {
+          //Team id
+          id: {eq: `${MatchData.home.id}`},
+        },
+      }),
+    );
+    const win1 = teamData1.data.listTeams.items[0].win;
+    const lose1 = teamData1.data.listTeams.items[0].lose;
+
+    // Updating Team win-lose datas
+    try {
+      await API.graphql(
+        graphqlOperation(updateTeam, {
+          input: {
+            //Team id
+            id: `${MatchData.home.id}`,
+            win: `${win1}`,
+            lose: `${lose1 + 1}`,
+          },
+        }),
+      );
+      console.log('Team Updated');
+    } catch (err) {
+      console.log('error updating Teams', err);
+    }
+  }
+
+  //Getting teamPlayer PlayerScore to update
+  // const teamPlayerData = await API.graphql(
+  //   graphqlOperation(listTeamPlayers, {
+  //     filter: {
+  //       //TeamPlayer id
+  //       id: {eq: '14e74619-25e1-429e-a486-f250e2995775'},
+  //     },
+  //   }),
+  // );
+  // const playerScore =
+  //   teamPlayerData.data.listTeamPlayers.items[0].playerScore;
+
+  // // Updating TeamPlayer playerScore
+  // // Toglogchiin onoog update hiine
+  // try {
+  //   await API.graphql(
+  //     graphqlOperation(updateTeamPlayer, {
+  //       input: {
+  //         //TeamPlayer id
+  //         id: '14e74619-25e1-429e-a486-f250e2995775',
+  //         playerScore: `${playerScore + 5}`,
+  //       },
+  //     }),
+  //   );
+  //   console.log('TeamPlayer PlayerScore Updated');
+  // } catch (err) {
+  //   console.log('error updating Teams', err);
+  // }
 
   function CancelModal() {
     return (
@@ -184,52 +419,6 @@ export default function CountScreen({navigation}) {
     );
   }
   // function BestOne() {
-  //   return (
-  //     <View>
-  //       <Modal
-  //         animationIn="rubberBand"
-  //         isVisible={BestOneModal}
-  //         // onBackdropPress={() => toggleBestModal(false)}
-  //         style={{justifyContent: 'center', alignItems: 'center'}}>
-  //         <View
-  //           style={{
-  //             width: wp(70),
-  //             height: hp(20),
-  //             backgroundColor: COLORS.background,
-  //             borderColor: COLORS.brand,
-  //             borderWidth: 2,
-  //             justifyContent: 'center',
-  //             alignItems: 'center',
-  //           }}>
-  //           <View
-  //             style={{
-  //               height: hp(11),
-  //               flexDirection: 'column',
-  //               justifyContent: 'space-between',
-  //             }}>
-  //             <View style={{flexDirection: 'row'}}>
-  //               <TouchableOpacity
-  //                 style={styles.chooseType}
-  //                 onPress={() => setBest(true)}>
-  //                 <Text style={styles.chooseTypeText}>1 round</Text>
-  //               </TouchableOpacity>
-  //               <TouchableOpacity
-  //                 style={styles.chooseType}
-  //                 onPress={() => setBest(false)}>
-  //                 <Text style={styles.chooseTypeText}>3 round</Text>
-  //               </TouchableOpacity>
-  //             </View>
-  //             <TouchableOpacity
-  //               style={styles.modalBtnContainer}
-  //               onPress={() => navigation.pop()}>
-  //               <Text style={styles.modalBtnText}>Cancel</Text>
-  //             </TouchableOpacity>
-  //           </View>
-  //         </View>
-  //       </Modal>
-  //     </View>
-  //   );
-  // }
 
   const endMatch = () => {
     let response = '';
@@ -248,17 +437,6 @@ export default function CountScreen({navigation}) {
           <Text style={styles.teamScore}>
             {allPoint.three.point + allPoint.four.point}
           </Text>
-          {/* {!isBestOne && AwayWin ? (
-            <Image
-              source={icons.star}
-              style={{
-                width: wp(5),
-                height: wp(5),
-                position: 'absolute',
-                left: wp(16),
-              }}
-            />
-          ) : null} */}
         </View>
         <View
           style={{
@@ -275,7 +453,11 @@ export default function CountScreen({navigation}) {
               allPoint.three.point !== 0
                 ? setAllPoint(prev => ({
                     ...prev,
-                    three: {point: allPoint.three.point - 1, name: 'Buynaa'},
+                    three: {
+                      point: allPoint.three.point - 1,
+                      name: `${ThreeName}`,
+                      image: `${ThreeImage}`,
+                    },
                   }))
                 : null
             }>
@@ -289,7 +471,11 @@ export default function CountScreen({navigation}) {
               allPoint.four.point !== 0
                 ? setAllPoint(prev => ({
                     ...prev,
-                    four: {point: allPoint.four.point - 1, name: 'Amaraa'},
+                    four: {
+                      point: allPoint.four.point - 1,
+                      name: `${FourName}`,
+                      image: `${FourImage}`,
+                    },
                   }))
                 : null
             }>
@@ -307,7 +493,11 @@ export default function CountScreen({navigation}) {
               : setFind(3);
             setAllPoint(prev => ({
               ...prev,
-              three: {point: allPoint.three.point + 1, name: 'Buynaa'},
+              three: {
+                point: allPoint.three.point + 1,
+                name: `${ThreeName}`,
+                image: `${ThreeImage}`,
+              },
             }));
           }}>
           <View style={[styles.avatarScore, {marginLeft: wp(2)}]}>
@@ -315,7 +505,7 @@ export default function CountScreen({navigation}) {
               {allPoint.three.name}
             </Text>
             <View style={{flexDirection: 'row'}}>
-              <Image source={images.men} style={[styles.image]} />
+              <Image source={allPoint.three.image} style={[styles.image]} />
               <Text
                 style={{
                   color: COLORS.greyText,
@@ -338,7 +528,11 @@ export default function CountScreen({navigation}) {
               : setFind(4);
             setAllPoint(prev => ({
               ...prev,
-              four: {point: allPoint.four.point + 1, name: 'Amaraa'},
+              four: {
+                point: allPoint.four.point + 1,
+                name: `${FourName}`,
+                image: `${FourImage}`,
+              },
             }));
           }}
           style={[styles.touch, {overflow: 'hidden'}]}>
@@ -371,7 +565,7 @@ export default function CountScreen({navigation}) {
                 {allPoint.four.point}
               </Text>
               <Image
-                source={images.men}
+                source={allPoint.four.image}
                 style={[{marginRight: wp(2)}, styles.image]}
               />
             </View>
@@ -383,17 +577,6 @@ export default function CountScreen({navigation}) {
           <Text style={styles.teamScore}>
             {allPoint.two.point + allPoint.one.point}
           </Text>
-          {/* {!isBestOne && HomeWin ? (
-            <Image
-              source={icons.star}
-              style={{
-                width: wp(5),
-                height: wp(5),
-                position: 'absolute',
-                left: wp(16),
-              }}
-            />
-          ) : null} */}
         </View>
         <View
           style={{
@@ -410,7 +593,11 @@ export default function CountScreen({navigation}) {
               allPoint.one.point !== 0
                 ? setAllPoint(prev => ({
                     ...prev,
-                    one: {point: allPoint.one.point - 1, name: 'Moogii'},
+                    one: {
+                      point: allPoint.one.point - 1,
+                      name: `${OneName}`,
+                      image: `${OneImage}`,
+                    },
                   }))
                 : null
             }>
@@ -424,7 +611,11 @@ export default function CountScreen({navigation}) {
               allPoint.two.point !== 0
                 ? setAllPoint(prev => ({
                     ...prev,
-                    two: {point: allPoint.two.point - 1, name: 'Temuulen'},
+                    two: {
+                      point: allPoint.two.point - 1,
+                      name: `${TwoName}`,
+                      image: `${TwoImage}`,
+                    },
                   }))
                 : null
             }>
@@ -440,7 +631,11 @@ export default function CountScreen({navigation}) {
             allPoint.one.point + allPoint.two.point !== 9 ? null : setFind(1);
             setAllPoint(prev => ({
               ...prev,
-              one: {point: allPoint.one.point + 1, name: 'Moogii'},
+              one: {
+                point: allPoint.one.point + 1,
+                name: `${OneName}`,
+                image: `${OneImage}`,
+              },
             }));
           }}>
           <View style={[styles.avatarScore, {marginLeft: wp(2)}]}>
@@ -448,7 +643,7 @@ export default function CountScreen({navigation}) {
               {allPoint.one.name}
             </Text>
             <View style={{flexDirection: 'row'}}>
-              <Image source={images.men} style={[styles.image]} />
+              <Image source={allPoint.one.image} style={[styles.image]} />
               <Text
                 style={{
                   color: COLORS.greyText,
@@ -468,7 +663,11 @@ export default function CountScreen({navigation}) {
             allPoint.one.point + allPoint.two.point !== 9 ? null : setFind(2);
             setAllPoint(prev => ({
               ...prev,
-              two: {point: allPoint.two.point + 1, name: 'Temuulen'},
+              two: {
+                point: allPoint.two.point + 1,
+                name: `${TwoName}`,
+                image: `${TwoImage}`,
+              },
             }));
           }}
           style={[styles.touch, {overflow: 'hidden'}]}>
@@ -501,7 +700,7 @@ export default function CountScreen({navigation}) {
                 {allPoint.two.point}
               </Text>
               <Image
-                source={images.men}
+                source={allPoint.two.image}
                 style={[{marginRight: wp(2)}, styles.image]}
               />
             </View>
@@ -518,15 +717,9 @@ export default function CountScreen({navigation}) {
             navigateSchedule={endMatch}
             cancelbtn={cancelBtnPress}
             EndBtn={EndBtnPress}
-            // NextBtn={NextBtnPress}
             allData={allPoint}
-            // isBestOne={isBestOne}
-            // Round={Round}
-            // HomeWin={HomeWin}
-            // AwayWin={AwayWin}
           />
         )}
-        {/* {checkHomeWin()} */}
       </View>
     </View>
   );
