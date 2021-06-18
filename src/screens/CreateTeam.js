@@ -24,6 +24,7 @@ import {
   createSchedule,
   deleteLeaguePlayer,
   updateLeague,
+  updateSchedule,
 } from '../graphql/mutations';
 import {
   listGames,
@@ -380,6 +381,23 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function UpdateSchedule() {
+    try {
+      await API.graphql(
+        graphqlOperation(updateSchedule, {
+          input: {
+            id: '4f773918-5aa7-490f-8bff-afb3853a529e',
+            homeScore: 10,
+            awayScore: 8,
+          },
+        }),
+      );
+      console.log('Schedule Updated');
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
   async function getDate() {
     var date = new Date();
     var numberOfDaysToAdd = 0;
@@ -415,6 +433,7 @@ const createTeamScreen = ({navigation}) => {
         <Button onPress={() => addScheduleLoop()} title="add Schedule" />
         <Button onPress={() => getDate()} title="get Date" />
         <Button onPress={() => getSchedule()} title="get Schedule" />
+        <Button onPress={() => UpdateSchedule()} title="update Schedule" />
       </View>
     </SafeAreaView>
   );
