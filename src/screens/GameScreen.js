@@ -21,12 +21,6 @@ import awsmobile from '../aws-exports';
 import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
 
-import {
-  showNotification,
-  handleScheduleNotification,
-  handleCancel,
-} from '../functions/notification';
-
 import {createPlayer} from '../graphql/mutations';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -63,9 +57,7 @@ const Match = ({item, onPress, selectedId}) => {
 
   const getPlayerData = React.useCallback(async () => {
     let homePlayers = await fetchTeamPlayers(item.home.id);
-    console.log('homePlayers', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
-    console.log(`awayPlayers`, awayPlayers);
     setHome(homePlayers);
     setAway(awayPlayers);
     setImgLoad(false);
@@ -79,11 +71,8 @@ const Match = ({item, onPress, selectedId}) => {
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
       return todos;
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    } catch (err) {}
   }
 
   return (
@@ -105,7 +94,7 @@ const Match = ({item, onPress, selectedId}) => {
                   ) : (
                     <Image
                       source={_item.player.avatar}
-                      style={{width: 50, height: 50}}
+                      style={{width: 60, height: 60}}
                     />
                   )}
                 </>
@@ -141,7 +130,7 @@ const Match = ({item, onPress, selectedId}) => {
                   ) : (
                     <Image
                       source={_item.player.avatar}
-                      style={{width: 50, height: 50}}
+                      style={{width: 60, height: 60}}
                     />
                   )}
                 </>
@@ -211,7 +200,6 @@ const GameScreen = ({navigation}) => {
   };
 
   function renderSchedule({item}) {
-    console.log(`match`, item);
     return (
       <Match
         item={item}
@@ -297,7 +285,7 @@ const GameScreen = ({navigation}) => {
     const user = await Auth.currentUserInfo();
     const playerData = await API.graphql(graphqlOperation(listPlayers));
     setName(user.attributes['custom:Name']);
-    console.log('user medeelel ireed loading set hiih gej bn');
+
     setLoading(false);
     let existing = await checkPlayer(playerData, user.username);
     if (existing) {
@@ -317,7 +305,6 @@ const GameScreen = ({navigation}) => {
         }
       });
       setUserInfo(finded);
-      console.log('context player model data', finded);
     },
     [setUserInfo],
   );
@@ -326,27 +313,23 @@ const GameScreen = ({navigation}) => {
     try {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       // const todos = leagueData.data.listTeams.items;
-      // console.log('Teams>>>>>>>>>>>>>>', todos);
-      console.log('Leagues list', leagueData.data.listLeagues.items);
+      //
+
       setLeagueList(leagueData.data.listLeagues.items);
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    } catch (err) {}
   };
 
   const checkPlayer = React.useCallback((playerData, p_id) => {
     try {
       const players = playerData.data.listPlayers.items;
-      // console.log('Players>>>>>>>>>>>>>>', players);
+      //
       for (var i = 0; i < players.length; i++) {
         if (players[i].c_id === p_id) {
           return false;
         }
       }
       return true;
-    } catch (err) {
-      console.log('error fetching players', err);
-    }
+    } catch (err) {}
   }, []);
 
   const getAvatar = React.useCallback(() => {
@@ -355,7 +338,6 @@ const GameScreen = ({navigation}) => {
 
   const addPlayer = React.useCallback(
     async (username, p_id) => {
-      console.log('uuslee', username, p_id);
       try {
         const res = await API.graphql(
           graphqlOperation(createPlayer, {
@@ -369,11 +351,7 @@ const GameScreen = ({navigation}) => {
             },
           }),
         );
-        console.log('>>>>>>>>>>>>>>>>>>>>', res);
-        console.log('Player Created');
-      } catch (err) {
-        console.log('error creating Player:', err);
-      }
+      } catch (err) {}
     },
     [selectedItem],
   );
@@ -389,11 +367,9 @@ const GameScreen = ({navigation}) => {
         }),
       );
       const todos = scheduleData.data.listSchedules.items;
-      console.log('Schedule>>>>>>>>>>>>>>', todos);
+
       setSchedule(todos);
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    } catch (err) {}
   }, []);
 
   return (
