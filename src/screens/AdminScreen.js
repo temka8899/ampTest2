@@ -20,11 +20,17 @@ import LinearGradient from 'react-native-linear-gradient';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
-import {listLeaguePlayers, listLeagues, listTeams} from '../graphql/queries';
+import {
+  listGames,
+  listLeaguePlayers,
+  listLeagues,
+  listTeams,
+} from '../graphql/queries';
 import {
   createSchedule,
   createTeam,
   createTeamPlayer,
+  deleteGame,
   deleteLeague,
   updateLeague,
 } from '../graphql/mutations';
@@ -32,9 +38,11 @@ import {
 const AdminScreen = ({navigation}) => {
   useEffect(() => {
     fetchLeague();
+    fetchGame();
   }, []);
 
   const [LeagueList, setLeagueList] = React.useState([]);
+  const [GameData, setGameData] = useState([]);
 
   const fetchLeague = async () => {
     try {
@@ -192,6 +200,21 @@ const AdminScreen = ({navigation}) => {
     }
   }
 
+  async function DeleteGame(gameID) {
+    try {
+      await API.graphql(
+        graphqlOperation(deleteGame, {
+          input: {
+            id: gameID,
+          },
+        }),
+      );
+      console.log('Game deleted');
+    } catch (err) {
+      console.log('error deleting League:', err);
+    }
+  }
+
   async function addStartTeamPlayer(teamplayerteam, teamplayerplayer) {
     try {
       await API.graphql(
@@ -211,7 +234,18 @@ const AdminScreen = ({navigation}) => {
     }
   }
 
-  const renderItem = ({item, onPressStart, onPressDelete}) => {
+  async function fetchGame() {
+    try {
+      const gameData = await API.graphql(graphqlOperation(listGames));
+
+      console.log('Games>>>>>>>>>>>>>>', gameData.data.listGames.items);
+      setGameData(gameData.data.listGames.items);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
+  const renderItem = ({item}) => {
     return (
       <View
         style={{
@@ -270,6 +304,51 @@ const AdminScreen = ({navigation}) => {
     );
   };
 
+  const renderItemGame = ({item}) => {
+    return (
+      <View
+        style={{
+          marginLeft: wp(4),
+          marginTop: hp(3),
+          borderRadius: 20,
+          flexDirection: 'row',
+        }}>
+        <ImageBackground
+          source={{
+            uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.image}`,
+          }}
+          style={{
+            width: wp(33.3),
+            height: hp(20),
+          }}
+          imageStyle={{borderRadius: 40}}>
+          <LinearGradient
+            style={{flex: 1, borderRadius: 40}}
+            start={{x: 1, y: 0}}
+            end={{x: 1, y: 1}}
+            colors={['#00000000', '#000']}></LinearGradient>
+        </ImageBackground>
+        <View style={styles.leagueStatus}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              paddingVertical: hp(1),
+            }}>
+            {item.name}
+          </Text>
+          <View>
+            <TouchableOpacity
+              onPress={() => DeleteLeague(item.id)}
+              style={styles.deleteBtn}>
+              <Text style={styles.btnText}>Delete game</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -295,6 +374,27 @@ const AdminScreen = ({navigation}) => {
                 source={require('../assets/Lottie/game-loading.json')}
               />
               <Text style={styles.lottieText}>LEAGUE CREATING...</Text>
+            </View>
+          </View>
+        )}
+      </View>
+      <View>
+        {LeagueList.length !== 0 ? (
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            data={GameData}
+            renderItem={renderItemGame}
+            keyExtractor={item => item.id}
+          />
+        ) : (
+          <View>
+            <View style={styles.lottie}>
+              <LottieView
+                autoPlay
+                source={require('../assets/Lottie/game-loading.json')}
+              />
+              <Text style={styles.lottieText}>GAME CREATING...</Text>
             </View>
           </View>
         )}
