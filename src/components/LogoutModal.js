@@ -4,6 +4,7 @@ import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTS, hp, wp} from '../constants/theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 
 export const LogoutModal = props => {
   return (
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
   text: {
     color: COLORS.greyText,
     fontFamily: FONTS.brandFont,
+    fontSize: RFPercentage(2),
   },
   buttonText: {
     fontFamily: FONTS.brandFont,

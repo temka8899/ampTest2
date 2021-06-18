@@ -19,11 +19,45 @@ import LeaguePicker from '../components/LeaguePicker';
 import moment from 'moment';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {listTeams} from '../graphql/queries';
+import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
 import API, {graphqlOperation} from '@aws-amplify/api';
+
+const Match = ({item, onPress, selectedId}) => {
+  // const color = item === selectedId ? COLORS.brand : COLORS.greyText;
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        width: wp(100),
+        height: hp(6),
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <View style={{flexDirection: 'row'}}>
+        <View style={{borderColor: 'red', borderWidth: 1}}>
+          {/* <Image source={players[0].avatar} /> */}
+          <Text style={{color: COLORS.greyText, fontFamily: FONTS.brandFont}}>
+            {item.home.name}
+          </Text>
+        </View>
+        <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
+          VS
+        </Text>
+        <View style={{borderColor: 'red', borderWidth: 1}}>
+          <Text style={{color: COLORS.greyText, fontFamily: FONTS.brandFont}}>
+            {item.away.name}
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const Item = ({item, onPress, selectedId}) => {
   const color = item === selectedId ? COLORS.brand : COLORS.greyText;
+  const gang = new Date(item);
+  let dayName = moment(gang).format('dddd');
+  dayName = dayName.substring(0, 3);
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -34,9 +68,9 @@ const Item = ({item, onPress, selectedId}) => {
         alignItems: 'center',
       }}>
       <Text style={[styles.dayText, {color: color}]}>
-        {item.split(' ')[2].substring(0, 3)}
+        {dayName}
         {'\n'}
-        {item.split(' ')[1]}
+        {item.split('/')[1]}
       </Text>
     </TouchableOpacity>
   );
@@ -61,30 +95,94 @@ const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [month, setMonth] = useState('June');
-  const [year, setYear] = useState('2021');
+  // const [month, setMonth] = useState('June');
+  // const [year, setYear] = useState('2021');
   const [dayData, setDayData] = useState([]);
-  const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+  const [scheduleData, setScheduleData] = useState([]);
 
-  const [selectedId, setSelectedId] = useState(null);
+  const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+  let firstDate = new Date();
+  let localDay = moment(firstDate).format('ddd');
+  firstDate = moment(firstDate).format('MMMM D dddd YY');
+  const [localId, setlocalId] = useState(localDay);
+  const [selectedId, setSelectedId] = useState(firstDate);
+  const [Home, setHome] = useState([]);
+  const [Away, setAway] = useState([]);
+
   useEffect(() => {}, []);
+
   const getDay = item => {
     setSelectedId(item);
-    console.log('manai', item);
+    getSchedule(item);
+  };
+
+  async function getSchedule(item) {
+    try {
+      const scheduleData = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            date: {eq: `${item}`},
+            leagueID: {eq: `${chooseData.id}`},
+          },
+        }),
+      );
+      const schedulePerDay = scheduleData.data.listSchedules.items;
+
+      setScheduleData(schedulePerDay);
+      console.log('Schedule>>>>>>>>>>>>>>', schedulePerDay);
+      return schedulePerDay;
+    } catch (err) {
+      console.log('error fetching schedulePerDay', err);
+    }
+  }
+
+  async function fetchTeamPlayers(id) {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeamPlayers, {
+          filter: {teamID: {eq: `${id}`}},
+        }),
+      );
+      const todos = leagueData.data.listTeamPlayers.items;
+      // console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+      return todos;
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
+  const renderSchedule = async ({item}) => {
+    let homePlayers = await fetchTeamPlayers(item.home.id);
+    console.log(`homePlayers`, homePlayers);
+    let awayPlayers = await fetchTeamPlayers(item.away.id);
+    console.log(`awayPlayers`, awayPlayers);
+
+    // setHome(homePlayers);
+    // setAway(awayPlayers);
+
+    console.log(`match`, item);
+    return (
+      <Match
+        item={item}
+        onPress={() => alert()}
+        selectedId={selectedId}
+        Home={Home}
+        Away={Away}
+      />
+    );
   };
   const renderItem = ({item}) => {
-    console.log(`item`, item);
     return (
       <Item item={item} onPress={() => getDay(item)} selectedId={selectedId} />
     );
   };
+
   const renderLocalDay = ({item}) => {
-    console.log(`item`, item);
     return (
       <LocalDay
         item={item}
-        onPress={() => setSelectedId(item)}
-        selectedId={selectedId}
+        onPress={() => setlocalId(item)}
+        selectedId={localId}
       />
     );
   };
@@ -95,8 +193,8 @@ const ScheduleScreen = ({navigation, route}) => {
     let teamNumber = 0;
     console.log(leagueData.data.listTeams.items.length);
     for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
-      console.log(leagueData.data.listTeams.items[i].league.id);
-      console.log(option.id);
+      // console.log(leagueData.data.listTeams.items[i].league.id);
+      // console.log(option.id);
 
       if (leagueData.data.listTeams.items[i].league.id === option.id) {
         teamNumber = teamNumber + 1;
@@ -126,7 +224,6 @@ const ScheduleScreen = ({navigation, route}) => {
   function getDayData(number, date) {
     console.log(`number`, number);
     console.log(`date`, date);
-    setDayData([]);
     let newDate = new Date(date);
     let odor;
     console.log(`newDate`, newDate);
@@ -137,7 +234,7 @@ const ScheduleScreen = ({navigation, route}) => {
       } else if (odor === 'Sunday') {
         date = new Date(newDate.setDate(newDate.getDate() + 1));
       }
-      date = moment(date).format('MMMM D dddd YY');
+      date = moment(date).format('M/D/YYYY');
       console.log(`odor`, odor);
       setDayData(prev => [...prev, date]);
       date = new Date(newDate.setDate(newDate.getDate() + 1));
@@ -150,11 +247,12 @@ const ScheduleScreen = ({navigation, route}) => {
   };
 
   const setData = async option => {
+    setDayData([]);
     setChooseData(option);
     setLoading(false);
     console.log('League bainuu', option);
     let teamNumber = await getTeamNumber(option);
-    let duration = await getDuration(teamNumber, 2);
+    let duration = await getDuration(teamNumber, 4);
     getDayData(duration, option.startedDate);
   };
 
@@ -309,6 +407,23 @@ const ScheduleScreen = ({navigation, route}) => {
                 />
               )}
             </View>
+          </View>
+          <View>
+            {scheduleData.length === 0 ? (
+              <View>
+                <Text style={{color: COLORS.white}}>Hooosooon</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={scheduleData}
+                renderItem={renderSchedule}
+                keyExtractor={item => item.id}
+                // style={{
+                //   borderBottomColor: COLORS.brand,
+                //   borderBottomWidth: 1,
+                // }}
+              />
+            )}
           </View>
           <TouchableOpacity
             style={{margin: wp(10)}}
