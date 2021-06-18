@@ -164,6 +164,15 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function fetchGame() {
+    try {
+      const gameData = await API.graphql(graphqlOperation(listGames));
+      console.log('Games>>>>>>>>>>>>>>', gameData.data.listGames.items);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
   async function fetchTeamPlayers() {
     try {
       const leagueData = await API.graphql(
@@ -523,6 +532,7 @@ const createTeamScreen = ({navigation}) => {
           title="Delete LeaguePlayer"
         />
         <Button onPress={() => DeleteLeague()} title="Delete League" />
+        <Button onPress={() => fetchGame()} title="fetch game" />
       </View>
     </SafeAreaView>
   );

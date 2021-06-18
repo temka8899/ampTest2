@@ -45,6 +45,7 @@ const SwitchView = ({value, onPress}) => {
   const [name, setSignUpName] = useState('');
   const [phone_number, setPhoneNumber] = useState('+97688888888');
   const [authCode, setConfirmCode] = useState('');
+  const [resendEmail, setResendEmail] = useState('');
   const [gender, setGender] = useState([
     {id: 1, value: true, name: 'Female', selected: false},
     {id: 2, value: false, name: 'Male', selected: false},
@@ -71,6 +72,16 @@ const SwitchView = ({value, onPress}) => {
       onPress(3);
     } catch (error) {
       console.log('❌ Error signing up...', error);
+    }
+  }
+
+  async function forgotPasswordEmail() {
+    try {
+      const temp = Auth.forgotPassword(username);
+      console.log(username);
+      console.log('✅ Email sent', temp);
+    } catch (error) {
+      console.log(err);
     }
   }
 
@@ -243,14 +254,13 @@ const SwitchView = ({value, onPress}) => {
               <Text style={styles.text}>Enter your email</Text>
 
               <FormInput
-                value={authCode}
                 autoCorrect={false}
                 placeholder="Email"
-                onChangeText={text2 => setConfirmCode(text2)}
+                onChangeText={text2 => [setSignUpUsername(text2)]}
                 keyboardType="email-address"
               />
 
-              <TouchableOpacity onPress={() => onPress(5)}>
+              <TouchableOpacity onPress={() => [forgotPasswordEmail()]}>
                 <ImageBackground
                   source={images.button}
                   style={styles.smallButton}>
@@ -280,7 +290,6 @@ const SwitchView = ({value, onPress}) => {
             <Text style={styles.text}>Enter your code from email</Text>
 
             <FormInput
-              value={authCode}
               autoCorrect={false}
               placeholder="Code"
               onChangeText={text2 => setConfirmCode(text2)}
