@@ -28,7 +28,7 @@ import {
 
 import {createPlayer} from '../graphql/mutations';
 import LinearGradient from 'react-native-linear-gradient';
-import {listPlayers, listLeagues} from '../graphql/queries';
+import {listPlayers, listLeagues, listSchedules} from '../graphql/queries';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
@@ -48,6 +48,7 @@ const Avatar = ({item, onPress, backgroundColor}) => (
 );
 
 const GameScreen = ({navigation}) => {
+  const [schedule, setSchedule] = useState([]);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [AvatarModal, setAvatarModal] = useState(false);
   const [permissions, setPermissions] = useState({});
@@ -63,7 +64,8 @@ const GameScreen = ({navigation}) => {
     fetchLeague();
     findGreet();
     getName();
-  }, [getName]);
+    getSchedule();
+  }, [getName, getSchedule]);
 
   const press = item => {
     setSelectedId(item.id);
@@ -168,7 +170,7 @@ const GameScreen = ({navigation}) => {
       findUser(user);
     }
     findUser(user);
-  }, [findUser, getAvatar]);
+  }, [checkPlayer, findUser, getAvatar]);
 
   const findUser = React.useCallback(
     async user => {
@@ -189,14 +191,14 @@ const GameScreen = ({navigation}) => {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       // const todos = leagueData.data.listTeams.items;
       // console.log('Teams>>>>>>>>>>>>>>', todos);
-      // console.log('Leagues>>>>>>>>>>>>>>', leagueData.data.listLeagues.items);
+      console.log('Leagues list', leagueData.data.listLeagues.items);
       setLeagueList(leagueData.data.listLeagues.items);
     } catch (err) {
       console.log('error fetching todos', err);
     }
   };
 
-  async function checkPlayer(playerData, p_id) {
+  const checkPlayer = React.useCallback((playerData, p_id) => {
     try {
       const players = playerData.data.listPlayers.items;
       // console.log('Players>>>>>>>>>>>>>>', players);
@@ -209,32 +211,54 @@ const GameScreen = ({navigation}) => {
     } catch (err) {
       console.log('error fetching players', err);
     }
-  }
+  }, []);
+
   const getAvatar = React.useCallback(() => {
     setAvatarModal(true);
   }, []);
 
-  async function addPlayer(username, p_id) {
-    console.log('uuslee', username, p_id);
+  const addPlayer = React.useCallback(
+    async (username, p_id) => {
+      console.log('uuslee', username, p_id);
+      try {
+        const res = await API.graphql(
+          graphqlOperation(createPlayer, {
+            input: {
+              c_id: p_id,
+              name: username,
+              xp: 1,
+              level: 1,
+              admin: true,
+              avatar: selectedItem,
+            },
+          }),
+        );
+        console.log('>>>>>>>>>>>>>>>>>>>>', res);
+        console.log('Player Created');
+      } catch (err) {
+        console.log('error creating Player:', err);
+      }
+    },
+    [selectedItem],
+  );
+
+  const getSchedule = React.useCallback(async () => {
     try {
-      const res = await API.graphql(
-        graphqlOperation(createPlayer, {
-          input: {
-            c_id: p_id,
-            name: username,
-            xp: 1,
-            level: 1,
-            admin: true,
-            avatar: selectedItem,
+      const scheduleData = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            date: {eq: '6/18/2021'},
+            // leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
       );
-      console.log('>>>>>>>>>>>>>>>>>>>>', res);
-      console.log('Player Created');
+      const todos = scheduleData.data.listSchedules.items;
+      console.log('Schedule>>>>>>>>>>>>>>', todos);
+      setSchedule(todos);
     } catch (err) {
-      console.log('error creating Player:', err);
+      console.log('error fetching todos', err);
     }
-  }
+  }, []);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -321,54 +345,99 @@ const GameScreen = ({navigation}) => {
             }}>
             COMING MATCHES
           </Text>
-          <TouchableOpacity
-            onPress={() => {
-              showNotification(
-                'Hippo League ehleh gej baina!',
-                'burtguulne uu!',
-              );
-            }}>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.7),
-                marginLeft: wp(4),
-                marginVertical: hp(2),
+          <View>
+            <FlatList
+              data={schedule}
+              keyExtractor={item => item.id}
+              renderItem={({item, index}) => (
+                <View>
+                  <View style={{flexDirection: 'row', width: wp(80)}}>
+                    <Text
+                      style={{
+                        color: COLORS.greyText,
+                        fontFamily: FONTS.brandFont,
+                        fontSize: RFPercentage(1.7),
+                        marginVertical: hp(2),
+                      }}
+                      ellipsizeMode="tail"
+                      numberOfLines={1}>
+                      {item.home.name}
+                    </Text>
+                    <Text
+                      style={{
+                        color: COLORS.greyText,
+                        fontFamily: FONTS.brandFont,
+                        fontSize: RFPercentage(1.7),
+                        marginVertical: hp(2),
+                      }}>
+                      {' '}
+                      VS{' '}
+                    </Text>
+                    <Text
+                      ellipsizeMode="tail"
+                      style={{
+                        color: COLORS.greyText,
+                        fontFamily: FONTS.brandFont,
+                        fontSize: RFPercentage(1.7),
+                        marginVertical: hp(2),
+                      }}>
+                      {item.away.name}
+                    </Text>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+          {/* <View>
+            <TouchableOpacity
+              onPress={() => {
+                showNotification(
+                  'Hippo League ehleh gej baina!',
+                  'burtguulne uu!',
+                );
               }}>
-              Test notification
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              handleScheduleNotification(
-                'Hippo League ehleh gej baina!',
-                'burtguulne uu!',
-              )
-            }>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.7),
-                marginLeft: wp(4),
-                marginVertical: hp(2),
-              }}>
-              Test scheduled notification
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleCancel()}>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.7),
-                marginLeft: wp(4),
-                marginVertical: hp(2),
-              }}>
-              Cancel all notification
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.7),
+                  marginLeft: wp(4),
+                  marginVertical: hp(2),
+                }}>
+                Test notification
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                handleScheduleNotification(
+                  'Hippo League ehleh gej baina!',
+                  'burtguulne uu!',
+                )
+              }>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.7),
+                  marginLeft: wp(4),
+                  marginVertical: hp(2),
+                }}>
+                Test scheduled notification
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleCancel()}>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.7),
+                  marginLeft: wp(4),
+                  marginVertical: hp(2),
+                }}>
+                Cancel all notification
+              </Text>
+            </TouchableOpacity>
+          </View> */}
         </View>
       )}
       <Modal
