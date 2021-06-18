@@ -336,6 +336,7 @@ const createTeamScreen = ({navigation}) => {
       }
       hasah--;
       nemeh++;
+      console.log(nemeh);
     }
   }
 
