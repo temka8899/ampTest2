@@ -153,14 +153,14 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const renderSchedule = async ({item}) => {
     let homePlayers = await fetchTeamPlayers(item.home.id);
-    console.log(`homePlayers`, homePlayers);
+    console.log('homePlayers', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
-    console.log(`awayPlayers`, awayPlayers);
+    console.log('awayPlayers', awayPlayers);
 
     // setHome(homePlayers);
     // setAway(awayPlayers);
 
-    console.log(`match`, item);
+    console.log('match', item);
     return (
       <Match
         item={item}
