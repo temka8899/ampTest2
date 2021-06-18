@@ -245,7 +245,7 @@ const createTeamScreen = ({navigation}) => {
             const temp = await API.graphql(
               graphqlOperation(createTeam, {
                 input: {
-                  name: `team${i}_generated`,
+                  name: `team${i}`,
 
                   //LeagueID
                   teamLeagueId: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
@@ -306,6 +306,7 @@ const createTeamScreen = ({navigation}) => {
     var date2 = date.getDay();
     var numberOfDaysToAdd = 0;
     let dateNemeh = 0;
+    let tooluur = 1;
     // date.setDate(date.getDate() + numberOfDaysToAdd);
     date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {
@@ -328,15 +329,17 @@ const createTeamScreen = ({navigation}) => {
           teams[j + nemeh].id,
           date.toLocaleDateString(),
           startLeagueId,
+          tooluur,
         );
         dateNemeh++;
+        tooluur++;
       }
       hasah--;
       nemeh++;
     }
   }
 
-  async function addSchedule(team1ID, team2ID, date, startLeagueId) {
+  async function addSchedule(team1ID, team2ID, date, startLeagueId, tooluur) {
     try {
       await API.graphql(
         graphqlOperation(createSchedule, {
@@ -347,6 +350,7 @@ const createTeamScreen = ({navigation}) => {
             awayScore: 0,
             date: `${date}`,
             leagueID: startLeagueId,
+            index: tooluur,
           },
         }),
       );
