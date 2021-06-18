@@ -127,6 +127,7 @@ const SwitchView = ({value, onPress}) => {
             <View style={styles.signupContainer}>
               <FormInput
                 autoCorrect={false}
+                max={10}
                 // value={signUpPassword}
                 onChangeText={text => [setSignUpName(text)]}
                 placeholder="Name"

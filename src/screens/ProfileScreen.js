@@ -14,8 +14,9 @@ import {AuthContext} from '../../App';
 import {hp, wp} from '../constants/theme';
 import CircleXp from '../components/CircleXp';
 import {COLORS, FONTS, icons} from '../constants';
+import {LogoutModal} from '../components/LogoutModal';
+import {LeaguePicker} from '../components/LeaguePicker';
 
-import LeaguePicker from '../components/LeaguePicker';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
@@ -23,6 +24,7 @@ const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [LogoutModalVisible, setLogoutModalVisible] = useState(false);
   const [adminVisible, setAdminVisible] = useState();
   const [xpPercent, setXpPercent] = useState('');
   const {userInfo} = React.useContext(AuthContext);
@@ -64,7 +66,13 @@ const Profile = ({navigation}) => {
       setAdminVisible(false);
     }
   }
-
+  const modalHide = () => {
+    setLogoutModalVisible(false);
+  };
+  const logout = () => {
+    setLogoutModalVisible(false);
+    navigation.navigate('Auth');
+  };
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
@@ -143,7 +151,7 @@ const Profile = ({navigation}) => {
               </TouchableOpacity>
               {/* ) : null} */}
             </View>
-            <TouchableOpacity onPress={() => navigation.replace('Auth')}>
+            <TouchableOpacity onPress={() => setLogoutModalVisible(true)}>
               <Image source={icons.logOut} style={styles.plusBtn} />
             </TouchableOpacity>
           </View>
@@ -194,6 +202,7 @@ const Profile = ({navigation}) => {
             </Text>
             <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
+
           <Modal
             transparent={true}
             animationType="fade"
@@ -204,6 +213,13 @@ const Profile = ({navigation}) => {
               setData={setData}
             />
           </Modal>
+          <View>
+            <LogoutModal
+              visible={LogoutModalVisible}
+              modalHide={modalHide}
+              logout={logout}
+            />
+          </View>
         </View>
       )}
     </SafeAreaView>
@@ -230,11 +246,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subSubContainer: {
-    width: wp(80),
+    width: wp(100),
     height: hp(16),
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
   },
   statusMain: {
     flexDirection: 'column',
