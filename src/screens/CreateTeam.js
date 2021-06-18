@@ -245,7 +245,7 @@ const createTeamScreen = ({navigation}) => {
             const temp = await API.graphql(
               graphqlOperation(createTeam, {
                 input: {
-                  name: `team${i}_generated`,
+                  name: `team${i}`,
 
                   //LeagueID
                   teamLeagueId: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
