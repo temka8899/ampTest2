@@ -51,14 +51,8 @@ Amplify.configure({
 });
 
 const createTeamScreen = ({navigation}) => {
-  const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const initialState = {name: ''};
   const [formState, setFormState] = useState(initialState);
-  const [todos, setTodos] = useState([]);
-  const [uploadImage, setUploadImage] = useState('');
-  const [teamPlayerID, setTeamPlayerID] = useState('');
-  const [fileName123, setFileName] = useState('');
-  const [file123, setFile123] = useState('');
 
   function setInput(key, value) {
     setFormState({...formState, [key]: value});
@@ -225,7 +219,18 @@ const createTeamScreen = ({navigation}) => {
 
   async function startLeague() {
     //Set Is Start League True
-    leagueIsStart();
+    var date = new Date();
+    date.setDate(date.getDate() + 1);
+    const temp = await API.graphql(
+      graphqlOperation(updateLeague, {
+        input: {
+          id: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
+          isStart: true,
+          startedDate: `${date.toLocaleDateString()}`,
+        },
+      }),
+    );
+    const startLeagueId = temp.data.updateLeague.id;
 
     // Get Soccer League Players
     try {
@@ -276,26 +281,7 @@ const createTeamScreen = ({navigation}) => {
     } catch (err) {
       console.log('error fetching League Players', err);
     }
-    addScheduleLoop();
-  }
-
-  async function leagueIsStart() {
-    var date = new Date();
-    date.setDate(date.getDate() + 1);
-    try {
-      const temp = await API.graphql(
-        graphqlOperation(updateLeague, {
-          input: {
-            id: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
-            isStart: true,
-            startedDate: `${date.toLocaleDateString()}`,
-          },
-        }),
-      );
-      console.log('League updated', temp);
-    } catch (err) {
-      console.log('error updating League: ', err);
-    }
+    addScheduleLoop(startLeagueId);
   }
 
   async function addStartTeamPlayer(teamplayerteam, teamplayerplayer) {
@@ -317,7 +303,7 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
-  async function addScheduleLoop() {
+  async function addScheduleLoop(startLeagueId) {
     const teamData = await API.graphql(graphqlOperation(listTeams));
     const teams = teamData.data.listTeams.items;
     const k = teams.length;
@@ -348,6 +334,7 @@ const createTeamScreen = ({navigation}) => {
           teams[j].id,
           teams[j + nemeh].id,
           date.toLocaleDateString(),
+          startLeagueId,
         );
         dateNemeh++;
       }
@@ -356,7 +343,7 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
-  async function addSchedule(team1ID, team2ID, date) {
+  async function addSchedule(team1ID, team2ID, date, startLeagueId) {
     try {
       await API.graphql(
         graphqlOperation(createSchedule, {
@@ -366,6 +353,7 @@ const createTeamScreen = ({navigation}) => {
             homeScore: 0,
             awayScore: 0,
             date: `${date}`,
+            leagueID: startLeagueId,
           },
         }),
       );
@@ -380,7 +368,8 @@ const createTeamScreen = ({navigation}) => {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
-            date: {eq: '6/17/2021'},
+            date: {eq: '6/18/2021'},
+            leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
       );
