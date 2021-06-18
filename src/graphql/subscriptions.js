@@ -473,6 +473,7 @@ export const onCreateSchedule = /* GraphQL */ `
   subscription OnCreateSchedule {
     onCreateSchedule {
       id
+      index
       leagueID
       home {
         id
@@ -522,6 +523,7 @@ export const onUpdateSchedule = /* GraphQL */ `
   subscription OnUpdateSchedule {
     onUpdateSchedule {
       id
+      index
       leagueID
       home {
         id
@@ -571,6 +573,7 @@ export const onDeleteSchedule = /* GraphQL */ `
   subscription OnDeleteSchedule {
     onDeleteSchedule {
       id
+      index
       leagueID
       home {
         id
