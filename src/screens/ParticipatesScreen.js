@@ -192,6 +192,7 @@ const ParticipatesScreen = ({navigation, route}) => {
       );
       const data = await leaguePlayerData.data.listLeaguePlayers.items;
       setLeaguePlayers(data);
+      console.log('data :>> ', data);
     } catch (err) {}
   }, [LeagueId]);
 
@@ -330,7 +331,7 @@ const ParticipatesScreen = ({navigation, route}) => {
                   ]}>
                   {index + 1}
                 </Text>
-                <Image source={userData.image} style={styles.avatar} />
+                <Image source={item.player.avatar} style={styles.avatar} />
                 <View style={styles.playerSubContainer}>
                   <Text
                     style={[
