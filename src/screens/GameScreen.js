@@ -170,7 +170,7 @@ const GameScreen = ({navigation}) => {
       findUser(user);
     }
     findUser(user);
-  }, [findUser, getAvatar]);
+  }, [checkPlayer, findUser, getAvatar]);
 
   const findUser = React.useCallback(
     async user => {
@@ -198,7 +198,7 @@ const GameScreen = ({navigation}) => {
     }
   };
 
-  async function checkPlayer(playerData, p_id) {
+  const checkPlayer = React.useCallback((playerData, p_id) => {
     try {
       const players = playerData.data.listPlayers.items;
       // console.log('Players>>>>>>>>>>>>>>', players);
@@ -211,39 +211,44 @@ const GameScreen = ({navigation}) => {
     } catch (err) {
       console.log('error fetching players', err);
     }
-  }
+  }, []);
+
   const getAvatar = React.useCallback(() => {
     setAvatarModal(true);
   }, []);
 
-  async function addPlayer(username, p_id) {
-    console.log('uuslee', username, p_id);
-    try {
-      const res = await API.graphql(
-        graphqlOperation(createPlayer, {
-          input: {
-            c_id: p_id,
-            name: username,
-            xp: 1,
-            level: 1,
-            admin: true,
-            avatar: selectedItem,
-          },
-        }),
-      );
-      console.log('>>>>>>>>>>>>>>>>>>>>', res);
-      console.log('Player Created');
-    } catch (err) {
-      console.log('error creating Player:', err);
-    }
-  }
+  const addPlayer = React.useCallback(
+    async (username, p_id) => {
+      console.log('uuslee', username, p_id);
+      try {
+        const res = await API.graphql(
+          graphqlOperation(createPlayer, {
+            input: {
+              c_id: p_id,
+              name: username,
+              xp: 1,
+              level: 1,
+              admin: true,
+              avatar: selectedItem,
+            },
+          }),
+        );
+        console.log('>>>>>>>>>>>>>>>>>>>>', res);
+        console.log('Player Created');
+      } catch (err) {
+        console.log('error creating Player:', err);
+      }
+    },
+    [selectedItem],
+  );
+
   const getSchedule = React.useCallback(async () => {
     try {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
             date: {eq: '6/18/2021'},
-            leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
+            // leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
       );
@@ -340,6 +345,49 @@ const GameScreen = ({navigation}) => {
             }}>
             COMING MATCHES
           </Text>
+          <View>
+            <FlatList
+              data={schedule}
+              keyExtractor={item => item.id}
+              renderItem={({item, index}) => (
+                <View>
+                  <View style={{flexDirection: 'row', width: wp(80)}}>
+                    <Text
+                      style={{
+                        color: COLORS.greyText,
+                        fontFamily: FONTS.brandFont,
+                        fontSize: RFPercentage(1.7),
+                        marginVertical: hp(2),
+                      }}
+                      ellipsizeMode="tail"
+                      numberOfLines={1}>
+                      {item.home.name}
+                    </Text>
+                    <Text
+                      style={{
+                        color: COLORS.greyText,
+                        fontFamily: FONTS.brandFont,
+                        fontSize: RFPercentage(1.7),
+                        marginVertical: hp(2),
+                      }}>
+                      {' '}
+                      VS{' '}
+                    </Text>
+                    <Text
+                      ellipsizeMode="tail"
+                      style={{
+                        color: COLORS.greyText,
+                        fontFamily: FONTS.brandFont,
+                        fontSize: RFPercentage(1.7),
+                        marginVertical: hp(2),
+                      }}>
+                      {item.away.name}
+                    </Text>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
           {/* <View>
             <TouchableOpacity
               onPress={() => {
