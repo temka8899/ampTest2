@@ -19,23 +19,66 @@ import LeaguePicker from '../components/LeaguePicker';
 import moment from 'moment';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
+import {
+  getPlayer,
+  listSchedules,
+  listTeamPlayers,
+  listTeams,
+} from '../graphql/queries';
 import API, {graphqlOperation} from '@aws-amplify/api';
 
 const Match = ({item, onPress, selectedId}) => {
-  // const color = item === selectedId ? COLORS.brand : COLORS.greyText;
+  const [Home, setHome] = useState(undefined);
+  const [Away, setAway] = useState(undefined);
+  useEffect(() => {
+    getPlayerData();
+  }, [getPlayerData]);
+
+  const getPlayerData = React.useCallback(async () => {
+    let homePlayers = await fetchTeamPlayers(item.home.id);
+    console.log('homePlayers', homePlayers);
+    let awayPlayers = await fetchTeamPlayers(item.away.id);
+    console.log(`awayPlayers`, awayPlayers);
+
+    setHome(homePlayers);
+    setAway(awayPlayers);
+  }, [item.away.id, item.home.id]);
+  async function fetchTeamPlayers(id) {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeamPlayers, {
+          filter: {teamID: {eq: `${id}`}},
+        }),
+      );
+      const todos = leagueData.data.listTeamPlayers.items;
+      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+      return todos;
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
   return (
     <TouchableOpacity
       onPress={onPress}
       style={{
         width: wp(100),
-        height: hp(6),
+        height: hp(10),
         justifyContent: 'center',
         alignItems: 'center',
       }}>
       <View style={{flexDirection: 'row'}}>
         <View style={{borderColor: 'red', borderWidth: 1}}>
-          {/* <Image source={players[0].avatar} /> */}
+          {Home && (
+            <View style={{flexDirection: 'row'}}>
+              {Home.map(_item => (
+                <Image
+                  source={_item.player.avatar}
+                  style={{width: 50, height: 50}}
+                />
+              ))}
+            </View>
+          )}
           <Text style={{color: COLORS.greyText, fontFamily: FONTS.brandFont}}>
             {item.home.name}
           </Text>
@@ -44,6 +87,16 @@ const Match = ({item, onPress, selectedId}) => {
           VS
         </Text>
         <View style={{borderColor: 'red', borderWidth: 1}}>
+          {Away && (
+            <View style={{flexDirection: 'row'}}>
+              {Away.map(_item => (
+                <Image
+                  source={_item.player.avatar}
+                  style={{width: 50, height: 50}}
+                />
+              ))}
+            </View>
+          )}
           <Text style={{color: COLORS.greyText, fontFamily: FONTS.brandFont}}>
             {item.away.name}
           </Text>
@@ -91,6 +144,7 @@ const LocalDay = ({item, onPress, selectedId}) => {
     </TouchableOpacity>
   );
 };
+
 const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
@@ -106,8 +160,9 @@ const ScheduleScreen = ({navigation, route}) => {
   firstDate = moment(firstDate).format('MMMM D dddd YY');
   const [localId, setlocalId] = useState(localDay);
   const [selectedId, setSelectedId] = useState(firstDate);
-  const [Home, setHome] = useState([]);
-  const [Away, setAway] = useState([]);
+
+  // let homePlayers = [];
+  // let awayPlayers = [];
 
   useEffect(() => {}, []);
 
@@ -130,47 +185,22 @@ const ScheduleScreen = ({navigation, route}) => {
 
       setScheduleData(schedulePerDay);
       console.log('Schedule>>>>>>>>>>>>>>', schedulePerDay);
-      return schedulePerDay;
+      // return schedulePerDay;
     } catch (err) {
       console.log('error fetching schedulePerDay', err);
     }
   }
 
-  async function fetchTeamPlayers(id) {
-    try {
-      const leagueData = await API.graphql(
-        graphqlOperation(listTeamPlayers, {
-          filter: {teamID: {eq: `${id}`}},
-        }),
-      );
-      const todos = leagueData.data.listTeamPlayers.items;
-      // console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
-      return todos;
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
-  }
+  // const matches = ({item}) => {
+  //   renderSchedule(item);
+  // };
 
-  const renderSchedule = async ({item}) => {
-    let homePlayers = await fetchTeamPlayers(item.home.id);
-    console.log('homePlayers', homePlayers);
-    let awayPlayers = await fetchTeamPlayers(item.away.id);
-    console.log('awayPlayers', awayPlayers);
-
-    // setHome(homePlayers);
-    // setAway(awayPlayers);
-
-    console.log('match', item);
+  function renderSchedule({item}) {
+    console.log(`match`, item);
     return (
-      <Match
-        item={item}
-        onPress={() => alert()}
-        selectedId={selectedId}
-        Home={Home}
-        Away={Away}
-      />
+      <Match item={item} onPress={() => alert()} selectedId={selectedId} />
     );
-  };
+  }
   const renderItem = ({item}) => {
     return (
       <Item item={item} onPress={() => getDay(item)} selectedId={selectedId} />
@@ -193,9 +223,6 @@ const ScheduleScreen = ({navigation, route}) => {
     let teamNumber = 0;
     console.log(leagueData.data.listTeams.items.length);
     for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
-      // console.log(leagueData.data.listTeams.items[i].league.id);
-      // console.log(option.id);
-
       if (leagueData.data.listTeams.items[i].league.id === option.id) {
         teamNumber = teamNumber + 1;
       }
@@ -418,10 +445,9 @@ const ScheduleScreen = ({navigation, route}) => {
                 data={scheduleData}
                 renderItem={renderSchedule}
                 keyExtractor={item => item.id}
-                // style={{
-                //   borderBottomColor: COLORS.brand,
-                //   borderBottomWidth: 1,
-                // }}
+                style={{
+                  height: hp(50),
+                }}
               />
             )}
           </View>
