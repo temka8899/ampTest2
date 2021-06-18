@@ -48,6 +48,7 @@ const Avatar = ({item, onPress, backgroundColor}) => (
 );
 
 const GameScreen = ({navigation}) => {
+  const [schedule, setSchedule] = useState([]);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [AvatarModal, setAvatarModal] = useState(false);
   const [permissions, setPermissions] = useState({});
@@ -59,13 +60,12 @@ const GameScreen = ({navigation}) => {
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
 
-  console.log('LeagueList[1] :>> ', LeagueList[1]);
   useEffect(() => {
     fetchLeague();
     findGreet();
     getName();
-    // getSchedule();
-  }, [getName]);
+    getSchedule();
+  }, [getName, getSchedule]);
 
   const press = item => {
     setSelectedId(item.id);
@@ -237,23 +237,23 @@ const GameScreen = ({navigation}) => {
       console.log('error creating Player:', err);
     }
   }
-
-  async function getSchedule() {
+  const getSchedule = React.useCallback(async () => {
     try {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
             date: {eq: '6/18/2021'},
-            leagueID: {eq: 'asd'},
+            leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
       );
       const todos = scheduleData.data.listSchedules.items;
       console.log('Schedule>>>>>>>>>>>>>>', todos);
+      setSchedule(todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
-  }
+  }, []);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -340,54 +340,56 @@ const GameScreen = ({navigation}) => {
             }}>
             COMING MATCHES
           </Text>
-          <TouchableOpacity
-            onPress={() => {
-              showNotification(
-                'Hippo League ehleh gej baina!',
-                'burtguulne uu!',
-              );
-            }}>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.7),
-                marginLeft: wp(4),
-                marginVertical: hp(2),
+          {/* <View>
+            <TouchableOpacity
+              onPress={() => {
+                showNotification(
+                  'Hippo League ehleh gej baina!',
+                  'burtguulne uu!',
+                );
               }}>
-              Test notification
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              handleScheduleNotification(
-                'Hippo League ehleh gej baina!',
-                'burtguulne uu!',
-              )
-            }>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.7),
-                marginLeft: wp(4),
-                marginVertical: hp(2),
-              }}>
-              Test scheduled notification
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleCancel()}>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.7),
-                marginLeft: wp(4),
-                marginVertical: hp(2),
-              }}>
-              Cancel all notification
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.7),
+                  marginLeft: wp(4),
+                  marginVertical: hp(2),
+                }}>
+                Test notification
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                handleScheduleNotification(
+                  'Hippo League ehleh gej baina!',
+                  'burtguulne uu!',
+                )
+              }>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.7),
+                  marginLeft: wp(4),
+                  marginVertical: hp(2),
+                }}>
+                Test scheduled notification
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleCancel()}>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.7),
+                  marginLeft: wp(4),
+                  marginVertical: hp(2),
+                }}>
+                Cancel all notification
+              </Text>
+            </TouchableOpacity>
+          </View> */}
         </View>
       )}
       <Modal
