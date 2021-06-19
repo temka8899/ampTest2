@@ -33,6 +33,7 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
+import IntroModal from '../components/IntroModal';
 
 Amplify.configure({
   ...awsmobile,
@@ -173,6 +174,7 @@ const GameScreen = ({navigation}) => {
   const [playerId, setId] = useState('');
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
+  const [introModal, setIntroModal] = useState(false);
 
   useEffect(() => {
     fetchLeague();
@@ -270,6 +272,7 @@ const GameScreen = ({navigation}) => {
     setAvatarModal(false);
     await addPlayer(user.attributes['custom:Name'], user.username);
     findUser(user);
+    setIntroModal(true);
   };
 
   const findGreet = () => {
@@ -372,6 +375,9 @@ const GameScreen = ({navigation}) => {
     } catch (err) {}
   }, []);
 
+  function close() {
+    setIntroModal(false);
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
@@ -410,7 +416,7 @@ const GameScreen = ({navigation}) => {
                   styles.greeting,
                   {marginTop: hp(1), fontSize: RFPercentage(2.5)},
                 ]}>
-                {userInfo === undefined ? 'Hello' : `${userInfo.name}`}
+                {userInfo === null ? 'Hello' : `${userInfo.name}`}
               </Text>
             </View>
             <View>
@@ -418,7 +424,7 @@ const GameScreen = ({navigation}) => {
                 onPress={() =>
                   navigation.navigate('Tabs', {screen: 'Profile'})
                 }>
-                {userInfo === undefined ? undefined : (
+                {userInfo === null ? null : (
                   <Image source={userInfo.avatar} style={styles.profileImage} />
                 )}
               </TouchableOpacity>
@@ -553,6 +559,7 @@ const GameScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </Modal>
+      <IntroModal visible={introModal} close={close} />
     </SafeAreaView>
   );
 };

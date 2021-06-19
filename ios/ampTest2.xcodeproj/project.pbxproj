@@ -15,6 +15,8 @@
 		65EC43B9C6639276886CE2E2 /* libPods-ampTest2-ampTest2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15EB0C0C7E6741FDB9D694F9 /* libPods-ampTest2-ampTest2Tests.a */; };
 		66D4383132AA6E8202D2C4E7 /* libPods-ampTest2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1521AA0BBC74D057DCA9095A /* libPods-ampTest2.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8466A154267DA46B004F141A /* BaronNeueItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D5702C22054C91B465C1A8 /* BaronNeueItalic.ttf */; };
+		D155C454139141C488955F5A /* BaronNeueItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D5702C22054C91B465C1A8 /* BaronNeueItalic.ttf */; };
 		F2B71F45475448BFB43F4764 /* PressStart2P-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 072ABBB944B94BADABE0DDD8 /* PressStart2P-Regular.ttf */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +51,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ampTest2/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		99F646BA033BCAF2388AEF4A /* Pods-ampTest2-ampTest2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2-ampTest2Tests.release.xcconfig"; path = "Target Support Files/Pods-ampTest2-ampTest2Tests/Pods-ampTest2-ampTest2Tests.release.xcconfig"; sourceTree = "<group>"; };
 		9F68E8E4649E2D9BC064CBE8 /* Pods-ampTest2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2.release.xcconfig"; path = "Target Support Files/Pods-ampTest2/Pods-ampTest2.release.xcconfig"; sourceTree = "<group>"; };
+		A7D5702C22054C91B465C1A8 /* BaronNeueItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = BaronNeueItalic.ttf; path = ../src/assets/fonts/BaronNeueItalic.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -162,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				072ABBB944B94BADABE0DDD8 /* PressStart2P-Regular.ttf */,
+				A7D5702C22054C91B465C1A8 /* BaronNeueItalic.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -251,6 +255,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8466A154267DA46B004F141A /* BaronNeueItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +266,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F2B71F45475448BFB43F4764 /* PressStart2P-Regular.ttf in Resources */,
+				D155C454139141C488955F5A /* BaronNeueItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
