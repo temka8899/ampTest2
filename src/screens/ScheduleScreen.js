@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
 import AppBar from '../components/AppBar';
@@ -25,6 +26,8 @@ import API, {graphqlOperation} from '@aws-amplify/api';
 const Match = ({item, onPress}) => {
   const [Home, setHome] = useState(undefined);
   const [Away, setAway] = useState(undefined);
+  const [imgLoad, setImgLoad] = useState(true);
+
   useEffect(() => {
     getPlayerData();
   }, [getPlayerData]);
@@ -36,6 +39,7 @@ const Match = ({item, onPress}) => {
     console.log(`awayPlayers`, awayPlayers);
     setHome(homePlayers);
     setAway(awayPlayers);
+    setImgLoad(false);
   }, [item.away.id, item.home.id]);
 
   async function fetchTeamPlayers(id) {
@@ -70,25 +74,29 @@ const Match = ({item, onPress}) => {
             {Home && (
               <View style={{flexDirection: 'row'}}>
                 {Home.map(_item => (
-                  <Image source={_item.player.avatar} style={styles.avatar} />
+                  <>
+                    {imgLoad ? (
+                      <ActivityIndicator size={'small'} color={'red'} />
+                    ) : (
+                      <Image
+                        source={_item.player.avatar}
+                        style={styles.avatar}
+                      />
+                    )}
+                  </>
                 ))}
               </View>
             )}
-            <View
+
+            <Text
               style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column',
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                marginTop: wp(2.5),
+                textAlign: 'center',
               }}>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  marginTop: wp(2.5),
-                }}>
-                {item.home.name}
-              </Text>
-            </View>
+              {item.home.name}
+            </Text>
           </View>
           <View
             style={{
@@ -116,25 +124,28 @@ const Match = ({item, onPress}) => {
             {Away && (
               <View style={{flexDirection: 'row'}}>
                 {Away.map(_item => (
-                  <Image source={_item.player.avatar} style={styles.avatar} />
+                  <>
+                    {imgLoad ? (
+                      <ActivityIndicator size={'small'} color={'red'} />
+                    ) : (
+                      <Image
+                        source={_item.player.avatar}
+                        style={styles.avatar}
+                      />
+                    )}
+                  </>
                 ))}
               </View>
             )}
-            <View
+            <Text
               style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column',
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                marginTop: wp(2.5),
+                textAlign: 'center',
               }}>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  marginTop: wp(2.5),
-                }}>
-                {item.away.name}
-              </Text>
-            </View>
+              {item.away.name}
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
