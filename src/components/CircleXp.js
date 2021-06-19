@@ -26,7 +26,10 @@ const CircleXp = props => {
         backgroundColor="#F74C1130">
         {fill => (
           <View>
-            <Image source={userInfo.avatar} style={styles.image} />
+            <Image
+              source={userInfo === undefined ? null : userInfo.avatar}
+              style={styles.image}
+            />
           </View>
         )}
       </AnimatedCircularProgress>

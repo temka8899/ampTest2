@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
 import AppBar from '../components/AppBar';
@@ -25,6 +26,8 @@ import API, {graphqlOperation} from '@aws-amplify/api';
 const Match = ({item, onPress}) => {
   const [Home, setHome] = useState(undefined);
   const [Away, setAway] = useState(undefined);
+  const [imgLoad, setImgLoad] = useState(true);
+
   useEffect(() => {
     getPlayerData();
   }, [getPlayerData]);
@@ -36,6 +39,7 @@ const Match = ({item, onPress}) => {
     console.log(`awayPlayers`, awayPlayers);
     setHome(homePlayers);
     setAway(awayPlayers);
+    setImgLoad(false);
   }, [item.away.id, item.home.id]);
 
   async function fetchTeamPlayers(id) {
@@ -54,50 +58,107 @@ const Match = ({item, onPress}) => {
   }
 
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        width: wp(100),
-        height: hp(10),
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <View style={{flexDirection: 'row'}}>
-        <View style={{borderColor: 'red', borderWidth: 1}}>
-          {Home && (
-            <View style={{flexDirection: 'row'}}>
-              {Home.map(_item => (
-                <Image
-                  source={_item.player.avatar}
-                  style={{width: 50, height: 50}}
-                />
-              ))}
+    <View>
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          width: wp(100),
+          height: hp(13.8),
+          justifyContent: 'center',
+          alignItems: 'center',
+          // borderWidth: 1,
+          // borderColor: 'red',
+        }}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={{height: hp(9.35)}}>
+            {Home && (
+              <View style={{flexDirection: 'row'}}>
+                {Home.map(_item => (
+                  <>
+                    {imgLoad ? (
+                      <ActivityIndicator size={'small'} color={'red'} />
+                    ) : (
+                      <Image
+                        source={_item.player.avatar}
+                        style={styles.avatar}
+                      />
+                    )}
+                  </>
+                ))}
+              </View>
+            )}
+
+            <Text
+              style={{
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                marginTop: wp(2.5),
+                textAlign: 'center',
+              }}>
+              {item.home.name}
+            </Text>
+          </View>
+          <View
+            style={{
+              heigh: hp(9.35),
+              width: wp(21.6),
+            }}>
+            <View
+              style={{
+                width: wp(21.6),
+                height: hp(6.65),
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: FONTS.brandFont,
+                }}>
+                VS
+              </Text>
             </View>
-          )}
-          <Text style={{color: COLORS.greyText, fontFamily: FONTS.brandFont}}>
-            {item.home.name}
-          </Text>
+          </View>
+
+          <View style={{height: hp(9.35)}}>
+            {Away && (
+              <View style={{flexDirection: 'row'}}>
+                {Away.map(_item => (
+                  <>
+                    {imgLoad ? (
+                      <ActivityIndicator size={'small'} color={'red'} />
+                    ) : (
+                      <Image
+                        source={_item.player.avatar}
+                        style={styles.avatar}
+                      />
+                    )}
+                  </>
+                ))}
+              </View>
+            )}
+            <Text
+              style={{
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                marginTop: wp(2.5),
+                textAlign: 'center',
+              }}>
+              {item.away.name}
+            </Text>
+          </View>
         </View>
-        <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
-          VS
-        </Text>
-        <View style={{borderColor: 'red', borderWidth: 1}}>
-          {Away && (
-            <View style={{flexDirection: 'row'}}>
-              {Away.map(_item => (
-                <Image
-                  source={_item.player.avatar}
-                  style={{width: 50, height: 50}}
-                />
-              ))}
-            </View>
-          )}
-          <Text style={{color: COLORS.greyText, fontFamily: FONTS.brandFont}}>
-            {item.away.name}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      <View
+        style={{
+          height: hp(0.1),
+          backgroundColor: COLORS.white,
+          width: wp(80),
+          justifyContent: 'center',
+          alignSelf: 'center',
+        }}
+      />
+    </View>
   );
 };
 
@@ -193,7 +254,7 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const startMatch = item => {
     navigation.navigate('CountScreen', {
-      scheduleId: `${item.id}`,
+      match: item,
     });
   };
   function renderSchedule({item}) {
@@ -201,7 +262,7 @@ const ScheduleScreen = ({navigation, route}) => {
     return (
       <Match
         item={item}
-        onPress={() => alert('item')}
+        onPress={() => startMatch(item)}
         selectedId={selectedId}
       />
     );
@@ -451,25 +512,30 @@ const ScheduleScreen = ({navigation, route}) => {
                 renderItem={renderSchedule}
                 keyExtractor={item => item.id}
                 style={{
-                  height: hp(50),
+                  height: hp(85),
                 }}
               />
             )}
           </View>
-          <TouchableOpacity
-            style={{margin: wp(10)}}
-            onPress={() => navigation.navigate('CountScreen')}>
-            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              START
-            </Text>
-          </TouchableOpacity>
         </View>
       )}
     </SafeAreaView>
   );
 };
-
+{
+  /* <TouchableOpacity
+            style={{margin: wp(10)}}
+            onPress={() => navigation.navigate('CountScreen')}>
+            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+              START
+            </Text>
+          </TouchableOpacity> */
+}
 const styles = StyleSheet.create({
+  avatar: {
+    width: wp(14.4),
+    height: hp(6.65),
+  },
   skeleton1: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

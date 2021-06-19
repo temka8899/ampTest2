@@ -96,14 +96,14 @@ const SwitchView = ({value, onPress}) => {
     }
   }
 
-  const onRadioBtnClick = item => {
-    let updateState = gender.map(genderItem =>
-      genderItem.id == item.id
-        ? {...genderItem, selected: true}
-        : {...genderItem, selected: false},
-    );
-    setGender(updateState);
-  };
+  // const onRadioBtnClick = item => {
+  //   let updateState = gender.map(genderItem =>
+  //     genderItem.id == item.id
+  //       ? {...genderItem, selected: true}
+  //       : {...genderItem, selected: false},
+  //   );
+  //   setGender(updateState);
+  // };
   switch (value) {
     case 0:
       return (
@@ -166,12 +166,11 @@ const SwitchView = ({value, onPress}) => {
               <FormInput
                 autoCorrect={false}
                 whichScreen
-                // value={signUpPassword}
                 onChangeText={text => [setPhoneNumber(`+976${text}`)]}
                 placeholder="Phone number"
                 keyboardType="number-pad"
               />
-              <View style={styles.radioContainer}>
+              {/* <View style={styles.radioContainer}>
                 {gender.map(item => (
                   <RadioButton
                     onPress={() => onRadioBtnClick(item)}
@@ -181,7 +180,7 @@ const SwitchView = ({value, onPress}) => {
                     {item.name}
                   </RadioButton>
                 ))}
-              </View>
+              </View> */}
 
               <TouchableOpacity onPress={() => signUp()}>
                 <ImageBackground
@@ -251,7 +250,7 @@ const SwitchView = ({value, onPress}) => {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.forgotPassContainer}>
               <FlashMessage position="top" />
-              <Text style={styles.text}>Enter your email </Text>
+              <Text style={styles.text}>Enter your email</Text>
 
               <FormInput
                 autoCorrect={false}
