@@ -16,6 +16,10 @@ import {COLORS, FONTS, icons} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {useEffect} from 'react';
+import {listTeamPlayers, listTeams} from '../graphql/queries';
+import {graphqlOperation} from '@aws-amplify/api-graphql';
+import API from '@aws-amplify/api';
 
 const StandingsScreen = ({navigation, route}) => {
   // let itemID = 0;
@@ -26,14 +30,53 @@ const StandingsScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [Home, setHome] = useState(undefined);
+  const [Away, setAway] = useState(undefined);
+  const [imgLoad, setImgLoad] = useState(true);
+  const [teamData, setTeamData] = useState([]);
+  const PlayerArr = [];
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
 
-  const setData = option => {
-    setChooseData(option);
+  const setData = async option => {
+    await setChooseData(option);
+    await console.log('leagueID :>> ', chooseData.id);
+    fetchTeam(chooseData.id);
   };
+
+  // useEffect(() => {
+  //   fetchTeam();
+  // }, [fetchTeam]);
+
+  const fetchTeam = React.useCallback(
+    async lgID => {
+      try {
+        const leagueData = await API.graphql(
+          graphqlOperation(listTeams, {
+            filter: {leagueID: {eq: lgID}},
+          }),
+        );
+        console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
+        setTeamData(leagueData.data.listTeams.items);
+        for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
+          const leagueData_ = await API.graphql(
+            graphqlOperation(listTeamPlayers, {
+              filter: {teamID: {eq: teamData[i].id}},
+            }),
+          );
+          const teamPlayers = leagueData_.data.listTeamPlayers.items;
+          PlayerArr.push(teamPlayers);
+          console.log('league PLayer data.', teamPlayers);
+          console.log(PlayerArr);
+        }
+      } catch (err) {
+        console.log('error fetching todos', err);
+      }
+    },
+    [PlayerArr, teamData],
+  );
 
   return (
     <SafeAreaView style={styles.mainContainer}>
