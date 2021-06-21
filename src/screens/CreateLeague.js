@@ -111,6 +111,7 @@ const createLeagueScreen = ({navigation}) => {
         }),
       );
       console.log('League Created');
+      navigation.navigate('AdminScreen');
     } catch (err) {
       console.log('error creating League:', err);
     }
