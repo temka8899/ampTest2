@@ -251,7 +251,7 @@ const SwitchView = ({value, onPress}) => {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.forgotPassContainer}>
               <FlashMessage position="top" />
-              <Text style={styles.text}>Enter your email </Text>
+              <Text style={styles.text}>Enter your email asdasd</Text>
 
               <FormInput
                 autoCorrect={false}
@@ -287,7 +287,9 @@ const SwitchView = ({value, onPress}) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <View style={styles.forgotPassContainer}>
             <FlashMessage position="top" />
-            <Text style={styles.text}>Enter your code from email</Text>
+            <Text style={styles.text}>
+              Enter your code from email qweqweqwe
+            </Text>
 
             <FormInput
               autoCorrect={false}
