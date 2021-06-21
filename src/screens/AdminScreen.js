@@ -3,12 +3,12 @@ import {
   Text,
   View,
   Image,
+  FlatList,
   StatusBar,
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
   ImageBackground,
-  FlatList,
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';

@@ -15,10 +15,14 @@ import {hp, wp} from '../constants/theme';
 import CircleXp from '../components/CircleXp';
 import {COLORS, FONTS, icons} from '../constants';
 import {LogoutModal} from '../components/LogoutModal';
-import {LeaguePicker} from '../components/LeaguePicker';
+import LeaguePicker from '../components/LeaguePicker';
 
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {updatePlayer} from '../graphql/mutations';
+import API, {graphqlOperation} from '@aws-amplify/api';
+import Auth from '@aws-amplify/auth';
+import {listPlayers} from '../graphql/queries';
 
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
@@ -28,11 +32,11 @@ const Profile = ({navigation}) => {
   const [adminVisible, setAdminVisible] = useState();
   const [xpPercent, setXpPercent] = useState('');
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
+  // const [xpCount, setXpCount] = useState(true);
 
   useEffect(() => {
-    getUser();
     getXp();
-  }, [getUser, getXp]);
+  }, []);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -43,20 +47,88 @@ const Profile = ({navigation}) => {
   };
 
   const getXp = React.useCallback(async () => {
-    try {
-      let max = userInfo.level * 50;
-      let xp = userInfo.xp;
-      setLoading(false);
-      setXpPercent((xp * 100) / max);
-    } catch (err) {
-      console.log('aldaa', err);
+    let count = true;
+    let value = userInfo.xp;
+    let diff = 0;
+    let level = userInfo.level;
+    while (count) {
+      console.log('count - ', count);
+      console.log('value- ', value);
+      console.log('level - ', level);
+      if (value < 50 * level) {
+        count = false;
+        diff = value;
+      } else {
+        value -= level * 50;
+        level++;
+      }
     }
+    console.log(`value in last`, value);
+    console.log(`diff`, diff);
+    let max = level * 50;
+    let xp = diff;
+    updateLevel(xp, level);
+    // console.log(`max`, max);
+    // console.log(`xp`, xp);
+    setLoading(false);
+
+    setXpPercent((xp * 100) / max);
   }, []);
 
-  const getUser = React.useCallback(async () => {
-    console.log('object');
-    console.log(`userInfo`, userInfo);
-  }, [userInfo]);
+  const updateLevel = React.useCallback(
+    async (xp, level) => {
+      console.log('mai');
+      // const level = await fetchPlayer(userInfo.id);
+      const user = await Auth.currentUserInfo();
+      try {
+        const temp = await API.graphql(
+          graphqlOperation(updatePlayer, {
+            input: {
+              id: userInfo.id,
+              level,
+              xp,
+            },
+          }),
+        );
+        console.log('Player updated', temp);
+      } catch (err) {
+        console.log('error updating Player: ', err);
+      }
+      findUser(user);
+    },
+    [findUser, userInfo.id],
+  );
+
+  async function fetchPlayer(id) {
+    try {
+      const playerData = await API.graphql(
+        graphqlOperation(listPlayers, {
+          filter: {id: {eq: id}},
+        }),
+      );
+
+      console.log(
+        'Player>>>>>>>>>>>>>>',
+        playerData.data.listPlayers.items[0].id,
+      );
+      return playerData.data.listPlayers.items[0].level;
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+  const findUser = React.useCallback(
+    async user => {
+      const playerData = await API.graphql(graphqlOperation(listPlayers));
+      let finded = playerData.data.listPlayers.items.find((item, index) => {
+        if (user.username === item.c_id) {
+          return item;
+        }
+      });
+      setUserInfo(finded);
+      console.log('context player model data', finded);
+    },
+    [setUserInfo],
+  );
 
   async function isAdmin() {
     if (userInfo.admin) {
@@ -81,7 +153,7 @@ const Profile = ({navigation}) => {
         <SkeletonPlaceholder
           speed={800}
           backgroundColor={'#E1E9EE'}
-          highlightColor={'#F2F8FC'}>
+          highlightColor={'gray'}>
           <View>
             <View style={{paddingHorizontal: hp(2)}}>
               <View style={styles.skeleton1} />
@@ -176,7 +248,6 @@ const Profile = ({navigation}) => {
                     Level
                   </Text>
                   <Text style={styles.level}>
-                    {' '}
                     {userInfo === undefined ? '1' : `${userInfo.level}`}
                   </Text>
                 </View>
