@@ -27,7 +27,7 @@ const Profile = ({navigation}) => {
   const [LogoutModalVisible, setLogoutModalVisible] = useState(false);
   const [adminVisible, setAdminVisible] = useState();
   const [xpPercent, setXpPercent] = useState('');
-  const {userInfo} = React.useContext(AuthContext);
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
 
   useEffect(() => {
     getUser();
@@ -51,7 +51,7 @@ const Profile = ({navigation}) => {
     } catch (err) {
       console.log('aldaa', err);
     }
-  }, [userInfo.level, userInfo.xp]);
+  }, []);
 
   const getUser = React.useCallback(async () => {
     console.log('object');
@@ -71,6 +71,7 @@ const Profile = ({navigation}) => {
   };
   const logout = () => {
     setLogoutModalVisible(false);
+    setUserInfo('');
     navigation.navigate('Auth');
   };
   return (
@@ -162,7 +163,7 @@ const Profile = ({navigation}) => {
                 <View style={styles.statusSub}>
                   <Text
                     style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
-                    {userInfo.name}
+                    {userInfo === undefined ? `Player` : `${userInfo.name}`}
                   </Text>
                   <TouchableOpacity
                     onPress={() => navigation.navigate('EditProfileScreen')}>
@@ -174,7 +175,10 @@ const Profile = ({navigation}) => {
                     style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
                     Level
                   </Text>
-                  <Text style={styles.level}>{userInfo.level}</Text>
+                  <Text style={styles.level}>
+                    {' '}
+                    {userInfo === undefined ? '1' : `${userInfo.level}`}
+                  </Text>
                 </View>
               </View>
             </View>
