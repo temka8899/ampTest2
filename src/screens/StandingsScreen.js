@@ -50,33 +50,31 @@ const StandingsScreen = ({navigation, route}) => {
   //   fetchTeam();
   // }, [fetchTeam]);
 
-  const fetchTeam = React.useCallback(
-    async lgID => {
-      try {
-        const leagueData = await API.graphql(
-          graphqlOperation(listTeams, {
-            filter: {leagueID: {eq: lgID}},
+  const fetchTeam = React.useCallback(async lgID => {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {leagueID: {eq: lgID}},
+        }),
+      );
+      console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
+      setTeamData(leagueData.data.listTeams.items);
+      let array = [];
+      for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
+        const leagueData_ = await API.graphql(
+          graphqlOperation(listTeamPlayers, {
+            filter: {teamID: {eq: leagueData.data.listTeams.items[i].id}},
           }),
         );
-        console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
-        setTeamData(leagueData.data.listTeams.items);
-        for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
-          const leagueData_ = await API.graphql(
-            graphqlOperation(listTeamPlayers, {
-              filter: {teamID: {eq: teamData[i].id}},
-            }),
-          );
-          const teamPlayers = leagueData_.data.listTeamPlayers.items;
-          setPlayerInfo(prev => [...prev, teamPlayers]);
-          console.log('PlayerInfo :>> ', PlayerInfo);
-          console.log('league PLayer data.', teamPlayers);
-        }
-      } catch (err) {
-        console.log('error fetching todos', err);
+        const teamPlayers = leagueData_.data.listTeamPlayers.items;
+        array.push(teamPlayers);
       }
-    },
-    [PlayerInfo, teamData],
-  );
+      console.log('array after looped :>> ', array);
+      setPlayerInfo(array);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }, []);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -85,7 +83,7 @@ const StandingsScreen = ({navigation, route}) => {
         <SkeletonPlaceholder
           speed={800}
           backgroundColor={'#E1E9EE'}
-          highlightColor={'#F2F8FC'}>
+          highlightColor={'gray'}>
           <View>
             <View>
               <View style={{width: wp(100), height: hp(4)}} />
@@ -157,6 +155,8 @@ const StandingsScreen = ({navigation, route}) => {
               setData={setData}
             />
           </Modal>
+          <Text
+            style={{fontFamily: FONTS.brandFont, color: COLORS.white}}></Text>
         </View>
       )}
     </SafeAreaView>
