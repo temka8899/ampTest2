@@ -9,6 +9,12 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ImageBackground,
+<<<<<<< HEAD
+=======
+  FlatList,
+  RefreshControl,
+  ScrollView,
+>>>>>>> 471732c5f9daee722dba01e56337e9c48f20b386
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';
@@ -35,14 +41,27 @@ import {
   updateLeague,
 } from '../graphql/mutations';
 
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const AdminScreen = ({navigation}) => {
   useEffect(() => {
     fetchLeague();
     fetchGame();
   }, []);
 
+  const [refreshing, setRefreshing] = React.useState(false);
   const [LeagueList, setLeagueList] = React.useState([]);
   const [GameData, setGameData] = useState([]);
+
+  const onRefresh = React.useCallback(() => {
+    // checkInLeague();
+    setRefreshing(true);
+    fetchLeague();
+    fetchGame();
+    wait(500).then(() => setRefreshing(false));
+  }, []);
 
   const fetchLeague = async () => {
     try {
@@ -64,6 +83,9 @@ const AdminScreen = ({navigation}) => {
         }),
       );
       console.log('League deleted');
+      setTimeout(() => {
+        onRefresh();
+      }, 1000);
     } catch (err) {
       console.log('error deleting League:', err);
     }
@@ -210,6 +232,9 @@ const AdminScreen = ({navigation}) => {
         }),
       );
       console.log('Game deleted');
+      setTimeout(() => {
+        onRefresh();
+      }, 1000);
     } catch (err) {
       console.log('error deleting League:', err);
     }
@@ -339,7 +364,7 @@ const AdminScreen = ({navigation}) => {
           </Text>
           <View>
             <TouchableOpacity
-              onPress={() => DeleteLeague(item.id)}
+              onPress={() => DeleteGame(item.id)}
               style={styles.deleteBtn}>
               <Text style={styles.btnText}>Delete game</Text>
             </TouchableOpacity>
@@ -357,48 +382,64 @@ const AdminScreen = ({navigation}) => {
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
       </View>
-      <View>
-        {LeagueList.length !== 0 ? (
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={LeagueList}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-          />
-        ) : (
-          <View>
-            <View style={styles.lottie}>
-              <LottieView
-                autoPlay
-                source={require('../assets/Lottie/game-loading.json')}
-              />
-              <Text style={styles.lottieText}>LEAGUE CREATING...</Text>
+      <ScrollView
+        bounces={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.textStyle}> League List </Text>
+          <TouchableOpacity
+            onPress={() => {
+              onRefresh();
+            }}>
+            <Text style={styles.textStyle}> refresh </Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          {LeagueList.length !== 0 ? (
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={LeagueList}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+            />
+          ) : (
+            <View>
+              <View style={styles.lottie}>
+                <LottieView
+                  autoPlay
+                  source={require('../assets/Lottie/game-loading.json')}
+                />
+                <Text style={styles.lottieText}>LEAGUE CREATING...</Text>
+              </View>
             </View>
-          </View>
-        )}
-      </View>
-      <View>
-        {LeagueList.length !== 0 ? (
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={GameData}
-            renderItem={renderItemGame}
-            keyExtractor={item => item.id}
-          />
-        ) : (
-          <View>
-            <View style={styles.lottie}>
-              <LottieView
-                autoPlay
-                source={require('../assets/Lottie/game-loading.json')}
-              />
-              <Text style={styles.lottieText}>GAME CREATING...</Text>
+          )}
+        </View>
+        <Text style={styles.textStyle}> Game List </Text>
+        <View>
+          {LeagueList.length !== 0 ? (
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={GameData}
+              renderItem={renderItemGame}
+              keyExtractor={item => item.id}
+            />
+          ) : (
+            <View>
+              <View style={styles.lottie}>
+                <LottieView
+                  autoPlay
+                  source={require('../assets/Lottie/game-loading.json')}
+                />
+                <Text style={styles.lottieText}>GAME CREATING...</Text>
+              </View>
             </View>
-          </View>
-        )}
-      </View>
+          )}
+        </View>
+      </ScrollView>
       <View style={styles.ButtonContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('createGameScreen')}
@@ -489,6 +530,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'flex-end',
     flexDirection: 'row',
+  },
+  textStyle: {
+    color: COLORS.white,
+    fontFamily: FONTS.brandFont,
   },
 });
 export default AdminScreen;

@@ -49,6 +49,8 @@ export const createLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     createLeague(input: $input, condition: $condition) {
+      maxSchedule
+      currentSchedule
       startedDate
       perDay
       id
@@ -73,6 +75,8 @@ export const updateLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     updateLeague(input: $input, condition: $condition) {
+      maxSchedule
+      currentSchedule
       startedDate
       perDay
       id
@@ -97,6 +101,8 @@ export const deleteLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     deleteLeague(input: $input, condition: $condition) {
+      maxSchedule
+      currentSchedule
       startedDate
       perDay
       id
@@ -177,6 +183,8 @@ export const createTeam = /* GraphQL */ `
     createTeam(input: $input, condition: $condition) {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -193,6 +201,7 @@ export const createTeam = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       name
       win
       lose
@@ -209,6 +218,8 @@ export const updateTeam = /* GraphQL */ `
     updateTeam(input: $input, condition: $condition) {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -225,6 +236,7 @@ export const updateTeam = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       name
       win
       lose
@@ -241,6 +253,8 @@ export const deleteTeam = /* GraphQL */ `
     deleteTeam(input: $input, condition: $condition) {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -257,6 +271,7 @@ export const deleteTeam = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       name
       win
       lose
@@ -275,6 +290,8 @@ export const createTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -284,6 +301,7 @@ export const createTeamPlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -319,6 +337,8 @@ export const updateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -328,6 +348,7 @@ export const updateTeamPlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -363,6 +384,8 @@ export const deleteTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -372,6 +395,7 @@ export const deleteTeamPlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -405,6 +429,8 @@ export const createLeaguePlayer = /* GraphQL */ `
     createLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -447,6 +473,8 @@ export const updateLeaguePlayer = /* GraphQL */ `
     updateLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -489,6 +517,8 @@ export const deleteLeaguePlayer = /* GraphQL */ `
     deleteLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -535,6 +565,8 @@ export const createSchedule = /* GraphQL */ `
       home {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -544,6 +576,7 @@ export const createSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -553,6 +586,8 @@ export const createSchedule = /* GraphQL */ `
       away {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -562,6 +597,7 @@ export const createSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -588,6 +624,8 @@ export const updateSchedule = /* GraphQL */ `
       home {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -597,6 +635,7 @@ export const updateSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -606,6 +645,8 @@ export const updateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -615,6 +656,7 @@ export const updateSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -641,6 +683,8 @@ export const deleteSchedule = /* GraphQL */ `
       home {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -650,6 +694,7 @@ export const deleteSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -659,6 +704,8 @@ export const deleteSchedule = /* GraphQL */ `
       away {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -668,6 +715,7 @@ export const deleteSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose

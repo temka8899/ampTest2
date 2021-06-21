@@ -33,6 +33,8 @@ export const listGames = /* GraphQL */ `
 export const getLeague = /* GraphQL */ `
   query GetLeague($id: ID!) {
     getLeague(id: $id) {
+      maxSchedule
+      currentSchedule
       startedDate
       perDay
       id
@@ -59,6 +61,8 @@ export const listLeagues = /* GraphQL */ `
   ) {
     listLeagues(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -121,6 +125,8 @@ export const getTeam = /* GraphQL */ `
     getTeam(id: $id) {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -137,6 +143,7 @@ export const getTeam = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       name
       win
       lose
@@ -155,6 +162,8 @@ export const listTeams = /* GraphQL */ `
       items {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -164,6 +173,7 @@ export const listTeams = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -181,6 +191,8 @@ export const getTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -190,6 +202,7 @@ export const getTeamPlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -226,6 +239,7 @@ export const listTeamPlayers = /* GraphQL */ `
         id
         team {
           id
+          leagueID
           name
           win
           lose
@@ -258,6 +272,8 @@ export const getLeaguePlayer = /* GraphQL */ `
     getLeaguePlayer(id: $id) {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -302,6 +318,8 @@ export const listLeaguePlayers = /* GraphQL */ `
       items {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -340,6 +358,8 @@ export const getSchedule = /* GraphQL */ `
       home {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -349,6 +369,7 @@ export const getSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -358,6 +379,8 @@ export const getSchedule = /* GraphQL */ `
       away {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -367,6 +390,7 @@ export const getSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -394,6 +418,7 @@ export const listSchedules = /* GraphQL */ `
         leagueID
         home {
           id
+          leagueID
           name
           win
           lose
@@ -402,6 +427,7 @@ export const listSchedules = /* GraphQL */ `
         }
         away {
           id
+          leagueID
           name
           win
           lose

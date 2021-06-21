@@ -5,6 +5,8 @@ type Game @model {
 }
 
 type League @model {
+  maxSchedule: Int
+  currentSchedule: Int
   startedDate: String
   perDay: Int
   id: ID!
@@ -27,6 +29,7 @@ type Player @model {
 type Team @model {
   id: ID!
   league: League @connection
+  leagueID: String
   name: String!
   win: Int
   lose: Int

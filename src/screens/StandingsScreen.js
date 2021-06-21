@@ -16,6 +16,10 @@ import {COLORS, FONTS, icons} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {useEffect} from 'react';
+import {listTeamPlayers, listTeams} from '../graphql/queries';
+import {graphqlOperation} from '@aws-amplify/api-graphql';
+import API from '@aws-amplify/api';
 
 const StandingsScreen = ({navigation, route}) => {
   // let itemID = 0;
@@ -26,14 +30,51 @@ const StandingsScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [Home, setHome] = useState(undefined);
+  const [Away, setAway] = useState(undefined);
+  const [imgLoad, setImgLoad] = useState(true);
+  const [teamData, setTeamData] = useState([]);
+  const [PlayerInfo, setPlayerInfo] = useState([]);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
 
-  const setData = option => {
-    setChooseData(option);
+  const setData = async option => {
+    await setChooseData(option);
+    await console.log('leagueID :>> ', option.id);
+    fetchTeam(option.id);
   };
+
+  // useEffect(() => {
+  //   fetchTeam();
+  // }, [fetchTeam]);
+
+  const fetchTeam = React.useCallback(async lgID => {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {leagueID: {eq: lgID}},
+        }),
+      );
+      console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
+      setTeamData(leagueData.data.listTeams.items);
+      let array = [];
+      for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
+        const leagueData_ = await API.graphql(
+          graphqlOperation(listTeamPlayers, {
+            filter: {teamID: {eq: leagueData.data.listTeams.items[i].id}},
+          }),
+        );
+        const teamPlayers = leagueData_.data.listTeamPlayers.items;
+        array.push(teamPlayers);
+      }
+      console.log('array after looped :>> ', array);
+      setPlayerInfo(array);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }, []);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -42,7 +83,7 @@ const StandingsScreen = ({navigation, route}) => {
         <SkeletonPlaceholder
           speed={800}
           backgroundColor={'#E1E9EE'}
-          highlightColor={'#F2F8FC'}>
+          highlightColor={'gray'}>
           <View>
             <View>
               <View style={{width: wp(100), height: hp(4)}} />
@@ -114,6 +155,8 @@ const StandingsScreen = ({navigation, route}) => {
               setData={setData}
             />
           </Modal>
+          <Text
+            style={{fontFamily: FONTS.brandFont, color: COLORS.white}}></Text>
         </View>
       )}
     </SafeAreaView>
