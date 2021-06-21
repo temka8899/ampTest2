@@ -34,7 +34,7 @@ const StandingsScreen = ({navigation, route}) => {
   const [Away, setAway] = useState(undefined);
   const [imgLoad, setImgLoad] = useState(true);
   const [teamData, setTeamData] = useState([]);
-  const PlayerArr = [];
+  const [PlayerInfo, setPlayerInfo] = useState([]);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -42,8 +42,8 @@ const StandingsScreen = ({navigation, route}) => {
 
   const setData = async option => {
     await setChooseData(option);
-    await console.log('leagueID :>> ', chooseData.id);
-    fetchTeam(chooseData.id);
+    await console.log('leagueID :>> ', option.id);
+    fetchTeam(option.id);
   };
 
   // useEffect(() => {
@@ -67,15 +67,15 @@ const StandingsScreen = ({navigation, route}) => {
             }),
           );
           const teamPlayers = leagueData_.data.listTeamPlayers.items;
-          PlayerArr.push(teamPlayers);
+          setPlayerInfo(prev => [...prev, teamPlayers]);
+          console.log('PlayerInfo :>> ', PlayerInfo);
           console.log('league PLayer data.', teamPlayers);
-          console.log(PlayerArr);
         }
       } catch (err) {
         console.log('error fetching todos', err);
       }
     },
-    [PlayerArr, teamData],
+    [PlayerInfo, teamData],
   );
 
   return (
