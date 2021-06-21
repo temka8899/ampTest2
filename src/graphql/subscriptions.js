@@ -37,6 +37,8 @@ export const onDeleteGame = /* GraphQL */ `
 export const onCreateLeague = /* GraphQL */ `
   subscription OnCreateLeague {
     onCreateLeague {
+      maxSchedule
+      currentSchedule
       startedDate
       perDay
       id
@@ -58,6 +60,8 @@ export const onCreateLeague = /* GraphQL */ `
 export const onUpdateLeague = /* GraphQL */ `
   subscription OnUpdateLeague {
     onUpdateLeague {
+      maxSchedule
+      currentSchedule
       startedDate
       perDay
       id
@@ -79,6 +83,8 @@ export const onUpdateLeague = /* GraphQL */ `
 export const onDeleteLeague = /* GraphQL */ `
   subscription OnDeleteLeague {
     onDeleteLeague {
+      maxSchedule
+      currentSchedule
       startedDate
       perDay
       id
@@ -147,6 +153,8 @@ export const onCreateTeam = /* GraphQL */ `
     onCreateTeam {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -163,6 +171,7 @@ export const onCreateTeam = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       name
       win
       lose
@@ -176,6 +185,8 @@ export const onUpdateTeam = /* GraphQL */ `
     onUpdateTeam {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -192,6 +203,7 @@ export const onUpdateTeam = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       name
       win
       lose
@@ -205,6 +217,8 @@ export const onDeleteTeam = /* GraphQL */ `
     onDeleteTeam {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -221,6 +235,7 @@ export const onDeleteTeam = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      leagueID
       name
       win
       lose
@@ -236,6 +251,8 @@ export const onCreateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -245,6 +262,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -277,6 +295,8 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -286,6 +306,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -318,6 +339,8 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -327,6 +350,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -357,6 +381,8 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
     onCreateLeaguePlayer {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -396,6 +422,8 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
     onUpdateLeaguePlayer {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -435,6 +463,8 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
     onDeleteLeaguePlayer {
       id
       league {
+        maxSchedule
+        currentSchedule
         startedDate
         perDay
         id
@@ -478,6 +508,8 @@ export const onCreateSchedule = /* GraphQL */ `
       home {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -487,6 +519,7 @@ export const onCreateSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -496,6 +529,8 @@ export const onCreateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -505,6 +540,7 @@ export const onCreateSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -528,6 +564,8 @@ export const onUpdateSchedule = /* GraphQL */ `
       home {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -537,6 +575,7 @@ export const onUpdateSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -546,6 +585,8 @@ export const onUpdateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -555,6 +596,7 @@ export const onUpdateSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -578,6 +620,8 @@ export const onDeleteSchedule = /* GraphQL */ `
       home {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -587,6 +631,7 @@ export const onDeleteSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose
@@ -596,6 +641,8 @@ export const onDeleteSchedule = /* GraphQL */ `
       away {
         id
         league {
+          maxSchedule
+          currentSchedule
           startedDate
           perDay
           id
@@ -605,6 +652,7 @@ export const onDeleteSchedule = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        leagueID
         name
         win
         lose

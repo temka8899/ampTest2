@@ -7,6 +7,7 @@ import {
   StatusBar,
   StyleSheet,
   SafeAreaView,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
 
@@ -183,6 +184,23 @@ const Profile = ({navigation}) => {
               </View>
             </View>
           </View>
+          <View>
+            <View style={styles.formContainer}>
+              <TextInput
+                multiline
+                numberOfLines={4}
+                maxLength={150}
+                autoCorrect={false}
+                // onChangeText={val => setleagueDescription(val)}
+                // value={formState.name}
+                style={styles.input}
+                // onChangeText={onChangeNumber}
+                // value={number}
+                placeholder="TEAM4"
+                placeholderTextColor={COLORS.purpleText}
+              />
+            </View>
+          </View>
           <View
             style={{
               marginTop: hp(8),
@@ -234,6 +252,11 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: COLORS.background,
+  },
+  formContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: hp(3),
   },
   header: {
     width: wp(100),

@@ -57,6 +57,8 @@ Amplify.configure({
 const createTeamScreen = ({navigation}) => {
   const initialState = {name: ''};
   const [formState, setFormState] = useState(initialState);
+  let unfinishedMatch = 0;
+  const winners = [];
 
   function setInput(key, value) {
     setFormState({...formState, [key]: value});
@@ -126,7 +128,11 @@ const createTeamScreen = ({navigation}) => {
       //     },
       //   ],
       // };
-      const leagueData = await API.graphql(graphqlOperation(listTeams));
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'}},
+        }),
+      );
       // const todos = leagueData.data.listTeams.items;
       // console.log('Teams>>>>>>>>>>>>>>', todos);
       console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
@@ -220,19 +226,7 @@ const createTeamScreen = ({navigation}) => {
   }
 
   async function startLeague() {
-    //Set Is Start League True
-    var date = new Date();
-    date.setDate(date.getDate() + 1);
-    const temp = await API.graphql(
-      graphqlOperation(updateLeague, {
-        input: {
-          id: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
-          isStart: true,
-          startedDate: `${date.toLocaleDateString()}`,
-        },
-      }),
-    );
-    const startLeagueId = temp.data.updateLeague.id;
+    const startLeagueId = 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa';
 
     // Get Soccer League Players
     try {
@@ -257,6 +251,7 @@ const createTeamScreen = ({navigation}) => {
                   name: `team${i}`,
 
                   //LeagueID
+                  leagueID: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
                   teamLeagueId: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
                   win: 0,
                   lose: 0,
@@ -265,10 +260,7 @@ const createTeamScreen = ({navigation}) => {
             );
             console.log(`Team${i} created `);
             //Add Team Player
-            await addStartTeamPlayer(
-              temp.data.createTeam.id,
-              todos[i].playerID,
-            );
+            addStartTeamPlayer(temp.data.createTeam.id, todos[i].playerID);
             await addStartTeamPlayer(
               temp.data.createTeam.id,
               todos[i + 1].playerID,
@@ -277,6 +269,22 @@ const createTeamScreen = ({navigation}) => {
             console.log('error creating League:', err);
           }
         }
+
+        //Set Is Start League True
+        var date = new Date();
+        date.setDate(date.getDate());
+        let n = todos.length / 2 - 1;
+        await API.graphql(
+          graphqlOperation(updateLeague, {
+            input: {
+              id: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
+              isStart: true,
+              startedDate: `${date.toLocaleDateString()}`,
+              maxSchedule: `${(n * (n + 1)) / 2}`,
+              currentSchedule: 0,
+            },
+          }),
+        );
       } else {
         console.log('Soccer League Players not even or not enough');
       }
@@ -305,6 +313,23 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function updateTeamName() {
+    try {
+      await API.graphql(
+        graphqlOperation(updateTeam, {
+          input: {
+            //Team id
+            id: '236e6a2f-6014-44de-889e-f1962730366a',
+            name: 'ner soligdson bat',
+          },
+        }),
+      );
+      console.log('Team name Updated');
+    } catch (err) {
+      console.log('error updating Teams', err);
+    }
+  }
+
   async function addScheduleLoop(startLeagueId) {
     const teamData = await API.graphql(graphqlOperation(listTeams));
     const teams = teamData.data.listTeams.items;
@@ -316,6 +341,7 @@ const createTeamScreen = ({navigation}) => {
     var numberOfDaysToAdd = 0;
     let dateNemeh = 0;
     let tooluur = 1;
+
     // date.setDate(date.getDate() + numberOfDaysToAdd);
     date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {
@@ -374,13 +400,43 @@ const createTeamScreen = ({navigation}) => {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
-            date: {eq: '6/18/2021'},
             leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
       );
       const todos = scheduleData.data.listSchedules.items;
       console.log('Schedule>>>>>>>>>>>>>>', todos);
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
+  async function isScheduleEnded() {
+    try {
+      const scheduleData = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
+          },
+        }),
+      );
+      const todos = scheduleData.data.listSchedules.items;
+      for (let i = 0; i < todos.length; i++) {
+        if (todos[i].awayScore == 0 || todos[i].homeScore == 0) {
+          unfinishedMatch++;
+        } else {
+          if (todos[i].awayScore == 10) {
+            winners.push(todos[i].away);
+          } else if (todos[i].homeScore == 10) {
+            winners.push(todos[i].home);
+          }
+        }
+      }
+      todos.length == unfinishedMatch
+        ? console.log('all matches played>>>>>>>>>>>>>>')
+        : console.log('unfinished Match>>>>>>>>>>>>>>', unfinishedMatch);
+      console.log('unfinished Match>>>>>>>>>>>>>>', todos);
+      console.log('Winners', winners);
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -533,6 +589,8 @@ const createTeamScreen = ({navigation}) => {
         />
         <Button onPress={() => DeleteLeague()} title="Delete League" />
         <Button onPress={() => fetchGame()} title="fetch game" />
+        <Button onPress={() => updateTeamName()} title="update team name" />
+        <Button onPress={() => isScheduleEnded()} title="isSchedule Ended?" />
       </View>
     </SafeAreaView>
   );
