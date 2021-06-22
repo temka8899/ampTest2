@@ -101,6 +101,7 @@ const AdminScreen = ({navigation}) => {
         }),
       );
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
+      let tooluur = 1;
       console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
       if (todos.length % 2 == 0 && todos.length >= 8) {
         for (var i = 0; i < todos.length; i = i + 2) {
@@ -110,7 +111,7 @@ const AdminScreen = ({navigation}) => {
             const temp = await API.graphql(
               graphqlOperation(createTeam, {
                 input: {
-                  name: `team${i}`,
+                  name: `team${tooluur}`,
 
                   //LeagueID
                   leagueID: leagueID,
@@ -130,9 +131,10 @@ const AdminScreen = ({navigation}) => {
           } catch (err) {
             console.log('error creating League:', err);
           }
+          tooluur++;
         }
 
-        //Set Is Start League True
+        //Update League
         var date = new Date();
         date.setDate(date.getDate());
         let n = todos.length / 2 - 1;
@@ -228,14 +230,17 @@ const AdminScreen = ({navigation}) => {
   };
 
   async function addScheduleLoop(startLeagueId) {
-    const teamData = await API.graphql(graphqlOperation(listTeams));
+    const teamData = await API.graphql(
+      graphqlOperation(listTeams, {
+        filter: {leagueID: {eq: startLeagueId}},
+      }),
+    );
     const teams = teamData.data.listTeams.items;
     const k = teams.length;
     var nemeh = 1;
     var hasah = teams.length;
     var date = new Date();
     var date2 = date.getDay();
-    var numberOfDaysToAdd = 0;
     let dateNemeh = 0;
     let tooluur = 1;
     date.setDate(date.getDate() - 1);
