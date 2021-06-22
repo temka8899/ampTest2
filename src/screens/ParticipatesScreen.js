@@ -51,9 +51,7 @@ const ParticipatesScreen = ({navigation, route}) => {
   const [leaguePlayers, setLeaguePlayers] = useState([]);
   const {userInfo} = React.useContext(AuthContext);
   const [refreshing, setRefreshing] = React.useState(false);
-
   const [inLeague, setInLeague] = useState();
-
   const [isModalVisible, setModalVisible] = useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -72,10 +70,9 @@ const ParticipatesScreen = ({navigation, route}) => {
   }, [LeaguePlayers, checkInLeague, fetchLeague, getPlayerId]);
 
   const sorted = leaguePlayers.sort((a, b) => b.player.level - a.player.level);
-
   const gameInfo = route.params.itemId;
-
   const LeagueId = route.params.itemId.id;
+  const _isStart = route.params.itemId.isStart;
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -261,6 +258,7 @@ const ParticipatesScreen = ({navigation, route}) => {
           <ActivityIndicator size={'small'} color={'white'} />
         ) : (
           <TouchableOpacity
+            disabled={_isStart == true ? true : false}
             style={[
               {
                 backgroundColor: !inLeague ? COLORS.green : COLORS.red,
@@ -274,7 +272,7 @@ const ParticipatesScreen = ({navigation, route}) => {
                 fontSize: RFPercentage(1.7),
                 color: COLORS.white,
               }}>
-              {inLeague ? "I'm out" : "I'm in"}
+              {inLeague ? (_isStart == true ? 'Started' : "I'm out") : "I'm in"}
             </Text>
           </TouchableOpacity>
         )}
