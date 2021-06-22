@@ -147,6 +147,8 @@ export const getTeam = /* GraphQL */ `
       name
       win
       lose
+      playerAvatar1
+      playerAvatar2
       createdAt
       updatedAt
     }
@@ -177,6 +179,8 @@ export const listTeams = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -206,6 +210,8 @@ export const getTeamPlayer = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -243,6 +249,8 @@ export const listTeamPlayers = /* GraphQL */ `
           name
           win
           lose
+          playerAvatar1
+          playerAvatar2
           createdAt
           updatedAt
         }
@@ -373,6 +381,8 @@ export const getSchedule = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -394,6 +404,8 @@ export const getSchedule = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -422,6 +434,8 @@ export const listSchedules = /* GraphQL */ `
           name
           win
           lose
+          playerAvatar1
+          playerAvatar2
           createdAt
           updatedAt
         }
@@ -431,6 +445,8 @@ export const listSchedules = /* GraphQL */ `
           name
           win
           lose
+          playerAvatar1
+          playerAvatar2
           createdAt
           updatedAt
         }
