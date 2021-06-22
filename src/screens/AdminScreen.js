@@ -112,7 +112,8 @@ const AdminScreen = ({navigation}) => {
               graphqlOperation(createTeam, {
                 input: {
                   name: `team${tooluur}`,
-
+                  playerAvatar1: `${todos[i].player.avatar}`,
+                  playerAvatar2: `${todos[i + 1].player.avatar}`,
                   //LeagueID
                   leagueID: leagueID,
                   teamLeagueId: leagueID,

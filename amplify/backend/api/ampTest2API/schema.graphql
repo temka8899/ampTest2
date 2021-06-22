@@ -33,6 +33,8 @@ type Team @model {
   name: String!
   win: Int
   lose: Int
+  playerAvatar1: String
+  playerAvatar2: String
 }
 
 type TeamPlayer @model {

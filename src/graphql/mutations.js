@@ -205,6 +205,8 @@ export const createTeam = /* GraphQL */ `
       name
       win
       lose
+      playerAvatar1
+      playerAvatar2
       createdAt
       updatedAt
     }
@@ -240,6 +242,8 @@ export const updateTeam = /* GraphQL */ `
       name
       win
       lose
+      playerAvatar1
+      playerAvatar2
       createdAt
       updatedAt
     }
@@ -275,6 +279,8 @@ export const deleteTeam = /* GraphQL */ `
       name
       win
       lose
+      playerAvatar1
+      playerAvatar2
       createdAt
       updatedAt
     }
@@ -305,6 +311,8 @@ export const createTeamPlayer = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -352,6 +360,8 @@ export const updateTeamPlayer = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -399,6 +409,8 @@ export const deleteTeamPlayer = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -580,6 +592,8 @@ export const createSchedule = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -601,6 +615,8 @@ export const createSchedule = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -639,6 +655,8 @@ export const updateSchedule = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -660,6 +678,8 @@ export const updateSchedule = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -698,6 +718,8 @@ export const deleteSchedule = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }
@@ -719,6 +741,8 @@ export const deleteSchedule = /* GraphQL */ `
         name
         win
         lose
+        playerAvatar1
+        playerAvatar2
         createdAt
         updatedAt
       }

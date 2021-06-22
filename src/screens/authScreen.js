@@ -15,7 +15,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
-
+import ValidationComponent from 'react-native-form-validator';
 import {icons, images} from '../constants';
 import {wp, hp, FONTS, COLORS} from '../constants/theme';
 import FormInput from '../components/FormInput';
@@ -43,15 +43,10 @@ const SwitchView = ({value, onPress}) => {
   const [username, setSignUpUsername] = useState('');
   const [password, setSignUpPassword] = useState('');
   const [name, setSignUpName] = useState('');
-  const [phone_number, setPhoneNumber] = useState('+97688888888');
+  const [phone_number, setPhoneNumber] = useState('');
   const [authCode, setConfirmCode] = useState('');
-  const [resendEmail, setResendEmail] = useState('');
   const [code, setCode] = useState('');
   const [new_password, setNew_Password] = useState('');
-  const [gender, setGender] = useState([
-    {id: 1, value: true, name: 'Female', selected: false},
-    {id: 2, value: false, name: 'Male', selected: false},
-  ]);
 
   async function signUp() {
     console.log(email);
@@ -65,7 +60,7 @@ const SwitchView = ({value, onPress}) => {
         password,
         attributes: {
           email: `${email}`,
-          phone_number: `${phone_number}`,
+          phone_number: `+976${phone_number}`,
           'custom:Admin': `1`,
           'custom:Name': `${name}`,
         },
@@ -75,6 +70,36 @@ const SwitchView = ({value, onPress}) => {
       onPress(3);
     } catch (error) {
       console.log('❌ Error signing up...', error);
+    }
+  }
+  function checkSignUpData() {
+    var checkEmail = email.includes('@');
+    if (name.length < 4) {
+      showMessage({
+        message: `Username length not enough`,
+        type: 'warning',
+        duration: 1500,
+      });
+    } else if (checkEmail == false || email.length < 10) {
+      showMessage({
+        message: `Check your email`,
+        type: 'warning',
+        duration: 1500,
+      });
+    } else if (password.length < 8) {
+      showMessage({
+        message: `Password length not enough`,
+        type: 'warning',
+        duration: 1500,
+      });
+    } else if (phone_number.length < 8) {
+      showMessage({
+        message: `Phone number length not enough`,
+        type: 'warning',
+        duration: 1500,
+      });
+    } else {
+      signUp();
     }
   }
 
@@ -188,7 +213,7 @@ const SwitchView = ({value, onPress}) => {
               <FormInput
                 autoCorrect={false}
                 whichScreen
-                onChangeText={text => [setPhoneNumber(`+976${text}`)]}
+                onChangeText={text => [setPhoneNumber(`${text}`)]}
                 placeholder="Phone number"
                 keyboardType="number-pad"
               />
@@ -204,7 +229,8 @@ const SwitchView = ({value, onPress}) => {
                 ))}
               </View> */}
 
-              <TouchableOpacity onPress={() => signUp()}>
+              {/* <TouchableOpacity onPress={() => signUp()}> */}
+              <TouchableOpacity onPress={() => checkSignUpData()}>
                 <ImageBackground
                   source={images.button}
                   style={styles.signupButton}>
