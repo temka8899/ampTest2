@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Home from './src/screens/uploadScreen';
 import Tabs from './src/components/BottomTab';
-import AuthScreen from './src/screens/AuthScreen';
+import authScreen from './src/screens/authScreen';
 import AdminScreen from './src/screens/AdminScreen';
 import CountScreen from './src/screens/CountScreen';
 import createTeamScreen from './src/screens/CreateTeam';
@@ -24,7 +24,7 @@ function App() {
           screenOptions={{
             headerShown: false,
           }}>
-          <Stack.Screen name="Auth" component={AuthScreen} />
+          <Stack.Screen name="Auth" component={authScreen} />
           <Stack.Screen name="Tabs" component={Tabs} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen

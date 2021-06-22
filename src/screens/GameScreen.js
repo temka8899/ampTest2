@@ -554,7 +554,8 @@ const GameScreen = ({navigation}) => {
     [selectedItem],
   );
   var date = new Date();
-  date.setDate(date.getDate() - 1);
+  date.setDate(date.getDate());
+  console.log(date.toLocaleDateString());
   const getSchedule = React.useCallback(async () => {
     try {
       const scheduleData = await API.graphql(
