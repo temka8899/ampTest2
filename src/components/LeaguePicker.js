@@ -30,7 +30,6 @@ const LeaguePicker = props => {
     }
   }
   const option = LeagueList.map((item, index) => {
-    // console.log(item);
     return (
       <TouchableOpacity
         style={styles.option}
