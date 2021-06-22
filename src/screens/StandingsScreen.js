@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 
 import AppBar from '../components/AppBar';
@@ -35,6 +36,7 @@ const StandingsScreen = ({navigation, route}) => {
   const [imgLoad, setImgLoad] = useState(true);
   const [teamData, setTeamData] = useState([]);
   const [PlayerInfo, setPlayerInfo] = useState([]);
+  console.log('PlayerInfo :>> ', PlayerInfo);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -155,8 +157,22 @@ const StandingsScreen = ({navigation, route}) => {
               setData={setData}
             />
           </Modal>
-          <Text
-            style={{fontFamily: FONTS.brandFont, color: COLORS.white}}></Text>
+          <View>
+        { PlayerInfo.length != 0    <FlatList
+              data={PlayerInfo}
+              keyExtractor={item => item.id}
+              renderItem={({item, index}) => (
+                <View>
+                  <Text
+                    style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+                    {item[0].player.name}
+                  </Text>
+                </View>
+              )}
+            /> : 
+            
+            }
+          </View>
         </View>
       )}
     </SafeAreaView>
