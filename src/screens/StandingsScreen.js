@@ -39,11 +39,9 @@ const StandingsScreen = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [PlayerInfo, setPlayerInfo] = useState([]);
 
-  const sorted = PlayerInfo.sort(
-    (a, b) =>
-      a[1].team.win / (a[1].team.lose + a[1].team.win) -
-      b[0].team.win / (b[0].team.lose + b[0].team.win),
-  ).reverse();
+  const sorted = teamData
+    .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
+    .reverse();
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -76,6 +74,7 @@ const StandingsScreen = ({navigation, route}) => {
       );
       console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
       setTeamData(leagueData.data.listTeams.items);
+      setLoading(false);
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -105,7 +104,7 @@ const StandingsScreen = ({navigation, route}) => {
           />
         </Modal>
         <View>
-          {PlayerInfo.length != 0 ? (
+          {teamData.length != 0 ? (
             <>
               {isLoading ? (
                 <SkeletonPlaceholder
@@ -190,11 +189,11 @@ const StandingsScreen = ({navigation, route}) => {
                         </Text>
                         <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
                           <Image
-                            source={item[0].player.avatar}
+                            source={item.playerAvatar1}
                             style={styles.avatar}
                           />
                           <Image
-                            source={item[1].player.avatar}
+                            source={item.playerAvatar2}
                             style={styles.avatar}
                           />
                         </View>
@@ -204,7 +203,7 @@ const StandingsScreen = ({navigation, route}) => {
                             color: COLORS.white,
                             marginLeft: wp(5),
                           }}>
-                          {item[0].team.name}
+                          {item.name}
                         </Text>
                         <View
                           style={{
@@ -216,15 +215,13 @@ const StandingsScreen = ({navigation, route}) => {
                               fontFamily: FONTS.brandFont,
                               color: COLORS.green,
                             }}>
-                            {item[0].team.win}
+                            {item.win}
                             <Text
                               style={{
                                 fontFamily: FONTS.brandFont,
                                 color: COLORS.white,
                               }}>{`-`}</Text>
-                            <Text style={{color: COLORS.red}}>
-                              {item[0].team.lose}
-                            </Text>
+                            <Text style={{color: COLORS.red}}>{item.lose}</Text>
                           </Text>
                         </View>
                       </View>
