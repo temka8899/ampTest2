@@ -103,8 +103,10 @@ const AdminScreen = ({navigation}) => {
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       let tooluur = 1;
       console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
-      if (todos.length % 2 == 0 && todos.length >= 8) {
-        for (var i = 0; i < todos.length; i = i + 2) {
+      const sorted = todos.sort((a, b) => b.player.level - a.player.level);
+      if (sorted.length % 2 == 0 && sorted.length >= 8) {
+        let last = sorted.length - 1;
+        for (var i = 0; i < sorted.length / 2; i = i + 1) {
           console.log(i);
           // Add Team loop
           try {
@@ -112,8 +114,8 @@ const AdminScreen = ({navigation}) => {
               graphqlOperation(createTeam, {
                 input: {
                   name: `team${tooluur}`,
-                  playerAvatar1: `${todos[i].player.avatar}`,
-                  playerAvatar2: `${todos[i + 1].player.avatar}`,
+                  playerAvatar1: `${sorted[i].player.avatar}`,
+                  playerAvatar2: `${sorted[last].player.avatar}`,
                   //LeagueID
                   leagueID: leagueID,
                   teamLeagueId: leagueID,
@@ -124,11 +126,12 @@ const AdminScreen = ({navigation}) => {
             );
             console.log(`Team${i} created `);
             //Add Team Player
-            addStartTeamPlayer(temp.data.createTeam.id, todos[i].playerID);
+            addStartTeamPlayer(temp.data.createTeam.id, sorted[i].playerID);
             await addStartTeamPlayer(
               temp.data.createTeam.id,
-              todos[i + 1].playerID,
+              sorted[last].playerID,
             );
+            last--;
           } catch (err) {
             console.log('error creating League:', err);
           }

@@ -64,13 +64,13 @@ const Match = ({item, onPress, user}) => {
     console.log('homePlayers', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
     console.log(`awayPlayers`, awayPlayers);
-    let finded = await findTeam(user.id);
+    let findHome = await findTeam(user.id, item.home.id);
+    let findAway = await findTeam(user.id, item.away.id);
     console.log(`item.home.id`, item.home.id);
     console.log(`item.away.id`, item.away.id);
-    console.log(`finded`, finded[0].teamID);
-    if (item.home.id === finded[0].teamID) {
+    if (findHome) {
       setFind('home');
-    } else if (item.away.id === finded[0].teamID) {
+    } else if (findAway) {
       setFind('away');
     }
     setHome(homePlayers);
@@ -92,16 +92,20 @@ const Match = ({item, onPress, user}) => {
       console.log('error fetching todos', err);
     }
   }
-  async function findTeam(id) {
+  async function findTeam(id, teamid) {
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeamPlayers, {
-          filter: {playerID: {eq: `${id}`}},
+          filter: {playerID: {eq: `${id}`}, teamID: {eq: `${teamid}`}},
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
       console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
-      return todos;
+      if (todos.length === 1) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -375,6 +379,7 @@ const GameScreen = ({navigation}) => {
     findGreet();
     getName();
     getSchedule();
+    console.log('userInfo   as d as ', userInfo);
   }, [getName, getSchedule]);
 
   const press = item => {
@@ -502,6 +507,7 @@ const GameScreen = ({navigation}) => {
           return item;
         }
       });
+      console.log(`finded`, finded);
       setUserInfo(finded);
     },
     [setUserInfo],

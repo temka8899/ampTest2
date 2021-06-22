@@ -15,7 +15,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
-import ValidationComponent from 'react-native-form-validator';
+// import ValidationComponent from 'react-native-form-validator';
 import {icons, images} from '../constants';
 import {wp, hp, FONTS, COLORS} from '../constants/theme';
 import FormInput from '../components/FormInput';
