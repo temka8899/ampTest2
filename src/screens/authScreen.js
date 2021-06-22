@@ -46,10 +46,13 @@ const SwitchView = ({value, onPress}) => {
   const [phone_number, setPhoneNumber] = useState('+97688888888');
   const [authCode, setConfirmCode] = useState('');
   const [resendEmail, setResendEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [new_password, setNew_Password] = useState('');
   const [gender, setGender] = useState([
     {id: 1, value: true, name: 'Female', selected: false},
     {id: 2, value: false, name: 'Male', selected: false},
   ]);
+
   async function signUp() {
     console.log(email);
     console.log(password);
@@ -78,10 +81,29 @@ const SwitchView = ({value, onPress}) => {
   async function forgotPasswordEmail() {
     try {
       const temp = Auth.forgotPassword(username);
-      console.log(username);
       console.log('✅ Email sent', temp);
+      showMessage({
+        message: `Email sent`,
+        type: 'success',
+        duration: 1500,
+      });
     } catch (error) {
-      console.log(err);
+      console.log('Error sending email. ', err);
+    }
+  }
+
+  async function forgotPasswordSubmit() {
+    try {
+      const temp = Auth.forgotPasswordSubmit(username, code, new_password);
+      console.log('Password changed', temp);
+      showMessage({
+        message: `Password Change`,
+        description: 'Log In to your account',
+        type: 'success',
+        duration: 1500,
+      });
+    } catch (error) {
+      console.log('Error setting new password', error);
     }
   }
 
@@ -250,16 +272,18 @@ const SwitchView = ({value, onPress}) => {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.forgotPassContainer}>
               <FlashMessage position="top" />
-              <Text style={styles.text}>Enter your email asdasd</Text>
+              <Text style={styles.text}>Enter your email asdfgh</Text>
 
               <FormInput
                 autoCorrect={false}
+                autoCapitalize="none"
                 placeholder="Email"
                 onChangeText={text2 => [setSignUpUsername(text2)]}
                 keyboardType="email-address"
               />
 
-              <TouchableOpacity onPress={() => [forgotPasswordEmail()]}>
+              <TouchableOpacity
+                onPress={() => [forgotPasswordEmail(), onPress(5)]}>
                 <ImageBackground
                   source={images.button}
                   style={styles.smallButton}>
@@ -292,48 +316,22 @@ const SwitchView = ({value, onPress}) => {
 
             <FormInput
               autoCorrect={false}
+              autoCapitalize="none"
               placeholder="Code"
-              onChangeText={text2 => setConfirmCode(text2)}
+              onChangeText={text2 => setCode(text2)}
               keyboardType="number-pad"
             />
 
-            <TouchableOpacity onPress={() => onPress(6)}>
-              <ImageBackground
-                source={images.button}
-                style={styles.smallButton}>
-                <Text
-                  style={{
-                    fontFamily: FONTS.brandFont,
-                    color: COLORS.white,
-                    paddingTop: hp(0.6),
-                    margin: hp(1),
-                    fontSize: RFPercentage(1.7),
-                  }}>
-                  CONFIRM
-                </Text>
-              </ImageBackground>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      );
-    //Forgot password3
-    case 6:
-      return (
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={styles.forgotPassContainer}>
-            <FlashMessage position="top" />
-            <Text style={styles.text}>Enter new password</Text>
-
             <FormInput
-              value={authCode}
               autoCorrect={false}
-              onChangeText={text2 => setConfirmCode(text2)}
               placeholder="Password"
+              onChangeText={text2 => setNew_Password(text2)}
+              keyboardType="default"
               secureTextEntry
             />
 
-            <TouchableOpacity onPress={() => onPress(1)}>
+            <TouchableOpacity
+              onPress={() => [forgotPasswordSubmit(), onPress(0)]}>
               <ImageBackground
                 source={images.button}
                 style={styles.smallButton}>
@@ -352,6 +350,42 @@ const SwitchView = ({value, onPress}) => {
           </View>
         </KeyboardAvoidingView>
       );
+    // //Forgot password3
+    // case 6:
+    //   return (
+    //     <KeyboardAvoidingView
+    //       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    //       <View style={styles.forgotPassContainer}>
+    //         <FlashMessage position="top" />
+    //         <Text style={styles.text}>Enter new password</Text>
+
+    //         <FormInput
+    //           value={authCode}
+    //           autoCorrect={false}
+    //           onChangeText={text2 => setConfirmCode(text2)}
+    //           placeholder="Password"
+    //           secureTextEntry
+    //         />
+
+    //         <TouchableOpacity onPress={() => onPress(1)}>
+    //           <ImageBackground
+    //             source={images.button}
+    //             style={styles.smallButton}>
+    //             <Text
+    //               style={{
+    //                 fontFamily: FONTS.brandFont,
+    //                 color: COLORS.white,
+    //                 paddingTop: hp(0.6),
+    //                 margin: hp(1),
+    //                 fontSize: RFPercentage(1.7),
+    //               }}>
+    //               CONFIRM
+    //             </Text>
+    //           </ImageBackground>
+    //         </TouchableOpacity>
+    //       </View>
+    //     </KeyboardAvoidingView>
+    //   );
     default:
       return;
   }

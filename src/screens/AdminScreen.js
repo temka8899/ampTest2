@@ -90,13 +90,16 @@ const AdminScreen = ({navigation}) => {
   const StartLeague = async leagueID => {
     //Set Is Start League True
     var date = new Date();
-    date.setDate(date.getDate() + 1);
+    date.setDate(date.getDate());
+    let n = todos.length / 2 - 1;
     const temp = await API.graphql(
       graphqlOperation(updateLeague, {
         input: {
           id: leagueID,
           isStart: true,
           startedDate: `${date.toLocaleDateString()}`,
+          maxSchedule: `${(n * (n + 1)) / 2}`,
+          currentSchedule: 1,
         },
       }),
     );
@@ -112,6 +115,7 @@ const AdminScreen = ({navigation}) => {
           },
         }),
       );
+      let teamIndex = 1;
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
       if (todos.length % 2 == 0 && todos.length >= 8) {
@@ -122,7 +126,7 @@ const AdminScreen = ({navigation}) => {
             const temp_ = await API.graphql(
               graphqlOperation(createTeam, {
                 input: {
-                  name: `team${i}`,
+                  name: `team${teamIndex}`,
 
                   //LeagueID
                   teamLeagueId: leagueID,
@@ -131,7 +135,7 @@ const AdminScreen = ({navigation}) => {
                 },
               }),
             );
-            console.log(`Team${i} created `);
+            console.log(`Team${teamIndex} created `);
             //Add Team Player
             await addStartTeamPlayer(
               temp_.data.createTeam.id,
@@ -144,6 +148,7 @@ const AdminScreen = ({navigation}) => {
           } catch (err) {
             console.log('error creating League:', err);
           }
+          teamIndex++;
         }
       } else {
         console.log('Soccer League Players not even or not enough');

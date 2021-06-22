@@ -280,7 +280,7 @@ const createTeamScreen = ({navigation}) => {
               id: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa',
               isStart: true,
               startedDate: `${date.toLocaleDateString()}`,
-              maxSchedule: `${n(n + 1) / 2}`,
+              maxSchedule: `${(n * (n + 1)) / 2}`,
               currentSchedule: 1,
             },
           }),
