@@ -9,12 +9,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ImageBackground,
-<<<<<<< HEAD
-=======
-  FlatList,
   RefreshControl,
   ScrollView,
->>>>>>> 471732c5f9daee722dba01e56337e9c48f20b386
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';

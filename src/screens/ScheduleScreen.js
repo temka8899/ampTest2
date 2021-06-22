@@ -16,7 +16,7 @@ import {AuthContext} from '../../App';
 
 import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
-import {COLORS, FONTS, icons} from '../constants';
+import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
 import moment from 'moment';
@@ -39,11 +39,11 @@ const Match = ({item, onPress, user}) => {
     let homePlayers = await fetchTeamPlayers(item.home.id);
     console.log('homePlayers', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
-    console.log(`awayPlayers`, awayPlayers);
+    console.log('awayPlayers', awayPlayers);
     let finded = await findTeam(user.id);
-    console.log(`item.home.id`, item.home.id);
-    console.log(`item.away.id`, item.away.id);
-    console.log(`finded`, finded[0].teamID);
+    console.log('item.home.id', item.home.id);
+    console.log('item.away.id', item.away.id);
+    console.log('finded', finded[0].teamID);
     if (item.home.id === finded[0].teamID) {
       setFind('home');
     } else if (item.away.id === finded[0].teamID) {
@@ -411,7 +411,7 @@ const ScheduleScreen = ({navigation, route}) => {
       );
       const schedulePerDay = scheduleData.data.listSchedules.items;
       const sorted = schedulePerDay.sort((a, b) => b.index - a.index);
-      console.log(`sorted`, sorted);
+      console.log('sorted', sorted);
       setScheduleData(sorted);
       console.log('Schedule>>>>>>>>>>>>>>', schedulePerDay);
       // return schedulePerDay;
@@ -430,7 +430,7 @@ const ScheduleScreen = ({navigation, route}) => {
     });
   };
   function renderSchedule({item}) {
-    console.log(`match`, item);
+    console.log('match', item);
     return (
       <Match
         item={item}
@@ -458,7 +458,7 @@ const ScheduleScreen = ({navigation, route}) => {
 
   async function getTeamNumber(option) {
     const leagueData = await API.graphql(graphqlOperation(listTeams));
-    console.log(`leagueData >>>>>`, leagueData);
+    console.log('leagueData >>>>>', leagueData);
     let teamNumber = 0;
     console.log(leagueData.data.listTeams.items.length);
     for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
@@ -466,15 +466,15 @@ const ScheduleScreen = ({navigation, route}) => {
         teamNumber = teamNumber + 1;
       }
     }
-    console.log(`team`, teamNumber);
+    console.log('team', teamNumber);
     return teamNumber;
   }
 
   // ene league heden odor urgejlehiin avah function
 
   async function getDuration(number, perDay) {
-    console.log(`number get`, number);
-    console.log(`perDay get`, perDay);
+    console.log('number get', number);
+    console.log('perDay get', perDay);
     let s = 0,
       count;
     for (var i = 1; i < number; i++) {
@@ -488,11 +488,11 @@ const ScheduleScreen = ({navigation, route}) => {
   }
 
   function getDayData(number, date) {
-    console.log(`number`, number);
-    console.log(`date`, date);
+    console.log('number', number);
+    console.log('date', date);
     let newDate = new Date(date);
     let odor;
-    console.log(`newDate`, newDate);
+    console.log('newDate', newDate);
     for (let i = 0; i < number; i++) {
       odor = moment(date).format('dddd');
       if (odor === 'Saturday') {
@@ -501,11 +501,11 @@ const ScheduleScreen = ({navigation, route}) => {
         date = new Date(newDate.setDate(newDate.getDate() + 1));
       }
       date = moment(date).format('M/D/YYYY');
-      console.log(`odor`, odor);
+      console.log('odor', odor);
       setDayData(prev => [...prev, date]);
       date = new Date(newDate.setDate(newDate.getDate() + 1));
     }
-    console.log(`dayData >>>>>`, dayData);
+    console.log('dayData >>>>>', dayData);
   }
 
   const changeModalVisible = bool => {
@@ -676,8 +676,21 @@ const ScheduleScreen = ({navigation, route}) => {
           </View>
           <View>
             {scheduleData.length === 0 ? (
-              <View>
-                <Text style={{color: COLORS.white}}>Hooosooon</Text>
+              <View
+                style={{
+                  height: hp(65),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={images.logo}
+                  style={{
+                    width: wp(40),
+                    height: hp(30),
+                    resizeMode: 'contain',
+                    opacity: 0.7,
+                  }}
+                />
               </View>
             ) : (
               <FlatList

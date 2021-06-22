@@ -12,7 +12,7 @@ import {
 
 import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
-import {COLORS, FONTS, icons} from '../constants';
+import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -155,8 +155,23 @@ const StandingsScreen = ({navigation, route}) => {
               setData={setData}
             />
           </Modal>
-          <Text
-            style={{fontFamily: FONTS.brandFont, color: COLORS.white}}></Text>
+          <View
+            style={{
+              height: hp(65),
+              marginTop: hp(6.07),
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={images.logo}
+              style={{
+                width: wp(40),
+                height: hp(30),
+                resizeMode: 'contain',
+                opacity: 0.7,
+              }}
+            />
+          </View>
         </View>
       )}
     </SafeAreaView>

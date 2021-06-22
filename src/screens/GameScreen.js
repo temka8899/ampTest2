@@ -34,6 +34,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
 import IntroModal from '../components/IntroModal';
+import {images} from '../constants';
 
 Amplify.configure({
   ...awsmobile,
@@ -618,7 +619,9 @@ const GameScreen = ({navigation}) => {
                 onPress={() =>
                   navigation.navigate('Tabs', {screen: 'Profile'})
                 }>
-                {userInfo === undefined ? undefined : (
+                {userInfo === undefined ? (
+                  <Image source={images.nullPic} style={styles.profileImage} />
+                ) : (
                   <Image source={userInfo.avatar} style={styles.profileImage} />
                 )}
               </TouchableOpacity>
