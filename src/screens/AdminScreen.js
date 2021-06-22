@@ -195,6 +195,7 @@ const AdminScreen = ({navigation}) => {
     var numberOfDaysToAdd = 0;
     let dateNemeh = 0;
     let tooluur = 1;
+
     // date.setDate(date.getDate() + numberOfDaysToAdd);
     date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {

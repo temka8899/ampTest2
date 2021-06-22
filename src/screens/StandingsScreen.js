@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 
 import AppBar from '../components/AppBar';
@@ -21,6 +22,10 @@ import {useEffect} from 'react';
 import {listTeamPlayers, listTeams} from '../graphql/queries';
 import {graphqlOperation} from '@aws-amplify/api-graphql';
 import API from '@aws-amplify/api';
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 const StandingsScreen = ({navigation, route}) => {
   // let itemID = 0;
@@ -35,22 +40,35 @@ const StandingsScreen = ({navigation, route}) => {
   const [Away, setAway] = useState(undefined);
   const [imgLoad, setImgLoad] = useState(true);
   const [teamData, setTeamData] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [PlayerInfo, setPlayerInfo] = useState([]);
   console.log('PlayerInfo :>> ', PlayerInfo);
+
+  const sorted = PlayerInfo.sort(
+    (a, b) => b[0].team.win / b[0].team.lose - a[1].team.win / a[1].team.lose,
+  );
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
 
-  const setData = async option => {
-    await setChooseData(option);
-    await console.log('leagueID :>> ', option.id);
-    fetchTeam(option.id);
-  };
+  const setData = React.useCallback(
+    async option => {
+      await setChooseData(option);
+      await console.log('leagueID :>> ', option.id);
+      fetchTeam(option.id);
+    },
+    [fetchTeam],
+  );
 
   // useEffect(() => {
   //   fetchTeam();
   // }, [fetchTeam]);
+
+  const onRefresh = React.useCallback(() => {
+    setData(chooseData);
+    wait(500).then(() => setRefreshing(false));
+  }, [chooseData, setData]);
 
   const fetchTeam = React.useCallback(async lgID => {
     try {
@@ -160,17 +178,17 @@ const StandingsScreen = ({navigation, route}) => {
           <View>
             {PlayerInfo.length != 0 ? (
               <FlatList
-                data={PlayerInfo}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                data={sorted}
                 keyExtractor={item => item.id}
                 renderItem={({item, index}) => (
                   <View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-evenly',
-                        alignItems: 'center',
-                        marginVertical: hp(1),
-                      }}>
+                    <View style={styles.standingStyle}>
                       <Text
                         style={{
                           fontFamily: FONTS.brandFont,
@@ -205,33 +223,13 @@ const StandingsScreen = ({navigation, route}) => {
                         </Text>
                       </Text>
                     </View>
-                    <View
-                      style={{
-                        width: wp(90),
-                        height: 2,
-                        backgroundColor: 'white',
-                      }}
-                    />
+                    <View style={styles.line} />
                   </View>
                 )}
               />
             ) : (
-              <View
-                style={{
-                  height: hp(65),
-                  marginTop: hp(6.07),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={images.logo}
-                  style={{
-                    width: wp(40),
-                    height: hp(30),
-                    resizeMode: 'contain',
-                    opacity: 0.7,
-                  }}
-                />
+              <View style={styles.logoContainer}>
+                <Image source={images.logo} style={styles.logoStyle} />
               </View>
             )}
           </View>
@@ -313,6 +311,30 @@ const styles = StyleSheet.create({
     width: wp(14.4),
     height: hp(6.65),
     borderRadius: 50,
+  },
+  standingStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    marginVertical: hp(1),
+  },
+  line: {
+    alignSelf: 'center',
+    width: wp(90),
+    height: 2,
+    backgroundColor: 'white',
+  },
+  logoContainer: {
+    height: hp(65),
+    marginTop: hp(6.07),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoStyle: {
+    width: wp(40),
+    height: hp(30),
+    resizeMode: 'contain',
+    opacity: 0.7,
   },
 });
 
