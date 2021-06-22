@@ -553,13 +553,14 @@ const GameScreen = ({navigation}) => {
     },
     [selectedItem],
   );
-
+  var date = new Date();
+  date.setDate(date.getDate() - 1);
   const getSchedule = React.useCallback(async () => {
     try {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
-            date: {eq: '6/18/2021'},
+            date: {eq: `${date.toLocaleDateString()}`},
             // leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
