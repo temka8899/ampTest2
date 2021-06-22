@@ -33,20 +33,19 @@ const StandingsScreen = ({navigation, route}) => {
   // if (route.params?.itemId) {
   //   itemID = route.params.itemId;
   // }
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [Home, setHome] = useState(undefined);
-  const [Away, setAway] = useState(undefined);
-  const [imgLoad, setImgLoad] = useState(true);
   const [teamData, setTeamData] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [PlayerInfo, setPlayerInfo] = useState([]);
   console.log('PlayerInfo :>> ', PlayerInfo);
 
   const sorted = PlayerInfo.sort(
-    (a, b) => b[0].team.win / b[0].team.lose - a[1].team.win / a[1].team.lose,
-  );
+    (a, b) =>
+      a[1].team.win / (a[1].team.lose + a[1].team.win) -
+      b[0].team.win / (b[0].team.lose + b[0].team.win),
+  ).reverse();
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -88,6 +87,7 @@ const StandingsScreen = ({navigation, route}) => {
         );
         const teamPlayers = leagueData_.data.listTeamPlayers.items;
         array.push(teamPlayers);
+        setLoading(false);
       }
       console.log('array after looped :>> ', array);
       setPlayerInfo(array);
@@ -99,142 +99,159 @@ const StandingsScreen = ({navigation, route}) => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
-      {isLoading ? (
-        <SkeletonPlaceholder
-          speed={800}
-          backgroundColor={'#E1E9EE'}
-          highlightColor={'gray'}>
-          <View>
-            <View>
-              <View style={{width: wp(100), height: hp(4)}} />
-
-              <View style={{width: wp(100), height: hp(3), marginTop: hp(1)}} />
-            </View>
-            <View style={styles.skeletonMain}>
-              <View style={styles.skeleton1}>
-                <View style={styles.skeletonSubMain}>
-                  <View style={styles.skeletonSub} />
-                  <View style={styles.skeletonSub} />
-                </View>
-                <View style={styles.skeletonSubMain}>
-                  <View style={styles.skeletonInner} />
-                </View>
-              </View>
-              <View style={styles.skeletonAnotherSub} />
-              <View style={styles.skeleton3}>
-                <View style={styles.skeletonSubMain}>
-                  <View style={styles.skeletonSub} />
-                  <View style={styles.skeletonSub} />
-                </View>
-                <View style={styles.skeletonSubMain}>
-                  <View style={styles.skeletonInner} />
-                </View>
-              </View>
-              <View style={styles.skeletonAnotherSub} />
-              <View style={styles.skeleton}>
-                <View style={styles.skeletonSubMain}>
-                  <View style={styles.skeletonSub} />
-                  <View style={styles.skeletonSub} />
-                </View>
-                <View style={styles.skeletonSubMain}>
-                  <View style={styles.skeletonInner} />
-                </View>
-              </View>
-              <View style={styles.skeletonAnotherSub} />
-              <View style={styles.skeleton3}>
-                <View style={styles.skeletonSubMain}>
-                  <View style={styles.skeletonSub} />
-                  <View style={styles.skeletonSub} />
-                </View>
-                <View style={styles.skeletonSubMain}>
-                  <View style={styles.skeletonInner} />
-                </View>
-              </View>
-              <View style={styles.skeletonAnotherSub} />
-            </View>
-          </View>
-        </SkeletonPlaceholder>
-      ) : (
+      <View>
+        <AppBar />
+        <TouchableOpacity
+          onPress={() => changeModalVisible(true)}
+          style={styles.chooseButton}>
+          <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+            {chooseData === '' ? 'Select' : chooseData.game.name}
+          </Text>
+          <Image source={icons.drop} style={styles.dropButton} />
+        </TouchableOpacity>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={modalVisible}
+          nRequestClose={() => changeModalVisible(false)}>
+          <LeaguePicker
+            changeModalVisible={changeModalVisible}
+            setData={setData}
+          />
+        </Modal>
         <View>
-          <AppBar />
-          <TouchableOpacity
-            onPress={() => changeModalVisible(true)}
-            style={styles.chooseButton}>
-            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData === '' ? 'Select' : chooseData.game.name}
-            </Text>
-            <Image source={icons.drop} style={styles.dropButton} />
-          </TouchableOpacity>
-          <Modal
-            transparent={true}
-            animationType="fade"
-            visible={modalVisible}
-            nRequestClose={() => changeModalVisible(false)}>
-            <LeaguePicker
-              changeModalVisible={changeModalVisible}
-              setData={setData}
-            />
-          </Modal>
-          <View>
-            {PlayerInfo.length != 0 ? (
-              <FlatList
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-                data={sorted}
-                keyExtractor={item => item.id}
-                renderItem={({item, index}) => (
+          {PlayerInfo.length != 0 ? (
+            <>
+              {isLoading ? (
+                <SkeletonPlaceholder
+                  speed={800}
+                  backgroundColor={'#E1E9EE'}
+                  highlightColor={'gray'}>
                   <View>
-                    <View style={styles.standingStyle}>
-                      <Text
-                        style={{
-                          fontFamily: FONTS.brandFont,
-                          color: COLORS.white,
-                        }}>
-                        {index + 1}
-                      </Text>
-                      <Image
-                        source={item[0].player.avatar}
-                        style={styles.avatar}
-                      />
-                      <Image
-                        source={item[1].player.avatar}
-                        style={styles.avatar}
-                      />
-                      <Text
-                        style={{
-                          fontFamily: FONTS.brandFont,
-                          color: COLORS.white,
-                        }}>
-                        {item[0].team.name}
-                      </Text>
-                      <Text
-                        style={{
-                          fontFamily: FONTS.brandFont,
-                          color: COLORS.green,
-                        }}>
-                        {item[0].team.win}
-                        {`-`}
-                        <Text style={{color: COLORS.red}}>
-                          {item[0].team.lose}
-                        </Text>
-                      </Text>
+                    <View style={styles.skeletonMain}>
+                      <View style={styles.skeleton3}>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonSub} />
+                          <View style={styles.skeletonSub} />
+                        </View>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonInner} />
+                        </View>
+                      </View>
+                      <View style={styles.skeletonAnotherSub} />
+                      <View style={styles.skeleton3}>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonSub} />
+                          <View style={styles.skeletonSub} />
+                        </View>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonInner} />
+                        </View>
+                      </View>
+                      <View style={styles.skeletonAnotherSub} />
+                      <View style={styles.skeleton3}>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonSub} />
+                          <View style={styles.skeletonSub} />
+                        </View>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonInner} />
+                        </View>
+                      </View>
+                      <View style={styles.skeletonAnotherSub} />
+                      <View style={styles.skeleton3}>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonSub} />
+                          <View style={styles.skeletonSub} />
+                        </View>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonInner} />
+                        </View>
+                      </View>
+                      <View style={styles.skeletonAnotherSub} />
+                      <View style={styles.skeleton3}>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonSub} />
+                          <View style={styles.skeletonSub} />
+                        </View>
+                        <View style={styles.skeletonSubMain}>
+                          <View style={styles.skeletonInner} />
+                        </View>
+                      </View>
+                      <View style={styles.skeletonAnotherSub} />
                     </View>
-                    <View style={styles.line} />
                   </View>
-                )}
-              />
-            ) : (
-              <View style={styles.logoContainer}>
-                <Image source={images.logo} style={styles.logoStyle} />
-              </View>
-            )}
-          </View>
+                </SkeletonPlaceholder>
+              ) : (
+                <FlatList
+                  refreshControl={
+                    <RefreshControl
+                      color={'red'}
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                  data={sorted}
+                  keyExtractor={item => item.id}
+                  renderItem={({item, index}) => (
+                    <View>
+                      <View style={styles.standingStyle}>
+                        <Text
+                          style={{
+                            fontFamily: FONTS.brandFont,
+                            color: COLORS.white,
+                          }}>
+                          {index + 1}
+                        </Text>
+                        <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
+                          <Image
+                            source={item[0].player.avatar}
+                            style={styles.avatar}
+                          />
+                          <Image
+                            source={item[1].player.avatar}
+                            style={styles.avatar}
+                          />
+                        </View>
+                        <Text
+                          style={{
+                            fontFamily: FONTS.brandFont,
+                            color: COLORS.white,
+                            marginLeft: wp(5),
+                          }}>
+                          {item[0].team.name}
+                        </Text>
+                        <View
+                          style={{
+                            position: 'absolute',
+                            right: 0,
+                          }}>
+                          <Text
+                            style={{
+                              fontFamily: FONTS.brandFont,
+                              color: COLORS.green,
+                            }}>
+                            {item[0].team.win}
+                            {`-`}
+                            <Text style={{color: COLORS.red}}>
+                              {item[0].team.lose}
+                            </Text>
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.line} />
+                    </View>
+                  )}
+                />
+              )}
+            </>
+          ) : (
+            <View style={styles.logoContainer}>
+              <Image source={images.logo} style={styles.logoStyle} />
+            </View>
+          )}
         </View>
-      )}
+      </View>
     </SafeAreaView>
   );
 };
@@ -246,6 +263,7 @@ const styles = StyleSheet.create({
   },
   skeletonMain: {
     alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   skeletonAnotherSub: {
     width: wp(80),
@@ -257,11 +275,7 @@ const styles = StyleSheet.create({
     width: wp(20),
     height: hp(5),
   },
-  skeleton1: {
-    flexDirection: 'row',
-    marginTop: hp(10),
-    alignItems: 'center',
-  },
+
   skeleton3: {
     flexDirection: 'row',
     marginTop: hp(2),
@@ -272,6 +286,7 @@ const styles = StyleSheet.create({
     height: wp(15),
     borderRadius: 40,
     marginRight: hp(1),
+    flexDirection: 'row',
   },
   skeletonSubMain: {
     flexDirection: 'row',
@@ -314,13 +329,14 @@ const styles = StyleSheet.create({
   },
   standingStyle: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
     alignItems: 'center',
     marginVertical: hp(1),
+    marginHorizontal: wp(5),
   },
   line: {
     alignSelf: 'center',
-    width: wp(90),
+    width: wp(85),
+    marginLeft: wp(5),
     height: 2,
     backgroundColor: 'white',
   },
