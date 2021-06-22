@@ -26,6 +26,7 @@ import {
   updateTeamPlayer,
   updateTeam,
   deleteLeague,
+  updatePlayer,
 } from '../graphql/mutations';
 import {
   listGames,
@@ -37,15 +38,18 @@ import {
   getTeam,
   listSchedules,
 } from '../graphql/queries';
+import {AuthContext} from '../../App';
 import API, {graphqlOperation} from '@aws-amplify/api';
+import Auth from '@aws-amplify/auth';
 
 export default function CountScreen({navigation, route}) {
   const [CancelModalVisible, setCancelModalVisible] = useState(false);
   const [EndModalVisible, setEndModalVisible] = useState(false);
   const [findMistake, setfindMistake] = useState(0);
   const [MatchData, setMatchData] = useState();
-  const [Home, setHome] = useState(undefined);
-  const [Away, setAway] = useState(undefined);
+  const [Home, setHome] = useState();
+  const [Away, setAway] = useState();
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
 
   const [allPoint, setAllPoint] = useState({
     one: {
@@ -92,8 +96,8 @@ export default function CountScreen({navigation, route}) {
     console.log('homePlayers>>>>>>>', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
     console.log(`awayPlayers>>>>>>>`, awayPlayers);
-    // setHome(homePlayers);
-    // setAway(awayPlayers);
+    setHome(homePlayers);
+    setAway(awayPlayers);
     initMatch(homePlayers, awayPlayers);
   }, []);
 
@@ -210,9 +214,70 @@ export default function CountScreen({navigation, route}) {
   const EndBtnPress = async () => {
     toggleEndModal(false);
     await UpdateSchedule();
+    await updatePlayers();
+    const user = await Auth.currentUserInfo();
+    findUser(user);
     console.log('allpoint', allPoint);
   };
+  async function updatePlayers() {
+    await updateProfile(Home[0].id, Home[0].player.id, allPoint.one.point);
+  }
 
+  async function updateProfile() {}
+  const findUser = React.useCallback(
+    async user => {
+      const playerData = await API.graphql(graphqlOperation(listPlayers));
+      let finded = playerData.data.listPlayers.items.find((item, index) => {
+        if (user.username === item.c_id) {
+          return item;
+        }
+      });
+      setUserInfo(finded);
+      console.log('context player model data', finded);
+    },
+    [setUserInfo],
+  );
+
+  async function updateProfile(id, playerID, point) {
+    const teamPlayerData = await API.graphql(
+      graphqlOperation(listTeamPlayers, {
+        filter: {
+          id: {eq: id},
+        },
+      }),
+    );
+    const playerScore =
+      teamPlayerData.data.listTeamPlayers.items[0].playerScore;
+
+    try {
+      await API.graphql(
+        graphqlOperation(updateTeamPlayer, {
+          input: {
+            playerid: '14e74619-25e1-429e-a486-f250e2995775',
+            playerScore: `${playerScore + 5}`,
+          },
+        }),
+      );
+      console.log('TeamPlayer PlayerScore Updated');
+    } catch (err) {
+      console.log('error updating Teams', err);
+    }
+
+    try {
+      const temp = await API.graphql(
+        graphqlOperation(updatePlayer, {
+          input: {
+            id: userInfo.id,
+            avatar: newImage,
+            name: newName,
+          },
+        }),
+      );
+      console.log('League updated', temp);
+    } catch (err) {
+      console.log('error updating League: ', err);
+    }
+  }
   async function UpdateSchedule() {
     // Updating Schedule data
     // Bagiin avsan onoog update hiine
@@ -371,35 +436,6 @@ export default function CountScreen({navigation, route}) {
       );
     }
   }
-
-  //Getting teamPlayer PlayerScore to update
-  // const teamPlayerData = await API.graphql(
-  //   graphqlOperation(listTeamPlayers, {
-  //     filter: {
-  //       //TeamPlayer id
-  //       id: {eq: '14e74619-25e1-429e-a486-f250e2995775'},
-  //     },
-  //   }),
-  // );
-  // const playerScore =
-  //   teamPlayerData.data.listTeamPlayers.items[0].playerScore;
-
-  // // Updating TeamPlayer playerScore
-  // // Toglogchiin onoog update hiine
-  // try {
-  //   await API.graphql(
-  //     graphqlOperation(updateTeamPlayer, {
-  //       input: {
-  //         //TeamPlayer id
-  //         id: '14e74619-25e1-429e-a486-f250e2995775',
-  //         playerScore: `${playerScore + 5}`,
-  //       },
-  //     }),
-  //   );
-  //   console.log('TeamPlayer PlayerScore Updated');
-  // } catch (err) {
-  //   console.log('error updating Teams', err);
-  // }
 
   function CancelModal() {
     return (

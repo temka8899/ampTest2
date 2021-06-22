@@ -13,7 +13,7 @@ import {
 
 import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
-import {COLORS, FONTS, icons} from '../constants';
+import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -158,20 +158,82 @@ const StandingsScreen = ({navigation, route}) => {
             />
           </Modal>
           <View>
-        { PlayerInfo.length != 0    <FlatList
-              data={PlayerInfo}
-              keyExtractor={item => item.id}
-              renderItem={({item, index}) => (
-                <View>
-                  <Text
-                    style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-                    {item[0].player.name}
-                  </Text>
-                </View>
-              )}
-            /> : 
-            
-            }
+            {PlayerInfo.length != 0 ? (
+              <FlatList
+                data={PlayerInfo}
+                keyExtractor={item => item.id}
+                renderItem={({item, index}) => (
+                  <View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                        alignItems: 'center',
+                        marginVertical: hp(1),
+                      }}>
+                      <Text
+                        style={{
+                          fontFamily: FONTS.brandFont,
+                          color: COLORS.white,
+                        }}>
+                        {index + 1}
+                      </Text>
+                      <Image
+                        source={item[0].player.avatar}
+                        style={styles.avatar}
+                      />
+                      <Image
+                        source={item[1].player.avatar}
+                        style={styles.avatar}
+                      />
+                      <Text
+                        style={{
+                          fontFamily: FONTS.brandFont,
+                          color: COLORS.white,
+                        }}>
+                        {item[0].team.name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: FONTS.brandFont,
+                          color: COLORS.green,
+                        }}>
+                        {item[0].team.win}
+                        {`-`}
+                        <Text style={{color: COLORS.red}}>
+                          {item[0].team.lose}
+                        </Text>
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: wp(90),
+                        height: 2,
+                        backgroundColor: 'white',
+                      }}
+                    />
+                  </View>
+                )}
+              />
+            ) : (
+              <View
+                style={{
+                  height: hp(65),
+                  marginTop: hp(6.07),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={images.logo}
+                  style={{
+                    width: wp(40),
+                    height: hp(30),
+                    resizeMode: 'contain',
+                    opacity: 0.7,
+                  }}
+                />
+              </View>
+            )}
           </View>
         </View>
       )}
@@ -246,6 +308,11 @@ const styles = StyleSheet.create({
     fontFamily: 'PressStart2P-Regular',
     fontWeight: '800',
     fontSize: 15,
+  },
+  avatar: {
+    width: wp(14.4),
+    height: hp(6.65),
+    borderRadius: 50,
   },
 });
 

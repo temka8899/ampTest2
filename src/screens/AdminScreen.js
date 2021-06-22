@@ -50,6 +50,7 @@ const AdminScreen = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [LeagueList, setLeagueList] = React.useState([]);
   const [GameData, setGameData] = useState([]);
+  const [isStarted, setIsStarted] = useState(false);
 
   const onRefresh = React.useCallback(() => {
     // checkInLeague();
@@ -141,6 +142,9 @@ const AdminScreen = ({navigation}) => {
               temp_.data.createTeam.id,
               todos[i + 1].playerID,
             );
+            setTimeout(() => {
+              onRefresh();
+            }, 1000);
           } catch (err) {
             console.log('error creating League:', err);
           }
@@ -309,11 +313,20 @@ const AdminScreen = ({navigation}) => {
             {item.startedDate}
           </Text>
           <View>
-            <TouchableOpacity
-              onPress={() => StartLeague(item.id)}
-              style={styles.startBtn}>
-              <Text style={styles.btnText}>Start League</Text>
-            </TouchableOpacity>
+            {item.isStart ? (
+              <TouchableOpacity
+                disabled={true}
+                onPress={() => StartLeague(item.id)}
+                style={styles.onGoingBtn}>
+                <Text style={styles.btnText}>Started</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => StartLeague(item.id)}
+                style={styles.startBtn}>
+                <Text style={styles.btnText}>Start League</Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               onPress={() => DeleteLeague(item.id)}
               style={styles.deleteBtn}>
@@ -484,6 +497,15 @@ const styles = StyleSheet.create({
     width: wp(35),
     height: hp(3),
     backgroundColor: COLORS.green,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: hp(1),
+    marginLeft: wp(1),
+  },
+  onGoingBtn: {
+    width: wp(35),
+    height: hp(3),
+    backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: hp(1),

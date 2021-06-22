@@ -34,6 +34,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
 import IntroModal from '../components/IntroModal';
+import {images} from '../constants';
 
 Amplify.configure({
   ...awsmobile,
@@ -552,13 +553,14 @@ const GameScreen = ({navigation}) => {
     },
     [selectedItem],
   );
-
+  var date = new Date();
+  date.setDate(date.getDate() - 1);
   const getSchedule = React.useCallback(async () => {
     try {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
-            date: {eq: '6/18/2021'},
+            date: {eq: `${date.toLocaleDateString()}`},
             // leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
           },
         }),
@@ -618,7 +620,9 @@ const GameScreen = ({navigation}) => {
                 onPress={() =>
                   navigation.navigate('Tabs', {screen: 'Profile'})
                 }>
-                {userInfo === undefined ? undefined : (
+                {userInfo === undefined ? (
+                  <Image source={images.nullPic} style={styles.profileImage} />
+                ) : (
                   <Image source={userInfo.avatar} style={styles.profileImage} />
                 )}
               </TouchableOpacity>
