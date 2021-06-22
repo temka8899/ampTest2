@@ -89,23 +89,7 @@ const AdminScreen = ({navigation}) => {
   };
 
   const StartLeague = async leagueID => {
-    //Set Is Start League True
-    var date = new Date();
-    date.setDate(date.getDate());
-    let n = todos.length / 2 - 1;
-    const temp = await API.graphql(
-      graphqlOperation(updateLeague, {
-        input: {
-          id: leagueID,
-          isStart: true,
-          startedDate: `${date.toLocaleDateString()}`,
-          maxSchedule: `${(n * (n + 1)) / 2}`,
-          currentSchedule: 1,
-        },
-      }),
-    );
-    const startLeagueId = temp.data.updateLeague.id;
-
+    const startLeagueId = leagueID;
     // Get Soccer League Players
     try {
       const leaguePlayerData = await API.graphql(
@@ -116,7 +100,6 @@ const AdminScreen = ({navigation}) => {
           },
         }),
       );
-      let teamIndex = 1;
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
       if (todos.length % 2 == 0 && todos.length >= 8) {
@@ -124,36 +107,46 @@ const AdminScreen = ({navigation}) => {
           console.log(i);
           // Add Team loop
           try {
-            const temp_ = await API.graphql(
+            const temp = await API.graphql(
               graphqlOperation(createTeam, {
                 input: {
-                  name: `team${teamIndex}`,
+                  name: `team${i}`,
 
                   //LeagueID
+                  leagueID: leagueID,
                   teamLeagueId: leagueID,
                   win: 0,
                   lose: 0,
                 },
               }),
             );
-            console.log(`Team${teamIndex} created `);
+            console.log(`Team${i} created `);
             //Add Team Player
+            addStartTeamPlayer(temp.data.createTeam.id, todos[i].playerID);
             await addStartTeamPlayer(
-              temp_.data.createTeam.id,
-              todos[i].playerID,
-            );
-            await addStartTeamPlayer(
-              temp_.data.createTeam.id,
+              temp.data.createTeam.id,
               todos[i + 1].playerID,
             );
-            setTimeout(() => {
-              onRefresh();
-            }, 1000);
           } catch (err) {
             console.log('error creating League:', err);
           }
-          teamIndex++;
         }
+
+        //Set Is Start League True
+        var date = new Date();
+        date.setDate(date.getDate());
+        let n = todos.length / 2 - 1;
+        await API.graphql(
+          graphqlOperation(updateLeague, {
+            input: {
+              id: leagueID,
+              isStart: true,
+              startedDate: `${date.toLocaleDateString()}`,
+              maxSchedule: `${(n * (n + 1)) / 2}`,
+              currentSchedule: 1,
+            },
+          }),
+        );
       } else {
         console.log('Soccer League Players not even or not enough');
       }
@@ -161,28 +154,78 @@ const AdminScreen = ({navigation}) => {
       console.log('error fetching League Players', err);
     }
     addScheduleLoop(startLeagueId);
-  };
 
-  async function addSchedule(team1ID, team2ID, date, startLeagueId, tooluur) {
-    try {
-      await API.graphql(
-        graphqlOperation(createSchedule, {
-          input: {
-            scheduleHomeId: team1ID,
-            scheduleAwayId: team2ID,
-            homeScore: 0,
-            awayScore: 0,
-            date: `${date}`,
-            leagueID: startLeagueId,
-            index: tooluur,
-          },
-        }),
-      );
-      // console.log('Schedule Created');
-    } catch (err) {
-      console.log('error creating Schedule:', err);
-    }
-  }
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //   const startLeagueId = leagueID;
+
+    //   // Get Soccer League Players
+    //   const leaguePlayerData = await API.graphql(
+    //     graphqlOperation(listLeaguePlayers, {
+    //       filter: {
+    //         //LeagueID
+    //         leagueID: {eq: leagueID},
+    //       },
+    //     }),
+    //   );
+    //   let teamIndex = 1;
+    //   const todos = leaguePlayerData.data.listLeaguePlayers.items;
+    //   console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
+
+    //   if (todos.length % 2 == 0 && todos.length >= 8) {
+    //     for (var i = 0; i < todos.length; i = i + 2) {
+    //       console.log(i);
+    //       // Add Team loop
+    //       try {
+    //         const temp_ = await API.graphql(
+    //           graphqlOperation(createTeam, {
+    //             input: {
+    //               name: `team${teamIndex}`,
+
+    //               //LeagueID
+    //               teamLeagueId: leagueID,
+    //               leagueID: leagueID,
+    //               win: 0,
+    //               lose: 0,
+    //             },
+    //           }),
+    //         );
+    //         console.log(`Team${teamIndex} created `);
+    //         //Add Team Player
+    //         await addStartTeamPlayer(temp_.data.createTeam.id, todos[i].playerID);
+    //         await addStartTeamPlayer(
+    //           temp_.data.createTeam.id,
+    //           todos[i + 1].playerID,
+    //         );
+    //         setTimeout(() => {
+    //           onRefresh();
+    //         }, 1000);
+    //       } catch (err) {
+    //         console.log('error creating League:', err);
+    //       }
+    //       teamIndex++;
+    //     }
+    //   } else {
+    //     console.log('Soccer League Players not even or not enough');
+    //   }
+
+    //   //Set Is Start League True
+    //   var date = new Date();
+    //   date.setDate(date.getDate());
+    //   let n = leaguePlayerData.length / 2 - 1;
+    //   const temp = await API.graphql(
+    //     graphqlOperation(updateLeague, {
+    //       input: {
+    //         id: leagueID,
+    //         isStart: true,
+    //         startedDate: `${date.toLocaleDateString()}`,
+    //         maxSchedule: `${(n * (n + 1)) / 2}`,
+    //         currentSchedule: 1,
+    //       },
+    //     }),
+    //   );
+    //   addScheduleLoop(startLeagueId);
+    // };
+  };
 
   async function addScheduleLoop(startLeagueId) {
     const teamData = await API.graphql(graphqlOperation(listTeams));
@@ -195,8 +238,6 @@ const AdminScreen = ({navigation}) => {
     var numberOfDaysToAdd = 0;
     let dateNemeh = 0;
     let tooluur = 1;
-
-    // date.setDate(date.getDate() + numberOfDaysToAdd);
     date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {
       for (var j = 0; j < hasah - 1; j++) {
@@ -225,6 +266,27 @@ const AdminScreen = ({navigation}) => {
       }
       hasah--;
       nemeh++;
+    }
+  }
+
+  async function addSchedule(team1ID, team2ID, date, startLeagueId, tooluur) {
+    try {
+      await API.graphql(
+        graphqlOperation(createSchedule, {
+          input: {
+            scheduleHomeId: team1ID,
+            scheduleAwayId: team2ID,
+            homeScore: 0,
+            awayScore: 0,
+            date: `${date}`,
+            leagueID: startLeagueId,
+            index: tooluur,
+          },
+        }),
+      );
+      // console.log('Schedule Created');
+    } catch (err) {
+      console.log('error creating Schedule:', err);
     }
   }
 
