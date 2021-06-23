@@ -24,7 +24,9 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
 import API, {graphqlOperation} from '@aws-amplify/api';
-import {useMemo} from 'react';
+// import {useMemo} from 'react';
+
+let myValue;
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -43,25 +45,27 @@ const Match = ({item, onPress, user}) => {
   }, [getPlayerData]);
 
   const getPlayerData = React.useCallback(async () => {
-    let homePlayers = await fetchTeamPlayers(item.home.id);
-    console.log('homePlayers', homePlayers);
-    let awayPlayers = await fetchTeamPlayers(item.away.id);
-    console.log(`awayPlayers`, awayPlayers);
+    if (item !== null) {
+      setImgLoad(false);
+    }
+    // let homePlayers = await fetchTeamPlayers(item.home.id);
+    // console.log('homePlayers', homePlayers);
+    // let awayPlayers = await fetchTeamPlayers(item.away.id);
+    // console.log(`awayPlayers`, awayPlayers);
     let findHome = await findTeam(user.id, item.home.id);
     let findAway = await findTeam(user.id, item.away.id);
-    console.log(`findHome`, findHome);
-    console.log(`findAway`, findAway);
-    console.log(`item.home.id`, item.home.id);
-    console.log(`item.away.id`, item.away.id);
+    // console.log(`findHome`, findHome);
+    // console.log(`findAway`, findAway);
+    // console.log(`item.home.id`, item.home.id);
+    // console.log(`item.away.id`, item.away.id);
     if (findHome) {
       setFind('home');
     } else if (findAway) {
       setFind('away');
     }
-    setHome(homePlayers);
-    setAway(awayPlayers);
-    setImgLoad(false);
-  }, [item.away.id, item.home.id, user.id]);
+    // setHome(homePlayers);
+    // setAway(awayPlayers);
+  }, [item, user.id]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -84,7 +88,7 @@ const Match = ({item, onPress, user}) => {
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+      // console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
       if (todos.length === 1) {
         return true;
       } else {
@@ -114,27 +118,32 @@ const Match = ({item, onPress, user}) => {
                 width: wp(39),
                 alignItems: 'center',
               }}>
-              {Home && (
-                <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator
-                          style={styles.avatar}
-                          size={'small'}
-                          color={COLORS.brand}
-                        />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
-                </View>
-              )}
-
+              <View style={{flexDirection: 'row'}}>
+                {imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image
+                    source={item.home.playerAvatar1}
+                    style={styles.avatar}
+                  />
+                )}
+                {imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image
+                    source={item.home.playerAvatar2}
+                    style={styles.avatar}
+                  />
+                )}
+              </View>
               <Text
                 style={{
                   color: find === 'home' ? COLORS.brand : COLORS.greyText,
@@ -192,22 +201,33 @@ const Match = ({item, onPress, user}) => {
                 width: wp(39),
                 alignItems: 'center',
               }}>
-              {Away && (
-                <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
-                </View>
-              )}
+              <View style={{flexDirection: 'row'}}>
+                {imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image
+                    source={item.away.playerAvatar1}
+                    style={styles.avatar}
+                  />
+                )}
+                {imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image
+                    source={item.away.playerAvatar2}
+                    style={styles.avatar}
+                  />
+                )}
+              </View>
+
               <Text
                 style={{
                   color: find === 'away' ? COLORS.brand : COLORS.greyText,
@@ -252,23 +272,32 @@ const Match = ({item, onPress, user}) => {
                 width: wp(39),
                 alignItems: 'center',
               }}>
-              {Home && (
-                <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
-                </View>
-              )}
-
+              <View style={{flexDirection: 'row'}}>
+                {imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image
+                    source={item.home.playerAvatar1}
+                    style={styles.avatar}
+                  />
+                )}
+                {imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image
+                    source={item.home.playerAvatar2}
+                    style={styles.avatar}
+                  />
+                )}
+              </View>
               <Text
                 style={{
                   color: find === 'home' ? COLORS.brand : COLORS.greyText,
@@ -307,22 +336,32 @@ const Match = ({item, onPress, user}) => {
                 width: wp(39),
                 alignItems: 'center',
               }}>
-              {Away && (
-                <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
-                </View>
-              )}
+              <View style={{flexDirection: 'row'}}>
+                {imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image
+                    source={item.away.playerAvatar1}
+                    style={styles.avatar}
+                  />
+                )}
+                {imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image
+                    source={item.away.playerAvatar2}
+                    style={styles.avatar}
+                  />
+                )}
+              </View>
               <Text
                 style={{
                   color: find === 'away' ? COLORS.brand : COLORS.greyText,
@@ -390,13 +429,14 @@ const LocalDay = ({item, onPress, selectedId}) => {
 
 const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
-  const [chooseData, setChooseData] = useState('');
+  const [chooseData, setChooseData] = useState();
   const [modalVisible, setModalVisible] = useState(true);
   // const [month, setMonth] = useState('June');
   // const [year, setYear] = useState('2021');
   const [refreshing, setRefreshing] = React.useState(false);
   const [dayData, setDayData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
+  const [leagueData, setLeagueData] = useState();
 
   const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
   let localDay = moment(firstDate).format('ddd');
@@ -407,9 +447,9 @@ const ScheduleScreen = ({navigation, route}) => {
   // let homePlayers = [];
   // let awayPlayers = [];
 
-  useEffect(() => {
-    getDay(firstDate);
-  }, [getDay]);
+  // useEffect(() => {
+  //   getDay(firstDate);
+  // }, [getDay]);
 
   const getDay = React.useCallback(
     (item, option = null) => {
@@ -428,8 +468,12 @@ const ScheduleScreen = ({navigation, route}) => {
   const getSchedule = React.useCallback(
     async (item, option = null) => {
       try {
+        console.log(`leagueData`, leagueData);
         console.log('chooseData', chooseData);
-        let param = option === null ? chooseData : option;
+        console.log(`option`, option);
+        let param = option === null ? myValue : option;
+        param = param === null ? leagueData : param;
+        console.log(`param`, param);
         const scheduleData = await API.graphql(
           graphqlOperation(listSchedules, {
             filter: {
@@ -447,7 +491,7 @@ const ScheduleScreen = ({navigation, route}) => {
         console.log('error fetching schedulePerDay', err);
       }
     },
-    [chooseData],
+    [chooseData, leagueData],
   );
 
   // const matches = ({item}) => {
@@ -460,7 +504,6 @@ const ScheduleScreen = ({navigation, route}) => {
     });
   };
   function renderSchedule({item}) {
-    console.log('match', item);
     return (
       <Match
         item={item}
@@ -540,15 +583,17 @@ const ScheduleScreen = ({navigation, route}) => {
   const setData = React.useCallback(
     async option => {
       setDayData([]);
-      console.log(`option`, option);
+      console.log(`set data hiigdlee value ---> `, option);
+      myValue = option;
       await setChooseData(option);
+      // setLeagueData(option);
       getDay(firstDate, option);
       setLoading(false);
       let teamNumber = await getTeamNumber(option);
       let duration = await getDuration(teamNumber, 4);
       getDayData(duration, option.startedDate);
     },
-    [firstDate, getDay, getDayData],
+    [getDay, getDayData],
   );
 
   return (
@@ -557,8 +602,8 @@ const ScheduleScreen = ({navigation, route}) => {
       {isLoading ? (
         <SkeletonPlaceholder
           speed={800}
-          backgroundColor={'#E1E9EE'}
-          highlightColor={'#F2F8FC'}>
+          backgroundColor={COLORS.count}
+          highlightColor={'gray'}>
           <View>
             <View>
               <View style={{width: wp(100), height: hp(4)}} />
@@ -636,7 +681,7 @@ const ScheduleScreen = ({navigation, route}) => {
             onPress={() => changeModalVisible(true)}
             style={styles.chooseButton}>
             <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData === '' ? 'Select' : chooseData.game.name}
+              {/* {chooseData === '' ? 'Select' : chooseData.game.name} */}
             </Text>
             <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
@@ -658,7 +703,7 @@ const ScheduleScreen = ({navigation, route}) => {
                   data={LocalDayData}
                   horizontal
                   renderItem={renderLocalDay}
-                  keyExtractor={item => item.id}
+                  keyExtractor={item => item}
                   style={{
                     borderBottomColor: COLORS.brand,
                     borderBottomWidth: 1,
@@ -669,7 +714,7 @@ const ScheduleScreen = ({navigation, route}) => {
                   data={dayData}
                   horizontal
                   renderItem={renderItem}
-                  keyExtractor={item => item.id}
+                  keyExtractor={item => item}
                   style={{
                     borderBottomColor: COLORS.brand,
                     borderBottomWidth: 1,

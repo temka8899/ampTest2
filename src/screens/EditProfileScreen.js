@@ -9,6 +9,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 
 import {AuthContext} from '../../App';
@@ -35,13 +36,16 @@ export default function EditProfileScreen({navigation}) {
   const [AvatarModal, setAvatarModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [btnLoading, setBtnLoading] = useState(false);
 
   useEffect(() => {
     setImage();
-  }, []);
-  const setImage = () => {
+  }, [setImage]);
+
+  const setImage = React.useCallback(() => {
     setNewImage(userInfo.avatar);
-  };
+  }, [userInfo.avatar]);
+
   const press = item => {
     setSelectedId(item.id);
     console.log(item.image);
@@ -67,6 +71,7 @@ export default function EditProfileScreen({navigation}) {
   async function updateProfile() {
     const user = await Auth.currentUserInfo();
     try {
+      setBtnLoading(true);
       const temp = await API.graphql(
         graphqlOperation(updatePlayer, {
           input: {
@@ -76,8 +81,10 @@ export default function EditProfileScreen({navigation}) {
           },
         }),
       );
+      setBtnLoading(false);
       console.log('League updated', temp);
     } catch (err) {
+      setBtnLoading(false);
       console.log('error updating League: ', err);
     }
     findUser(user);
@@ -154,9 +161,14 @@ export default function EditProfileScreen({navigation}) {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={btnLoading}
             onPress={() => updateProfile()}
             style={[{backgroundColor: COLORS.brand}, styles.button]}>
-            <Text style={[{}, styles.headButton]}>Save</Text>
+            {btnLoading ? (
+              <ActivityIndicator size={'small'} color={COLORS.white} />
+            ) : (
+              <Text style={[{}, styles.headButton]}>Save</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
