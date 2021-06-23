@@ -587,7 +587,7 @@ const GameScreen = ({navigation}) => {
       {isLoading ? (
         <SkeletonPlaceholder
           speed={800}
-          backgroundColor={'#E1E9EE'}
+          backgroundColor={COLORS.count}
           highlightColor={'gray'}>
           <View style={{paddingHorizontal: wp(4)}}>
             <View style={styles.skeletonFirstContainer}>

@@ -557,8 +557,8 @@ const ScheduleScreen = ({navigation, route}) => {
       {isLoading ? (
         <SkeletonPlaceholder
           speed={800}
-          backgroundColor={'#E1E9EE'}
-          highlightColor={'#F2F8FC'}>
+          backgroundColor={COLORS.count}
+          highlightColor={'gray'}>
           <View>
             <View>
               <View style={{width: wp(100), height: hp(4)}} />

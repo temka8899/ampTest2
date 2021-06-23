@@ -17,6 +17,7 @@ import {COLORS, FONTS, icons} from '../constants';
 
 import {hp, wp} from '../constants/theme';
 
+import LoadBtn from '../components/Loading';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -36,6 +37,7 @@ import {
   deleteLeague,
   updateLeague,
 } from '../graphql/mutations';
+import CustomButton from '../components/Loading';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -50,6 +52,7 @@ const AdminScreen = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [LeagueList, setLeagueList] = React.useState([]);
   const [GameData, setGameData] = useState([]);
+  const [btnLoad, setBtnLoad] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -66,12 +69,20 @@ const AdminScreen = ({navigation}) => {
       // const todos = leagueData.data.listTeams.items;
       //
       console.log('leageuData :>> ', leagueData);
+      // let myData = [];
+      // leagueData.data.listLeagues.items.map(item => {
+      //   let custom = item;
+      //   custom.loading = false;
+      //   myData.push(custom);
+      // });
+      // console.log('myData :>> ', myData);
       setLeagueList(leagueData.data.listLeagues.items);
     } catch (err) {}
   };
 
   const DeleteLeague = async leagueID => {
     try {
+      setBtnLoad(true);
       await API.graphql(
         graphqlOperation(deleteLeague, {
           input: {
@@ -83,15 +94,20 @@ const AdminScreen = ({navigation}) => {
       setTimeout(() => {
         onRefresh();
       }, 1000);
+      setBtnLoad(false);
     } catch (err) {
       console.log('error deleting League:', err);
+      setBtnLoad(false);
     }
   };
 
-  const StartLeague = async leagueID => {
+  const StartLeague = async (leagueID, index) => {
     const startLeagueId = leagueID;
+    // setLeagueList(prev => [...prev, (prev[index].loading = true)]);
     // Get Soccer League Players
     try {
+      console.log('pressed');
+      setBtnLoad(true);
       const leaguePlayerData = await API.graphql(
         graphqlOperation(listLeaguePlayers, {
           filter: {
@@ -114,8 +130,6 @@ const AdminScreen = ({navigation}) => {
               graphqlOperation(createTeam, {
                 input: {
                   name: `team${tooluur}`,
-                  playerAvatar1: `${sorted[i].player.avatar}`,
-                  playerAvatar2: `${sorted[last].player.avatar}`,
                   //LeagueID
                   leagueID: leagueID,
                   teamLeagueId: leagueID,
@@ -137,7 +151,10 @@ const AdminScreen = ({navigation}) => {
           }
           tooluur++;
         }
-
+        setTimeout(() => {
+          onRefresh();
+        }, 1000);
+        setBtnLoad(false);
         //Update League
         var date = new Date();
         date.setDate(date.getDate());
@@ -153,84 +170,16 @@ const AdminScreen = ({navigation}) => {
             },
           }),
         );
+        setBtnLoad(false);
       } else {
         console.log('Soccer League Players not even or not enough');
+        setBtnLoad(false);
       }
     } catch (err) {
       console.log('error fetching League Players', err);
+      setBtnLoad(false);
     }
     addScheduleLoop(startLeagueId);
-
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //   const startLeagueId = leagueID;
-
-    //   // Get Soccer League Players
-    //   const leaguePlayerData = await API.graphql(
-    //     graphqlOperation(listLeaguePlayers, {
-    //       filter: {
-    //         //LeagueID
-    //         leagueID: {eq: leagueID},
-    //       },
-    //     }),
-    //   );
-    //   let teamIndex = 1;
-    //   const todos = leaguePlayerData.data.listLeaguePlayers.items;
-    //   console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
-
-    //   if (todos.length % 2 == 0 && todos.length >= 8) {
-    //     for (var i = 0; i < todos.length; i = i + 2) {
-    //       console.log(i);
-    //       // Add Team loop
-    //       try {
-    //         const temp_ = await API.graphql(
-    //           graphqlOperation(createTeam, {
-    //             input: {
-    //               name: `team${teamIndex}`,
-
-    //               //LeagueID
-    //               teamLeagueId: leagueID,
-    //               leagueID: leagueID,
-    //               win: 0,
-    //               lose: 0,
-    //             },
-    //           }),
-    //         );
-    //         console.log(`Team${teamIndex} created `);
-    //         //Add Team Player
-    //         await addStartTeamPlayer(temp_.data.createTeam.id, todos[i].playerID);
-    //         await addStartTeamPlayer(
-    //           temp_.data.createTeam.id,
-    //           todos[i + 1].playerID,
-    //         );
-    //         setTimeout(() => {
-    //           onRefresh();
-    //         }, 1000);
-    //       } catch (err) {
-    //         console.log('error creating League:', err);
-    //       }
-    //       teamIndex++;
-    //     }
-    //   } else {
-    //     console.log('Soccer League Players not even or not enough');
-    //   }
-
-    //   //Set Is Start League True
-    //   var date = new Date();
-    //   date.setDate(date.getDate());
-    //   let n = leaguePlayerData.length / 2 - 1;
-    //   const temp = await API.graphql(
-    //     graphqlOperation(updateLeague, {
-    //       input: {
-    //         id: leagueID,
-    //         isStart: true,
-    //         startedDate: `${date.toLocaleDateString()}`,
-    //         maxSchedule: `${(n * (n + 1)) / 2}`,
-    //         currentSchedule: 1,
-    //       },
-    //     }),
-    //   );
-    //   addScheduleLoop(startLeagueId);
-    // };
   };
 
   async function addScheduleLoop(startLeagueId) {
@@ -309,11 +258,14 @@ const AdminScreen = ({navigation}) => {
         }),
       );
       console.log('Game deleted');
+      setBtnLoad(false);
+
       setTimeout(() => {
         onRefresh();
       }, 1000);
     } catch (err) {
       console.log('error deleting League:', err);
+      setBtnLoad(false);
     }
   }
 
@@ -347,15 +299,9 @@ const AdminScreen = ({navigation}) => {
     }
   }
 
-  const renderItem = ({item}) => {
+  const renderItem = ({item, index}) => {
     return (
-      <View
-        style={{
-          marginLeft: wp(4),
-          marginTop: hp(3),
-          borderRadius: 20,
-          flexDirection: 'row',
-        }}>
+      <View style={styles.LeagueContainer}>
         <ImageBackground
           source={{
             uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
@@ -391,20 +337,21 @@ const AdminScreen = ({navigation}) => {
           </Text>
           <View>
             {item.isStart ? (
-              <TouchableOpacity
-                disabled={true}
-                onPress={() => StartLeague(item.id)}
-                style={styles.onGoingBtn}>
+              <TouchableOpacity disabled={true} style={styles.onGoingBtn}>
                 <Text style={styles.btnText}>Started</Text>
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity
-                onPress={() => StartLeague(item.id)}
-                style={styles.startBtn}>
-                <Text style={styles.btnText}>Start League</Text>
-              </TouchableOpacity>
+              <CustomButton
+                text={'Start League'}
+                disabled={btnLoad}
+                loading={item.loading}
+                styleAdd={styles.startBtn}
+                typStyle={styles.btnText}
+                onPress={() => StartLeague(item.id, index)}
+              />
             )}
             <TouchableOpacity
+              disabled={btnLoad}
               onPress={() => DeleteLeague(item.id)}
               style={styles.deleteBtn}>
               <Text style={styles.btnText}>Delete league</Text>
@@ -450,6 +397,7 @@ const AdminScreen = ({navigation}) => {
           </Text>
           <View>
             <TouchableOpacity
+              disabled={btnLoad}
               onPress={() => DeleteGame(item.id)}
               style={styles.deleteBtn}>
               <Text style={styles.btnText}>Delete game</Text>
@@ -471,7 +419,11 @@ const AdminScreen = ({navigation}) => {
       <ScrollView
         bounces={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            tintColor={COLORS.brand}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.textStyle}> League List </Text>
@@ -629,6 +581,12 @@ const styles = StyleSheet.create({
   textStyle: {
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
+  },
+  LeagueContainer: {
+    marginLeft: wp(4),
+    marginTop: hp(3),
+    borderRadius: 20,
+    flexDirection: 'row',
   },
 });
 export default AdminScreen;

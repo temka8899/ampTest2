@@ -409,7 +409,7 @@ const Profile = ({navigation}) => {
       {isLoading ? (
         <SkeletonPlaceholder
           speed={800}
-          backgroundColor={'#E1E9EE'}
+          backgroundColor={COLORS.count}
           highlightColor={'gray'}>
           <View>
             <View style={{paddingHorizontal: hp(2)}}>
