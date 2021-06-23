@@ -14,14 +14,11 @@ import {
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';
-
 import {hp, wp} from '../constants/theme';
-
 import LoadBtn from '../components/Loading';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
 import {
   listGames,
@@ -156,14 +153,13 @@ const AdminScreen = ({navigation}) => {
             );
             last--;
           } catch (err) {
-            console.log('error creating League:', err);
+            console.log('error creating League2:', err);
           }
           tooluur++;
         }
-        onRefresh();
-        // setTimeout(() => {
-        //   onRefresh();
-        // }, 1000);
+        setTimeout(() => {
+          onRefresh();
+        }, 1000);
         setBtnLoad(false);
         //Update League
         var date = new Date();
@@ -293,7 +289,7 @@ const AdminScreen = ({navigation}) => {
           },
         }),
       );
-      // console.log('Schedule Created');
+      console.log('Schedule Created');
     } catch (err) {
       console.log('error creating Schedule:', err);
     }
@@ -335,7 +331,7 @@ const AdminScreen = ({navigation}) => {
       );
       console.log('TeamPlayer Created');
     } catch (err) {
-      console.log('error creating League:', err);
+      console.log('error creating League1:', err);
     }
   }
 
