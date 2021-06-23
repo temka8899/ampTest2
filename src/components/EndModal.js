@@ -3,6 +3,8 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import Modal from 'react-native-modal';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {images} from '../constants';
+import LottieView from 'lottie-react-native';
+
 import {COLORS, FONTS, hp, wp} from '../constants/theme';
 
 export const EndModal = props => {
@@ -111,87 +113,97 @@ export const EndModal = props => {
           alignItems: 'center',
           // paddingVertical: hp(1),
         }}>
-        <View
-          style={
-            {
-              // borderWidth: 1,
-              // borderColor: 'red',
-            }
-          }>
+        {props.loading !== true ? (
           <View
-            style={{
-              // borderColor: 'red',
-              // borderWidth: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                color: COLORS.white,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(2.5),
-              }}>
-              WINNER
-            </Text>
+            style={
+              {
+                // borderWidth: 1,
+                // borderColor: 'red',
+              }
+            }>
             <View
               style={{
-                flexDirection: 'row',
                 // borderColor: 'red',
                 // borderWidth: 1,
+                justifyContent: 'center',
                 alignItems: 'center',
-                width: wp(40),
-                justifyContent: 'space-between',
-                marginTop: hp(2),
-                marginBottom: hp(1),
               }}>
-              <Image source={winner.one.image} style={[styles.winnerImage]} />
-              <Text style={[{color: COLORS.green}, styles.score]}>
-                {winner.one.point + winner.two.point}
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(2.5),
+                }}>
+                WINNER
               </Text>
-              <Image source={winner.two.image} style={[styles.winnerImage]} />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  // borderColor: 'red',
+                  // borderWidth: 1,
+                  alignItems: 'center',
+                  width: wp(40),
+                  justifyContent: 'space-between',
+                  marginTop: hp(2),
+                  marginBottom: hp(1),
+                }}>
+                <Image source={winner.one.image} style={[styles.winnerImage]} />
+                <Text style={[{color: COLORS.green}, styles.score]}>
+                  {winner.one.point + winner.two.point}
+                </Text>
+                <Image source={winner.two.image} style={[styles.winnerImage]} />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  // borderColor: 'red',
+                  // borderWidth: 1,
+                  alignItems: 'center',
+                  width: wp(30),
+                  justifyContent: 'space-between',
+                  marginBottom: hp(2),
+                }}>
+                <Image source={loser.one.image} style={[styles.image]} />
+                <Text style={[{color: COLORS.red}, styles.score]}>
+                  {loser.one.point + loser.two.point}
+                </Text>
+                <Image source={loser.two.image} style={[styles.image]} />
+              </View>
             </View>
             <View
               style={{
+                width: wp(80),
+                // height: hp(11),
+                justifyContent: 'space-evenly',
                 flexDirection: 'row',
-                // borderColor: 'red',
-                // borderWidth: 1,
-                alignItems: 'center',
-                width: wp(30),
-                justifyContent: 'space-between',
-                marginBottom: hp(2),
               }}>
-              <Image source={loser.one.image} style={[styles.image]} />
-              <Text style={[{color: COLORS.red}, styles.score]}>
-                {loser.one.point + loser.two.point}
-              </Text>
-              <Image source={loser.two.image} style={[styles.image]} />
+              <TouchableOpacity
+                style={styles.modalCancelBtn}
+                onPress={props.cancelbtn}>
+                <Text
+                  style={[styles.modalBtnText, {fontSize: RFPercentage(1.7)}]}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalBtnContainer}
+                onPress={props.EndBtn}>
+                <Text
+                  style={[styles.modalBtnText, {fontSize: RFPercentage(1.6)}]}>
+                  End Match
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <View
-            style={{
-              width: wp(80),
-              // height: hp(11),
-              justifyContent: 'space-evenly',
-              flexDirection: 'row',
-            }}>
-            <TouchableOpacity
-              style={styles.modalCancelBtn}
-              onPress={props.cancelbtn}>
-              <Text
-                style={[styles.modalBtnText, {fontSize: RFPercentage(1.7)}]}>
-                Cancel
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalBtnContainer}
-              onPress={props.EndBtn}>
-              <Text
-                style={[styles.modalBtnText, {fontSize: RFPercentage(1.6)}]}>
-                End Match
-              </Text>
-            </TouchableOpacity>
+        ) : (
+          <View>
+            <LottieView
+              autoPlay
+              style={{width: wp(45)}}
+              source={require('../assets/Lottie/game-pinpon.json')}
+            />
           </View>
-        </View>
+        )}
       </View>
     </Modal>
   );
