@@ -261,6 +261,7 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     getXp();
+    fetchTeamPlayers();
   }, []);
 
   const changeModalVisible = bool => {
@@ -345,23 +346,22 @@ const Profile = ({navigation}) => {
     [findUser, userInfo.id],
   );
 
-  async function fetchPlayer(id) {
+  async function fetchTeamPlayers() {
     try {
-      const playerData = await API.graphql(
-        graphqlOperation(listPlayers, {
-          filter: {id: {eq: id}},
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeamPlayers, {
+          filter: {
+            playerID: {eq: `${userInfo.id}`},
+          },
         }),
       );
-
-      console.log(
-        'Player>>>>>>>>>>>>>>',
-        playerData.data.listPlayers.items[0].id,
-      );
-      return playerData.data.listPlayers.items[0].level;
+      const todos = leagueData.data.listTeamPlayers.items;
+      console.log('>>>>>>>>>>>>>>', todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
   }
+
   function renderSchedule({item}) {
     console.log('match', item);
     return (
