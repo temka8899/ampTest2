@@ -681,7 +681,7 @@ const ScheduleScreen = ({navigation, route}) => {
             onPress={() => changeModalVisible(true)}
             style={styles.chooseButton}>
             <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData === '' ? 'Select' : chooseData.game.name}
+              {chooseData === undefined ? 'Select' : chooseData.game.name}
             </Text>
             <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
