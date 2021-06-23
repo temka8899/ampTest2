@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {AuthContext} from '../../App';
@@ -23,6 +24,13 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
 import API, {graphqlOperation} from '@aws-amplify/api';
+import {useMemo} from 'react';
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
+let firstDate = new Date();
 
 const Match = ({item, onPress, user}) => {
   const [Home, setHome] = useState(undefined);
@@ -111,7 +119,11 @@ const Match = ({item, onPress, user}) => {
                   {Home.map(_item => (
                     <>
                       {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
+                        <ActivityIndicator
+                          style={styles.avatar}
+                          size={'small'}
+                          color={COLORS.brand}
+                        />
                       ) : (
                         <Image
                           source={_item.player.avatar}
@@ -382,11 +394,11 @@ const ScheduleScreen = ({navigation, route}) => {
   const [modalVisible, setModalVisible] = useState(true);
   // const [month, setMonth] = useState('June');
   // const [year, setYear] = useState('2021');
+  const [refreshing, setRefreshing] = React.useState(false);
   const [dayData, setDayData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
 
   const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-  let firstDate = new Date();
   let localDay = moment(firstDate).format('ddd');
   firstDate = moment(firstDate).format('M/D/YYYY');
   const [localId, setlocalId] = useState(localDay);
@@ -397,35 +409,46 @@ const ScheduleScreen = ({navigation, route}) => {
 
   useEffect(() => {
     getDay(firstDate);
-  }, []);
+  }, [getDay]);
 
-  const getDay = (item, option = null) => {
-    console.log(`item ni i i i i  - -- - ----- -`, item);
-    setSelectedId(item);
-    getSchedule(item, option);
-  };
+  const getDay = React.useCallback(
+    (item, option = null) => {
+      console.log('item ni i i i i  - -- - ----- -', item);
+      setSelectedId(item);
+      getSchedule(item, option);
+    },
+    [getSchedule],
+  );
 
-  async function getSchedule(item, option = null) {
-    try {
-      console.log(`chooseData`, chooseData);
-      let param = option === null ? chooseData : option;
-      const scheduleData = await API.graphql(
-        graphqlOperation(listSchedules, {
-          filter: {
-            date: {eq: item},
-            leagueID: {eq: `${param.id}`},
-          },
-        }),
-      );
-      const schedulePerDay = scheduleData.data.listSchedules.items;
-      const sorted = schedulePerDay.sort((a, b) => b.index - a.index);
-      console.log('sorted', sorted);
-      setScheduleData(sorted);
-      // return schedulePerDay;
-    } catch (err) {
-      console.log('error fetching schedulePerDay', err);
-    }
-  }
+  const onRefresh = React.useCallback(() => {
+    getDay(selectedId);
+    wait(500).then(() => setRefreshing(false));
+  }, [getDay, selectedId]);
+
+  const getSchedule = React.useCallback(
+    async (item, option = null) => {
+      try {
+        console.log('chooseData', chooseData);
+        let param = option === null ? chooseData : option;
+        const scheduleData = await API.graphql(
+          graphqlOperation(listSchedules, {
+            filter: {
+              date: {eq: item},
+              leagueID: {eq: `${param.id}`},
+            },
+          }),
+        );
+        const schedulePerDay = scheduleData.data.listSchedules.items;
+        const sorted = schedulePerDay.sort((a, b) => b.index - a.index);
+        console.log('sorted', sorted);
+        setScheduleData(sorted);
+        // return schedulePerDay;
+      } catch (err) {
+        console.log('error fetching schedulePerDay', err);
+      }
+    },
+    [chooseData],
+  );
 
   // const matches = ({item}) => {
   //   renderSchedule(item);
@@ -489,38 +512,44 @@ const ScheduleScreen = ({navigation, route}) => {
     return count;
   }
 
-  function getDayData(number, date) {
-    let newDate = new Date(date);
-    let odor;
-    for (let i = 0; i < number; i++) {
-      odor = moment(date).format('dddd');
-      if (odor === 'Saturday') {
-        date = new Date(newDate.setDate(newDate.getDate() + 2));
-      } else if (odor === 'Sunday') {
+  const getDayData = React.useCallback(
+    (number, date) => {
+      let newDate = new Date(date);
+      let odor;
+      for (let i = 0; i < number; i++) {
+        odor = moment(date).format('dddd');
+        if (odor === 'Saturday') {
+          date = new Date(newDate.setDate(newDate.getDate() + 2));
+        } else if (odor === 'Sunday') {
+          date = new Date(newDate.setDate(newDate.getDate() + 1));
+        }
+        date = moment(date).format('M/D/YYYY');
+        setDayData(prev => [...prev, date]);
         date = new Date(newDate.setDate(newDate.getDate() + 1));
       }
-      date = moment(date).format('M/D/YYYY');
-      setDayData(prev => [...prev, date]);
-      date = new Date(newDate.setDate(newDate.getDate() + 1));
-    }
-    console.log('dayData >>>>>', dayData);
-  }
+      console.log('dayData >>>>>', dayData);
+    },
+    [dayData],
+  );
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
     console.log(`firstDate in getday`, firstDate);
   };
 
-  const setData = async option => {
-    setDayData([]);
-    console.log(`option`, option);
-    await setChooseData(option);
-    getDay(firstDate, option);
-    setLoading(false);
-    let teamNumber = await getTeamNumber(option);
-    let duration = await getDuration(teamNumber, 4);
-    getDayData(duration, option.startedDate);
-  };
+  const setData = React.useCallback(
+    async option => {
+      setDayData([]);
+      console.log(`option`, option);
+      await setChooseData(option);
+      getDay(firstDate, option);
+      setLoading(false);
+      let teamNumber = await getTeamNumber(option);
+      let duration = await getDuration(teamNumber, 4);
+      getDayData(duration, option.startedDate);
+    },
+    [firstDate, getDay, getDayData],
+  );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
@@ -623,32 +652,6 @@ const ScheduleScreen = ({navigation, route}) => {
             />
           </Modal>
           <View>
-            {/* <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginVertical: hp(0.5),
-              }}>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.8),
-                  marginRight: wp(1),
-                }}>
-                {month}
-              </Text>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.8),
-                  marginLeft: wp(1),
-                }}>
-                {year}
-              </Text>
-            </View> */}
             <View>
               {dayData.length === 0 ? (
                 <FlatList
@@ -697,6 +700,13 @@ const ScheduleScreen = ({navigation, route}) => {
               <FlatList
                 data={scheduleData}
                 renderItem={renderSchedule}
+                refreshControl={
+                  <RefreshControl
+                    tintColor={COLORS.brand}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
                 keyExtractor={item => item.id}
                 style={{
                   height: hp(85),

@@ -118,23 +118,11 @@ const createTeamScreen = ({navigation}) => {
 
   async function fetchTeam() {
     try {
-      // let filter = {
-      //   or: [
-      //     {
-      //       name: {eq: 'team2'},
-      //     },
-      //     {
-      //       name: {eq: 'team2'},
-      //     },
-      //   ],
-      // };
       const leagueData = await API.graphql(
         graphqlOperation(listTeams, {
-          filter: {leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'}},
+          filter: {leagueID: {eq: '83418a6f-4054-4ee7-ab18-ae7f62eb312e'}},
         }),
       );
-      // const todos = leagueData.data.listTeams.items;
-      // console.log('Teams>>>>>>>>>>>>>>', todos);
       console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
     } catch (err) {
       console.log('error fetching todos', err);
@@ -183,7 +171,9 @@ const createTeamScreen = ({navigation}) => {
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeamPlayers, {
-          filter: {teamID: {eq: '652535fb-b6d2-4531-bbb0-5edde60fb9e4'}},
+          filter: {
+            leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
+          },
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;

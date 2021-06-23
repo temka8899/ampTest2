@@ -91,7 +91,10 @@ const StandingsScreen = ({navigation, route}) => {
         }),
       );
       console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
-      setTeamData(leagueData.data.listTeams.items);
+      const sorted = leagueData.data.listTeams.items
+        .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
+        .reverse();
+      setTeamData(sorted);
       setLoading(false);
     } catch (err) {
       console.log('error fetching todos', err);
@@ -188,12 +191,13 @@ const StandingsScreen = ({navigation, route}) => {
                 <FlatList
                   refreshControl={
                     <RefreshControl
-                      color={'red'}
+                      tintColor={COLORS.brand}
                       refreshing={refreshing}
                       onRefresh={onRefresh}
                     />
                   }
-                  data={sorted}
+                  data={teamData}
+                  style={{height: hp(100)}}
                   keyExtractor={item => item.id}
                   renderItem={({item, index}) => (
                     <View>
