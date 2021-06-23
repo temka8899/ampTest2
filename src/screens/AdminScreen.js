@@ -192,75 +192,78 @@ const AdminScreen = ({navigation}) => {
   };
 
   async function addScheduleLoop(startLeagueId) {
-    const teamData = await API.graphql(
-      
-      graphqlOperation(listTeams, {
-        filter: {leagueID: {eq: startLeagueId}},
-      }),
-    );
-    const teams = teamData.data.listTeams.items;
-    const k = teams.length;
-    var nemeh = 1;
-    var hasah = teams.length;
-    var date = new Date();
-    var date2 = date.getDay();
-    let dateNemeh = 0;
-    let tooluur = 1;
-    date.setDate(date.getDate() - 1);
-    for (var i = 1; i < teams.length; i++) {
-      for (var j = 0; j < hasah - 1; j++) {
-        if (dateNemeh % 4 == 0) {
-          date.setDate(date.getDate() + 1);
-          var date2 = date.getDay();
-          if (date2 == 6) {
-            date.setDate(date.getDate() + 2);
+    try {
+      const teamData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {leagueID: {eq: startLeagueId}},
+        }),
+      );
+      const teams = teamData.data.listTeams.items;
+      const k = teams.length;
+      var nemeh = 1;
+      var hasah = teams.length;
+      var date = new Date();
+      var date2 = date.getDay();
+      let dateNemeh = 0;
+      let tooluur = 1;
+      date.setDate(date.getDate() - 1);
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', teams);
+      for (var i = 1; i < teams.length; i++) {
+        for (var j = 0; j < hasah - 1; j++) {
+          if (dateNemeh % 4 == 0) {
+            date.setDate(date.getDate() + 1);
+            var date2 = date.getDay();
+            if (date2 == 6) {
+              date.setDate(date.getDate() + 2);
+            }
+
+            const leagueData1 = await API.graphql(
+              graphqlOperation(await listTeamPlayers, {
+                filter: {
+                  teamID: {eq: `${teams[j].id}`},
+                },
+              }),
+            );
+            const _teamPlayers1 = leagueData1.data.listTeamPlayers.items;
+            const playerAvatar1 = [];
+            for (var z = 0; z < _teamPlayers1.length; z++) {
+              playerAvatar1.push(_teamPlayers1[z].player.avatar);
+            }
+
+            const leagueData2 = await API.graphql(
+              graphqlOperation(await listTeamPlayers, {
+                filter: {
+                  teamID: {eq: `${teams[j + nemeh].id}`},
+                },
+              }),
+            );
+            const _teamPlayers2 = leagueData2.data.listTeamPlayers.items;
+            const playerAvatar2 = [];
+            for (var z2 = 0; z2 < _teamPlayers2.length; z2++) {
+              playerAvatar2.push(_teamPlayers2[z2].player.avatar);
+            }
+
+            console.log(
+              `${teams[j].name} vs ${
+                teams[j + nemeh].name
+              }___at ${date.toLocaleDateString()}____`,
+            );
+            addSchedule(
+              teams[j].id,
+              teams[j + nemeh].id,
+              date.toLocaleDateString(),
+              startLeagueId,
+              tooluur,
+              playerAvatar1,
+              playerAvatar2,
+            );
+            dateNemeh++;
+            tooluur++;
           }
-
-        const leagueData1 = await API.graphql(
-          graphqlOperation(await listTeamPlayers, {
-            filter: {
-              teamID: {eq: `${teams[j].id}`},
-            },
-          }),
-        );
-        const _teamPlayers1 = leagueData1.data.listTeamPlayers.items;
-        const playerAvatar1 = [];
-        for (var z = 0; z < _teamPlayers1.length; z++) {
-          playerAvatar1.push(_teamPlayers1[z].player.avatar);
         }
-
-        const leagueData2 = await API.graphql(
-          graphqlOperation(await listTeamPlayers, {
-            filter: {
-              teamID: {eq: `${teams[j + nemeh].id}`},
-            },
-          }),
-        );
-        const _teamPlayers2 = leagueData2.data.listTeamPlayers.items;
-        const playerAvatar2 = [];
-        for (var z2 = 0; z2 < _teamPlayers2.length; z2++) {
-          playerAvatar2.push(_teamPlayers2[z2].player.avatar);
-        }
-
-        console.log(
-          `${teams[j].name} vs ${
-            teams[j + nemeh].name
-          }___at ${date.toLocaleDateString()}____`,
-        );
-        addSchedule(
-          teams[j].id,
-          teams[j + nemeh].id,
-          date.toLocaleDateString(),
-          startLeagueId,
-          tooluur,
-          playerAvatar1,
-          playerAvatar2,
-        );
-        dateNemeh++;
-        tooluur++;
       }
-    } catch (error) {
-      console.log('error :>> ', error);
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -289,7 +292,7 @@ const AdminScreen = ({navigation}) => {
           },
         }),
       );
-      // console.log('Schedule Created');
+      console.log('Schedule Created');
     } catch (err) {
       console.log('error creating Schedule:', err);
     }
