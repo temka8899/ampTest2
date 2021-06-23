@@ -315,7 +315,11 @@ const ParticipatesScreen = ({navigation, route}) => {
       </View>
       <FlatList
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            tintColor={COLORS.brand}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }
         data={sorted}
         renderItem={({item, index}) => (
