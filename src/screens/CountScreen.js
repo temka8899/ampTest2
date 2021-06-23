@@ -212,15 +212,19 @@ export default function CountScreen({navigation, route}) {
     setEndModalVisible(bool);
   };
   const EndBtnPress = async () => {
-    toggleEndModal(false);
     await UpdateSchedule();
     await updatePlayers();
     const user = await Auth.currentUserInfo();
     findUser(user);
+    toggleEndModal(false);
+    navigation.pop();
     console.log('allpoint', allPoint);
   };
   async function updatePlayers() {
     await updateProfile(Home[0].id, Home[0].player.id, allPoint.one.point);
+    await updateProfile(Home[1].id, Home[1].player.id, allPoint.two.point);
+    await updateProfile(Away[0].id, Away[0].player.id, allPoint.three.point);
+    await updateProfile(Away[1].id, Away[1].player.id, allPoint.four.point);
   }
 
   async function updateProfile() {}
@@ -238,7 +242,7 @@ export default function CountScreen({navigation, route}) {
     [setUserInfo],
   );
 
-  async function updateProfile(id, playerID, point) {
+  async function updateProfile(id, playerid, point) {
     const teamPlayerData = await API.graphql(
       graphqlOperation(listTeamPlayers, {
         filter: {
@@ -246,15 +250,15 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    const playerScore =
-      teamPlayerData.data.listTeamPlayers.items[0].playerScore;
+    const score = teamPlayerData.data.listTeamPlayers.items[0].playerScore;
+    console.log(`score`, score);
 
     try {
       await API.graphql(
         graphqlOperation(updateTeamPlayer, {
           input: {
-            playerid: '14e74619-25e1-429e-a486-f250e2995775',
-            playerScore: `${playerScore + 5}`,
+            id: id,
+            playerScore: `${score + point}`,
           },
         }),
       );
@@ -263,13 +267,20 @@ export default function CountScreen({navigation, route}) {
       console.log('error updating Teams', err);
     }
 
+    const playerData = await API.graphql(
+      graphqlOperation(listPlayers, {
+        filter: {id: {eq: playerid}},
+      }),
+    );
+    const xp = playerData.data.listPlayers.items[0].xp;
+
+    const newxp = point * 8;
     try {
       const temp = await API.graphql(
         graphqlOperation(updatePlayer, {
           input: {
-            id: userInfo.id,
-            avatar: newImage,
-            name: newName,
+            id: playerid,
+            xp: `${xp + newxp}`,
           },
         }),
       );

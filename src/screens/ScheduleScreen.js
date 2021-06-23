@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
-  Modal,
   Image,
   StatusBar,
   StyleSheet,
@@ -11,7 +10,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-
+import Modal from 'react-native-modal';
 import {AuthContext} from '../../App';
 
 import AppBar from '../components/AppBar';
@@ -39,14 +38,16 @@ const Match = ({item, onPress, user}) => {
     let homePlayers = await fetchTeamPlayers(item.home.id);
     console.log('homePlayers', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
-    console.log('awayPlayers', awayPlayers);
-    let finded = await findTeam(user.id);
-    console.log('item.home.id', item.home.id);
-    console.log('item.away.id', item.away.id);
-    console.log('finded', finded[0].teamID);
-    if (item.home.id === finded[0].teamID) {
+    console.log(`awayPlayers`, awayPlayers);
+    let findHome = await findTeam(user.id, item.home.id);
+    let findAway = await findTeam(user.id, item.away.id);
+    console.log(`findHome`, findHome);
+    console.log(`findAway`, findAway);
+    console.log(`item.home.id`, item.home.id);
+    console.log(`item.away.id`, item.away.id);
+    if (findHome) {
       setFind('home');
-    } else if (item.away.id === finded[0].teamID) {
+    } else if (findAway) {
       setFind('away');
     }
     setHome(homePlayers);
@@ -58,26 +59,29 @@ const Match = ({item, onPress, user}) => {
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeamPlayers, {
-          filter: {teamID: {eq: `${id}`}},
+          filter: {teamID: {eq: id}},
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
       return todos;
     } catch (err) {
-      console.log('error fetching todos', err);
+      //
     }
   }
-  async function findTeam(id) {
+  async function findTeam(id, teamid) {
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeamPlayers, {
-          filter: {playerID: {eq: `${id}`}},
+          filter: {playerID: {eq: `${id}`}, teamID: {eq: `${teamid}`}},
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
       console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
-      return todos;
+      if (todos.length === 1) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -375,7 +379,7 @@ const LocalDay = ({item, onPress, selectedId}) => {
 const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
   // const [month, setMonth] = useState('June');
   // const [year, setYear] = useState('2021');
   const [dayData, setDayData] = useState([]);
@@ -384,28 +388,32 @@ const ScheduleScreen = ({navigation, route}) => {
   const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
   let firstDate = new Date();
   let localDay = moment(firstDate).format('ddd');
-  firstDate = moment(firstDate).format('MMMM D dddd YY');
+  firstDate = moment(firstDate).format('M/D/YYYY');
   const [localId, setlocalId] = useState(localDay);
   const [selectedId, setSelectedId] = useState(firstDate);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
-
   // let homePlayers = [];
   // let awayPlayers = [];
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getDay(firstDate);
+  }, []);
 
-  const getDay = item => {
+  const getDay = (item, option = null) => {
+    console.log(`item ni i i i i  - -- - ----- -`, item);
     setSelectedId(item);
-    getSchedule(item);
+    getSchedule(item, option);
   };
 
-  async function getSchedule(item) {
+  async function getSchedule(item, option = null) {
     try {
+      console.log(`chooseData`, chooseData);
+      let param = option === null ? chooseData : option;
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
-            date: {eq: `${item}`},
-            leagueID: {eq: `${chooseData.id}`},
+            date: {eq: item},
+            leagueID: {eq: `${param.id}`},
           },
         }),
       );
@@ -413,7 +421,6 @@ const ScheduleScreen = ({navigation, route}) => {
       const sorted = schedulePerDay.sort((a, b) => b.index - a.index);
       console.log('sorted', sorted);
       setScheduleData(sorted);
-      console.log('Schedule>>>>>>>>>>>>>>', schedulePerDay);
       // return schedulePerDay;
     } catch (err) {
       console.log('error fetching schedulePerDay', err);
@@ -458,23 +465,18 @@ const ScheduleScreen = ({navigation, route}) => {
 
   async function getTeamNumber(option) {
     const leagueData = await API.graphql(graphqlOperation(listTeams));
-    console.log('leagueData >>>>>', leagueData);
     let teamNumber = 0;
-    console.log(leagueData.data.listTeams.items.length);
     for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
       if (leagueData.data.listTeams.items[i].league.id === option.id) {
         teamNumber = teamNumber + 1;
       }
     }
-    console.log('team', teamNumber);
     return teamNumber;
   }
 
   // ene league heden odor urgejlehiin avah function
 
   async function getDuration(number, perDay) {
-    console.log('number get', number);
-    console.log('perDay get', perDay);
     let s = 0,
       count;
     for (var i = 1; i < number; i++) {
@@ -488,11 +490,8 @@ const ScheduleScreen = ({navigation, route}) => {
   }
 
   function getDayData(number, date) {
-    console.log('number', number);
-    console.log('date', date);
     let newDate = new Date(date);
     let odor;
-    console.log('newDate', newDate);
     for (let i = 0; i < number; i++) {
       odor = moment(date).format('dddd');
       if (odor === 'Saturday') {
@@ -501,7 +500,6 @@ const ScheduleScreen = ({navigation, route}) => {
         date = new Date(newDate.setDate(newDate.getDate() + 1));
       }
       date = moment(date).format('M/D/YYYY');
-      console.log('odor', odor);
       setDayData(prev => [...prev, date]);
       date = new Date(newDate.setDate(newDate.getDate() + 1));
     }
@@ -510,13 +508,15 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
+    console.log(`firstDate in getday`, firstDate);
   };
 
   const setData = async option => {
     setDayData([]);
-    setChooseData(option);
+    console.log(`option`, option);
+    await setChooseData(option);
+    getDay(firstDate, option);
     setLoading(false);
-    console.log('League bainuu', option);
     let teamNumber = await getTeamNumber(option);
     let duration = await getDuration(teamNumber, 4);
     getDayData(duration, option.startedDate);
@@ -614,8 +614,9 @@ const ScheduleScreen = ({navigation, route}) => {
           <Modal
             transparent={true}
             animationType="fade"
-            visible={modalVisible}
-            nRequestClose={() => changeModalVisible(false)}>
+            isVisible={modalVisible}
+            style={{margin: 0}}
+            onRequestClose={() => changeModalVisible(false)}>
             <LeaguePicker
               changeModalVisible={changeModalVisible}
               setData={setData}

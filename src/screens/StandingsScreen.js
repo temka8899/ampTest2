@@ -18,7 +18,6 @@ import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {useEffect} from 'react';
 import {listTeamPlayers, listTeams} from '../graphql/queries';
 import {graphqlOperation} from '@aws-amplify/api-graphql';
 import API from '@aws-amplify/api';
@@ -39,13 +38,10 @@ const StandingsScreen = ({navigation, route}) => {
   const [teamData, setTeamData] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [PlayerInfo, setPlayerInfo] = useState([]);
-  console.log('PlayerInfo :>> ', PlayerInfo);
 
-  const sorted = PlayerInfo.sort(
-    (a, b) =>
-      a[1].team.win / (a[1].team.lose + a[1].team.win) -
-      b[0].team.win / (b[0].team.lose + b[0].team.win),
-  ).reverse();
+  const sorted = teamData
+    .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
+    .reverse();
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -78,19 +74,7 @@ const StandingsScreen = ({navigation, route}) => {
       );
       console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
       setTeamData(leagueData.data.listTeams.items);
-      let array = [];
-      for (let i = 0; i < leagueData.data.listTeams.items.length; i++) {
-        const leagueData_ = await API.graphql(
-          graphqlOperation(listTeamPlayers, {
-            filter: {teamID: {eq: leagueData.data.listTeams.items[i].id}},
-          }),
-        );
-        const teamPlayers = leagueData_.data.listTeamPlayers.items;
-        array.push(teamPlayers);
-        setLoading(false);
-      }
-      console.log('array after looped :>> ', array);
-      setPlayerInfo(array);
+      setLoading(false);
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -120,7 +104,7 @@ const StandingsScreen = ({navigation, route}) => {
           />
         </Modal>
         <View>
-          {PlayerInfo.length != 0 ? (
+          {teamData.length != 0 ? (
             <>
               {isLoading ? (
                 <SkeletonPlaceholder
@@ -205,11 +189,11 @@ const StandingsScreen = ({navigation, route}) => {
                         </Text>
                         <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
                           <Image
-                            source={item[0].player.avatar}
+                            source={item.playerAvatar1}
                             style={styles.avatar}
                           />
                           <Image
-                            source={item[1].player.avatar}
+                            source={item.playerAvatar2}
                             style={styles.avatar}
                           />
                         </View>
@@ -219,7 +203,7 @@ const StandingsScreen = ({navigation, route}) => {
                             color: COLORS.white,
                             marginLeft: wp(5),
                           }}>
-                          {item[0].team.name}
+                          {item.name}
                         </Text>
                         <View
                           style={{
@@ -231,11 +215,13 @@ const StandingsScreen = ({navigation, route}) => {
                               fontFamily: FONTS.brandFont,
                               color: COLORS.green,
                             }}>
-                            {item[0].team.win}
-                            {`-`}
-                            <Text style={{color: COLORS.red}}>
-                              {item[0].team.lose}
-                            </Text>
+                            {item.win}
+                            <Text
+                              style={{
+                                fontFamily: FONTS.brandFont,
+                                color: COLORS.white,
+                              }}>{`-`}</Text>
+                            <Text style={{color: COLORS.red}}>{item.lose}</Text>
                           </Text>
                         </View>
                       </View>

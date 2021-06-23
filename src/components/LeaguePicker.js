@@ -30,7 +30,6 @@ const LeaguePicker = props => {
     }
   }
   const option = LeagueList.map((item, index) => {
-    // console.log(item);
     return (
       <TouchableOpacity
         style={styles.option}
@@ -40,10 +39,8 @@ const LeaguePicker = props => {
       </TouchableOpacity>
     );
   });
-  const onPressItem = option => {
-    props.changeModalVisible(false);
-    console.log('option ochij bn');
-    console.log(option);
+  const onPressItem = async option => {
+    await props.changeModalVisible(false);
     props.setData(option);
   };
   return (
