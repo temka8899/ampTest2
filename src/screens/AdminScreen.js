@@ -157,10 +157,9 @@ const AdminScreen = ({navigation}) => {
           }
           tooluur++;
         }
-        onRefresh();
-        // setTimeout(() => {
-        //   onRefresh();
-        // }, 1000);
+        setTimeout(() => {
+          onRefresh();
+        }, 1000);
         setBtnLoad(false);
         //Update League
         var date = new Date();
