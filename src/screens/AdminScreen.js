@@ -192,8 +192,8 @@ const AdminScreen = ({navigation}) => {
   };
 
   async function addScheduleLoop(startLeagueId) {
-<<<<<<< HEAD
     const teamData = await API.graphql(
+      
       graphqlOperation(listTeams, {
         filter: {leagueID: {eq: startLeagueId}},
       }),
@@ -214,35 +214,8 @@ const AdminScreen = ({navigation}) => {
           var date2 = date.getDay();
           if (date2 == 6) {
             date.setDate(date.getDate() + 2);
-=======
-    try {
-      console.log('add called');
-      const teamData = await API.graphql(
-        graphqlOperation(listTeams, {
-          filter: {leagueID: {eq: startLeagueId}},
-        }),
-      );
-      const teams = teamData.data.listTeams.items;
-      const k = teams.length;
-      var nemeh = 1;
-      var hasah = teams.length;
-      var date = new Date();
-      var date2 = date.getDay();
-      let dateNemeh = 0;
-      let tooluur = 1;
-      date.setDate(date.getDate() - 1);
-      for (var i = 1; i < teams.length; i++) {
-        for (var j = 0; j < hasah - 1; j++) {
-          if (dateNemeh % 4 == 0) {
-            date.setDate(date.getDate() + 1);
-            var date2 = date.getDay();
-            if (date2 == 6) {
-              date.setDate(date.getDate() + 2);
-            }
->>>>>>> 4285e1270328c93820b88c39bd573e0b6c0d2529
           }
 
-<<<<<<< HEAD
         const leagueData1 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
             filter: {
@@ -285,25 +258,6 @@ const AdminScreen = ({navigation}) => {
         );
         dateNemeh++;
         tooluur++;
-=======
-          console.log(
-            `${teams[j].name} vs ${
-              teams[j + nemeh].name
-            }___at ${date.toLocaleDateString()}____`,
-          );
-          addSchedule(
-            teams[j].id,
-            teams[j + nemeh].id,
-            date.toLocaleDateString(),
-            startLeagueId,
-            tooluur,
-          );
-          dateNemeh++;
-          tooluur++;
-        }
-        hasah--;
-        nemeh++;
->>>>>>> 4285e1270328c93820b88c39bd573e0b6c0d2529
       }
     } catch (error) {
       console.log('error :>> ', error);
