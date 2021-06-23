@@ -422,35 +422,34 @@ export default function CountScreen({navigation, route}) {
         }),
       );
       console.log('Team Updated');
-
-      const updateLeagueID = teamData1.data.listTeams.items[0].leagueID;
-      //Getting League current Schedule
-      const leagueData = await API.graphql(
-        graphqlOperation(listLeagues, {
-          filter: {
-            id: {eq: updateLeagueID},
-          },
-        }),
-      );
-      console.log(
-        'Leagues>>>>>>>>>>>>>>',
-        leagueData.data.listLeagues.items[0].currentSchedule,
-      );
-      let updateCurrentSchedule =
-        leagueData.data.listLeagues.items[0].currentSchedule;
-      console.log(updateCurrentSchedule);
-
-      //Updating League current schedule
-      const resCurrentSchedule = await API.graphql(
-        graphqlOperation(updateLeague, {
-          input: {
-            id: updateLeagueID,
-            currentSchedule: updateCurrentSchedule + 1,
-          },
-        }),
-      );
-      console.log('>>>>>>>>>>>>>>>>', resCurrentSchedule);
     }
+    const updateLeagueID = MatchData.leagueID;
+    //Getting League current Schedule
+    const leagueData = await API.graphql(
+      graphqlOperation(listLeagues, {
+        filter: {
+          id: {eq: updateLeagueID},
+        },
+      }),
+    );
+    console.log(
+      'Leagues>>>>>>>>>>>>>>',
+      leagueData.data.listLeagues.items[0].currentSchedule,
+    );
+    let updateCurrentSchedule =
+      leagueData.data.listLeagues.items[0].currentSchedule;
+    console.log(updateCurrentSchedule);
+
+    //Updating League current schedule
+    const resCurrentSchedule = await API.graphql(
+      graphqlOperation(updateLeague, {
+        input: {
+          id: updateLeagueID,
+          currentSchedule: updateCurrentSchedule + 1,
+        },
+      }),
+    );
+    console.log('>>>>>>>>>>>>>>>>', resCurrentSchedule);
   }
 
   function CancelModal() {
