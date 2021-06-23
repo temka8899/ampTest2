@@ -27,6 +27,7 @@ import {
   listLeaguePlayers,
   listLeagues,
   listTeams,
+  listTeamPlayers,
 } from '../graphql/queries';
 import {
   createSchedule,
@@ -135,7 +136,7 @@ const AdminScreen = ({navigation}) => {
             );
             last--;
           } catch (err) {
-            console.log('error creating League:', err);
+            console.log('error creating League2:', err);
           }
           tooluur++;
         }
@@ -249,8 +250,6 @@ const AdminScreen = ({navigation}) => {
     var date2 = date.getDay();
     let dateNemeh = 0;
     let tooluur = 1;
-    const todos = leagueData.data.listTeamPlayers.items;
-    console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
     date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {
       for (var j = 0; j < hasah - 1; j++) {
@@ -260,6 +259,32 @@ const AdminScreen = ({navigation}) => {
           if (date2 == 6) {
             date.setDate(date.getDate() + 2);
           }
+        }
+
+        const leagueData1 = await API.graphql(
+          graphqlOperation(await listTeamPlayers, {
+            filter: {
+              teamID: {eq: `${teams[j].id}`},
+            },
+          }),
+        );
+        const _teamPlayers1 = leagueData1.data.listTeamPlayers.items;
+        const playerAvatar1 = [];
+        for (var z = 0; z < _teamPlayers1.length; z++) {
+          playerAvatar1.push(_teamPlayers1[z].player.avatar);
+        }
+
+        const leagueData2 = await API.graphql(
+          graphqlOperation(await listTeamPlayers, {
+            filter: {
+              teamID: {eq: `${teams[j + nemeh].id}`},
+            },
+          }),
+        );
+        const _teamPlayers2 = leagueData2.data.listTeamPlayers.items;
+        const playerAvatar2 = [];
+        for (var z2 = 0; z2 < _teamPlayers2.length; z2++) {
+          playerAvatar2.push(_teamPlayers2[z2].player.avatar);
         }
 
         console.log(
@@ -273,6 +298,8 @@ const AdminScreen = ({navigation}) => {
           date.toLocaleDateString(),
           startLeagueId,
           tooluur,
+          playerAvatar1,
+          playerAvatar2,
         );
         dateNemeh++;
         tooluur++;
@@ -282,7 +309,15 @@ const AdminScreen = ({navigation}) => {
     }
   }
 
-  async function addSchedule(team1ID, team2ID, date, startLeagueId, tooluur) {
+  async function addSchedule(
+    team1ID,
+    team2ID,
+    date,
+    startLeagueId,
+    tooluur,
+    homeAvatar,
+    awayAvatar,
+  ) {
     try {
       await API.graphql(
         graphqlOperation(createSchedule, {
@@ -294,6 +329,8 @@ const AdminScreen = ({navigation}) => {
             date: `${date}`,
             leagueID: startLeagueId,
             index: tooluur,
+            homeImage: homeAvatar,
+            awayImage: awayAvatar,
           },
         }),
       );
@@ -336,7 +373,7 @@ const AdminScreen = ({navigation}) => {
       );
       console.log('TeamPlayer Created');
     } catch (err) {
-      console.log('error creating League:', err);
+      console.log('error creating League1:', err);
     }
   }
 
