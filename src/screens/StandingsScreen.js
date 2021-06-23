@@ -10,8 +10,8 @@ import {
   TouchableOpacity,
   FlatList,
   RefreshControl,
-  // Animated,
-  // Easing,
+  Animated,
+  Easing,
 } from 'react-native';
 
 import AppBar from '../components/AppBar';
@@ -28,13 +28,15 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
+let load = true;
+
 const StandingsScreen = ({navigation, route}) => {
   // let itemID = 0;
 
   // if (route.params?.itemId) {
   //   itemID = route.params.itemId;
   // }
-  // const [rotateValue, setRotateValue] = useState(new Animated.Value(0));
+  const [rotateValue, setRotateValue] = useState(new Animated.Value(0));
   const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -42,21 +44,25 @@ const StandingsScreen = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [PlayerInfo, setPlayerInfo] = useState([]);
 
-  // function StartImageRotate() {
-  //   rotateValue.setValue(0);
+  const StartImageRotate = React.useCallback(() => {
+    console.log('start rot callde');
+    rotateValue.setValue(0);
 
-  //   Animated.timing(rotateValue, {
-  //     toValue: 1,
-  //     duration: 5000,
-  //     easing: Easing.linear,
-  //     useNativeDriver: true,
-  //   }).start(() => StartImageRotate());
-  // }
+    Animated.timing(rotateValue, {
+      toValue: 1,
+      duration: 3000,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => {
+      load ? StartImageRotate() : null;
+      console.log('s load', isLoading);
+    });
+  }, [isLoading, rotateValue]);
 
-  // const RotateData = rotateValue.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: ['0deg', '360deg'],
-  // });
+  const RotateData = rotateValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
   const sorted = teamData
     .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
     .reverse();
@@ -74,9 +80,9 @@ const StandingsScreen = ({navigation, route}) => {
     [fetchTeam],
   );
 
-  // useEffect(() => {
-  //   StartImageRotate();
-  // }, [StartImageRotate]);
+  useEffect(() => {
+    StartImageRotate();
+  }, [StartImageRotate]);
 
   const onRefresh = React.useCallback(() => {
     setData(chooseData);
@@ -96,6 +102,8 @@ const StandingsScreen = ({navigation, route}) => {
         .reverse();
       setTeamData(sorted);
       setLoading(false);
+      load = false;
+      console.log('set_load false');
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -255,7 +263,10 @@ const StandingsScreen = ({navigation, route}) => {
             </>
           ) : (
             <View style={styles.logoContainer}>
-              <Image source={images.logo} style={[styles.logoStyle]} />
+              <Animated.Image
+                source={images.logo}
+                style={[styles.logoStyle, {transform: [{rotate: RotateData}]}]}
+              />
             </View>
           )}
         </View>
