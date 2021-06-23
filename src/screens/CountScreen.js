@@ -292,11 +292,12 @@ export default function CountScreen({navigation, route}) {
       console.log('error updating League: ', err);
     }
   }
+
   async function UpdateSchedule() {
     // Updating Schedule data
     // Bagiin avsan onoog update hiine
     try {
-      await API.graphql(
+      API.graphql(
         graphqlOperation(updateSchedule, {
           input: {
             //Schedule id
@@ -325,7 +326,7 @@ export default function CountScreen({navigation, route}) {
 
       // Updating Team win-lose datas
       try {
-        await API.graphql(
+        API.graphql(
           graphqlOperation(updateTeam, {
             input: {
               //Team id
@@ -354,7 +355,7 @@ export default function CountScreen({navigation, route}) {
 
       // Updating Team win-lose datas
       try {
-        await API.graphql(
+        API.graphql(
           graphqlOperation(updateTeam, {
             input: {
               //Team id
@@ -408,7 +409,6 @@ export default function CountScreen({navigation, route}) {
       );
       const win1 = teamData1.data.listTeams.items[0].win;
       const lose1 = teamData1.data.listTeams.items[0].lose;
-      const updateLeagueID = teamData1.data.listTeams.items[0].leagueID;
 
       // Updating Team win-lose datas
       await API.graphql(
@@ -422,33 +422,34 @@ export default function CountScreen({navigation, route}) {
         }),
       );
       console.log('Team Updated');
-
-      //Getting League current Schedule
-      const leagueData = await API.graphql(
-        graphqlOperation(listLeagues, {
-          filter: {
-            id: {eq: updateLeagueID},
-          },
-        }),
-      );
-      console.log(
-        'Leagues>>>>>>>>>>>>>>',
-        leagueData.data.listLeagues.items[0].currentSchedule,
-      );
-      let updateCurrentSchedule =
-        leagueData.data.listLeagues.items[0].currentSchedule;
-      console.log(updateCurrentSchedule);
-
-      //Updating League current schedule
-      await API.graphql(
-        graphqlOperation(updateLeague, {
-          input: {
-            id: updateLeagueID,
-            currentSchedule: updateCurrentSchedule + 1,
-          },
-        }),
-      );
     }
+    const updateLeagueID = MatchData.leagueID;
+    //Getting League current Schedule
+    const leagueData = await API.graphql(
+      graphqlOperation(listLeagues, {
+        filter: {
+          id: {eq: updateLeagueID},
+        },
+      }),
+    );
+    console.log(
+      'Leagues>>>>>>>>>>>>>>',
+      leagueData.data.listLeagues.items[0].currentSchedule,
+    );
+    let updateCurrentSchedule =
+      leagueData.data.listLeagues.items[0].currentSchedule;
+    console.log(updateCurrentSchedule);
+
+    //Updating League current schedule
+    const resCurrentSchedule = await API.graphql(
+      graphqlOperation(updateLeague, {
+        input: {
+          id: updateLeagueID,
+          currentSchedule: updateCurrentSchedule + 1,
+        },
+      }),
+    );
+    console.log('>>>>>>>>>>>>>>>>', resCurrentSchedule);
   }
 
   function CancelModal() {
