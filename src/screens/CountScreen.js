@@ -50,6 +50,7 @@ export default function CountScreen({navigation, route}) {
   const [Home, setHome] = useState();
   const [Away, setAway] = useState();
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const [allPoint, setAllPoint] = useState({
     one: {
@@ -212,11 +213,13 @@ export default function CountScreen({navigation, route}) {
     setEndModalVisible(bool);
   };
   const EndBtnPress = async () => {
+    setLoading(true);
     await UpdateSchedule();
     await updatePlayers();
     const user = await Auth.currentUserInfo();
     findUser(user);
     toggleEndModal(false);
+    setLoading(false);
     navigation.pop();
     console.log('allpoint', allPoint);
   };
@@ -788,6 +791,7 @@ export default function CountScreen({navigation, route}) {
             cancelbtn={cancelBtnPress}
             EndBtn={EndBtnPress}
             allData={allPoint}
+            loading={loading}
           />
         )}
       </View>

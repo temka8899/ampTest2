@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   FlatList,
   RefreshControl,
+  // Animated,
+  // Easing,
 } from 'react-native';
 
 import AppBar from '../components/AppBar';
@@ -32,6 +34,7 @@ const StandingsScreen = ({navigation, route}) => {
   // if (route.params?.itemId) {
   //   itemID = route.params.itemId;
   // }
+  // const [rotateValue, setRotateValue] = useState(new Animated.Value(0));
   const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -39,6 +42,21 @@ const StandingsScreen = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [PlayerInfo, setPlayerInfo] = useState([]);
 
+  // function StartImageRotate() {
+  //   rotateValue.setValue(0);
+
+  //   Animated.timing(rotateValue, {
+  //     toValue: 1,
+  //     duration: 5000,
+  //     easing: Easing.linear,
+  //     useNativeDriver: true,
+  //   }).start(() => StartImageRotate());
+  // }
+
+  // const RotateData = rotateValue.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: ['0deg', '360deg'],
+  // });
   const sorted = teamData
     .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
     .reverse();
@@ -57,8 +75,8 @@ const StandingsScreen = ({navigation, route}) => {
   );
 
   // useEffect(() => {
-  //   fetchTeam();
-  // }, [fetchTeam]);
+  //   StartImageRotate();
+  // }, [StartImageRotate]);
 
   const onRefresh = React.useCallback(() => {
     setData(chooseData);
@@ -233,7 +251,7 @@ const StandingsScreen = ({navigation, route}) => {
             </>
           ) : (
             <View style={styles.logoContainer}>
-              <Image source={images.logo} style={styles.logoStyle} />
+              <Image source={images.logo} style={[styles.logoStyle]} />
             </View>
           )}
         </View>
