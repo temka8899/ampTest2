@@ -114,9 +114,6 @@ const AdminScreen = ({navigation}) => {
               graphqlOperation(createTeam, {
                 input: {
                   name: `team${tooluur}`,
-                  playerAvatar1: `${sorted[i].player.avatar}`,
-                  playerAvatar2: `${sorted[last].player.avatar}`,
-                  //LeagueID
                   leagueID: leagueID,
                   teamLeagueId: leagueID,
                   win: 0,
@@ -126,10 +123,15 @@ const AdminScreen = ({navigation}) => {
             );
             console.log(`Team${i} created `);
             //Add Team Player
-            addStartTeamPlayer(temp.data.createTeam.id, sorted[i].playerID);
+            addStartTeamPlayer(
+              temp.data.createTeam.id,
+              sorted[i].playerID,
+              sorted[i].player.avatar,
+            );
             await addStartTeamPlayer(
               temp.data.createTeam.id,
               sorted[last].playerID,
+              sorted[last].player.avatar,
             );
             last--;
           } catch (err) {
@@ -247,6 +249,8 @@ const AdminScreen = ({navigation}) => {
     var date2 = date.getDay();
     let dateNemeh = 0;
     let tooluur = 1;
+    const todos = leagueData.data.listTeamPlayers.items;
+    console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
     date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {
       for (var j = 0; j < hasah - 1; j++) {
@@ -317,7 +321,7 @@ const AdminScreen = ({navigation}) => {
     }
   }
 
-  async function addStartTeamPlayer(teamplayerteam, teamplayerplayer) {
+  async function addStartTeamPlayer(teamplayerteam, teamplayerplayer, avatar) {
     try {
       await API.graphql(
         graphqlOperation(createTeamPlayer, {

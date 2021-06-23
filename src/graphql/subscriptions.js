@@ -175,8 +175,6 @@ export const onCreateTeam = /* GraphQL */ `
       name
       win
       lose
-      playerAvatar1
-      playerAvatar2
       createdAt
       updatedAt
     }
@@ -209,8 +207,6 @@ export const onUpdateTeam = /* GraphQL */ `
       name
       win
       lose
-      playerAvatar1
-      playerAvatar2
       createdAt
       updatedAt
     }
@@ -243,8 +239,6 @@ export const onDeleteTeam = /* GraphQL */ `
       name
       win
       lose
-      playerAvatar1
-      playerAvatar2
       createdAt
       updatedAt
     }
@@ -272,8 +266,6 @@ export const onCreateTeamPlayer = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
@@ -318,8 +310,6 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
@@ -364,8 +354,6 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
@@ -535,8 +523,6 @@ export const onCreateSchedule = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
@@ -558,11 +544,11 @@ export const onCreateSchedule = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
+      homeImage
+      awayImage
       homeScore
       awayScore
       date
@@ -595,8 +581,6 @@ export const onUpdateSchedule = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
@@ -618,11 +602,11 @@ export const onUpdateSchedule = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
+      homeImage
+      awayImage
       homeScore
       awayScore
       date
@@ -655,8 +639,6 @@ export const onDeleteSchedule = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
@@ -678,11 +660,11 @@ export const onDeleteSchedule = /* GraphQL */ `
         name
         win
         lose
-        playerAvatar1
-        playerAvatar2
         createdAt
         updatedAt
       }
+      homeImage
+      awayImage
       homeScore
       awayScore
       date

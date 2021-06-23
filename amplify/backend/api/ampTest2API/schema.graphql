@@ -33,8 +33,6 @@ type Team @model {
   name: String!
   win: Int
   lose: Int
-  playerAvatar1: String
-  playerAvatar2: String
 }
 
 type TeamPlayer @model {
@@ -60,6 +58,8 @@ type Schedule @model {
   leagueID: String
   home: Team! @connection
   away: Team! @connection
+  homeImage: String
+  awayImage: String
   homeScore: Int
   awayScore: Int
   date: String!

@@ -666,7 +666,7 @@ const GameScreen = ({navigation}) => {
               marginLeft: wp(4),
               marginVertical: hp(2),
             }}>
-            COMING MATCHES
+            PLAYING TODAY
           </Text>
           <View style={{height: hp(26)}}>
             <FlatList
