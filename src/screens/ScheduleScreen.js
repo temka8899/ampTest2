@@ -48,6 +48,15 @@ const Match = ({item, onPress, user}) => {
     if (item !== null) {
       setImgLoad(false);
     }
+    // console.log(`item.homeImage`, item.homeImage);
+    let homeImages1 = item.homeImage.split('[');
+    let homeImages2 = homeImages1[1].split(']');
+    let homeImages = homeImages2[0].split(', ');
+    let awayImages1 = item.awayImage.split('[');
+    let awayImages2 = awayImages1[1].split(']');
+    let awayImages = awayImages2[0].split(', ');
+    setHome(homeImages);
+    setAway(awayImages);
     // let homePlayers = await fetchTeamPlayers(item.home.id);
     // console.log('homePlayers', homePlayers);
     // let awayPlayers = await fetchTeamPlayers(item.away.id);
@@ -63,9 +72,8 @@ const Match = ({item, onPress, user}) => {
     } else if (findAway) {
       setFind('away');
     }
-    // setHome(homePlayers);
-    // setAway(awayPlayers);
-  }, [item, user.id]);
+    console.log(`Home`, Home);
+  }, [Home, item, user.id]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -118,32 +126,21 @@ const Match = ({item, onPress, user}) => {
                 width: wp(39),
                 alignItems: 'center',
               }}>
-              <View style={{flexDirection: 'row'}}>
-                {imgLoad ? (
-                  <ActivityIndicator
-                    style={styles.avatar}
-                    size={'small'}
-                    color={COLORS.brand}
-                  />
-                ) : (
-                  <Image
-                    source={item.home.playerAvatar1}
-                    style={styles.avatar}
-                  />
-                )}
-                {imgLoad ? (
-                  <ActivityIndicator
-                    style={styles.avatar}
-                    size={'small'}
-                    color={COLORS.brand}
-                  />
-                ) : (
-                  <Image
-                    source={item.home.playerAvatar2}
-                    style={styles.avatar}
-                  />
-                )}
-              </View>
+              {Home && (
+                <View style={{flexDirection: 'row'}}>
+                  {Home.map(_item => {
+                    return imgLoad ? (
+                      <ActivityIndicator
+                        style={styles.avatar}
+                        size={'small'}
+                        color={COLORS.brand}
+                      />
+                    ) : (
+                      <Image source={_item} style={styles.avatar} />
+                    );
+                  })}
+                </View>
+              )}
               <Text
                 style={{
                   color: find === 'home' ? COLORS.brand : COLORS.greyText,
@@ -201,32 +198,21 @@ const Match = ({item, onPress, user}) => {
                 width: wp(39),
                 alignItems: 'center',
               }}>
-              <View style={{flexDirection: 'row'}}>
-                {imgLoad ? (
-                  <ActivityIndicator
-                    style={styles.avatar}
-                    size={'small'}
-                    color={COLORS.brand}
-                  />
-                ) : (
-                  <Image
-                    source={item.away.playerAvatar1}
-                    style={styles.avatar}
-                  />
-                )}
-                {imgLoad ? (
-                  <ActivityIndicator
-                    style={styles.avatar}
-                    size={'small'}
-                    color={COLORS.brand}
-                  />
-                ) : (
-                  <Image
-                    source={item.away.playerAvatar2}
-                    style={styles.avatar}
-                  />
-                )}
-              </View>
+              {Away && (
+                <View style={{flexDirection: 'row'}}>
+                  {Away.map(_item => {
+                    return imgLoad ? (
+                      <ActivityIndicator
+                        style={styles.avatar}
+                        size={'small'}
+                        color={COLORS.brand}
+                      />
+                    ) : (
+                      <Image source={_item} style={styles.avatar} />
+                    );
+                  })}
+                </View>
+              )}
 
               <Text
                 style={{
@@ -272,32 +258,21 @@ const Match = ({item, onPress, user}) => {
                 width: wp(39),
                 alignItems: 'center',
               }}>
-              <View style={{flexDirection: 'row'}}>
-                {imgLoad ? (
-                  <ActivityIndicator
-                    style={styles.avatar}
-                    size={'small'}
-                    color={COLORS.brand}
-                  />
-                ) : (
-                  <Image
-                    source={item.home.playerAvatar1}
-                    style={styles.avatar}
-                  />
-                )}
-                {imgLoad ? (
-                  <ActivityIndicator
-                    style={styles.avatar}
-                    size={'small'}
-                    color={COLORS.brand}
-                  />
-                ) : (
-                  <Image
-                    source={item.home.playerAvatar2}
-                    style={styles.avatar}
-                  />
-                )}
-              </View>
+              {Home && (
+                <View style={{flexDirection: 'row'}}>
+                  {Home.map(_item => {
+                    return imgLoad ? (
+                      <ActivityIndicator
+                        style={styles.avatar}
+                        size={'small'}
+                        color={COLORS.brand}
+                      />
+                    ) : (
+                      <Image source={_item} style={styles.avatar} />
+                    );
+                  })}
+                </View>
+              )}
               <Text
                 style={{
                   color: find === 'home' ? COLORS.brand : COLORS.greyText,
@@ -336,32 +311,21 @@ const Match = ({item, onPress, user}) => {
                 width: wp(39),
                 alignItems: 'center',
               }}>
-              <View style={{flexDirection: 'row'}}>
-                {imgLoad ? (
-                  <ActivityIndicator
-                    style={styles.avatar}
-                    size={'small'}
-                    color={COLORS.brand}
-                  />
-                ) : (
-                  <Image
-                    source={item.away.playerAvatar1}
-                    style={styles.avatar}
-                  />
-                )}
-                {imgLoad ? (
-                  <ActivityIndicator
-                    style={styles.avatar}
-                    size={'small'}
-                    color={COLORS.brand}
-                  />
-                ) : (
-                  <Image
-                    source={item.away.playerAvatar2}
-                    style={styles.avatar}
-                  />
-                )}
-              </View>
+              {Away && (
+                <View style={{flexDirection: 'row'}}>
+                  {Away.map(_item => {
+                    return imgLoad ? (
+                      <ActivityIndicator
+                        style={styles.avatar}
+                        size={'small'}
+                        color={COLORS.brand}
+                      />
+                    ) : (
+                      <Image source={_item} style={styles.avatar} />
+                    );
+                  })}
+                </View>
+              )}
               <Text
                 style={{
                   color: find === 'away' ? COLORS.brand : COLORS.greyText,
@@ -436,7 +400,6 @@ const ScheduleScreen = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [dayData, setDayData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
-  const [leagueData, setLeagueData] = useState();
 
   const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
   let localDay = moment(firstDate).format('ddd');
@@ -468,11 +431,9 @@ const ScheduleScreen = ({navigation, route}) => {
   const getSchedule = React.useCallback(
     async (item, option = null) => {
       try {
-        console.log(`leagueData`, leagueData);
         console.log('chooseData', chooseData);
         console.log(`option`, option);
         let param = option === null ? myValue : option;
-        param = param === null ? leagueData : param;
         console.log(`param`, param);
         const scheduleData = await API.graphql(
           graphqlOperation(listSchedules, {
@@ -483,7 +444,7 @@ const ScheduleScreen = ({navigation, route}) => {
           }),
         );
         const schedulePerDay = scheduleData.data.listSchedules.items;
-        const sorted = schedulePerDay.sort((a, b) => b.index - a.index);
+        const sorted = schedulePerDay.sort((a, b) => a.index - b.index);
         console.log('sorted', sorted);
         setScheduleData(sorted);
         // return schedulePerDay;
@@ -491,7 +452,7 @@ const ScheduleScreen = ({navigation, route}) => {
         console.log('error fetching schedulePerDay', err);
       }
     },
-    [chooseData, leagueData],
+    [chooseData],
   );
 
   // const matches = ({item}) => {
@@ -586,7 +547,6 @@ const ScheduleScreen = ({navigation, route}) => {
       console.log(`set data hiigdlee value ---> `, option);
       myValue = option;
       await setChooseData(option);
-      // setLeagueData(option);
       getDay(firstDate, option);
       setLoading(false);
       let teamNumber = await getTeamNumber(option);
@@ -681,7 +641,7 @@ const ScheduleScreen = ({navigation, route}) => {
             onPress={() => changeModalVisible(true)}
             style={styles.chooseButton}>
             <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData === '' ? 'Select' : chooseData.game.name}
+              {chooseData === undefined ? 'Select' : chooseData.game.name}
             </Text>
             <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
