@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import Modal from 'react-native-modal';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {images} from '../constants';
 import LottieView from 'lottie-react-native';
 
-import {COLORS, FONTS, hp, wp} from '../constants/theme';
+import {COLORS, FONTS, wp} from '../constants/theme';
 
 export const EndModal = props => {
   const [allData, setAllData] = useState(props.allData);
@@ -34,7 +33,6 @@ export const EndModal = props => {
       image: '',
     },
   });
-  // console.log('allData', allData);
   useEffect(() => {
     getWinner();
   }, []);
@@ -95,36 +93,25 @@ export const EndModal = props => {
       }));
     }
   }
-  // if (props.isBestOne) {
   return (
     <Modal
       animationIn="rubberBand"
       isVisible={props.isVisible}
-      // onBackdropPress={props.onBackdropPress}
       style={{justifyContent: 'center', flex: 1, alignItems: 'center'}}>
       <View
         style={{
           width: wp(80),
-          height: hp(30),
+          height: wp(60),
           backgroundColor: COLORS.background,
           borderColor: COLORS.brand,
           borderWidth: 2,
           justifyContent: 'center',
           alignItems: 'center',
-          // paddingVertical: hp(1),
         }}>
         {props.loading !== true ? (
-          <View
-            style={
-              {
-                // borderWidth: 1,
-                // borderColor: 'red',
-              }
-            }>
+          <View>
             <View
               style={{
-                // borderColor: 'red',
-                // borderWidth: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -139,13 +126,11 @@ export const EndModal = props => {
               <View
                 style={{
                   flexDirection: 'row',
-                  // borderColor: 'red',
-                  // borderWidth: 1,
                   alignItems: 'center',
                   width: wp(40),
                   justifyContent: 'space-between',
-                  marginTop: hp(2),
-                  marginBottom: hp(1),
+                  marginTop: wp(3),
+                  marginBottom: wp(3),
                 }}>
                 <Image source={winner.one.image} style={[styles.winnerImage]} />
                 <Text style={[{color: COLORS.green}, styles.score]}>
@@ -161,7 +146,7 @@ export const EndModal = props => {
                   alignItems: 'center',
                   width: wp(30),
                   justifyContent: 'space-between',
-                  marginBottom: hp(2),
+                  marginBottom: wp(5),
                 }}>
                 <Image source={loser.one.image} style={[styles.image]} />
                 <Text style={[{color: COLORS.red}, styles.score]}>
@@ -173,7 +158,6 @@ export const EndModal = props => {
             <View
               style={{
                 width: wp(80),
-                // height: hp(11),
                 justifyContent: 'space-evenly',
                 flexDirection: 'row',
               }}>
@@ -211,7 +195,7 @@ export const EndModal = props => {
 
 const styles = StyleSheet.create({
   score: {
-    fontSize: RFPercentage(2, 5),
+    fontSize: RFPercentage(2),
     fontFamily: FONTS.brandFont,
   },
   modalBtnText: {
@@ -220,7 +204,7 @@ const styles = StyleSheet.create({
   },
   modalCancelBtn: {
     width: wp(32),
-    height: hp(5),
+    height: wp(10),
     borderColor: COLORS.brand,
     borderWidth: 2,
     justifyContent: 'center',
@@ -229,18 +213,18 @@ const styles = StyleSheet.create({
   modalBtnContainer: {
     backgroundColor: COLORS.brand,
     width: wp(32),
-    height: hp(5),
+    height: wp(10),
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
     width: wp(9.6),
-    height: hp(4.43),
+    height: wp(9.6),
     resizeMode: 'contain',
   },
   winnerImage: {
     resizeMode: 'contain',
     width: wp(12),
-    height: hp(5.43),
+    height: wp(12),
   },
 });

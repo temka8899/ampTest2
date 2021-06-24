@@ -7,6 +7,7 @@ import GameScreen from '../screens/GameScreen';
 import Profile from '../screens/ProfileScreen';
 import Standings from '../screens/StandingsScreen';
 import ScheduleScreen from '../screens/ScheduleScreen';
+import Admin from '../screens/EditProfileScreen';
 
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';

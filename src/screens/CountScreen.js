@@ -463,7 +463,7 @@ export default function CountScreen({navigation, route}) {
           <View
             style={{
               width: wp(70),
-              height: hp(20),
+              height: wp(40),
               backgroundColor: COLORS.background,
               borderColor: COLORS.brand,
               borderWidth: 2,
@@ -472,7 +472,7 @@ export default function CountScreen({navigation, route}) {
             }}>
             <View
               style={{
-                height: hp(11),
+                height: wp(25),
                 flexDirection: 'column',
                 justifyContent: 'space-between',
               }}>
@@ -813,7 +813,7 @@ const styles = StyleSheet.create({
   modalBtnContainer: {
     backgroundColor: COLORS.brand,
     width: wp(50),
-    height: hp(4),
+    height: wp(9),
     justifyContent: 'center',
     alignItems: 'center',
   },

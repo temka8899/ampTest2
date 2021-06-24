@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  Platform,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {images} from '../constants';
@@ -9,7 +16,11 @@ export default function IntroModal(props) {
   const [isEng, setEng] = useState(true);
   return (
     <Modal isVisible={props.visible} style={styles.modal}>
-      <View style={styles.modalContainer}>
+      <View
+        style={[
+          styles.modalContainer,
+          {height: Platform.OS === 'ios' ? wp(120) : wp(100)},
+        ]}>
         <Image source={images.logo} style={styles.image} />
         <View style={styles.textContainer}>
           {isEng ? (
@@ -71,7 +82,7 @@ export default function IntroModal(props) {
 const styles = StyleSheet.create({
   image: {
     width: wp(20),
-    height: hp(10),
+    height: wp(20),
     resizeMode: 'contain',
     // borderColor: 'red',
     // borderWidth: 1,
@@ -89,7 +100,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'red',
     width: wp(70),
-    paddingTop: hp(2),
+    paddingTop: wp(4),
   },
   langText: {
     fontFamily: FONTS.brandFont,
@@ -99,7 +110,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     marginRight: wp(5),
-    marginTop: hp(1.5),
+    marginTop: wp(3),
   },
   modal: {
     margin: 0,
@@ -111,15 +122,14 @@ const styles = StyleSheet.create({
     borderColor: COLORS.brand,
     borderWidth: 2,
     width: wp(80),
-    height: hp(57),
     alignItems: 'center',
-    paddingTop: hp(2),
+    paddingTop: wp(4),
   },
   modalButton: {
     backgroundColor: COLORS.brand,
     width: wp(30),
-    height: hp(4),
-    marginTop: hp(2),
+    height: wp(8),
+    marginTop: wp(4),
     justifyContent: 'center',
     alignItems: 'center',
   },

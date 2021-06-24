@@ -87,8 +87,7 @@ const Match = ({item, onPress, user}) => {
     } else if (findAway) {
       setFind('away');
     }
-    console.log(`Home`, Home);
-  }, [Home, item, user.id]);
+  }, [item, user.id]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -128,7 +127,7 @@ const Match = ({item, onPress, user}) => {
           onPress={onPress}
           style={{
             width: wp(100),
-            height: hp(13.8),
+            height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
             // borderWidth: 1,
@@ -137,7 +136,7 @@ const Match = ({item, onPress, user}) => {
           <View style={{flexDirection: 'row'}}>
             <View
               style={{
-                height: hp(9.35),
+                height: wp(23),
                 width: wp(39),
                 alignItems: 'center',
               }}>
@@ -168,13 +167,13 @@ const Match = ({item, onPress, user}) => {
             </View>
             <View
               style={{
-                heigh: hp(9.35),
+                heigh: wp(23),
                 width: wp(20),
               }}>
               <View
                 style={{
                   width: wp(20),
-                  height: hp(6.65),
+                  height: wp(15),
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
@@ -209,7 +208,7 @@ const Match = ({item, onPress, user}) => {
 
             <View
               style={{
-                height: hp(9.35),
+                height: wp(23),
                 width: wp(39),
                 alignItems: 'center',
               }}>
@@ -243,9 +242,9 @@ const Match = ({item, onPress, user}) => {
         </View>
         <View
           style={{
-            height: hp(0.1),
-            backgroundColor: COLORS.white,
-            width: wp(80),
+            height: wp(0.2),
+            backgroundColor: COLORS.greyText,
+            width: wp(88),
             justifyContent: 'center',
             alignSelf: 'center',
           }}
@@ -260,7 +259,7 @@ const Match = ({item, onPress, user}) => {
           onPress={onPress}
           style={{
             width: wp(100),
-            height: hp(13.8),
+            height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
             // borderWidth: 1,
@@ -269,7 +268,7 @@ const Match = ({item, onPress, user}) => {
           <View style={{flexDirection: 'row'}}>
             <View
               style={{
-                height: hp(9.35),
+                height: wp(23),
                 width: wp(39),
                 alignItems: 'center',
               }}>
@@ -296,17 +295,18 @@ const Match = ({item, onPress, user}) => {
                   textAlign: 'center',
                 }}>
                 {item.home.name}
+                {/* MMMMMMMMMMMMMMMMMMMM */}
               </Text>
             </View>
             <View
               style={{
-                heigh: hp(9.35),
+                heigh: wp(23),
                 width: wp(20),
               }}>
               <View
                 style={{
                   width: wp(20),
-                  height: hp(6.65),
+                  height: wp(15),
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
@@ -322,7 +322,7 @@ const Match = ({item, onPress, user}) => {
 
             <View
               style={{
-                height: hp(9.35),
+                height: wp(23),
                 width: wp(39),
                 alignItems: 'center',
               }}>
@@ -355,9 +355,9 @@ const Match = ({item, onPress, user}) => {
         </TouchableOpacity>
         <View
           style={{
-            height: hp(0.1),
-            backgroundColor: COLORS.white,
-            width: wp(80),
+            height: wp(0.2),
+            backgroundColor: COLORS.greyText,
+            width: wp(88),
             justifyContent: 'center',
             alignSelf: 'center',
           }}
@@ -379,7 +379,7 @@ const GameScreen = ({navigation}) => {
   const [playerId, setId] = useState('');
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
-  const [introModal, setIntroModal] = useState(false);
+  const [introModal, setIntroModal] = useState(true);
 
   useEffect(() => {
     fetchLeague();
@@ -761,14 +761,15 @@ const styles = StyleSheet.create({
   },
   matchPointContainer: {
     width: wp(21.6),
-    height: hp(3.65),
+    height: wp(8),
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
   },
   avatar: {
+    resizeMode: 'contain',
     width: wp(14.4),
-    height: hp(6.65),
+    height: wp(14.4),
   },
   skeletonFirstContainer: {
     flexDirection: 'row',
@@ -818,28 +819,6 @@ const styles = StyleSheet.create({
     height: wp(16),
     alignItems: 'center',
   },
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 0,
-  },
-  modalContainer: {
-    backgroundColor: COLORS.background,
-    borderColor: COLORS.brand,
-    borderWidth: 2,
-    width: wp(80),
-    height: hp(57),
-    alignItems: 'center',
-  },
-  modalButton: {
-    backgroundColor: COLORS.brand,
-    width: wp(30),
-    height: hp(4),
-    marginBottom: hp(2),
-    marginTop: hp(2),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   lottieText: {
     color: COLORS.brand,
     fontFamily: FONTS.brandFont,
@@ -857,6 +836,29 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginBottom: hp(5),
     marginHorizontal: wp(5),
+  },
+
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0,
+  },
+  modalContainer: {
+    backgroundColor: COLORS.background,
+    borderColor: COLORS.brand,
+    borderWidth: 2,
+    width: wp(80),
+    height: wp(120),
+    alignItems: 'center',
+  },
+  modalButton: {
+    backgroundColor: COLORS.brand,
+    width: wp(30),
+    height: wp(8),
+    marginBottom: wp(4),
+    marginTop: wp(4),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   avatars: {
     width: wp(16),

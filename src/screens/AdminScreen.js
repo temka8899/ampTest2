@@ -615,9 +615,11 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: wp(100),
-    height: hp(7),
+    height: wp(16),
     paddingHorizontal: wp(3),
-    flexDirection: 'column',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   ButtonContainer: {
     flex: 1,

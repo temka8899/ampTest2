@@ -11,7 +11,7 @@ import {
   Modal,
 } from 'react-native';
 
-import {COLORS, FONTS, icons} from '../constants';
+import {COLORS, FONTS, icons, images} from '../constants';
 import {hp, wp} from '../constants/theme';
 import GamePicker from '../components/GamePicker';
 
@@ -21,6 +21,7 @@ import {createLeague} from '../graphql/mutations';
 import {listGames, listLeagues} from '../graphql/queries';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+import LeaguePicker from '../components/LeaguePicker';
 
 Amplify.configure({
   ...awsmobile,
@@ -130,12 +131,12 @@ const createLeagueScreen = ({navigation}) => {
           {uploadImage === '' ? (
             <Image
               style={{
-                width: wp(70),
-                height: hp(40),
+                width: wp(60),
+                height: wp(60),
                 // borderColor: 'red',
                 // borderWidth: 1,
               }}
-              source={require('../assets/images/avatars/men1.png')}
+              source={images.local}
               resizeMode="contain"
             />
           ) : (
@@ -145,7 +146,7 @@ const createLeagueScreen = ({navigation}) => {
               }}
               style={{
                 width: wp(70),
-                height: hp(40),
+                height: wp(70),
                 backgroundColor: COLORS.background,
               }}
               resizeMode="contain"
@@ -157,9 +158,9 @@ const createLeagueScreen = ({navigation}) => {
         onPress={() => changeModalVisible(true)}
         style={styles.chooseButton}>
         <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData.name}
+          {chooseData === '' ? 'Select' : chooseData.name}
         </Text>
-        <Image source={icons.drop} style={styles.dropImage} />
+        <Image source={icons.drop} style={styles.dropButton} />
       </TouchableOpacity>
       <Modal
         transparent={true}
@@ -198,11 +199,8 @@ const createLeagueScreen = ({navigation}) => {
           cancelBtnText="Cancel"
           customStyles={{
             dateIcon: {
-              display: 'none',
-              position: 'absolute',
-              left: 0,
-              top: 4,
-              marginLeft: 0,
+              width: 0,
+              height: 0,
             },
             dateInput: {
               borderWidth: 0,
@@ -233,7 +231,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: wp(100),
-    height: hp(7),
+    height: wp(16),
     paddingHorizontal: wp(3),
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -243,13 +241,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   chooseButton: {
-    justifyContent: 'center',
+    height: wp(13),
+    marginTop: wp(10),
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: hp(3),
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(3),
+    borderBottomColor: COLORS.brand,
+    borderTopColor: COLORS.brand,
+    borderWidth: 1,
   },
-  dropImage: {
+  dropButton: {
     resizeMode: 'contain',
-    height: hp(1.7),
+    height: wp(4.53),
     width: wp(4.53),
   },
   formContainer: {
@@ -265,14 +269,19 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flexDirection: 'column',
   },
+  datePickerStyle: {
+    borderColor: 'red',
+    borderWidth: 1,
+    width: wp(40),
+  },
   backBtn: {
     resizeMode: 'contain',
     width: wp(7.4),
-    height: hp(3.2),
+    height: wp(7.4),
     borderColor: 'white',
   },
   input: {
-    height: hp(10),
+    height: wp(20),
     width: wp(94),
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
@@ -285,7 +294,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   createBtn: {
-    height: hp(5),
+    height: wp(11),
     width: wp(75),
     backgroundColor: COLORS.brand,
     justifyContent: 'center',

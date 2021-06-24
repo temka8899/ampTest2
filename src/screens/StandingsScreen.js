@@ -105,106 +105,111 @@ const StandingsScreen = ({navigation, route}) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.brand}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
+        <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
 
-      <View>
-        <AppBar />
-        <TouchableOpacity
-          onPress={() => changeModalVisible(true)}
-          style={styles.chooseButton}>
-          <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-            {chooseData === '' ? 'Select' : chooseData.game.name}
-          </Text>
-          <Image source={icons.drop} style={styles.dropButton} />
-        </TouchableOpacity>
-        <Modal
-          transparent={true}
-          animationType="fade"
-          visible={modalVisible}
-          nRequestClose={() => changeModalVisible(false)}>
-          <LeaguePicker
-            changeModalVisible={changeModalVisible}
-            setData={setData}
-          />
-        </Modal>
         <View>
-          {teamData.length != 0 ? (
-            <FlatList
-              refreshControl={
-                <RefreshControl
-                  tintColor={COLORS.brand}
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
-              }
-              data={teamData}
-              style={{height: hp(100)}}
-              keyExtractor={item => item.id}
-              renderItem={({item, index}) => (
-                <View>
-                  <View style={styles.standingStyle}>
-                    <Text
-                      style={{
-                        fontFamily: FONTS.brandFont,
-                        color: COLORS.white,
-                      }}>
-                      {index + 1}
-                    </Text>
-                    <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
-                      <Image
-                        source={item.playerAvatar1}
-                        style={styles.avatar}
-                      />
-                      <Image
-                        source={item.playerAvatar2}
-                        style={styles.avatar}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        fontFamily: FONTS.brandFont,
-                        color: COLORS.white,
-                        marginLeft: wp(5),
-                      }}>
-                      {item.name}
-                    </Text>
-                    <View
-                      style={{
-                        position: 'absolute',
-                        right: 0,
-                      }}>
+          <AppBar />
+          <TouchableOpacity
+            onPress={() => changeModalVisible(true)}
+            style={styles.chooseButton}>
+            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+              {chooseData === '' ? 'Select' : chooseData.game.name}
+            </Text>
+            <Image source={icons.drop} style={styles.dropButton} />
+          </TouchableOpacity>
+          <Modal
+            transparent={true}
+            animationType="fade"
+            visible={modalVisible}
+            nRequestClose={() => changeModalVisible(false)}>
+            <LeaguePicker
+              changeModalVisible={changeModalVisible}
+              setData={setData}
+            />
+          </Modal>
+          <View>
+            {teamData.length != 0 ? (
+              <FlatList
+                refreshControl={
+                  <RefreshControl
+                    tintColor={COLORS.brand}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                data={teamData}
+                style={{height: hp(100)}}
+                keyExtractor={item => item.id}
+                renderItem={({item, index}) => (
+                  <View>
+                    <View style={styles.standingStyle}>
                       <Text
                         style={{
                           fontFamily: FONTS.brandFont,
-                          color: COLORS.green,
+                          color: COLORS.white,
                         }}>
-                        {item.win}
+                        {index + 1}
+                      </Text>
+                      <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
+                        <Image
+                          source={item.playerAvatar1}
+                          style={styles.avatar}
+                        />
+                        <Image
+                          source={item.playerAvatar2}
+                          style={styles.avatar}
+                        />
+                      </View>
+                      <Text
+                        style={{
+                          fontFamily: FONTS.brandFont,
+                          color: COLORS.white,
+                          marginLeft: wp(5),
+                        }}>
+                        {item.name}
+                      </Text>
+                      <View
+                        style={{
+                          position: 'absolute',
+                          right: 0,
+                        }}>
                         <Text
                           style={{
                             fontFamily: FONTS.brandFont,
-                            color: COLORS.white,
-                          }}>{`-`}</Text>
-                        <Text style={{color: COLORS.red}}>{item.lose}</Text>
-                      </Text>
+                            color: COLORS.green,
+                          }}>
+                          {item.win}
+                          <Text
+                            style={{
+                              fontFamily: FONTS.brandFont,
+                              color: COLORS.white,
+                            }}>{`-`}</Text>
+                          <Text style={{color: COLORS.red}}>{item.lose}</Text>
+                        </Text>
+                      </View>
                     </View>
+                    <View style={styles.line} />
                   </View>
-                  <View style={styles.line} />
-                </View>
-              )}
-            />
-          ) : (
-            //   )}
-            // </>
-            <View style={styles.logoContainer}>
-              <Animated.Image
-                source={images.logo}
-                style={[styles.logoStyle, {transform: [{rotate: RotateData}]}]}
+                )}
               />
-            </View>
-          )}
+            ) : (
+              //   )}
+              // </>
+              <View style={styles.logoContainer}>
+                <Animated.Image
+                  source={images.logo}
+                  style={[
+                    styles.logoStyle,
+                    {transform: [{rotate: RotateData}]},
+                  ]}
+                />
+              </View>
+            )}
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
@@ -245,7 +250,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   chooseButton: {
-    height: hp(6),
+    height: wp(13),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -255,7 +260,7 @@ const styles = StyleSheet.create({
   },
   dropButton: {
     resizeMode: 'contain',
-    height: hp(1.7),
+    height: wp(4.53),
     width: wp(4.53),
   },
   input: {

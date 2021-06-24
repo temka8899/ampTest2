@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import {hp, wp} from '../constants/theme';
-import {COLORS, FONTS, icons} from '../constants';
+import {COLORS, FONTS, icons, images} from '../constants';
 
 import awsmobile from '../aws-exports';
 import {createGame} from '../graphql/mutations';
@@ -101,16 +101,18 @@ const createGameScreen = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View>
-        <View style={styles.imageContainer}>
+        <TouchableOpacity
+          onPress={choosePhotoFromLibrary}
+          style={styles.imageContainer}>
           {uploadImage === '' ? (
             <Image
               style={{
-                width: wp(80),
-                height: hp(50),
+                width: wp(60),
+                height: wp(60),
                 // borderColor: 'red',
                 // borderWidth: 1,
               }}
-              source={require('../assets/images/avatars/men1.png')}
+              source={images.local}
               resizeMode="contain"
             />
           ) : (
@@ -119,14 +121,14 @@ const createGameScreen = ({navigation}) => {
                 uri: uploadImage,
               }}
               style={{
-                width: wp(80),
-                height: hp(50),
+                width: wp(70),
+                height: wp(70),
                 backgroundColor: COLORS.background,
               }}
               resizeMode="contain"
             />
           )}
-        </View>
+        </TouchableOpacity>
         <View style={styles.formContainer}>
           <TextInput
             onChangeText={val => setInput('name', val)}
@@ -146,8 +148,8 @@ const createGameScreen = ({navigation}) => {
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity
-          style={styles.button}
-          onPress={choosePhotoFromLibrary}>
+          onPress={choosePhotoFromLibrary}
+          style={styles.button}>
           <Text style={styles.btnText}>Choose an image</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={addGame}>
@@ -167,7 +169,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: wp(100),
-    height: hp(7),
+    height: wp(16),
     paddingHorizontal: wp(3),
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    height: hp(4),
+    height: wp(11),
     width: wp(70),
     color: COLORS.white,
     fontFamily: FONTS.brandFont,

@@ -125,8 +125,8 @@ export default function EditProfileScreen({navigation}) {
               color: COLORS.greyText,
               fontFamily: FONTS.brandFont,
               fontSize: RFPercentage(1.5),
-              marginBottom: hp(1),
-              marginTop: hp(2),
+              marginBottom: wp(2),
+              marginTop: wp(4),
             }}>
             New name
           </Text>
@@ -139,7 +139,7 @@ export default function EditProfileScreen({navigation}) {
           />
           <View
             style={{
-              height: hp(0.3),
+              height: wp(0.4),
               width: wp(80),
               backgroundColor: COLORS.purpleText,
             }}
@@ -182,8 +182,8 @@ export default function EditProfileScreen({navigation}) {
               color: COLORS.white,
               fontFamily: FONTS.brandFont,
               fontSize: RFPercentage(1.8),
-              marginTop: hp(3),
-              marginBottom: hp(2),
+              marginTop: wp(6),
+              marginBottom: wp(4),
             }}>
             Choose your avatar
           </Text>
@@ -225,16 +225,15 @@ const styles = StyleSheet.create({
   firstMain: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 2,
   },
   firstMainSub: {
-    height: hp(25),
+    height: wp(50),
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   header: {
-    height: hp(6),
+    height: wp(13),
     flexDirection: 'row',
     paddingHorizontal: wp(3),
     justifyContent: 'space-between',
@@ -246,22 +245,27 @@ const styles = StyleSheet.create({
   },
   headButtonContainer: {
     backgroundColor: COLORS.brand,
-    height: hp(4),
+    height: wp(9),
     width: wp(25),
     justifyContent: 'center',
     alignItems: 'center',
   },
   input: {
-    height: hp(4),
+    height: wp(8),
     width: wp(80),
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
     fontSize: RFPercentage(1.8),
     padding: 0,
   },
+  image: {
+    width: wp(40),
+    height: wp(40),
+    resizeMode: 'contain',
+  },
   button: {
     width: wp(80),
-    height: hp(5),
+    height: wp(11),
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
@@ -274,7 +278,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonSub: {
-    height: hp(12),
+    height: wp(26),
     justifyContent: 'space-between',
   },
   modal: {
@@ -287,22 +291,17 @@ const styles = StyleSheet.create({
     borderColor: COLORS.brand,
     borderWidth: 2,
     width: wp(80),
-    height: hp(57),
+    height: wp(120),
     alignItems: 'center',
   },
   modalButton: {
     backgroundColor: COLORS.brand,
     width: wp(30),
-    height: hp(4),
-    marginBottom: hp(2),
-    marginTop: hp(2),
+    height: wp(8),
+    marginBottom: wp(4),
+    marginTop: wp(4),
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  image: {
-    width: wp(40),
-    height: hp(20),
-    resizeMode: 'contain',
   },
   avatars: {
     width: wp(16),

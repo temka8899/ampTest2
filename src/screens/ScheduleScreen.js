@@ -35,7 +35,6 @@ const wait = timeout => {
 let firstDate = new Date();
 
 const Match = ({item, onPress, user}) => {
-  console.log(`item`, item);
   const [Home, setHome] = useState(undefined);
   const [Away, setAway] = useState(undefined);
   const [imgLoad, setImgLoad] = useState(true);
@@ -734,7 +733,7 @@ const styles = StyleSheet.create({
   },
   matchPointContainer: {
     width: wp(21.6),
-    height: hp(3.65),
+    height: wp(8),
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
