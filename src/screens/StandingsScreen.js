@@ -15,13 +15,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import LottieView from 'lottie-react-native';
 import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
 import {graphqlOperation} from '@aws-amplify/api-graphql';
 import API from '@aws-amplify/api';
@@ -40,7 +38,6 @@ const StandingsScreen = ({navigation, route}) => {
   const [logoLoad, setLogoLoad] = useState();
 
   const rotateValue = useState(new Animated.Value(0))[0];
-
   const RotateData = rotateValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
@@ -58,6 +55,61 @@ const StandingsScreen = ({navigation, route}) => {
       iterations: true,
     },
   ).start();
+
+  const Standings = ({item, index}) => {
+    let homeImages1 = item.image.split('[');
+    let homeImages2 = homeImages1[1].split(']');
+    let homeImages = homeImages2[0].split(', ');
+    return (
+      <View>
+        <View style={styles.standingStyle}>
+          <Text
+            style={{
+              fontFamily: FONTS.brandFont,
+              color: COLORS.white,
+            }}>
+            {index + 1}
+          </Text>
+          <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
+            <Image source={homeImages[0]} style={styles.avatar} />
+            <Image source={homeImages[1]} style={styles.avatar} />
+          </View>
+          <Text
+            style={{
+              fontFamily: FONTS.brandFont,
+              color: COLORS.white,
+              marginLeft: wp(5),
+            }}>
+            {item.name}
+          </Text>
+          <View
+            style={{
+              position: 'absolute',
+              right: 0,
+            }}>
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                color: COLORS.green,
+              }}>
+              {item.win}
+              <Text
+                style={{
+                  fontFamily: FONTS.brandFont,
+                  color: COLORS.white,
+                }}>{`-`}</Text>
+              <Text style={{color: COLORS.red}}>{item.lose}</Text>
+            </Text>
+          </View>
+        </View>
+        <View style={styles.line} />
+      </View>
+    );
+  };
+
+  const renderItem = ({item, index}) => {
+    return <Standings item={item} index={index} />;
+  };
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -107,10 +159,10 @@ const StandingsScreen = ({navigation, route}) => {
           leagueData.push(item);
         }
       }
-      console.log('Unique League data ->', leagueData);
       const sorted = leagueData
         .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
         .reverse();
+      console.log('sorted Unique league data:>> ', sorted);
       setTeamData(sorted);
       setLoading(false);
       setLogoLoad(false);
@@ -155,54 +207,12 @@ const StandingsScreen = ({navigation, route}) => {
               }
               data={teamData}
               style={{height: hp(100)}}
-              keyExtractor={item => item}
-              renderItem={({item, index}) => (
-                <View>
-                  <View style={styles.standingStyle}>
-                    <Text
-                      style={{
-                        fontFamily: FONTS.brandFont,
-                        color: COLORS.white,
-                      }}>
-                      {index + 1}
-                    </Text>
-                    <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
-                      <Image source={item.image[0]} style={styles.avatar} />
-                      <Image source={item.image[1]} style={styles.avatar} />
-                    </View>
-                    <Text
-                      style={{
-                        fontFamily: FONTS.brandFont,
-                        color: COLORS.white,
-                        marginLeft: wp(5),
-                      }}>
-                      {item.name}
-                    </Text>
-                    <View
-                      style={{
-                        position: 'absolute',
-                        right: 0,
-                      }}>
-                      <Text
-                        style={{
-                          fontFamily: FONTS.brandFont,
-                          color: COLORS.green,
-                        }}>
-                        {item.win}
-                        <Text
-                          style={{
-                            fontFamily: FONTS.brandFont,
-                            color: COLORS.white,
-                          }}>{`-`}</Text>
-                        <Text style={{color: COLORS.red}}>{item.lose}</Text>
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.line} />
-                </View>
-              )}
+              keyExtractor={item => item.id}
+              renderItem={renderItem}
             />
           ) : (
+            //   )}
+            // </>
             <View style={styles.logoContainer}>
               <Animated.Image
                 source={images.logo}
