@@ -410,7 +410,16 @@ const ScheduleScreen = ({navigation, route}) => {
   useEffect(() => {
     getDay(selectedId);
     onRefresh();
-  }, [getDay, onRefresh, selectedId]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      // The screen is focused
+      // Call any action
+      onRefresh();
+      console.log('object REFRESHING HKANA:>> ');
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [getDay, onRefresh, selectedId, navigation]);
 
   const getDay = React.useCallback(
     (item, option = null) => {
@@ -459,7 +468,7 @@ const ScheduleScreen = ({navigation, route}) => {
   // };
 
   const startMatch = item => {
-    navigation.replace('CountScreen', {
+    navigation.navigate('CountScreen', {
       match: item,
     });
   };
