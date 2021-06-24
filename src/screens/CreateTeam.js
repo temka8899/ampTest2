@@ -183,6 +183,7 @@ const createTeamScreen = ({navigation}) => {
           sorted[3].id,
           date.toLocaleDateString(),
           '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+
           1,
           2,
         );
