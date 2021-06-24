@@ -343,7 +343,7 @@ const Profile = ({navigation}) => {
       }
       findUser(user);
     },
-    [findUser, userInfo.id],
+    [findUser],
   );
 
   async function fetchTeamPlayers() {

@@ -87,7 +87,7 @@ const Match = ({item, onPress, user}) => {
     } else if (findAway) {
       setFind('away');
     }
-  }, [item, user.id]);
+  }, [item]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -410,7 +410,7 @@ const GameScreen = ({navigation}) => {
       <Avatar
         item={item}
         onPress={() => press(item)}
-        // backgroundColor={{backgroundColor}}
+        backgroundColor={{backgroundColor}}
       />
     );
   };

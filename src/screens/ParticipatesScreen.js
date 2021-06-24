@@ -256,9 +256,26 @@ const ParticipatesScreen = ({navigation, route}) => {
         </TouchableOpacity>
         {isLoading ? (
           <ActivityIndicator size={'small'} color={'white'} />
+        ) : _isStart === true ? (
+          <TouchableOpacity
+            disabled={true}
+            style={[
+              {
+                backgroundColor: COLORS.red,
+              },
+              styles.btnContainer,
+            ]}>
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                color: COLORS.white,
+              }}>
+              Started
+            </Text>
+          </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            disabled={_isStart == true ? true : false}
             style={[
               {
                 backgroundColor: !inLeague ? COLORS.green : COLORS.red,
@@ -272,7 +289,7 @@ const ParticipatesScreen = ({navigation, route}) => {
                 fontSize: RFPercentage(1.7),
                 color: COLORS.white,
               }}>
-              {inLeague ? (_isStart == true ? 'Started' : "I'm out") : "I'm in"}
+              {inLeague ? "I'm out" : "I'm in"}
             </Text>
           </TouchableOpacity>
         )}
