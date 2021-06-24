@@ -10,6 +10,8 @@ import {
   ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
+  ScrollView,
 } from 'react-native';
 
 import {wp, hp, COLORS, FONTS} from '../constants/theme';
@@ -29,12 +31,17 @@ import {
   listSchedules,
   listTeamPlayers,
 } from '../graphql/queries';
+
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
 import IntroModal from '../components/IntroModal';
 import {images} from '../constants';
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 Amplify.configure({
   ...awsmobile,
@@ -63,7 +70,6 @@ const Match = ({item, onPress, user}) => {
     if (item !== null) {
       setImgLoad(false);
     }
-    // console.log(`item.homeImage`, item.homeImage);
     let homeImages1 = item.homeImage.split('[');
     let homeImages2 = homeImages1[1].split(']');
     let homeImages = homeImages2[0].split(', ');
@@ -72,16 +78,10 @@ const Match = ({item, onPress, user}) => {
     let awayImages = awayImages2[0].split(', ');
     setHome(homeImages);
     setAway(awayImages);
-    // let homePlayers = await fetchTeamPlayers(item.home.id);
-    // console.log('homePlayers', homePlayers);
-    // let awayPlayers = await fetchTeamPlayers(item.away.id);
-    // console.log(`awayPlayers`, awayPlayers);
+
     let findHome = await findTeam(user.id, item.home.id);
     let findAway = await findTeam(user.id, item.away.id);
-    // console.log(`findHome`, findHome);
-    // console.log(`findAway`, findAway);
-    // console.log(`item.home.id`, item.home.id);
-    // console.log(`item.away.id`, item.away.id);
+
     if (findHome) {
       setFind('home');
     } else if (findAway) {
@@ -375,6 +375,7 @@ const GameScreen = ({navigation}) => {
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = useState(null);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [playerId, setId] = useState('');
   const [name, setName] = useState();
@@ -386,7 +387,14 @@ const GameScreen = ({navigation}) => {
     findGreet();
     getName();
     getSchedule();
-    console.log('userInfo   as d as ', userInfo);
+  }, [getName, getSchedule]);
+
+  const onRefresh = React.useCallback(() => {
+    fetchLeague();
+    findGreet();
+    getName();
+    getSchedule();
+    wait(500).then(() => setRefreshing(false));
   }, [getName, getSchedule]);
 
   const press = item => {
@@ -574,9 +582,11 @@ const GameScreen = ({navigation}) => {
     },
     [selectedItem],
   );
-  var date = new Date();
+
+  let date = new Date();
   date.setDate(date.getDate());
-  console.log(date.toLocaleDateString());
+  // console.log(date.toLocaleDateString());
+
   const getSchedule = React.useCallback(async () => {
     try {
       const scheduleData = await API.graphql(
@@ -599,153 +609,168 @@ const GameScreen = ({navigation}) => {
   }
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <StatusBar barStyle="light-content" />
-      {isLoading ? (
-        <SkeletonPlaceholder
-          speed={800}
-          backgroundColor={COLORS.count}
-          highlightColor={'gray'}>
-          <View style={{paddingHorizontal: wp(4)}}>
-            <View style={styles.skeletonFirstContainer}>
-              <View style={{marginHorizontal: wp(5)}}>
-                <View style={styles.skeletonFirstSub} />
-                <View style={styles.skeletonFirstSub} />
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            tintColor={COLORS.brand}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <StatusBar barStyle="light-content" />
+        {isLoading ? (
+          <SkeletonPlaceholder
+            speed={800}
+            backgroundColor={COLORS.count}
+            highlightColor={'gray'}>
+            <View style={{paddingHorizontal: wp(4)}}>
+              <View style={styles.skeletonFirstContainer}>
+                <View style={{marginHorizontal: wp(5)}}>
+                  <View style={styles.skeletonFirstSub} />
+                  <View style={styles.skeletonFirstSub} />
+                </View>
+                <View style={styles.skeletonFirstSubSub} />
               </View>
-              <View style={styles.skeletonFirstSubSub} />
+              <View style={styles.skeletonSecondContainer}>
+                <View style={styles.skeletonSecondFirstSub} />
+                <View style={styles.skeletonSecondSecondSub} />
+                <View style={styles.skeletonSecondThirdSub} />
+              </View>
+              <View style={styles.skeletonThirdContainer} />
             </View>
-            <View style={styles.skeletonSecondContainer}>
-              <View style={styles.skeletonSecondFirstSub} />
-              <View style={styles.skeletonSecondSecondSub} />
-              <View style={styles.skeletonSecondThirdSub} />
+          </SkeletonPlaceholder>
+        ) : (
+          <View>
+            <View style={styles.header}>
+              <View>
+                <Text
+                  style={[
+                    styles.greeting,
+                    {fontSize: RFPercentage(1.8), color: COLORS.greyText},
+                  ]}>{`Good ${greet} `}</Text>
+                <Text
+                  style={[
+                    styles.greeting,
+                    {marginTop: hp(1), fontSize: RFPercentage(2.5)},
+                  ]}>
+                  {userInfo === undefined ? 'Hello' : `${userInfo.name}`}
+                </Text>
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Tabs', {screen: 'Profile'})
+                  }>
+                  {userInfo === undefined ? (
+                    <Image
+                      source={images.nullPic}
+                      style={styles.profileImage}
+                    />
+                  ) : (
+                    <Image
+                      source={userInfo.avatar}
+                      style={styles.profileImage}
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.skeletonThirdContainer} />
-          </View>
-        </SkeletonPlaceholder>
-      ) : (
-        <View>
-          <View style={styles.header}>
             <View>
+              {LeagueList.length !== 0 ? (
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  data={LeagueList}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id}
+                  extraData={selectedId}
+                  onPress={() => {}}
+                  style={{
+                    height: wp(75),
+                  }}
+                />
+              ) : (
+                <View>
+                  <View style={styles.lottie}>
+                    <LottieView
+                      autoPlay
+                      source={require('../assets/Lottie/game-loading.json')}
+                    />
+                    <Text style={styles.lottieText}>LEAGUE CREATING...</Text>
+                  </View>
+                </View>
+              )}
+            </View>
+            <View
+              style={{
+                height: wp(12),
+                justifyContent: 'center',
+              }}>
               <Text
-                style={[
-                  styles.greeting,
-                  {fontSize: RFPercentage(1.8), color: COLORS.greyText},
-                ]}>{`Good ${greet} `}</Text>
-              <Text
-                style={[
-                  styles.greeting,
-                  {marginTop: hp(1), fontSize: RFPercentage(2.5)},
-                ]}>
-                {userInfo === undefined ? 'Hello' : `${userInfo.name}`}
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.7),
+                  marginLeft: wp(4),
+                }}>
+                PLAYING TODAY
               </Text>
             </View>
-            <View>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Tabs', {screen: 'Profile'})
-                }>
-                {userInfo === undefined ? (
-                  <Image source={images.nullPic} style={styles.profileImage} />
-                ) : (
-                  <Image source={userInfo.avatar} style={styles.profileImage} />
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View>
-            {LeagueList.length !== 0 ? (
+            <View style={{height: wp(76)}}>
               <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={LeagueList}
-                renderItem={renderItem}
+                data={schedule}
                 keyExtractor={item => item.id}
-                extraData={selectedId}
-                onPress={() => {}}
-                style={{
-                  height: wp(75),
-                }}
+                renderItem={renderSchedule}
               />
-            ) : (
-              <View>
-                <View style={styles.lottie}>
-                  <LottieView
-                    autoPlay
-                    source={require('../assets/Lottie/game-loading.json')}
-                  />
-                  <Text style={styles.lottieText}>LEAGUE CREATING...</Text>
-                </View>
-              </View>
-            )}
-          </View>
-          <View
-            style={{
-              height: wp(12),
-              justifyContent: 'center',
-            }}>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.7),
-                marginLeft: wp(4),
-              }}>
-              PLAYING TODAY
-            </Text>
-          </View>
-          <View style={{height: wp(76)}}>
-            <FlatList
-              data={schedule}
-              keyExtractor={item => item.id}
-              renderItem={renderSchedule}
-            />
-            {/* <View
+              {/* <View
               style={{
                 height: hp(11),
                 width: '100%',
                 backgroundColor: 'red',
               }}
             /> */}
+            </View>
           </View>
-        </View>
-      )}
-      <Modal
-        animationIn="rubberBand"
-        isVisible={AvatarModal}
-        style={styles.modal}>
-        <View style={styles.modalContainer}>
-          <Text
-            style={{
-              color: COLORS.white,
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.8),
-              marginTop: hp(3),
-              marginBottom: hp(2),
-            }}>
-            Choose your avatar
-          </Text>
-          <FlatList
-            data={Avatars}
-            renderItem={avatarsRender}
-            keyExtractor={item => item.id}
-            extraData={selectedId}
-            numColumns={4}
-            showsHorizontalScrollIndicator={false}
-          />
-          <TouchableOpacity
-            onPress={() => setAvatar()}
-            style={styles.modalButton}>
+        )}
+        <Modal
+          animationIn="rubberBand"
+          isVisible={AvatarModal}
+          style={styles.modal}>
+          <View style={styles.modalContainer}>
             <Text
               style={{
                 color: COLORS.white,
                 fontFamily: FONTS.brandFont,
                 fontSize: RFPercentage(1.8),
+                marginTop: hp(3),
+                marginBottom: hp(2),
               }}>
-              OK
+              Choose your avatar
             </Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-      <IntroModal visible={introModal} close={close} />
+            <FlatList
+              data={Avatars}
+              renderItem={avatarsRender}
+              keyExtractor={item => item.id}
+              extraData={selectedId}
+              numColumns={4}
+              showsHorizontalScrollIndicator={false}
+            />
+            <TouchableOpacity
+              onPress={() => setAvatar()}
+              style={styles.modalButton}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.8),
+                }}>
+                OK
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+        <IntroModal visible={introModal} close={close} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
