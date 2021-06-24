@@ -557,170 +557,172 @@ const ScheduleScreen = ({navigation, route}) => {
   );
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
-      <StatusBar barStyle="light-content" />
-      {isLoading ? (
-        <SkeletonPlaceholder
-          speed={800}
-          backgroundColor={COLORS.count}
-          highlightColor={'gray'}>
-          <View>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.brand}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
+        <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
+        {isLoading ? (
+          <SkeletonPlaceholder
+            speed={800}
+            backgroundColor={COLORS.count}
+            highlightColor={'gray'}>
             <View>
-              <View style={{width: wp(100), height: hp(4)}} />
-              <View
-                style={{width: wp(100), height: hp(3), marginVertical: hp(1)}}
+              <View>
+                <View style={{width: wp(100), height: hp(4)}} />
+                <View
+                  style={{width: wp(100), height: hp(3), marginVertical: hp(1)}}
+                />
+                <View style={{width: wp(100), height: hp(3)}} />
+              </View>
+              <View style={styles.skeleton1}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+              </View>
+              <View style={styles.skeleton2} />
+              <View style={styles.skeleton3}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+              </View>
+              <View style={styles.skeleton4} />
+              <View style={styles.skeleton5}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+              </View>
+              <View style={styles.skeleton4} />
+              <View style={styles.skeleton7}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+              </View>
+              <View style={styles.skeleton4} />
+            </View>
+          </SkeletonPlaceholder>
+        ) : (
+          <View>
+            <AppBar />
+            <TouchableOpacity
+              onPress={() => changeModalVisible(true)}
+              style={styles.chooseButton}>
+              <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+                {chooseData === undefined ? 'Select' : chooseData.game.name}
+              </Text>
+              <Image source={icons.drop} style={styles.dropButton} />
+            </TouchableOpacity>
+            <Modal
+              transparent={true}
+              animationType="fade"
+              isVisible={modalVisible}
+              style={{margin: 0}}
+              onRequestClose={() => changeModalVisible(false)}>
+              <LeaguePicker
+                changeModalVisible={changeModalVisible}
+                setData={setData}
               />
-              <View style={{width: wp(100), height: hp(3)}} />
-            </View>
-            <View style={styles.skeleton1}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-            </View>
-            <View style={styles.skeleton2} />
-            <View style={styles.skeleton3}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-            </View>
-            <View style={styles.skeleton4} />
-            <View style={styles.skeleton5}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-            </View>
-            <View style={styles.skeleton4} />
-            <View style={styles.skeleton7}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-            </View>
-            <View style={styles.skeleton4} />
-          </View>
-        </SkeletonPlaceholder>
-      ) : (
-        <View>
-          <AppBar />
-          <TouchableOpacity
-            onPress={() => changeModalVisible(true)}
-            style={styles.chooseButton}>
-            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData === undefined ? 'Select' : chooseData.game.name}
-            </Text>
-            <Image source={icons.drop} style={styles.dropButton} />
-          </TouchableOpacity>
-          <Modal
-            transparent={true}
-            animationType="fade"
-            isVisible={modalVisible}
-            style={{margin: 0}}
-            onRequestClose={() => changeModalVisible(false)}>
-            <LeaguePicker
-              changeModalVisible={changeModalVisible}
-              setData={setData}
-            />
-          </Modal>
-          <View>
+            </Modal>
             <View>
-              {dayData.length === 0 ? (
-                <FlatList
-                  data={LocalDayData}
-                  horizontal
-                  renderItem={renderLocalDay}
-                  keyExtractor={item => item}
+              <View>
+                {dayData.length === 0 ? (
+                  <FlatList
+                    data={LocalDayData}
+                    horizontal
+                    renderItem={renderLocalDay}
+                    keyExtractor={item => item}
+                    style={{
+                      borderBottomColor: COLORS.brand,
+                      borderBottomWidth: 1,
+                    }}
+                  />
+                ) : (
+                  <FlatList
+                    data={dayData}
+                    horizontal
+                    renderItem={renderItem}
+                    keyExtractor={item => item}
+                    style={{
+                      borderBottomColor: COLORS.brand,
+                      borderBottomWidth: 1,
+                    }}
+                  />
+                )}
+              </View>
+            </View>
+            <View>
+              {scheduleData.length === 0 ? (
+                <View
                   style={{
-                    borderBottomColor: COLORS.brand,
-                    borderBottomWidth: 1,
-                  }}
-                />
+                    height: hp(65),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    source={images.logo}
+                    style={{
+                      width: wp(40),
+                      height: hp(30),
+                      resizeMode: 'contain',
+                      opacity: 0.7,
+                    }}
+                  />
+                </View>
               ) : (
                 <FlatList
-                  data={dayData}
-                  horizontal
-                  renderItem={renderItem}
-                  keyExtractor={item => item}
+                  data={scheduleData}
+                  renderItem={renderSchedule}
+                  refreshControl={
+                    <RefreshControl
+                      tintColor={COLORS.brand}
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                  keyExtractor={item => item.id}
                   style={{
-                    borderBottomColor: COLORS.brand,
-                    borderBottomWidth: 1,
+                    height: hp(85),
                   }}
                 />
               )}
             </View>
           </View>
-          <View>
-            {scheduleData.length === 0 ? (
-              <View
-                style={{
-                  height: hp(65),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={images.logo}
-                  style={{
-                    width: wp(40),
-                    height: hp(30),
-                    resizeMode: 'contain',
-                    opacity: 0.7,
-                  }}
-                />
-              </View>
-            ) : (
-              <FlatList
-                data={scheduleData}
-                renderItem={renderSchedule}
-                refreshControl={
-                  <RefreshControl
-                    tintColor={COLORS.brand}
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-                keyExtractor={item => item.id}
-                style={{
-                  height: hp(85),
-                }}
-              />
-            )}
-          </View>
-        </View>
-      )}
+        )}
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
@@ -736,6 +738,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   avatar: {
+    resizeMode: 'contain',
     width: wp(14.4),
     height: hp(6.65),
   },

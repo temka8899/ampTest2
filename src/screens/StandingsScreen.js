@@ -106,7 +106,8 @@ const StandingsScreen = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
+
       <View>
         <AppBar />
         <TouchableOpacity
@@ -129,71 +130,6 @@ const StandingsScreen = ({navigation, route}) => {
         </Modal>
         <View>
           {teamData.length != 0 ? (
-<<<<<<< HEAD
-            // <>
-            //   {isLoading ? (
-            //     <SkeletonPlaceholder
-            //       speed={800}
-            //       backgroundColor={'#E1E9EE'}
-            //       highlightColor={'gray'}>
-            //       <View>
-            //         <View style={styles.skeletonMain}>
-            //           <View style={styles.skeleton3}>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonSub} />
-            //               <View style={styles.skeletonSub} />
-            //             </View>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonInner} />
-            //             </View>
-            //           </View>
-            //           <View style={styles.skeletonAnotherSub} />
-            //           <View style={styles.skeleton3}>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonSub} />
-            //               <View style={styles.skeletonSub} />
-            //             </View>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonInner} />
-            //             </View>
-            //           </View>
-            //           <View style={styles.skeletonAnotherSub} />
-            //           <View style={styles.skeleton3}>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonSub} />
-            //               <View style={styles.skeletonSub} />
-            //             </View>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonInner} />
-            //             </View>
-            //           </View>
-            //           <View style={styles.skeletonAnotherSub} />
-            //           <View style={styles.skeleton3}>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonSub} />
-            //               <View style={styles.skeletonSub} />
-            //             </View>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonInner} />
-            //             </View>
-            //           </View>
-            //           <View style={styles.skeletonAnotherSub} />
-            //           <View style={styles.skeleton3}>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonSub} />
-            //               <View style={styles.skeletonSub} />
-            //             </View>
-            //             <View style={styles.skeletonSubMain}>
-            //               <View style={styles.skeletonInner} />
-            //             </View>
-            //           </View>
-            //           <View style={styles.skeletonAnotherSub} />
-            //         </View>
-            //       </View>
-            //     </SkeletonPlaceholder>
-            //   ) : (
-=======
->>>>>>> aaee7172b1dd5e29bfee56c43921628028c30d26
             <FlatList
               refreshControl={
                 <RefreshControl

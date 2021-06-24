@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import {View, Image, StyleSheet, Platform} from 'react-native';
 
 import {COLORS} from '../constants';
 import {AuthContext} from '../../App';
@@ -28,7 +28,7 @@ const CircleXp = props => {
           <View>
             <Image
               source={userInfo === undefined ? null : userInfo.avatar}
-              style={styles.image}
+              style={[styles.image]}
             />
           </View>
         )}
@@ -38,9 +38,9 @@ const CircleXp = props => {
 };
 const styles = StyleSheet.create({
   image: {
-    width: wp(26.6),
-    height: hp(12.3),
-    resizeMode: 'contain',
+    width: wp(27),
+    height: wp(27),
+    // resizeMode: 'contain',
     borderRadius: wp(26.6),
   },
 });
