@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
+  RefreshControl,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
@@ -248,6 +249,10 @@ const Match = ({item, onPress, user}) => {
     return <View></View>;
   }
 };
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('');
@@ -258,12 +263,17 @@ const Profile = ({navigation}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   // const [xpCount, setXpCount] = useState(true);
   const [scheduleData, setScheduleData] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     getXp();
     fetchTeamPlayers();
   }, []);
-
+  // const onRefresh = React.useCallback(() => {
+  //   // checkInLeague();
+  //   useEffect();
+  //   wait(500).then(() => setRefreshing(false));
+  // }, []);
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
@@ -293,7 +303,11 @@ const Profile = ({navigation}) => {
       console.log('error fetching schedulePerDay', err);
     }
   }
+
   const getXp = React.useCallback(async () => {
+    // let income = true;
+    // while (income) {
+    //   if (userInfo !== undefined) {
     let count = true;
     let value = userInfo.xp;
     let diff = 0;
@@ -320,6 +334,12 @@ const Profile = ({navigation}) => {
     setLoading(false);
 
     setXpPercent((xp * 100) / max);
+    // income = false;
+    //   }
+    //   setTimeout(() => {
+    //     onRefresh();
+    //   }, 1000);
+    // }
   }, []);
 
   const updateLevel = React.useCallback(
