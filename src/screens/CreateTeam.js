@@ -123,7 +123,7 @@ const createTeamScreen = ({navigation}) => {
           filter: {leagueID: {eq: '83418a6f-4054-4ee7-ab18-ae7f62eb312e'}},
         }),
       );
-
+      console.log(leagueData);
       if (
         leagueData.data.listTeams.items[0].league.currentSchedule ==
         leagueData.data.listTeams.items[0].league.maxSchedule
@@ -132,51 +132,69 @@ const createTeamScreen = ({navigation}) => {
         const teams = leagueData.data.listTeams.items
           .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
           .reverse();
+        console.log('TEAMS>>>', teams);
         const sorted = [];
         for (var i = 0; i < 4; i++) {
           sorted.push(teams[i]);
         }
-        console.log(sorted);
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        const k = sorted.length;
-        var nemeh = 1;
-        var hasah = sorted.length;
+        console.log('PLAYOFF TEAMS>>>>>', sorted[0], sorted[3]);
         var date = new Date();
+        date.setDate(date.getDate() + 1);
         var date2 = date.getDay();
-        let dateNemeh = 0;
-        let tooluur = 1;
-        date.setDate(date.getDate() - 1);
-        for (var i = 1; i < sorted.length; i++) {
-          for (var j = 0; j < hasah - 1; j++) {
-            if (dateNemeh % 4 == 0) {
-              date.setDate(date.getDate() + 2);
-              var date2 = date.getDay();
-              if (date2 == 6) {
-                date.setDate(date.getDate() + 2);
-              }
-            }
-            console.log(
-              `${sorted[j].name} vs ${
-                sorted[j + nemeh].name
-              }___at ${date.toLocaleDateString()}____`,
-            );
-            addSchedule(
-              sorted[j].id,
-              sorted[j + nemeh].id,
-              date.toLocaleDateString(),
-              '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
-              tooluur,
-            );
-            dateNemeh++;
-            tooluur++;
-          }
-          hasah--;
-          nemeh++;
+        console.log('>>>>>', date);
+        console.log('>>>>>', date2);
+        if (date2 == 6) {
+          date.setDate(date.getDate() + 2);
         }
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-        console.log('<<<<<<<<<<<<<<<<<', sorted);
+        addSchedule(
+          sorted[1].id,
+          sorted[2].id,
+          date.toLocaleDateString(),
+          '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+          1,
+          1,
+        );
+        addSchedule(
+          sorted[1].id,
+          sorted[2].id,
+          date.toLocaleDateString(),
+          '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+          1,
+          2,
+        );
+        await date.setDate(date.getDate() + 1);
+        date2 = date.getDay();
+        console.log('>>>>>', date);
+        console.log('>>>>>', date2);
+        if (date2 == 6) {
+          date.setDate(date.getDate() + 2);
+        }
+        console.log('>>>>>', date);
+        addSchedule(
+          sorted[0].id,
+          sorted[3].id,
+          date.toLocaleDateString(),
+          '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+          1,
+          1,
+        );
+        addSchedule(
+          sorted[0].id,
+          sorted[3].id,
+          date.toLocaleDateString(),
+          '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+          1,
+          2,
+        );
+        await API.graphql(
+          graphqlOperation(updateLeague, {
+            input: {
+              id: '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+              maxSchedule: 4,
+              currentSchedule: 0,
+            },
+          }),
+        );
       } else {
         console.log('League not Ended');
       }
@@ -430,7 +448,14 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
-  async function addSchedule(team1ID, team2ID, date, startLeagueId, tooluur) {
+  async function addSchedule(
+    team1ID,
+    team2ID,
+    date,
+    startLeagueId,
+    tooluur,
+    _playoffIndex,
+  ) {
     try {
       await API.graphql(
         graphqlOperation(createSchedule, {
@@ -442,6 +467,7 @@ const createTeamScreen = ({navigation}) => {
             date: `${date}`,
             leagueID: startLeagueId,
             index: tooluur,
+            playOffIndex: _playoffIndex,
           },
         }),
       );

@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-amptest2project-dev-170617-unauthRole",
       "StackName": "amplify-amptest2project-dev-170617",
       "StackId": "arn:aws:cloudformation:us-east-1:514215574045:stack/amplify-amptest2project-dev-170617/7bb280c0-b881-11eb-b1f6-0e5c31da0605",
-      "AmplifyAppId": "d3rnjwxoztpfcv"
+      "AmplifyAppId": "d3rnjwxoztpfcv",
+      "AuthTriggerTemplateURL": ""
     },
     "categories": {
       "auth": {

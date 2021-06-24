@@ -354,6 +354,7 @@ export const getSchedule = /* GraphQL */ `
     getSchedule(id: $id) {
       id
       index
+      playOffIndex
       leagueID
       home {
         id
@@ -399,6 +400,8 @@ export const getSchedule = /* GraphQL */ `
       }
       homeImage
       awayImage
+      homePlayers
+      awayPlayers
       homeScore
       awayScore
       date
@@ -417,6 +420,7 @@ export const listSchedules = /* GraphQL */ `
       items {
         id
         index
+        playOffIndex
         leagueID
         home {
           id
@@ -438,6 +442,8 @@ export const listSchedules = /* GraphQL */ `
         }
         homeImage
         awayImage
+        homePlayers
+        awayPlayers
         homeScore
         awayScore
         date
