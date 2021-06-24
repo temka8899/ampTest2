@@ -504,6 +504,7 @@ export const onCreateSchedule = /* GraphQL */ `
     onCreateSchedule {
       id
       index
+      playOffIndex
       leagueID
       home {
         id
@@ -549,6 +550,8 @@ export const onCreateSchedule = /* GraphQL */ `
       }
       homeImage
       awayImage
+      homePlayers
+      awayPlayers
       homeScore
       awayScore
       date
@@ -562,6 +565,7 @@ export const onUpdateSchedule = /* GraphQL */ `
     onUpdateSchedule {
       id
       index
+      playOffIndex
       leagueID
       home {
         id
@@ -607,6 +611,8 @@ export const onUpdateSchedule = /* GraphQL */ `
       }
       homeImage
       awayImage
+      homePlayers
+      awayPlayers
       homeScore
       awayScore
       date
@@ -620,6 +626,7 @@ export const onDeleteSchedule = /* GraphQL */ `
     onDeleteSchedule {
       id
       index
+      playOffIndex
       leagueID
       home {
         id
@@ -665,6 +672,8 @@ export const onDeleteSchedule = /* GraphQL */ `
       }
       homeImage
       awayImage
+      homePlayers
+      awayPlayers
       homeScore
       awayScore
       date

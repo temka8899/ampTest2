@@ -223,8 +223,10 @@ const AdminScreen = ({navigation}) => {
           );
           const _teamPlayers1 = leagueData1.data.listTeamPlayers.items;
           const playerAvatar1 = [];
+          const playerID1 = [];
           for (var z = 0; z < _teamPlayers1.length; z++) {
             playerAvatar1.push(_teamPlayers1[z].player.avatar);
+            playerID1.push(_teamPlayers1[z].player.id);
           }
 
           const leagueData2 = await API.graphql(
@@ -236,8 +238,10 @@ const AdminScreen = ({navigation}) => {
           );
           const _teamPlayers2 = leagueData2.data.listTeamPlayers.items;
           const playerAvatar2 = [];
+          const playerID2 = [];
           for (var z2 = 0; z2 < _teamPlayers2.length; z2++) {
             playerAvatar2.push(_teamPlayers2[z2].player.avatar);
+            playerID2.push(_teamPlayers2[z2].player.id);
           }
           console.log(
             `${teams[j].name} vs ${
@@ -252,6 +256,8 @@ const AdminScreen = ({navigation}) => {
             tooluur,
             playerAvatar1,
             playerAvatar2,
+            playerID1,
+            playerID2,
           );
           dateNemeh++;
           tooluur++;
@@ -272,6 +278,8 @@ const AdminScreen = ({navigation}) => {
     tooluur,
     playerAvatar1,
     playerAvatar2,
+    playerID1,
+    playerID2,
   ) {
     try {
       await API.graphql(
@@ -286,6 +294,8 @@ const AdminScreen = ({navigation}) => {
             index: tooluur,
             homeImage: playerAvatar1,
             awayImage: playerAvatar2,
+            homePlayers: playerID1,
+            awayPlayers: playerID2,
           },
         }),
       );

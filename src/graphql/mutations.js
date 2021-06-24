@@ -561,6 +561,7 @@ export const createSchedule = /* GraphQL */ `
     createSchedule(input: $input, condition: $condition) {
       id
       index
+      playOffIndex
       leagueID
       home {
         id
@@ -606,6 +607,8 @@ export const createSchedule = /* GraphQL */ `
       }
       homeImage
       awayImage
+      homePlayers
+      awayPlayers
       homeScore
       awayScore
       date
@@ -622,6 +625,7 @@ export const updateSchedule = /* GraphQL */ `
     updateSchedule(input: $input, condition: $condition) {
       id
       index
+      playOffIndex
       leagueID
       home {
         id
@@ -667,6 +671,8 @@ export const updateSchedule = /* GraphQL */ `
       }
       homeImage
       awayImage
+      homePlayers
+      awayPlayers
       homeScore
       awayScore
       date
@@ -683,6 +689,7 @@ export const deleteSchedule = /* GraphQL */ `
     deleteSchedule(input: $input, condition: $condition) {
       id
       index
+      playOffIndex
       leagueID
       home {
         id
@@ -728,6 +735,8 @@ export const deleteSchedule = /* GraphQL */ `
       }
       homeImage
       awayImage
+      homePlayers
+      awayPlayers
       homeScore
       awayScore
       date
