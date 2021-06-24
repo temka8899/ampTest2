@@ -402,7 +402,7 @@ const GameScreen = ({navigation}) => {
       <Avatar
         item={item}
         onPress={() => press(item)}
-        backgroundColor={{backgroundColor}}
+        // backgroundColor={{backgroundColor}}
       />
     );
   };
@@ -418,22 +418,26 @@ const GameScreen = ({navigation}) => {
     );
   }
 
-  const Item = ({item, onPress, backgroundColor, textColor}) => (
-    <View style={{marginLeft: wp(4), marginTop: hp(3), borderRadius: 20}}>
+  const Item = ({item, onPress}) => (
+    <View style={{marginLeft: wp(4), marginTop: hp(2), borderRadius: 20}}>
       <TouchableOpacity
         onPress={onPress}
-        style={[styles.item, backgroundColor]}>
+        style={[styles.item, {backgroundColor: COLORS.background}]}>
         <ImageBackground
           source={{
             uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
           }}
           style={{
-            width: wp(63.3),
-            height: hp(39),
+            width: wp(60),
+            height: hp(36),
           }}
-          imageStyle={{borderRadius: 40}}>
+          imageStyle={{
+            borderRadius: 50,
+            resizeMode: 'contain',
+            backgroundColor: COLORS.background,
+          }}>
           <LinearGradient
-            style={{flex: 1, borderRadius: 40}}
+            style={{flex: 1, borderRadius: 50}}
             start={{x: 1, y: 0}}
             end={{x: 1, y: 1}}
             colors={['#00000000', '#000']}>
@@ -899,7 +903,7 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    marginVertical: 8,
+    // marginVertical: 8,
   },
   title: {
     fontSize: 32,

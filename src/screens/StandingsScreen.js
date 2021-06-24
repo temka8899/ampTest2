@@ -106,7 +106,8 @@ const StandingsScreen = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
+
       <View>
         <AppBar />
         <TouchableOpacity
