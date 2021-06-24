@@ -146,6 +146,8 @@ const StandingsScreen = ({navigation, route}) => {
         if (found == undefined) {
           let item = new Object();
           item = leagueData2.data.listSchedules.items[i].home;
+          item.standingPlayers =
+            leagueData2.data.listSchedules.items[i].homePlayers;
           item.image = leagueData2.data.listSchedules.items[i].homeImage;
           leagueData.push(item);
         }
@@ -155,6 +157,8 @@ const StandingsScreen = ({navigation, route}) => {
         if (found2 == undefined) {
           let item = new Object();
           item = leagueData2.data.listSchedules.items[i].away;
+          item.standingPlayers =
+            leagueData2.data.listSchedules.items[i].awayPlayers;
           item.image = leagueData2.data.listSchedules.items[i].awayImage;
           leagueData.push(item);
         }
@@ -174,7 +178,8 @@ const StandingsScreen = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
+
       <View>
         <AppBar />
         <TouchableOpacity

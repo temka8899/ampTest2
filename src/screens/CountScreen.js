@@ -220,7 +220,7 @@ export default function CountScreen({navigation, route}) {
     findUser(user);
     toggleEndModal(false);
     setLoading(false);
-    navigation.pop();
+    navigation.replace('Tabs', {screen: 'ScheduleScreen'});
     console.log('allpoint', allPoint);
   };
   async function updatePlayers() {
