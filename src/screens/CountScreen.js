@@ -520,7 +520,7 @@ export default function CountScreen({navigation, route}) {
             width: wp(22),
             justifyContent: 'space-between',
             marginHorizontal: wp(39),
-            marginTop: hp(5.5),
+            marginTop: wp(12),
           }}>
           <TouchableOpacity
             onPress={() =>
@@ -660,7 +660,7 @@ export default function CountScreen({navigation, route}) {
             width: wp(22),
             justifyContent: 'space-between',
             marginHorizontal: wp(39),
-            marginTop: hp(5.5),
+            marginTop: wp(12),
           }}>
           <TouchableOpacity
             onPress={() =>
@@ -865,7 +865,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: wp(9.6),
-    height: hp(4.43),
+    height: wp(9.6),
     marginTop: wp(2),
   },
   teamScoreContainer: {
@@ -875,7 +875,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: COLORS.brand,
     width: wp(22),
-    height: hp(5),
+    height: wp(11),
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: wp(39.1),
@@ -893,11 +893,11 @@ const styles = StyleSheet.create({
   removeBtn: {
     resizeMode: 'contain',
     width: wp(10),
-    height: hp(5.2),
+    height: wp(10),
   },
   backBtn: {
     width: wp(9.6),
-    height: hp(4.43),
+    height: wp(9.6),
     opacity: 0.5,
   },
 });
