@@ -14,7 +14,7 @@ const AppBar = () => {
 const styles = StyleSheet.create({
   container: {
     width: wp(100),
-    height: hp(3),
+    height: wp(5),
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',

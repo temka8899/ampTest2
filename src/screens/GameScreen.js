@@ -419,7 +419,11 @@ const GameScreen = ({navigation}) => {
   }
 
   const Item = ({item, onPress}) => (
-    <View style={{marginLeft: wp(4), marginTop: hp(2), borderRadius: 20}}>
+    <View
+      style={{
+        marginLeft: wp(4),
+        marginVertical: wp(3),
+      }}>
       <TouchableOpacity
         onPress={onPress}
         style={[styles.item, {backgroundColor: COLORS.background}]}>
@@ -428,16 +432,16 @@ const GameScreen = ({navigation}) => {
             uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
           }}
           style={{
-            width: wp(60),
-            height: hp(36),
+            width: wp(52),
+            height: wp(68),
           }}
           imageStyle={{
-            borderRadius: 50,
-            resizeMode: 'contain',
+            borderRadius: wp(12),
+            // resizeMode: 'contain',
             backgroundColor: COLORS.background,
           }}>
           <LinearGradient
-            style={{flex: 1, borderRadius: 50}}
+            style={{flex: 1, borderRadius: wp(12)}}
             start={{x: 1, y: 0}}
             end={{x: 1, y: 1}}
             colors={['#00000000', '#000']}>
@@ -657,6 +661,9 @@ const GameScreen = ({navigation}) => {
                 keyExtractor={item => item.id}
                 extraData={selectedId}
                 onPress={() => {}}
+                style={{
+                  height: wp(75),
+                }}
               />
             ) : (
               <View>
@@ -670,73 +677,35 @@ const GameScreen = ({navigation}) => {
               </View>
             )}
           </View>
-          <Text
+          <View
             style={{
-              color: COLORS.greyText,
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.7),
-              marginLeft: wp(4),
-              marginVertical: hp(2),
+              height: wp(12),
+              justifyContent: 'center',
             }}>
-            PLAYING TODAY
-          </Text>
-          <View style={{height: hp(26)}}>
+            <Text
+              style={{
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                marginLeft: wp(4),
+              }}>
+              PLAYING TODAY
+            </Text>
+          </View>
+          <View style={{height: wp(76)}}>
             <FlatList
               data={schedule}
               keyExtractor={item => item.id}
               renderItem={renderSchedule}
             />
+            {/* <View
+              style={{
+                height: hp(11),
+                width: '100%',
+                backgroundColor: 'red',
+              }}
+            /> */}
           </View>
-          {/* <View>
-            <TouchableOpacity
-              onPress={() => {
-                showNotification(
-                  'Hippo League ehleh gej baina!',
-                  'burtguulne uu!',
-                );
-              }}>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.7),
-                  marginLeft: wp(4),
-                  marginVertical: hp(2),
-                }}>
-                Test notification
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                handleScheduleNotification(
-                  'Hippo League ehleh gej baina!',
-                  'burtguulne uu!',
-                )
-              }>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.7),
-                  marginLeft: wp(4),
-                  marginVertical: hp(2),
-                }}>
-                Test scheduled notification
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleCancel()}>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.7),
-                  marginLeft: wp(4),
-                  marginVertical: hp(2),
-                }}>
-                Cancel all notification
-              </Text>
-            </TouchableOpacity>
-          </View> */}
         </View>
       )}
       <Modal
@@ -846,6 +815,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: wp(4),
+    height: wp(16),
+    alignItems: 'center',
   },
   modal: {
     justifyContent: 'center',
@@ -879,7 +850,7 @@ const styles = StyleSheet.create({
   profileImage: {
     resizeMode: 'contain',
     width: wp(14.4),
-    height: hp(6.65),
+    height: wp(14.4),
   },
   leagueStatus: {
     flex: 1,
