@@ -12,8 +12,10 @@ import {
   RefreshControl,
   Animated,
   Easing,
+  ActivityIndicator,
 } from 'react-native';
 
+import LottieView from 'lottie-react-native';
 import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons, images} from '../constants';
@@ -28,44 +30,40 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-let load = true;
-
 const StandingsScreen = ({navigation, route}) => {
   // let itemID = 0;
 
   // if (route.params?.itemId) {
   //   itemID = route.params.itemId;
   // }
-  const [rotateValue, setRotateValue] = useState(new Animated.Value(0));
+
   const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
   const [teamData, setTeamData] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [PlayerInfo, setPlayerInfo] = useState([]);
+  const [logoLoad, setLogoLoad] = useState();
 
-  const StartImageRotate = React.useCallback(() => {
-    console.log('start rot callde');
-    rotateValue.setValue(0);
-
-    Animated.timing(rotateValue, {
-      toValue: 1,
-      duration: 3000,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start(() => {
-      load ? StartImageRotate() : null;
-      console.log('s load', isLoading);
-    });
-  }, [isLoading, rotateValue]);
+  const rotateValue = useState(new Animated.Value(0))[0];
 
   const RotateData = rotateValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
   });
-  const sorted = teamData
-    .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
-    .reverse();
+
+  Animated.loop(
+    Animated.sequence([
+      Animated.timing(rotateValue, {
+        toValue: 1,
+        duration: 1200,
+        useNativeDriver: false,
+      }),
+    ]),
+    {
+      iterations: 5,
+    },
+  ).start();
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -75,14 +73,10 @@ const StandingsScreen = ({navigation, route}) => {
     async option => {
       await setChooseData(option);
       await console.log('leagueID :>> ', option.id);
-      fetchTeam(option.id);
+      await fetchTeam(option.id);
     },
     [fetchTeam],
   );
-
-  useEffect(() => {
-    StartImageRotate();
-  }, [StartImageRotate]);
 
   const onRefresh = React.useCallback(() => {
     setData(chooseData);
@@ -90,19 +84,20 @@ const StandingsScreen = ({navigation, route}) => {
   }, [chooseData, setData]);
 
   const fetchTeam = React.useCallback(async lgID => {
+    console.log('lgID :>> ', lgID);
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeams, {
           filter: {leagueID: {eq: lgID}},
         }),
       );
-      console.log('Teams>>>>>>>>>>>>>>', leagueData.data.listTeams.items);
+      console.log('Teams>>>>>>>>>>>>>>', leagueData);
       const sorted = leagueData.data.listTeams.items
         .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
         .reverse();
       setTeamData(sorted);
       setLoading(false);
-      load = false;
+      setLogoLoad(false);
       console.log('set_load false');
     } catch (err) {
       console.log('error fetching todos', err);
@@ -134,134 +129,137 @@ const StandingsScreen = ({navigation, route}) => {
         </Modal>
         <View>
           {teamData.length != 0 ? (
-            <>
-              {isLoading ? (
-                <SkeletonPlaceholder
-                  speed={800}
-                  backgroundColor={COLORS.count}
-                  highlightColor={'gray'}>
-                  <View>
-                    <View style={styles.skeletonMain}>
-                      <View style={styles.skeleton3}>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonSub} />
-                          <View style={styles.skeletonSub} />
-                        </View>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonInner} />
-                        </View>
-                      </View>
-                      <View style={styles.skeletonAnotherSub} />
-                      <View style={styles.skeleton3}>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonSub} />
-                          <View style={styles.skeletonSub} />
-                        </View>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonInner} />
-                        </View>
-                      </View>
-                      <View style={styles.skeletonAnotherSub} />
-                      <View style={styles.skeleton3}>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonSub} />
-                          <View style={styles.skeletonSub} />
-                        </View>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonInner} />
-                        </View>
-                      </View>
-                      <View style={styles.skeletonAnotherSub} />
-                      <View style={styles.skeleton3}>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonSub} />
-                          <View style={styles.skeletonSub} />
-                        </View>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonInner} />
-                        </View>
-                      </View>
-                      <View style={styles.skeletonAnotherSub} />
-                      <View style={styles.skeleton3}>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonSub} />
-                          <View style={styles.skeletonSub} />
-                        </View>
-                        <View style={styles.skeletonSubMain}>
-                          <View style={styles.skeletonInner} />
-                        </View>
-                      </View>
-                      <View style={styles.skeletonAnotherSub} />
+<<<<<<< HEAD
+            // <>
+            //   {isLoading ? (
+            //     <SkeletonPlaceholder
+            //       speed={800}
+            //       backgroundColor={'#E1E9EE'}
+            //       highlightColor={'gray'}>
+            //       <View>
+            //         <View style={styles.skeletonMain}>
+            //           <View style={styles.skeleton3}>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonSub} />
+            //               <View style={styles.skeletonSub} />
+            //             </View>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonInner} />
+            //             </View>
+            //           </View>
+            //           <View style={styles.skeletonAnotherSub} />
+            //           <View style={styles.skeleton3}>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonSub} />
+            //               <View style={styles.skeletonSub} />
+            //             </View>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonInner} />
+            //             </View>
+            //           </View>
+            //           <View style={styles.skeletonAnotherSub} />
+            //           <View style={styles.skeleton3}>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonSub} />
+            //               <View style={styles.skeletonSub} />
+            //             </View>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonInner} />
+            //             </View>
+            //           </View>
+            //           <View style={styles.skeletonAnotherSub} />
+            //           <View style={styles.skeleton3}>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonSub} />
+            //               <View style={styles.skeletonSub} />
+            //             </View>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonInner} />
+            //             </View>
+            //           </View>
+            //           <View style={styles.skeletonAnotherSub} />
+            //           <View style={styles.skeleton3}>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonSub} />
+            //               <View style={styles.skeletonSub} />
+            //             </View>
+            //             <View style={styles.skeletonSubMain}>
+            //               <View style={styles.skeletonInner} />
+            //             </View>
+            //           </View>
+            //           <View style={styles.skeletonAnotherSub} />
+            //         </View>
+            //       </View>
+            //     </SkeletonPlaceholder>
+            //   ) : (
+=======
+>>>>>>> aaee7172b1dd5e29bfee56c43921628028c30d26
+            <FlatList
+              refreshControl={
+                <RefreshControl
+                  tintColor={COLORS.brand}
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              }
+              data={teamData}
+              style={{height: hp(100)}}
+              keyExtractor={item => item.id}
+              renderItem={({item, index}) => (
+                <View>
+                  <View style={styles.standingStyle}>
+                    <Text
+                      style={{
+                        fontFamily: FONTS.brandFont,
+                        color: COLORS.white,
+                      }}>
+                      {index + 1}
+                    </Text>
+                    <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
+                      <Image
+                        source={item.playerAvatar1}
+                        style={styles.avatar}
+                      />
+                      <Image
+                        source={item.playerAvatar2}
+                        style={styles.avatar}
+                      />
+                    </View>
+                    <Text
+                      style={{
+                        fontFamily: FONTS.brandFont,
+                        color: COLORS.white,
+                        marginLeft: wp(5),
+                      }}>
+                      {item.name}
+                    </Text>
+                    <View
+                      style={{
+                        position: 'absolute',
+                        right: 0,
+                      }}>
+                      <Text
+                        style={{
+                          fontFamily: FONTS.brandFont,
+                          color: COLORS.green,
+                        }}>
+                        {item.win}
+                        <Text
+                          style={{
+                            fontFamily: FONTS.brandFont,
+                            color: COLORS.white,
+                          }}>{`-`}</Text>
+                        <Text style={{color: COLORS.red}}>{item.lose}</Text>
+                      </Text>
                     </View>
                   </View>
-                </SkeletonPlaceholder>
-              ) : (
-                <FlatList
-                  refreshControl={
-                    <RefreshControl
-                      tintColor={COLORS.brand}
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
-                    />
-                  }
-                  data={teamData}
-                  style={{height: hp(100)}}
-                  keyExtractor={item => item.id}
-                  renderItem={({item, index}) => (
-                    <View>
-                      <View style={styles.standingStyle}>
-                        <Text
-                          style={{
-                            fontFamily: FONTS.brandFont,
-                            color: COLORS.white,
-                          }}>
-                          {index + 1}
-                        </Text>
-                        <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
-                          <Image
-                            source={item.playerAvatar1}
-                            style={styles.avatar}
-                          />
-                          <Image
-                            source={item.playerAvatar2}
-                            style={styles.avatar}
-                          />
-                        </View>
-                        <Text
-                          style={{
-                            fontFamily: FONTS.brandFont,
-                            color: COLORS.white,
-                            marginLeft: wp(5),
-                          }}>
-                          {item.name}
-                        </Text>
-                        <View
-                          style={{
-                            position: 'absolute',
-                            right: 0,
-                          }}>
-                          <Text
-                            style={{
-                              fontFamily: FONTS.brandFont,
-                              color: COLORS.green,
-                            }}>
-                            {item.win}
-                            <Text
-                              style={{
-                                fontFamily: FONTS.brandFont,
-                                color: COLORS.white,
-                              }}>{`-`}</Text>
-                            <Text style={{color: COLORS.red}}>{item.lose}</Text>
-                          </Text>
-                        </View>
-                      </View>
-                      <View style={styles.line} />
-                    </View>
-                  )}
-                />
+                  <View style={styles.line} />
+                </View>
               )}
-            </>
+            />
           ) : (
+            //   )}
+            // </>
             <View style={styles.logoContainer}>
               <Animated.Image
                 source={images.logo}
@@ -370,6 +368,11 @@ const styles = StyleSheet.create({
     height: hp(30),
     resizeMode: 'contain',
     opacity: 0.7,
+  },
+  lottie: {
+    width: wp(80),
+    height: wp(80),
+    alignSelf: 'center',
   },
 });
 

@@ -502,8 +502,11 @@ const SignInScreen = ({navigation, onPress}) => {
 export default function AuthScreen() {
   const [whichScreen, setWhichScreen] = useState(0);
   const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+
   const startValue = useRef(new Animated.Value(1)).current;
+
   const moveValue = useState(new Animated.Value(0))[0];
+
   const endValue = 0.8;
 
   const _keyboardDidShow = React.useCallback(() => {

@@ -60,36 +60,47 @@ const Match = ({item, onPress, user}) => {
   }, [getPlayerData]);
 
   const getPlayerData = React.useCallback(async () => {
-    let homePlayers = await fetchTeamPlayers(item.home.id);
-    console.log('homePlayers', homePlayers);
-    let awayPlayers = await fetchTeamPlayers(item.away.id);
-    console.log(`awayPlayers`, awayPlayers);
+    if (item !== null) {
+      setImgLoad(false);
+    }
+    // console.log(`item.homeImage`, item.homeImage);
+    let homeImages1 = item.homeImage.split('[');
+    let homeImages2 = homeImages1[1].split(']');
+    let homeImages = homeImages2[0].split(', ');
+    let awayImages1 = item.awayImage.split('[');
+    let awayImages2 = awayImages1[1].split(']');
+    let awayImages = awayImages2[0].split(', ');
+    setHome(homeImages);
+    setAway(awayImages);
+    // let homePlayers = await fetchTeamPlayers(item.home.id);
+    // console.log('homePlayers', homePlayers);
+    // let awayPlayers = await fetchTeamPlayers(item.away.id);
+    // console.log(`awayPlayers`, awayPlayers);
     let findHome = await findTeam(user.id, item.home.id);
     let findAway = await findTeam(user.id, item.away.id);
-    console.log(`item.home.id`, item.home.id);
-    console.log(`item.away.id`, item.away.id);
+    // console.log(`findHome`, findHome);
+    // console.log(`findAway`, findAway);
+    // console.log(`item.home.id`, item.home.id);
+    // console.log(`item.away.id`, item.away.id);
     if (findHome) {
       setFind('home');
     } else if (findAway) {
       setFind('away');
     }
-    setHome(homePlayers);
-    setAway(awayPlayers);
-    setImgLoad(false);
-  }, [item.away.id, item.home.id, user.id]);
+    console.log(`Home`, Home);
+  }, [Home, item, user.id]);
 
   async function fetchTeamPlayers(id) {
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeamPlayers, {
-          filter: {teamID: {eq: `${id}`}},
+          filter: {teamID: {eq: id}},
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
       return todos;
     } catch (err) {
-      console.log('error fetching todos', err);
+      //
     }
   }
   async function findTeam(id, teamid) {
@@ -100,7 +111,7 @@ const Match = ({item, onPress, user}) => {
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+      // console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
       if (todos.length === 1) {
         return true;
       } else {
@@ -132,21 +143,19 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Home && (
                 <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
+                  {Home.map(_item => {
+                    return imgLoad ? (
+                      <ActivityIndicator
+                        style={styles.avatar}
+                        size={'small'}
+                        color={COLORS.brand}
+                      />
+                    ) : (
+                      <Image source={_item} style={styles.avatar} />
+                    );
+                  })}
                 </View>
               )}
-
               <Text
                 style={{
                   color: find === 'home' ? COLORS.brand : COLORS.greyText,
@@ -206,20 +215,20 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Away && (
                 <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
+                  {Away.map(_item => {
+                    return imgLoad ? (
+                      <ActivityIndicator
+                        style={styles.avatar}
+                        size={'small'}
+                        color={COLORS.brand}
+                      />
+                    ) : (
+                      <Image source={_item} style={styles.avatar} />
+                    );
+                  })}
                 </View>
               )}
+
               <Text
                 style={{
                   color: find === 'away' ? COLORS.brand : COLORS.greyText,
@@ -247,6 +256,7 @@ const Match = ({item, onPress, user}) => {
     return (
       <View>
         <TouchableOpacity
+          disabled={find === '' ? true : false}
           onPress={onPress}
           style={{
             width: wp(100),
@@ -265,21 +275,19 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Home && (
                 <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
+                  {Home.map(_item => {
+                    return imgLoad ? (
+                      <ActivityIndicator
+                        style={styles.avatar}
+                        size={'small'}
+                        color={COLORS.brand}
+                      />
+                    ) : (
+                      <Image source={_item} style={styles.avatar} />
+                    );
+                  })}
                 </View>
               )}
-
               <Text
                 style={{
                   color: find === 'home' ? COLORS.brand : COLORS.greyText,
@@ -320,18 +328,17 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Away && (
                 <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
+                  {Away.map(_item => {
+                    return imgLoad ? (
+                      <ActivityIndicator
+                        style={styles.avatar}
+                        size={'small'}
+                        color={COLORS.brand}
+                      />
+                    ) : (
+                      <Image source={_item} style={styles.avatar} />
+                    );
+                  })}
                 </View>
               )}
               <Text
@@ -573,8 +580,9 @@ const GameScreen = ({navigation}) => {
         }),
       );
       const todos = scheduleData.data.listSchedules.items;
-
-      setSchedule(todos);
+      const sorted = todos.sort((a, b) => a.index - b.index);
+      console.log('sorted', sorted);
+      setSchedule(sorted);
     } catch (err) {}
   }, []);
 
