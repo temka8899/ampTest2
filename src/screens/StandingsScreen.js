@@ -22,7 +22,7 @@ import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {listTeamPlayers, listTeams} from '../graphql/queries';
+import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
 import {graphqlOperation} from '@aws-amplify/api-graphql';
 import API from '@aws-amplify/api';
 
@@ -31,12 +31,6 @@ const wait = timeout => {
 };
 
 const StandingsScreen = ({navigation, route}) => {
-  // let itemID = 0;
-
-  // if (route.params?.itemId) {
-  //   itemID = route.params.itemId;
-  // }
-
   const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(true);
@@ -61,7 +55,7 @@ const StandingsScreen = ({navigation, route}) => {
       }),
     ]),
     {
-      iterations: 5,
+      iterations: true,
     },
   ).start();
 
@@ -86,13 +80,35 @@ const StandingsScreen = ({navigation, route}) => {
   const fetchTeam = React.useCallback(async lgID => {
     console.log('lgID :>> ', lgID);
     try {
-      const leagueData = await API.graphql(
-        graphqlOperation(listTeams, {
+      const leagueData2 = await API.graphql(
+        graphqlOperation(listSchedules, {
           filter: {leagueID: {eq: lgID}},
         }),
       );
-      console.log('Teams>>>>>>>>>>>>>>', leagueData);
-      const sorted = leagueData.data.listTeams.items
+      console.log('Teams>>>>>>>>>>>>>>', leagueData2.data.listSchedules.items);
+      let leagueData = [];
+      for (let i = 0; i < leagueData2.data.listSchedules.items.length; i++) {
+        const found = leagueData.find(
+          e => e.id == leagueData2.data.listSchedules.items[i].home.id,
+        );
+        if (found == undefined) {
+          let item = new Object();
+          item = leagueData2.data.listSchedules.items[i].home;
+          item.image = leagueData2.data.listSchedules.items[i].homeImage;
+          leagueData.push(item);
+        }
+        const found2 = leagueData.find(
+          e => e.id == leagueData2.data.listSchedules.items[i].away.id,
+        );
+        if (found2 == undefined) {
+          let item = new Object();
+          item = leagueData2.data.listSchedules.items[i].away;
+          item.image = leagueData2.data.listSchedules.items[i].awayImage;
+          leagueData.push(item);
+        }
+      }
+      console.log('Unique League data ->', leagueData);
+      const sorted = leagueData
         .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
         .reverse();
       setTeamData(sorted);
@@ -139,7 +155,7 @@ const StandingsScreen = ({navigation, route}) => {
               }
               data={teamData}
               style={{height: hp(100)}}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item}
               renderItem={({item, index}) => (
                 <View>
                   <View style={styles.standingStyle}>
@@ -151,14 +167,8 @@ const StandingsScreen = ({navigation, route}) => {
                       {index + 1}
                     </Text>
                     <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
-                      <Image
-                        source={item.playerAvatar1}
-                        style={styles.avatar}
-                      />
-                      <Image
-                        source={item.playerAvatar2}
-                        style={styles.avatar}
-                      />
+                      <Image source={item.image[0]} style={styles.avatar} />
+                      <Image source={item.image[1]} style={styles.avatar} />
                     </View>
                     <Text
                       style={{
