@@ -172,7 +172,7 @@ const AdminScreen = ({navigation}) => {
               isStart: true,
               startedDate: `${date.toLocaleDateString()}`,
               maxSchedule: `${(n * (n + 1)) / 2}`,
-              currentSchedule: 1,
+              currentSchedule: 0,
             },
           }),
         );
