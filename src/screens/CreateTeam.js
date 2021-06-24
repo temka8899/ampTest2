@@ -116,6 +116,75 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function checkLeagueEnded() {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {leagueID: {eq: '83418a6f-4054-4ee7-ab18-ae7f62eb312e'}},
+        }),
+      );
+
+      if (
+        leagueData.data.listTeams.items[0].league.currentSchedule ==
+        leagueData.data.listTeams.items[0].league.maxSchedule
+      ) {
+        console.log('LeagueEnded');
+        const teams = leagueData.data.listTeams.items
+          .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
+          .reverse();
+        const sorted = [];
+        for (var i = 0; i < 4; i++) {
+          sorted.push(teams[i]);
+        }
+        console.log(sorted);
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        const k = sorted.length;
+        var nemeh = 1;
+        var hasah = sorted.length;
+        var date = new Date();
+        var date2 = date.getDay();
+        let dateNemeh = 0;
+        let tooluur = 1;
+        date.setDate(date.getDate() - 1);
+        for (var i = 1; i < sorted.length; i++) {
+          for (var j = 0; j < hasah - 1; j++) {
+            if (dateNemeh % 4 == 0) {
+              date.setDate(date.getDate() + 2);
+              var date2 = date.getDay();
+              if (date2 == 6) {
+                date.setDate(date.getDate() + 2);
+              }
+            }
+            console.log(
+              `${sorted[j].name} vs ${
+                sorted[j + nemeh].name
+              }___at ${date.toLocaleDateString()}____`,
+            );
+            addSchedule(
+              sorted[j].id,
+              sorted[j + nemeh].id,
+              date.toLocaleDateString(),
+              '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+              tooluur,
+            );
+            dateNemeh++;
+            tooluur++;
+          }
+          hasah--;
+          nemeh++;
+        }
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        console.log('<<<<<<<<<<<<<<<<<', sorted);
+      } else {
+        console.log('League not Ended');
+      }
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
   async function fetchTeam() {
     try {
       const leagueData = await API.graphql(
@@ -328,11 +397,8 @@ const createTeamScreen = ({navigation}) => {
     var hasah = teams.length;
     var date = new Date();
     var date2 = date.getDay();
-    var numberOfDaysToAdd = 0;
     let dateNemeh = 0;
     let tooluur = 1;
-
-    // date.setDate(date.getDate() + numberOfDaysToAdd);
     date.setDate(date.getDate() - 1);
     for (var i = 1; i < teams.length; i++) {
       for (var j = 0; j < hasah - 1; j++) {
@@ -551,7 +617,10 @@ const createTeamScreen = ({navigation}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content"></StatusBar>
       <View>
-        <Button onPress={() => addTeam()} title="add Team" />
+        <Button
+          onPress={() => checkLeagueEnded()}
+          title="check league ended?"
+        />
         <Button onPress={() => addTeamPlayer()} title="add Team Player" />
         <Button onPress={() => addLeaguePlayer()} title="add League Player" />
         <Button onPress={() => fetchTeam()} title="Fetch Team" />
