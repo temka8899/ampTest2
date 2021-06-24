@@ -15,14 +15,12 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import LottieView from 'lottie-react-native';
 import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {listTeamPlayers, listTeams} from '../graphql/queries';
+import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
 import {graphqlOperation} from '@aws-amplify/api-graphql';
 import API from '@aws-amplify/api';
 
@@ -31,12 +29,6 @@ const wait = timeout => {
 };
 
 const StandingsScreen = ({navigation, route}) => {
-  // let itemID = 0;
-
-  // if (route.params?.itemId) {
-  //   itemID = route.params.itemId;
-  // }
-
   const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(true);
@@ -46,7 +38,6 @@ const StandingsScreen = ({navigation, route}) => {
   const [logoLoad, setLogoLoad] = useState();
 
   const rotateValue = useState(new Animated.Value(0))[0];
-
   const RotateData = rotateValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
@@ -61,9 +52,64 @@ const StandingsScreen = ({navigation, route}) => {
       }),
     ]),
     {
-      iterations: 5,
+      iterations: true,
     },
   ).start();
+
+  const Standings = ({item, index}) => {
+    let homeImages1 = item.image.split('[');
+    let homeImages2 = homeImages1[1].split(']');
+    let homeImages = homeImages2[0].split(', ');
+    return (
+      <View>
+        <View style={styles.standingStyle}>
+          <Text
+            style={{
+              fontFamily: FONTS.brandFont,
+              color: COLORS.white,
+            }}>
+            {index + 1}
+          </Text>
+          <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
+            <Image source={homeImages[0]} style={styles.avatar} />
+            <Image source={homeImages[1]} style={styles.avatar} />
+          </View>
+          <Text
+            style={{
+              fontFamily: FONTS.brandFont,
+              color: COLORS.white,
+              marginLeft: wp(5),
+            }}>
+            {item.name}
+          </Text>
+          <View
+            style={{
+              position: 'absolute',
+              right: 0,
+            }}>
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                color: COLORS.green,
+              }}>
+              {item.win}
+              <Text
+                style={{
+                  fontFamily: FONTS.brandFont,
+                  color: COLORS.white,
+                }}>{`-`}</Text>
+              <Text style={{color: COLORS.red}}>{item.lose}</Text>
+            </Text>
+          </View>
+        </View>
+        <View style={styles.line} />
+      </View>
+    );
+  };
+
+  const renderItem = ({item, index}) => {
+    return <Standings item={item} index={index} />;
+  };
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
@@ -86,15 +132,41 @@ const StandingsScreen = ({navigation, route}) => {
   const fetchTeam = React.useCallback(async lgID => {
     console.log('lgID :>> ', lgID);
     try {
-      const leagueData = await API.graphql(
-        graphqlOperation(listTeams, {
+      const leagueData2 = await API.graphql(
+        graphqlOperation(listSchedules, {
           filter: {leagueID: {eq: lgID}},
         }),
       );
-      console.log('Teams>>>>>>>>>>>>>>', leagueData);
-      const sorted = leagueData.data.listTeams.items
+      console.log('Teams>>>>>>>>>>>>>>', leagueData2.data.listSchedules.items);
+      let leagueData = [];
+      for (let i = 0; i < leagueData2.data.listSchedules.items.length; i++) {
+        const found = leagueData.find(
+          e => e.id == leagueData2.data.listSchedules.items[i].home.id,
+        );
+        if (found == undefined) {
+          let item = new Object();
+          item = leagueData2.data.listSchedules.items[i].home;
+          item.standingPlayers =
+            leagueData2.data.listSchedules.items[i].homePlayers;
+          item.image = leagueData2.data.listSchedules.items[i].homeImage;
+          leagueData.push(item);
+        }
+        const found2 = leagueData.find(
+          e => e.id == leagueData2.data.listSchedules.items[i].away.id,
+        );
+        if (found2 == undefined) {
+          let item = new Object();
+          item = leagueData2.data.listSchedules.items[i].away;
+          item.standingPlayers =
+            leagueData2.data.listSchedules.items[i].awayPlayers;
+          item.image = leagueData2.data.listSchedules.items[i].awayImage;
+          leagueData.push(item);
+        }
+      }
+      const sorted = leagueData
         .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
         .reverse();
+      console.log('sorted Unique league data:>> ', sorted);
       setTeamData(sorted);
       setLoading(false);
       setLogoLoad(false);

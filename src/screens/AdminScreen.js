@@ -514,7 +514,7 @@ const AdminScreen = ({navigation}) => {
         </View>
         <Text style={styles.textStyle}> Game List </Text>
         <View>
-          {LeagueList.length !== 0 ? (
+          {GameData.length !== 0 ? (
             <FlatList
               showsHorizontalScrollIndicator={false}
               horizontal
@@ -646,6 +646,18 @@ const styles = StyleSheet.create({
     marginTop: hp(3),
     borderRadius: 20,
     flexDirection: 'row',
+  },
+  lottie: {
+    width: wp(80),
+    height: wp(80),
+    alignSelf: 'center',
+  },
+  lottieText: {
+    color: COLORS.brand,
+    fontFamily: FONTS.brandFont,
+    fontSize: RFPercentage(1.7),
+    alignSelf: 'center',
+    marginTop: hp(5),
   },
 });
 export default AdminScreen;

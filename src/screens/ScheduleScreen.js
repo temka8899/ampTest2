@@ -395,8 +395,6 @@ const ScheduleScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(false);
   const [chooseData, setChooseData] = useState();
   const [modalVisible, setModalVisible] = useState(true);
-  // const [month, setMonth] = useState('June');
-  // const [year, setYear] = useState('2021');
   const [refreshing, setRefreshing] = React.useState(false);
   const [dayData, setDayData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
@@ -407,12 +405,20 @@ const ScheduleScreen = ({navigation, route}) => {
   const [localId, setlocalId] = useState(localDay);
   const [selectedId, setSelectedId] = useState(firstDate);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
-  // let homePlayers = [];
-  // let awayPlayers = [];
 
-  // useEffect(() => {
-  //   getDay(firstDate);
-  // }, [getDay]);
+  useEffect(() => {
+    getDay(selectedId);
+    onRefresh();
+    const unsubscribe = navigation.addListener('focus', () => {
+      // The screen is focused
+      // Call any action
+      onRefresh();
+      console.log('object REFRESHING HKANA:>> ');
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [getDay, onRefresh, selectedId, navigation]);
 
   const getDay = React.useCallback(
     (item, option = null) => {

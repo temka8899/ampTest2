@@ -14,30 +14,19 @@ import {hp, wp} from '../constants/theme';
 import Modal from 'react-native-modal';
 import {EndModal} from '../components/EndModal';
 import {
-  createGame,
-  createLeague,
-  createTeam,
-  createTeamPlayer,
-  createLeaguePlayer,
-  createSchedule,
-  deleteLeaguePlayer,
   updateLeague,
   updateSchedule,
   updateTeamPlayer,
   updateTeam,
-  deleteLeague,
   updatePlayer,
 } from '../graphql/mutations';
 import {
-  listGames,
   listLeagues,
   listPlayers,
   listTeamPlayers,
   listTeams,
-  listLeaguePlayers,
-  getTeam,
-  listSchedules,
 } from '../graphql/queries';
+
 import {AuthContext} from '../../App';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
