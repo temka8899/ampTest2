@@ -505,6 +505,7 @@ export const onCreateSchedule = /* GraphQL */ `
       id
       index
       playOffIndex
+      finalsIndex
       leagueID
       home {
         id
@@ -566,6 +567,7 @@ export const onUpdateSchedule = /* GraphQL */ `
       id
       index
       playOffIndex
+      finalsIndex
       leagueID
       home {
         id
@@ -627,6 +629,7 @@ export const onDeleteSchedule = /* GraphQL */ `
       id
       index
       playOffIndex
+      finalsIndex
       leagueID
       home {
         id

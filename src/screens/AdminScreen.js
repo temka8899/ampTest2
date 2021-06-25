@@ -146,7 +146,7 @@ const AdminScreen = ({navigation}) => {
               sorted[i].playerID,
               sorted[i].player.avatar,
             );
-            await addStartTeamPlayer(
+            addStartTeamPlayer(
               temp.data.createTeam.id,
               sorted[last].playerID,
               sorted[last].player.avatar,
@@ -215,7 +215,7 @@ const AdminScreen = ({navigation}) => {
             }
           }
           const leagueData1 = await API.graphql(
-            graphqlOperation(await listTeamPlayers, {
+            graphqlOperation(listTeamPlayers, {
               filter: {
                 teamID: {eq: `${teams[j].id}`},
               },
@@ -230,7 +230,7 @@ const AdminScreen = ({navigation}) => {
           }
 
           const leagueData2 = await API.graphql(
-            graphqlOperation(await listTeamPlayers, {
+            graphqlOperation(listTeamPlayers, {
               filter: {
                 teamID: {eq: `${teams[j + nemeh].id}`},
               },

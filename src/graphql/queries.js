@@ -355,6 +355,7 @@ export const getSchedule = /* GraphQL */ `
       id
       index
       playOffIndex
+      finalsIndex
       leagueID
       home {
         id
@@ -421,6 +422,7 @@ export const listSchedules = /* GraphQL */ `
         id
         index
         playOffIndex
+        finalsIndex
         leagueID
         home {
           id
