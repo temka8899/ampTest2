@@ -206,7 +206,7 @@ const SwitchView = ({value, onPress}) => {
                 // value={signUpPassword}
                 onChangeText={text => setSignUpPassword(text)}
                 placeholder="Password"
-                secureTextEntry
+                secureTextEntry={true}
               />
 
               <FormInput
@@ -237,8 +237,8 @@ const SwitchView = ({value, onPress}) => {
                     style={{
                       fontFamily: FONTS.brandFont,
                       color: COLORS.white,
-                      paddingTop: hp(0.6),
-                      margin: hp(1),
+                      paddingTop: wp(2),
+                      margin: wp(2),
                       fontSize: RFPercentage(1.7),
                     }}>
                     SIGN UP
@@ -276,8 +276,8 @@ const SwitchView = ({value, onPress}) => {
                     style={{
                       fontFamily: FONTS.brandFont,
                       color: COLORS.white,
-                      paddingTop: hp(0.6),
-                      margin: hp(1),
+                      paddingTop: wp(2),
+                      margin: wp(2),
                       fontSize: RFPercentage(1.7),
                     }}>
                     CONFIRM
@@ -316,8 +316,8 @@ const SwitchView = ({value, onPress}) => {
                     style={{
                       fontFamily: FONTS.brandFont,
                       color: COLORS.white,
-                      paddingTop: hp(0.6),
-                      margin: hp(1),
+                      paddingTop: wp(2),
+                      margin: wp(2),
                       fontSize: RFPercentage(1.7),
                     }}>
                     SEND
@@ -457,7 +457,6 @@ const SignInScreen = ({navigation, onPress}) => {
           <FormInput
             autoCorrect={false}
             placeholder="Password"
-            keyboardType="email-address"
             value={password}
             onChangeText={text => setPassword(text)}
             textContentType="password"
@@ -470,8 +469,8 @@ const SignInScreen = ({navigation, onPress}) => {
                   style={{
                     fontFamily: FONTS.brandFont,
                     color: COLORS.white,
-                    paddingTop: hp(0.6),
-                    margin: hp(1),
+                    paddingTop: wp(2),
+                    margin: wp(2),
                     fontSize: RFPercentage(1.7),
                   }}>
                   SIGN IN
@@ -486,8 +485,8 @@ const SignInScreen = ({navigation, onPress}) => {
               style={{
                 fontFamily: FONTS.brandFont,
                 color: COLORS.white,
-                paddingTop: hp(0.6),
-                margin: hp(1),
+                paddingTop: wp(2),
+                margin: wp(2),
                 fontSize: RFPercentage(1.7),
               }}>
               Forgot Password?
@@ -585,8 +584,8 @@ export default function AuthScreen() {
                 source={icons.signBackBtn}
                 style={{
                   width: wp(14),
-                  height: hp(5.4),
-                  marginTop: hp(7),
+                  height: wp(10),
+                  marginTop: wp(14),
 
                   marginLeft: -wp(5),
                 }}
@@ -643,7 +642,7 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     width: wp(81.28),
-    height: hp(9.719),
+    height: wp(20),
   },
   button: {
     flex: 1,
@@ -652,7 +651,7 @@ const styles = StyleSheet.create({
   },
   smallButton: {
     width: wp(50),
-    height: hp(5.29),
+    height: wp(10),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -663,12 +662,12 @@ const styles = StyleSheet.create({
     height: wp(74.66),
   },
   btnText: {
-    marginTop: hp(1),
+    marginTop: wp(2),
     fontFamily: FONTS.brandFont,
     color: COLORS.white,
   },
   input: {
-    height: hp(4),
+    height: wp(8),
     width: wp(55.2),
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
@@ -677,28 +676,28 @@ const styles = StyleSheet.create({
   },
   signupContainer: {
     width: wp(75.5),
-    height: hp(40),
+    height: wp(86),
     backgroundColor: '#00032590',
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingVertical: hp(2),
-    marginBottom: hp(3),
+    paddingVertical: wp(4),
+    marginBottom: wp(6),
   },
   signupButton: {
     width: wp(50),
-    height: hp(5.29),
+    height: wp(10),
     justifyContent: 'center',
     alignItems: 'center',
   },
   confirmCodeContainer: {
     width: wp(75.5),
-    height: hp(26),
+    height: wp(50),
     backgroundColor: '#00032590',
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingVertical: hp(2),
+    paddingVertical: wp(4),
   },
   animatedContainer: {
     flex: 3,
@@ -716,23 +715,23 @@ const styles = StyleSheet.create({
   },
   forgotPassContainer: {
     width: wp(75.5),
-    height: hp(26),
+    height: wp(55),
     backgroundColor: '#00032590',
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingVertical: hp(2),
-    paddingBottom: hp(3),
+    paddingVertical: wp(4),
+    paddingBottom: wp(6),
   },
   signInModal: {
     width: wp(75.5),
-    height: hp(30),
+    height: wp(60),
     backgroundColor: '#00032590',
     borderRadius: 15,
     alignItems: 'center',
 
     justifyContent: 'space-evenly',
-    paddingVertical: hp(2),
+    paddingVertical: wp(4),
   },
   radioContainer: {
     width: wp(55),

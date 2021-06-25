@@ -120,7 +120,7 @@ const createTeamScreen = ({navigation}) => {
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeams, {
-          filter: {leagueID: {eq: '83418a6f-4054-4ee7-ab18-ae7f62eb312e'}},
+          filter: {leagueID: {eq: 'ee278317-bde7-46ba-82c7-8067d1e1e6f2'}},
         }),
       );
       console.log(leagueData);
@@ -132,36 +132,115 @@ const createTeamScreen = ({navigation}) => {
         const teams = leagueData.data.listTeams.items
           .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
           .reverse();
-        console.log('TEAMS>>>', teams);
         const sorted = [];
         for (var i = 0; i < 4; i++) {
           sorted.push(teams[i]);
         }
-        console.log('PLAYOFF TEAMS>>>>>', sorted[0], sorted[3]);
+        console.log('>???????????', sorted);
         var date = new Date();
         date.setDate(date.getDate() + 1);
         var date2 = date.getDay();
-        console.log('>>>>>', date);
-        console.log('>>>>>', date2);
         if (date2 == 6) {
           date.setDate(date.getDate() + 2);
         }
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        const _teamPlayerData1 = await API.graphql(
+          graphqlOperation(await listTeamPlayers, {
+            filter: {
+              teamID: {eq: `${sorted[0].id}`},
+            },
+          }),
+        );
+        const player1 = _teamPlayerData1.data.listTeamPlayers.items;
+        const _teamAvatar1 = [];
+        const _teamID1 = [];
+        _teamAvatar1.push(player1[0].player.avatar);
+        _teamAvatar1.push(player1[1].player.avatar);
+        _teamID1.push(player1[0].player.id);
+        _teamID1.push(player1[1].player.id);
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        const _teamPlayerData2 = await API.graphql(
+          graphqlOperation(await listTeamPlayers, {
+            filter: {
+              teamID: {eq: `${sorted[1].id}`},
+            },
+          }),
+        );
+        const player2 = _teamPlayerData2.data.listTeamPlayers.items;
+        const _teamAvatar2 = [];
+        const _teamID2 = [];
+        _teamAvatar2.push(player2[0].player.avatar);
+        _teamAvatar2.push(player2[1].player.avatar);
+        _teamID2.push(player2[0].player.id);
+        _teamID2.push(player2[1].player.id);
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        const _teamPlayerData3 = await API.graphql(
+          graphqlOperation(await listTeamPlayers, {
+            filter: {
+              teamID: {eq: `${sorted[2].id}`},
+            },
+          }),
+        );
+        const player3 = _teamPlayerData3.data.listTeamPlayers.items;
+        const _teamAvatar3 = [];
+        const _teamID3 = [];
+        _teamAvatar3.push(player3[0].player.avatar);
+        _teamAvatar3.push(player3[1].player.avatar);
+        _teamID3.push(player3[0].player.id);
+        _teamID3.push(player3[1].player.id);
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        const _teamPlayerData4 = await API.graphql(
+          graphqlOperation(await listTeamPlayers, {
+            filter: {
+              teamID: {eq: `${sorted[3].id}`},
+            },
+          }),
+        );
+        const player4 = _teamPlayerData4.data.listTeamPlayers.items;
+        const _teamAvatar4 = [];
+        const _teamID4 = [];
+        _teamAvatar4.push(player4[0].player.avatar);
+        _teamAvatar4.push(player4[1].player.avatar);
+        _teamID4.push(player4[0].player.id);
+        _teamID4.push(player4[1].player.id);
+
+        console.log(_teamAvatar1);
+        console.log(_teamAvatar2);
+        console.log(_teamAvatar3);
+        console.log(_teamAvatar4);
+        console.log(_teamID1);
+        console.log(_teamID2);
+        console.log(_teamID3);
+        console.log(_teamID4);
+
         addSchedule(
           sorted[1].id,
           sorted[2].id,
           date.toLocaleDateString(),
-          '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+          'ee278317-bde7-46ba-82c7-8067d1e1e6f2',
           1,
           1,
+          _teamAvatar2,
+          _teamID2,
+          _teamAvatar3,
+          _teamID3,
         );
         addSchedule(
           sorted[1].id,
           sorted[2].id,
           date.toLocaleDateString(),
-          '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
-          1,
+          'ee278317-bde7-46ba-82c7-8067d1e1e6f2',
           2,
+          2,
+          _teamAvatar2,
+          _teamID2,
+          _teamAvatar3,
+          _teamID3,
         );
+
         await date.setDate(date.getDate() + 1);
         date2 = date.getDay();
         console.log('>>>>>', date);
@@ -170,27 +249,35 @@ const createTeamScreen = ({navigation}) => {
           date.setDate(date.getDate() + 2);
         }
         console.log('>>>>>', date);
+
         addSchedule(
           sorted[0].id,
           sorted[3].id,
           date.toLocaleDateString(),
-          '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+          'ee278317-bde7-46ba-82c7-8067d1e1e6f2',
+          3,
           1,
-          1,
+          _teamAvatar4,
+          _teamID4,
+          _teamAvatar1,
+          _teamID1,
         );
         addSchedule(
           sorted[0].id,
           sorted[3].id,
           date.toLocaleDateString(),
-          '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
-
-          1,
+          'ee278317-bde7-46ba-82c7-8067d1e1e6f2',
+          4,
           2,
+          _teamAvatar4,
+          _teamID4,
+          _teamAvatar1,
+          _teamID1,
         );
         await API.graphql(
           graphqlOperation(updateLeague, {
             input: {
-              id: '83418a6f-4054-4ee7-ab18-ae7f62eb312e',
+              id: 'ee278317-bde7-46ba-82c7-8067d1e1e6f2',
               maxSchedule: 4,
               currentSchedule: 0,
             },
@@ -260,7 +347,7 @@ const createTeamScreen = ({navigation}) => {
       const leagueData = await API.graphql(
         graphqlOperation(listTeamPlayers, {
           filter: {
-            teamID: {eq: 'bcb4a92a-8e89-48a3-a584-599b26e7e730'},
+            teamID: {eq: '1bcb2633-07ae-4c49-acda-892388ea80ec'},
           },
         }),
       );
@@ -456,6 +543,10 @@ const createTeamScreen = ({navigation}) => {
     startLeagueId,
     tooluur,
     _playoffIndex,
+    homeAvatar,
+    homeID,
+    awayAvatar,
+    awayID,
   ) {
     try {
       await API.graphql(
@@ -469,6 +560,10 @@ const createTeamScreen = ({navigation}) => {
             leagueID: startLeagueId,
             index: tooluur,
             playOffIndex: _playoffIndex,
+            homeImage: homeAvatar,
+            awayImage: awayAvatar,
+            homePlayers: homeID,
+            awayPlayers: awayID,
           },
         }),
       );

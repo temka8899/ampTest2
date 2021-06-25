@@ -298,7 +298,7 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
-  - RNScreens (3.4.0):
+  - RNScreens (3.3.0):
     - React-Core
     - React-RCTImage
   - RNSVG (12.1.1):
@@ -446,7 +446,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: 82ef8cf81badac66e6ea7a1e2fe52500ba74a597
+  FBReactNativeSpec: 079d9f511724d5e43f77b33f23705729c68e38cd
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
   lottie-react-native: 4dff8fe8d10ddef9e7880e770080f4a56121397e
@@ -482,7 +482,7 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 61a7c72bd1ebad3568025957d001e0f0e7b32191
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
-  RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
+  RNScreens: bf59f17fbf001f1025243eeed5f19419d3c11ef2
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac

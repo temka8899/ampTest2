@@ -87,7 +87,7 @@ const Match = ({item, onPress, user}) => {
     } else if (findAway) {
       setFind('away');
     }
-  }, [item, user.id]);
+  }, [item]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -381,6 +381,7 @@ const GameScreen = ({navigation}) => {
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
   const [introModal, setIntroModal] = useState(false);
+  const [userInfoSeted, setUserInfoSeted] = useState(false);
 
   useEffect(() => {
     fetchLeague();
@@ -410,7 +411,7 @@ const GameScreen = ({navigation}) => {
       <Avatar
         item={item}
         onPress={() => press(item)}
-        // backgroundColor={{backgroundColor}}
+        backgroundColor={{backgroundColor}}
       />
     );
   };
@@ -512,14 +513,14 @@ const GameScreen = ({navigation}) => {
     const playerData = await API.graphql(graphqlOperation(listPlayers));
     setName(user.attributes['custom:Name']);
 
-    setLoading(false);
     let existing = await checkPlayer(playerData, user.username);
     if (existing) {
       getAvatar();
     } else {
       findUser(user);
     }
-    findUser(user);
+    await findUser(user);
+    setLoading(false);
   }, [checkPlayer, findUser, getAvatar]);
 
   const findUser = React.useCallback(
@@ -607,7 +608,25 @@ const GameScreen = ({navigation}) => {
   function close() {
     setIntroModal(false);
   }
-  return (
+  return isLoading ? (
+    <SafeAreaView>
+      <Modal
+        isVisible={true}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: COLORS.background,
+          margin: 0,
+        }}>
+        <View style={{width: wp(50), height: wp(50)}}>
+          <LottieView
+            autoPlay
+            source={require('../assets/Lottie/game-loading.json')}
+          />
+        </View>
+      </Modal>
+    </SafeAreaView>
+  ) : (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
         refreshControl={

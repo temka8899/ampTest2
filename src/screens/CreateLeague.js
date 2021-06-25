@@ -9,6 +9,8 @@ import {
   Image,
   SafeAreaView,
   Modal,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 
 import {COLORS, FONTS, icons, images} from '../constants';
@@ -119,109 +121,116 @@ const createLeagueScreen = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
-          <Image source={icons.backBtn} style={styles.backBtn} />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <View style={styles.imageContainer}>
-          {uploadImage === '' ? (
-            <Image
-              style={{
-                width: wp(60),
-                height: wp(60),
-                // borderColor: 'red',
-                // borderWidth: 1,
-              }}
-              source={images.local}
-              resizeMode="contain"
-            />
-          ) : (
-            <Image
-              source={{
-                uri: uploadImage,
-              }}
-              style={{
-                width: wp(70),
-                height: wp(70),
-                backgroundColor: COLORS.background,
-              }}
-              resizeMode="contain"
-            />
-          )}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" />
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
+            <Image source={icons.backBtn} style={styles.backBtn} />
+          </TouchableOpacity>
         </View>
-      </View>
-      <TouchableOpacity
-        onPress={() => changeModalVisible(true)}
-        style={styles.chooseButton}>
-        <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-          {chooseData === '' ? 'Select' : chooseData.name}
-        </Text>
-        <Image source={icons.drop} style={styles.dropButton} />
-      </TouchableOpacity>
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={modalVisible}
-        nRequestClose={() => changeModalVisible(false)}>
-        <GamePicker changeModalVisible={changeModalVisible} setData={setData} />
-      </Modal>
-      <View style={styles.formContainer}>
-        <TextInput
-          multiline
-          numberOfLines={4}
-          maxLength={150}
-          autoCorrect={false}
-          onChangeText={val => setleagueDescription(val)}
-          // value={formState.name}
-          style={styles.input}
-          // onChangeText={onChangeNumber}
-          // value={number}
-          placeholder="Enter description"
-          placeholderTextColor={COLORS.purpleText}
-        />
-      </View>
-      <View style={{marginHorizontal: wp(4), marginTop: hp(3)}}>
-        <Text style={[styles.text, {color: COLORS.purpleText}]}>Start</Text>
-        {/* <Text style={[styles.text, {color: COLORS.greyText}]}>{hrs}</Text> */}
-        <DatePicker
-          style={styles.datePickerStyle}
-          date={startDate}
-          mode="date"
-          placeholder="select date"
-          format="YYYY MM DD"
-          minDate="2021-06-01"
-          maxDate="2022-06-01"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          customStyles={{
-            dateIcon: {
-              width: 0,
-              height: 0,
-            },
-            dateInput: {
-              borderWidth: 0,
-              alignItems: 'flex-start',
-            },
-            dateText: {
-              color: COLORS.white,
-              fontFamily: FONTS.brandFont,
-            },
-          }}
-          onDateChange={startDate => {
-            setStartDate(startDate);
-          }}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => addLeague()} style={styles.createBtn}>
-          <Text style={styles.createBtnText}>Create League</Text>
+        <View>
+          <View style={styles.imageContainer}>
+            {uploadImage === '' ? (
+              <Image
+                style={{
+                  width: wp(60),
+                  height: wp(60),
+                  // borderColor: 'red',
+                  // borderWidth: 1,
+                }}
+                source={images.local}
+                resizeMode="contain"
+              />
+            ) : (
+              <Image
+                source={{
+                  uri: uploadImage,
+                }}
+                style={{
+                  width: wp(70),
+                  height: wp(70),
+                  backgroundColor: COLORS.background,
+                }}
+                resizeMode="contain"
+              />
+            )}
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={() => changeModalVisible(true)}
+          style={styles.chooseButton}>
+          <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+            {chooseData === '' ? 'Select' : chooseData.name}
+          </Text>
+          <Image source={icons.drop} style={styles.dropButton} />
         </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={modalVisible}
+          nRequestClose={() => changeModalVisible(false)}>
+          <GamePicker
+            changeModalVisible={changeModalVisible}
+            setData={setData}
+          />
+        </Modal>
+        <View style={styles.formContainer}>
+          <TextInput
+            multiline
+            numberOfLines={4}
+            maxLength={150}
+            autoCorrect={false}
+            onChangeText={val => setleagueDescription(val)}
+            // value={formState.name}
+            style={styles.input}
+            // onChangeText={onChangeNumber}
+            // value={number}
+            placeholder="Enter description"
+            placeholderTextColor={COLORS.purpleText}
+          />
+        </View>
+        <View style={{marginHorizontal: wp(4), marginTop: hp(3)}}>
+          <Text style={[styles.text, {color: COLORS.purpleText}]}>Start</Text>
+          {/* <Text style={[styles.text, {color: COLORS.greyText}]}>{hrs}</Text> */}
+          <DatePicker
+            style={styles.datePickerStyle}
+            date={startDate}
+            mode="date"
+            placeholder="select date"
+            format="YYYY MM DD"
+            minDate="2021-06-01"
+            maxDate="2022-06-01"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+              dateIcon: {
+                width: 0,
+                height: 0,
+              },
+              dateInput: {
+                borderWidth: 0,
+                alignItems: 'flex-start',
+              },
+              dateText: {
+                color: COLORS.white,
+                fontFamily: FONTS.brandFont,
+              },
+            }}
+            onDateChange={startDate => {
+              setStartDate(startDate);
+            }}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => addLeague()}
+            style={styles.createBtn}>
+            <Text style={styles.createBtnText}>Create League</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({

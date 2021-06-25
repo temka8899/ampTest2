@@ -214,61 +214,9 @@ const StandingsScreen = ({navigation, route}) => {
                 data={teamData}
                 style={{height: hp(100)}}
                 keyExtractor={item => item.id}
-                renderItem={({item, index}) => (
-                  <View>
-                    <View style={styles.standingStyle}>
-                      <Text
-                        style={{
-                          fontFamily: FONTS.brandFont,
-                          color: COLORS.white,
-                        }}>
-                        {index + 1}
-                      </Text>
-                      <View style={{flexDirection: 'row', marginLeft: wp(4)}}>
-                        <Image
-                          source={item.playerAvatar1}
-                          style={styles.avatar}
-                        />
-                        <Image
-                          source={item.playerAvatar2}
-                          style={styles.avatar}
-                        />
-                      </View>
-                      <Text
-                        style={{
-                          fontFamily: FONTS.brandFont,
-                          color: COLORS.white,
-                          marginLeft: wp(5),
-                        }}>
-                        {item.name}
-                      </Text>
-                      <View
-                        style={{
-                          position: 'absolute',
-                          right: 0,
-                        }}>
-                        <Text
-                          style={{
-                            fontFamily: FONTS.brandFont,
-                            color: COLORS.green,
-                          }}>
-                          {item.win}
-                          <Text
-                            style={{
-                              fontFamily: FONTS.brandFont,
-                              color: COLORS.white,
-                            }}>{`-`}</Text>
-                          <Text style={{color: COLORS.red}}>{item.lose}</Text>
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.line} />
-                  </View>
-                )}
+                renderItem={renderItem}
               />
             ) : (
-              //   )}
-              // </>
               <View style={styles.logoContainer}>
                 <Animated.Image
                   source={images.logo}
