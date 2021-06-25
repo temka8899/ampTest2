@@ -56,7 +56,6 @@ const Match = ({item, onPress, user}) => {
     let awayImages = awayImages2[0].split(', ');
     setHome(homeImages);
     setAway(awayImages);
-<<<<<<< HEAD
     // let homePlayers = await fetchTeamPlayers(item.home.id);
     // console.log('homePlayers', homePlayers);
     // let awayPlayers = await fetchTeamPlayers(item.away.id);
@@ -72,12 +71,6 @@ const Match = ({item, onPress, user}) => {
     // console.log(`findAway`, findAway);
     // console.log(`item.home.id`, item.home.id);
     // console.log(`item.away.id`, item.away.id);
-=======
-
-    let findHome = await findTeam(user.id, item.home.id);
-    let findAway = await findTeam(user.id, item.away.id);
-
->>>>>>> c92e71213968fe4881cf29a1cced3dd075a0e459
     if (findHome) {
       setFind('home');
     } else if (findAway) {
