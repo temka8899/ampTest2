@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTS, hp, wp} from '../constants/theme';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
 export const LogoutModal = props => {

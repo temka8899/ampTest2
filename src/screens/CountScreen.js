@@ -224,7 +224,6 @@ export default function CountScreen({navigation, route}) {
   async function UpdateSchedule() {
     // Updating Schedule data
     // Bagiin avsan onoog update hiine
-
     _updateSchedule();
 
     //League iin current index update
@@ -238,12 +237,13 @@ export default function CountScreen({navigation, route}) {
     if (allPoint.one.point + allPoint.two.point === 10) {
       //toglogch yalahad bagiin onoog update
       _updateHome1();
-      _updateAway1();
+      await _updateAway1();
     } else {
       //toglogch yalagdahad bagiin onoog update
       _updateHome2();
-      _updateAway2();
+      await _updateAway2();
     }
+    startPlayoff();
   }
   function _updateSchedule() {
     try {
@@ -437,7 +437,7 @@ export default function CountScreen({navigation, route}) {
   }
 
   async function startPlayoff() {
-    _leagueID = 'ee278317-bde7-46ba-82c7-8067d1e1e6f2';
+    const _leagueID = MatchData.leagueID;
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeams, {
