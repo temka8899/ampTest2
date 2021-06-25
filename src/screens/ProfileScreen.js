@@ -27,6 +27,28 @@ import {updatePlayer} from '../graphql/mutations';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
 import {listPlayers, listSchedules, listTeamPlayers} from '../graphql/queries';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+
+const UselessTextInput = ({value}) => {
+  const [text, onChangeText] = React.useState(value);
+  return (
+    <TextInput
+      style={styles1.input}
+      onChangeText={onChangeText}
+      value={text}
+      onPressOut={console.log('onPressOut')}
+      editable={false}
+    />
+  );
+};
+
+const styles1 = StyleSheet.create({
+  input: {
+    height: 40,
+    margin: 12,
+    color: 'white',
+  },
+});
 
 const Match = ({item, onPress, user}) => {
   const [Home, setHome] = useState(undefined);
@@ -254,11 +276,13 @@ const Profile = ({navigation}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   // const [xpCount, setXpCount] = useState(true);
   const [scheduleData, setScheduleData] = useState([]);
+  const [teamNames, setTeamNames] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     getXp();
     fetchTeamPlayers();
+    _teamNames(userInfo.id);
   }, []);
   // const onRefresh = React.useCallback(() => {
   //   // checkInLeague();
@@ -289,6 +313,21 @@ const Profile = ({navigation}) => {
       // return schedulePerDay;
     } catch (err) {
       console.log('error fetching schedulePerDay', err);
+    }
+  }
+
+  async function _teamNames(id) {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeamPlayers, {
+          filter: {playerID: {eq: id}},
+        }),
+      );
+      const todos = leagueData.data.listTeamPlayers.items;
+      setTeamNames(todos);
+      console.log('>>>>>>>>>>>>>>>', todos);
+    } catch (err) {
+      console.log('error fetching todos', err);
     }
   }
 
@@ -501,22 +540,11 @@ const Profile = ({navigation}) => {
               </View>
             </View>
           </View>
-          <View>
-            <View style={styles.formContainer}>
-              <TextInput
-                multiline
-                numberOfLines={4}
-                maxLength={150}
-                autoCorrect={false}
-                // onChangeText={val => setleagueDescription(val)}
-                // value={formState.name}
-                style={styles.input}
-                // onChangeText={onChangeNumber}
-                // value={number}
-                placeholder="TEAM4"
-                placeholderTextColor={COLORS.purpleText}
-              />
-            </View>
+          <View style={{}}>
+            {teamNames.map((_team, ind) => (
+              <UselessTextInput key={ind} value={_team.team.name} />
+            ))}
+            <View style={styles.formContainer}></View>
           </View>
           <View
             style={{
