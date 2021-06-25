@@ -137,7 +137,6 @@ const ParticipatesScreen = ({navigation, route}) => {
             },
           }),
         );
-        console.log('CHECK IF IM IN :>> ', leaguePlayerData);
         const todos = await leaguePlayerData.data.listLeaguePlayers.items;
         if (todos.length === 0) {
           setInLeague(false);
@@ -159,7 +158,6 @@ const ParticipatesScreen = ({navigation, route}) => {
         }),
       );
       let my_id = playerData.data.listPlayers.items[0].id;
-      console.log('my_id :>> ', my_id);
       // await setPlayerID(playerData.data.listPlayers.items[0].id);
       checkInLeague(my_id);
     } catch (err) {}
@@ -189,7 +187,6 @@ const ParticipatesScreen = ({navigation, route}) => {
       );
       const data = await leaguePlayerData.data.listLeaguePlayers.items;
       setLeaguePlayers(data);
-      console.log('data :>> ', data);
     } catch (err) {}
   }, [LeagueId]);
 

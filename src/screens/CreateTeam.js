@@ -1,23 +1,10 @@
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Button,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-  StatusBar,
-  ColorPropType,
-} from 'react-native';
+import {View, StyleSheet, Button, SafeAreaView, StatusBar} from 'react-native';
 
 import ImagePicker from 'react-native-image-crop-picker';
 
 import {
-  createGame,
-  createLeague,
   createTeam,
   createTeamPlayer,
   createLeaguePlayer,
@@ -36,16 +23,13 @@ import {
   listTeamPlayers,
   listTeams,
   listLeaguePlayers,
-  getTeam,
   listSchedules,
 } from '../graphql/queries';
 import awsmobile from '../aws-exports';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 
-import {COLORS, FONTS, icons} from '../constants';
+import {COLORS, FONTS} from '../constants';
 import {hp, wp} from '../constants/theme';
-import FormInput from '../components/FormInput';
-import {AuthContext} from '../../App';
 
 Amplify.configure({
   ...awsmobile,

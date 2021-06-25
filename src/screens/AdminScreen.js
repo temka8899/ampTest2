@@ -66,14 +66,12 @@ const AdminScreen = ({navigation}) => {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       // const todos = leagueData.data.listTeams.items;
       //
-      console.log('leageuData :>> ', leagueData);
       let myData = [];
       leagueData.data.listLeagues.items.map(item => {
         let custom = item;
         custom.loading = false;
         myData.push(custom);
       });
-      console.log('myData :>> ', myData);
       setLeagueList(leagueData.data.listLeagues.items);
     } catch (err) {
       console.log('err :>> ', err);
@@ -103,11 +101,9 @@ const AdminScreen = ({navigation}) => {
     const startLeagueId = leagueID;
     let newState = LeagueList;
     newState[index].loading = true;
-    console.log('newState :>> ', newState);
     setLeagueList(newState);
     // Get Soccer League Players
     try {
-      console.log('pressed');
       setBtnLoad(true);
       const leaguePlayerData = await API.graphql(
         graphqlOperation(listLeaguePlayers, {
@@ -120,7 +116,6 @@ const AdminScreen = ({navigation}) => {
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
       let tooluur = 1;
 
-      console.log('Start League LeaguePlayer>>>>>>>>>>>>>>', todos);
       const sorted = todos.sort((a, b) => b.player.level - a.player.level);
       if (sorted.length % 2 == 0 && sorted.length >= 8) {
         let last = sorted.length - 1;
@@ -190,7 +185,6 @@ const AdminScreen = ({navigation}) => {
 
   async function addScheduleLoop(startLeagueId) {
     try {
-      console.log('add called');
       const teamData = await API.graphql(
         graphqlOperation(listTeams, {
           filter: {leagueID: {eq: startLeagueId}},
@@ -243,11 +237,7 @@ const AdminScreen = ({navigation}) => {
             playerAvatar2.push(_teamPlayers2[z2].player.avatar);
             playerID2.push(_teamPlayers2[z2].player.id);
           }
-          console.log(
-            `${teams[j].name} vs ${
-              teams[j + nemeh].name
-            }___at ${date.toLocaleDateString()}____`,
-          );
+
           addSchedule(
             teams[j].id,
             teams[j + nemeh].id,

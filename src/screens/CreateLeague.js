@@ -68,23 +68,11 @@ const createLeagueScreen = ({navigation}) => {
   }, []);
 
   async function fetchGames() {
-    // const user = await Auth.currentUserInfo();
-    // console.log('Attributes =======', user);
     try {
       const gameData = await API.graphql(graphqlOperation(listGames));
       const gameList = gameData.data.listGames.items;
       setGameList(gameList);
       console.log('Games>>>>', gameList);
-      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-      // const user2 = await Auth.currentAuthenticatedUser();
-      // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
-      // const result = await Auth.updateUserAttributes(user2, {
-      //   'custom:IntLevel': `5`,
-      //   'custom:Xp': `390`,
-      //   'custom:Name': `Mkoogii`,
-      //   'custom:Admin': `1`,
-      // });
-      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     } catch (err) {
       console.log('error fetching todos', err);
     }

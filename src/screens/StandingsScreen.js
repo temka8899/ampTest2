@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+
 import {
   View,
   Text,
@@ -14,6 +15,8 @@ import {
   Easing,
   ActivityIndicator,
 } from 'react-native';
+
+import {AuthContext} from '../../App';
 
 import AppBar from '../components/AppBar';
 import {hp, wp} from '../constants/theme';
@@ -34,8 +37,10 @@ const StandingsScreen = ({navigation, route}) => {
   const [modalVisible, setModalVisible] = useState(true);
   const [teamData, setTeamData] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [find, setFind] = useState('');
   const [PlayerInfo, setPlayerInfo] = useState([]);
   const [logoLoad, setLogoLoad] = useState();
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
 
   const rotateValue = useState(new Animated.Value(0))[0];
   const RotateData = rotateValue.interpolate({
@@ -56,10 +61,15 @@ const StandingsScreen = ({navigation, route}) => {
     },
   ).start();
 
-  const Standings = ({item, index}) => {
+  const Standings = ({item, index, user}) => {
     let homeImages1 = item.image.split('[');
     let homeImages2 = homeImages1[1].split(']');
     let homeImages = homeImages2[0].split(', ');
+
+    let standingPlayers1 = item.standingPlayers.split('[');
+    let standingPlayers2 = standingPlayers1[1].split(']');
+    let standingPlayers = standingPlayers2[0].split(', ');
+
     return (
       <View>
         <View style={styles.standingStyle}>
@@ -74,14 +84,26 @@ const StandingsScreen = ({navigation, route}) => {
             <Image source={homeImages[0]} style={styles.avatar} />
             <Image source={homeImages[1]} style={styles.avatar} />
           </View>
-          <Text
-            style={{
-              fontFamily: FONTS.brandFont,
-              color: COLORS.white,
-              marginLeft: wp(5),
-            }}>
-            {item.name}
-          </Text>
+          {standingPlayers[0] == userInfo.id ||
+          standingPlayers[1] == userInfo.id ? (
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                color: COLORS.brand,
+                marginLeft: wp(5),
+              }}>
+              {item.name}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontFamily: FONTS.brandFont,
+                color: COLORS.white,
+                marginLeft: wp(5),
+              }}>
+              {item.name}
+            </Text>
+          )}
           <View
             style={{
               position: 'absolute',
@@ -108,7 +130,7 @@ const StandingsScreen = ({navigation, route}) => {
   };
 
   const renderItem = ({item, index}) => {
-    return <Standings item={item} index={index} />;
+    return <Standings item={item} index={index} user={userInfo} />;
   };
 
   const changeModalVisible = bool => {
@@ -118,7 +140,6 @@ const StandingsScreen = ({navigation, route}) => {
   const setData = React.useCallback(
     async option => {
       await setChooseData(option);
-      await console.log('leagueID :>> ', option.id);
       await fetchTeam(option.id);
     },
     [fetchTeam],
@@ -130,7 +151,6 @@ const StandingsScreen = ({navigation, route}) => {
   }, [chooseData, setData]);
 
   const fetchTeam = React.useCallback(async lgID => {
-    console.log('lgID :>> ', lgID);
     try {
       const leagueData2 = await API.graphql(
         graphqlOperation(listSchedules, {
@@ -170,7 +190,6 @@ const StandingsScreen = ({navigation, route}) => {
       setTeamData(sorted);
       setLoading(false);
       setLogoLoad(false);
-      console.log('set_load false');
     } catch (err) {
       console.log('error fetching todos', err);
     }

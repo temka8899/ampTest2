@@ -74,7 +74,6 @@ export default function CountScreen({navigation, route}) {
   const [FourImage, setFourImage] = useState();
 
   useEffect(() => {
-    console.log(`params`, route.params.match);
     const ScheduleData = route.params.match;
     setMatchData(ScheduleData);
     console.log(`ScheduleData`, ScheduleData);
@@ -442,7 +441,6 @@ export default function CountScreen({navigation, route}) {
     );
     console.log('League updated');
   }
-  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   function CancelModal() {
     return (

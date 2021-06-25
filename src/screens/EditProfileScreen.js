@@ -50,7 +50,6 @@ export default function EditProfileScreen({navigation}) {
 
   const press = item => {
     setSelectedId(item.id);
-    console.log(item.image);
     setSelectedItem(item.image);
   };
 
@@ -84,7 +83,6 @@ export default function EditProfileScreen({navigation}) {
         }),
       );
       setBtnLoading(false);
-      console.log('League updated', temp);
     } catch (err) {
       setBtnLoading(false);
       console.log('error updating League: ', err);
@@ -101,7 +99,6 @@ export default function EditProfileScreen({navigation}) {
         }
       });
       setUserInfo(finded);
-      console.log('context player model data', finded);
     },
     [setUserInfo],
   );
