@@ -74,7 +74,6 @@ export default function CountScreen({navigation, route}) {
   const [FourImage, setFourImage] = useState();
 
   useEffect(() => {
-    console.log(`params`, route.params.match);
     const ScheduleData = route.params.match;
     setMatchData(ScheduleData);
     console.log(`ScheduleData`, ScheduleData);
@@ -442,7 +441,6 @@ export default function CountScreen({navigation, route}) {
     );
     console.log('League updated');
   }
-  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   async function startPlayoff() {
     _leagueID = 'ee278317-bde7-46ba-82c7-8067d1e1e6f2';

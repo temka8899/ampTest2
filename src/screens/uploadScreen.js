@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Button,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {View, StyleSheet, TextInput, Button, Image} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 import {createGame, createLeague} from '../graphql/mutations';
@@ -19,19 +11,6 @@ import {userData} from '../data/Players';
 import {CognitoIdToken, CognitoUser} from 'amazon-cognito-identity-js';
 import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
-// import {AmplifyTheme} from 'aws-amplify-react-native';
-
-// const MySectionHeader = Object.assign({}, AmplifyTheme.sectionHeader, {
-//   background: 'black',
-// });
-// const MyTheme = Object.assign({}, AmplifyTheme, {
-//   sectionHeader: MySectionHeader,
-// });
-
-// Amplify.configure(awsmobile);
-
-// const [uploadImage, setUploadImage] = useState('empty');
-
 Amplify.configure({
   ...awsmobile,
   Analytics: {
@@ -40,7 +19,6 @@ Amplify.configure({
 });
 
 const initialState = {name: '', description: ''};
-const imageURL = '';
 const Home = ({navigation}) => {
   const [formState, setFormState] = useState(initialState);
   const [todos, setTodos] = useState([]);
@@ -69,15 +47,8 @@ const Home = ({navigation}) => {
           name: image.filename,
           type: image.mime,
         };
-        //
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //blobber(file);
         setFile123(file);
-        //
-        //
         setUploadImage(image.path);
-        //console.log('-0-0-0-0-0-0-0-0-', image);
-        //console.log(image.path);
       });
     } catch (err) {
       console.log('Error uploading file:', err);
@@ -85,10 +56,8 @@ const Home = ({navigation}) => {
   };
 
   const blobber = async file => {
-    //console.log('file ', file);
     const response = await fetch(file.uri);
     const blob = await response.blob();
-    //console.log('blob --> ', blob);
     const fileName = file.name;
     setFileName(fileName);
     await Storage.put(fileName, blob, {
@@ -99,27 +68,13 @@ const Home = ({navigation}) => {
       .catch(err => console.log('Blobber error>>>>', err));
   };
 
-  // async function pathToImageFile() {
-  //   try {
-  //     await Storage.put(uploadImageName, uploadImage, {
-  //       contentType: 'image/jpeg', // contentType is optional
-  //     });
-  //   } catch (err) {
-  //     console.log('Error uploading file:', err);
-  //   }
-  // }
-
   async function fetchGames() {
     const user = await Auth.currentUserInfo();
-    console.log('Attributes =======', user);
-    // userInfo = await Auth.userAttributes(us).then(console.log(userInfo));
     try {
       const todoData = await API.graphql(graphqlOperation(listGames));
       const todos = todoData.data.listGames.items;
-      console.log('Games>>>>', todos);
       setTodos(todos);
       const user2 = await Auth.currentAuthenticatedUser();
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user2);
       const temp = '5915c914-fbc8-4e08-a7c2-70b329539292';
       const result = await Auth.updateUserAttributes(user2, {
         'custom:IntLevel': `5`,
@@ -127,11 +82,6 @@ const Home = ({navigation}) => {
         'custom:Name': `Mkoogii`,
         'custom:Admin': `1`,
       });
-      // const temp = Storage.get();
-      // // Storage.list('') // for listing ALL files without prefix, pass '' instead
-      // //         .then(result => console.log(result))
-      // //         .catch(err => console.log(err));
-      // console.log('tempoooo ----> ', temp);
     } catch (err) {
       console.log('error fetching todos', err);
     }
@@ -141,16 +91,12 @@ const Home = ({navigation}) => {
     try {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       const todos = leagueData.data.listLeagues.items;
-      console.log('leagueData', leagueData);
-      console.log('League>>>>>>>>>>>>>>', todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
   }
 
   async function addGame() {
-    console.log('FormState name: ', formState.name);
-    console.log('Filename: ', file123.name);
     try {
       blobber(file123);
       const todo = {...formState};
@@ -166,7 +112,6 @@ const Home = ({navigation}) => {
           },
         }),
       );
-      //console.log('>>>>>>>>>>>>>>>>>', todo);
     } catch (err) {
       console.log('error creating todo:', err);
     }
@@ -182,7 +127,6 @@ const Home = ({navigation}) => {
           },
         }),
       );
-      console.log('League Created');
     } catch (err) {
       console.log('error creating League:', err);
     }
@@ -227,7 +171,6 @@ const Home = ({navigation}) => {
         value={formState.name}
         placeholder="Name"
       />
-      {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
 
       <Image
         source={{
@@ -235,21 +178,6 @@ const Home = ({navigation}) => {
         }}
         style={{width: 400, height: 400}}
       />
-
-      {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
-
-      {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
-
-      {/* {todos.map((todo, index) => {
-        return (
-          <View key={todo.id ? todo.id : index} style={styles.todo}>
-            <Text style={styles.todoName}>{todo.name}</Text>
-            <Text>{todo.image}</Text>
-          </View>
-        );
-      })} */}
-
-      {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
     </View>
   );
 };

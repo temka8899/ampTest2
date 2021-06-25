@@ -41,15 +41,9 @@ const Match = ({item, onPress, user}) => {
 
   const getPlayerData = React.useCallback(async () => {
     let homePlayers = await fetchTeamPlayers(item.home.id);
-    // console.log('homePlayers', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
-    // console.log('awayPlayers', awayPlayers);
     let finded = await findTeam(user.id);
     // setMyTeam(finded);
-    console.log(`finded`, finded);
-    // console.log('item.home.id', item.home.id);
-    // console.log('item.away.id', item.away.id);
-    // console.log('finded', finded[0].teamID);
     if (item.home.id === finded[0].teamID) {
       setFind('home');
     } else if (item.away.id === finded[0].teamID) {
@@ -68,7 +62,6 @@ const Match = ({item, onPress, user}) => {
         setWin(false);
       }
     }
-    console.log(`find`, find);
     setHome(homePlayers);
     setAway(awayPlayers);
     setImgLoad(false);
@@ -82,7 +75,6 @@ const Match = ({item, onPress, user}) => {
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
       return todos;
     } catch (err) {
       console.log('error fetching todos', err);
@@ -96,7 +88,6 @@ const Match = ({item, onPress, user}) => {
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
       return todos;
     } catch (err) {
       console.log('error fetching todos', err);
@@ -279,10 +270,8 @@ const Profile = ({navigation}) => {
   };
 
   const setData = async option => {
-    console.log(`option`, option);
     setChooseData(option);
     let Data = await getSchedule(option);
-    console.log(`Data`, Data);
     setScheduleData(Data);
   };
   async function getSchedule(item) {
@@ -296,7 +285,6 @@ const Profile = ({navigation}) => {
       );
       const matches = scheduleData.data.listSchedules.items;
 
-      console.log('Schedule>>>>>>>>>>>>>>', matches);
       return matches;
       // return schedulePerDay;
     } catch (err) {
@@ -313,9 +301,6 @@ const Profile = ({navigation}) => {
     let diff = 0;
     let level = userInfo.level;
     while (count) {
-      console.log('count - ', count);
-      console.log('value- ', value);
-      console.log('level - ', level);
       if (value < 50 * level) {
         count = false;
         diff = value;
@@ -324,27 +309,17 @@ const Profile = ({navigation}) => {
         level++;
       }
     }
-    console.log(`value in last`, value);
-    console.log(`diff`, diff);
     let max = level * 50;
     let xp = diff;
     updateLevel(xp, level);
-    // console.log(`max`, max);
-    // console.log(`xp`, xp);
+
     setLoading(false);
 
     setXpPercent((xp * 100) / max);
-    // income = false;
-    //   }
-    //   setTimeout(() => {
-    //     onRefresh();
-    //   }, 1000);
-    // }
   }, []);
 
   const updateLevel = React.useCallback(
     async (xp, level) => {
-      console.log('mai');
       // const level = await fetchPlayer(userInfo.id);
       const user = await Auth.currentUserInfo();
       try {
@@ -357,13 +332,12 @@ const Profile = ({navigation}) => {
             },
           }),
         );
-        console.log('Player updated', temp);
       } catch (err) {
         console.log('error updating Player: ', err);
       }
       findUser(user);
     },
-    [findUser],
+    [findUser, userInfo.id],
   );
 
   async function fetchTeamPlayers() {
@@ -376,14 +350,12 @@ const Profile = ({navigation}) => {
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('>>>>>>>>>>>>>>', todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
   }
 
   function renderSchedule({item}) {
-    console.log('match', item);
     return (
       <Match
         item={item}
@@ -402,7 +374,6 @@ const Profile = ({navigation}) => {
         }
       });
       setUserInfo(finded);
-      console.log('context player model data', finded);
     },
     [setUserInfo],
   );
@@ -410,7 +381,6 @@ const Profile = ({navigation}) => {
   async function isAdmin() {
     if (userInfo.admin) {
       setAdminVisible(true);
-      console.log('admin');
     } else {
       setAdminVisible(false);
     }

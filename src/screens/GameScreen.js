@@ -542,7 +542,6 @@ const GameScreen = ({navigation}) => {
           return item;
         }
       });
-      console.log('finded', finded);
       setUserInfo(finded);
     },
     [setUserInfo],
@@ -597,7 +596,6 @@ const GameScreen = ({navigation}) => {
 
   let date = new Date();
   date.setDate(date.getDate());
-  // console.log(date.toLocaleDateString());
 
   const getSchedule = React.useCallback(async () => {
     try {

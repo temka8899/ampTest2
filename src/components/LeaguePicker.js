@@ -31,12 +31,16 @@ const LeaguePicker = props => {
   }
   const option = LeagueList.map((item, index) => {
     return (
-      <TouchableOpacity
-        style={styles.option}
-        key={index}
-        onPress={() => onPressItem(item)}>
-        <Text style={styles.text}>{item.game.name}</Text>
-      </TouchableOpacity>
+      <>
+        {item.isStart && (
+          <TouchableOpacity
+            style={styles.option}
+            key={index}
+            onPress={() => onPressItem(item)}>
+            <Text style={styles.text}>{item.game.name}</Text>
+          </TouchableOpacity>
+        )}
+      </>
     );
   });
   const onPressItem = async option => {

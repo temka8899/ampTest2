@@ -48,7 +48,6 @@ const Match = ({item, onPress, user}) => {
     if (item !== null) {
       setImgLoad(false);
     }
-    // console.log(`item.homeImage`, item.homeImage);
     let homeImages1 = item.homeImage.split('[');
     let homeImages2 = homeImages1[1].split(']');
     let homeImages = homeImages2[0].split(', ');
@@ -57,6 +56,7 @@ const Match = ({item, onPress, user}) => {
     let awayImages = awayImages2[0].split(', ');
     setHome(homeImages);
     setAway(awayImages);
+<<<<<<< HEAD
     // let homePlayers = await fetchTeamPlayers(item.home.id);
     // console.log('homePlayers', homePlayers);
     // let awayPlayers = await fetchTeamPlayers(item.away.id);
@@ -72,6 +72,12 @@ const Match = ({item, onPress, user}) => {
     // console.log(`findAway`, findAway);
     // console.log(`item.home.id`, item.home.id);
     // console.log(`item.away.id`, item.away.id);
+=======
+
+    let findHome = await findTeam(user.id, item.home.id);
+    let findAway = await findTeam(user.id, item.away.id);
+
+>>>>>>> c92e71213968fe4881cf29a1cced3dd075a0e459
     if (findHome) {
       setFind('home');
     } else if (findAway) {
@@ -121,6 +127,7 @@ const Match = ({item, onPress, user}) => {
     //   console.log('error fetching todos', err);
     // }
   }
+
   if (item.awayScore === 10 || item.homeScore === 10) {
     return (
       <View>
@@ -131,8 +138,6 @@ const Match = ({item, onPress, user}) => {
             height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
-            // borderWidth: 1,
-            // borderColor: 'red',
           }}>
           <View style={{flexDirection: 'row'}}>
             <View
@@ -426,10 +431,7 @@ const ScheduleScreen = ({navigation, route}) => {
     getDay(selectedId);
     onRefresh();
     const unsubscribe = navigation.addListener('focus', () => {
-      // The screen is focused
-      // Call any action
       onRefresh();
-      console.log('object REFRESHING HKANA:>> ');
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -438,7 +440,6 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const getDay = React.useCallback(
     (item, option = null) => {
-      console.log('item ni i i i i  - -- - ----- -', item);
       setSelectedId(item);
       getSchedule(item, option);
     },
@@ -450,33 +451,25 @@ const ScheduleScreen = ({navigation, route}) => {
     wait(500).then(() => setRefreshing(false));
   }, [getDay, selectedId]);
 
-  const getSchedule = React.useCallback(
-    async (item, option = null) => {
-      try {
-        console.log('chooseData', chooseData);
-        console.log(`option`, option);
-        let param = option === null ? myValue : option;
-        console.log(`param`, param);
-        const scheduleData = await API.graphql(
-          graphqlOperation(listSchedules, {
-            filter: {
-              date: {eq: item},
-              leagueID: {eq: `${param.id}`},
-            },
-          }),
-        );
-        const schedulePerDay = scheduleData.data.listSchedules.items;
-        console.log(`schedulePerDay`, schedulePerDay);
-        const sorted = schedulePerDay.sort((a, b) => a.index - b.index);
-        console.log('sorted', sorted);
-        setScheduleData(sorted);
-        // return schedulePerDay;
-      } catch (err) {
-        console.log('error fetching schedulePerDay', err);
-      }
-    },
-    [chooseData],
-  );
+  const getSchedule = React.useCallback(async (item, option = null) => {
+    try {
+      let param = option === null ? myValue : option;
+      const scheduleData = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            date: {eq: item},
+            leagueID: {eq: `${param.id}`},
+          },
+        }),
+      );
+      const schedulePerDay = scheduleData.data.listSchedules.items;
+      const sorted = schedulePerDay.sort((a, b) => a.index - b.index);
+      setScheduleData(sorted);
+      // return schedulePerDay;
+    } catch (err) {
+      console.log('error fetching schedulePerDay', err);
+    }
+  }, []);
 
   // const matches = ({item}) => {
   //   renderSchedule(item);
@@ -539,35 +532,29 @@ const ScheduleScreen = ({navigation, route}) => {
     return count;
   }
 
-  const getDayData = React.useCallback(
-    (number, date) => {
-      let newDate = new Date(date);
-      let odor;
-      for (let i = 0; i < number; i++) {
-        odor = moment(date).format('dddd');
-        if (odor === 'Saturday') {
-          date = new Date(newDate.setDate(newDate.getDate() + 2));
-        } else if (odor === 'Sunday') {
-          date = new Date(newDate.setDate(newDate.getDate() + 1));
-        }
-        date = moment(date).format('M/D/YYYY');
-        setDayData(prev => [...prev, date]);
+  const getDayData = React.useCallback((number, date) => {
+    let newDate = new Date(date);
+    let odor;
+    for (let i = 0; i < number; i++) {
+      odor = moment(date).format('dddd');
+      if (odor === 'Saturday') {
+        date = new Date(newDate.setDate(newDate.getDate() + 2));
+      } else if (odor === 'Sunday') {
         date = new Date(newDate.setDate(newDate.getDate() + 1));
       }
-      console.log('dayData >>>>>', dayData);
-    },
-    [dayData],
-  );
+      date = moment(date).format('M/D/YYYY');
+      setDayData(prev => [...prev, date]);
+      date = new Date(newDate.setDate(newDate.getDate() + 1));
+    }
+  }, []);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
-    console.log(`firstDate in getday`, firstDate);
   };
 
   const setData = React.useCallback(
     async option => {
       setDayData([]);
-      console.log(`set data hiigdlee value ---> `, option);
       myValue = option;
       await setChooseData(option);
       getDay(firstDate, option);

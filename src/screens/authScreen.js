@@ -48,11 +48,6 @@ const SwitchView = ({value, onPress}) => {
   const [new_password, setNew_Password] = useState('');
 
   async function signUp() {
-    console.log(email);
-    console.log(password);
-    console.log(username);
-    console.log('dugaar-->', phone_number);
-
     try {
       await Auth.signUp({
         username,
@@ -65,7 +60,6 @@ const SwitchView = ({value, onPress}) => {
         },
       });
 
-      console.log('✅ Sign-up Confirmed');
       onPress(3);
     } catch (error) {
       console.log('❌ Error signing up...', error);
@@ -105,7 +99,6 @@ const SwitchView = ({value, onPress}) => {
   async function forgotPasswordEmail() {
     try {
       const temp = Auth.forgotPassword(username);
-      console.log('✅ Email sent', temp);
       showMessage({
         message: `Email sent`,
         type: 'success',
@@ -119,7 +112,6 @@ const SwitchView = ({value, onPress}) => {
   async function forgotPasswordSubmit() {
     try {
       const temp = Auth.forgotPasswordSubmit(username, code, new_password);
-      console.log('Password changed', temp);
       showMessage({
         message: `Password Change`,
         description: 'Log In to your account',
@@ -134,7 +126,6 @@ const SwitchView = ({value, onPress}) => {
   async function confirmSignUp() {
     try {
       let temp = await Auth.confirmSignUp(username, authCode);
-      console.log(temp);
       console.log('✅ Code confirmed');
       onPress(1);
     } catch (error) {
@@ -216,19 +207,7 @@ const SwitchView = ({value, onPress}) => {
                 placeholder="Phone number"
                 keyboardType="number-pad"
               />
-              {/* <View style={styles.radioContainer}>
-                {gender.map(item => (
-                  <RadioButton
-                    onPress={() => onRadioBtnClick(item)}
-                    selected={item.selected}
-                    value={item.value}
-                    key={item.id}>
-                    {item.name}
-                  </RadioButton>
-                ))}
-              </View> */}
 
-              {/* <TouchableOpacity onPress={() => signUp()}> */}
               <TouchableOpacity onPress={() => checkSignUpData()}>
                 <ImageBackground
                   source={images.button}
