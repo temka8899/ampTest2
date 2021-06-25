@@ -10,6 +10,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import {AuthContext} from '../../App';
@@ -104,112 +106,114 @@ export default function EditProfileScreen({navigation}) {
     [setUserInfo],
   );
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <StatusBar barStyle="light-content" />
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headButtonContainer}
-          onPress={() => navigation.pop()}>
-          <Text style={[{color: COLORS.background}, styles.headButton]}>
-            Cancel
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.firstMain}>
-        <View style={styles.firstMainSub}>
-          <Image source={newImage} style={styles.image} />
-        </View>
-        <View>
-          <Text
-            style={{
-              color: COLORS.greyText,
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.5),
-              marginBottom: hp(1),
-              marginTop: hp(2),
-            }}>
-            New name
-          </Text>
-          <TextInput
-            style={styles.input}
-            placeholder={userInfo.name}
-            maxLength={10}
-            onChangeText={text => setNewName(text)}
-            placeholderTextColor={COLORS.purpleText}
-          />
-          <View
-            style={{
-              height: hp(0.3),
-              width: wp(80),
-              backgroundColor: COLORS.purpleText,
-            }}
-          />
-        </View>
-      </View>
-      <View style={styles.buttonMain}>
-        <View style={styles.buttonSub}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.mainContainer}>
+        <StatusBar barStyle="light-content" />
+        <View style={styles.header}>
           <TouchableOpacity
-            onPress={() => setAvatarModal(true)}
-            style={[
-              {
-                borderColor: COLORS.brand,
-              },
-              styles.button,
-            ]}>
-            <Text style={[{color: COLORS.brand}, styles.headButton]}>
-              Change avatar
+            style={styles.headButtonContainer}
+            onPress={() => navigation.pop()}>
+            <Text style={[{color: COLORS.background}, styles.headButton]}>
+              Cancel
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            disabled={btnLoading}
-            onPress={() => updateProfile()}
-            style={[{backgroundColor: COLORS.brand}, styles.button]}>
-            {btnLoading ? (
-              <ActivityIndicator size={'small'} color={COLORS.white} />
-            ) : (
-              <Text style={[{}, styles.headButton]}>Save</Text>
-            )}
-          </TouchableOpacity>
         </View>
-      </View>
-      <Modal
-        animationIn="rubberBand"
-        isVisible={AvatarModal}
-        style={styles.modal}>
-        <View style={styles.modalContainer}>
-          <Text
-            style={{
-              color: COLORS.white,
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.8),
-              marginTop: hp(3),
-              marginBottom: hp(2),
-            }}>
-            Choose your avatar
-          </Text>
-          <FlatList
-            data={Avatars}
-            renderItem={avatarsRender}
-            keyExtractor={item => item.id}
-            extraData={selectedId}
-            numColumns={4}
-            showsHorizontalScrollIndicator={false}
-          />
-          <TouchableOpacity
-            onPress={() => setAvatar()}
-            style={styles.modalButton}>
+        <View style={styles.firstMain}>
+          <View style={styles.firstMainSub}>
+            <Image source={newImage} style={styles.image} />
+          </View>
+          <View>
+            <Text
+              style={{
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.5),
+                marginBottom: wp(2),
+                marginTop: wp(4),
+              }}>
+              New name
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder={userInfo.name}
+              maxLength={10}
+              onChangeText={text => setNewName(text)}
+              placeholderTextColor={COLORS.purpleText}
+            />
+            <View
+              style={{
+                height: wp(0.4),
+                width: wp(80),
+                backgroundColor: COLORS.purpleText,
+              }}
+            />
+          </View>
+        </View>
+        <View style={styles.buttonMain}>
+          <View style={styles.buttonSub}>
+            <TouchableOpacity
+              onPress={() => setAvatarModal(true)}
+              style={[
+                {
+                  borderColor: COLORS.brand,
+                },
+                styles.button,
+              ]}>
+              <Text style={[{color: COLORS.brand}, styles.headButton]}>
+                Change avatar
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              disabled={btnLoading}
+              onPress={() => updateProfile()}
+              style={[{backgroundColor: COLORS.brand}, styles.button]}>
+              {btnLoading ? (
+                <ActivityIndicator size={'small'} color={COLORS.white} />
+              ) : (
+                <Text style={[{}, styles.headButton]}>Save</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+        <Modal
+          animationIn="rubberBand"
+          isVisible={AvatarModal}
+          style={styles.modal}>
+          <View style={styles.modalContainer}>
             <Text
               style={{
                 color: COLORS.white,
                 fontFamily: FONTS.brandFont,
                 fontSize: RFPercentage(1.8),
+                marginTop: wp(6),
+                marginBottom: wp(4),
               }}>
-              OK
+              Choose your avatar
             </Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-    </SafeAreaView>
+            <FlatList
+              data={Avatars}
+              renderItem={avatarsRender}
+              keyExtractor={item => item.id}
+              extraData={selectedId}
+              numColumns={4}
+              showsHorizontalScrollIndicator={false}
+            />
+            <TouchableOpacity
+              onPress={() => setAvatar()}
+              style={styles.modalButton}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.8),
+                }}>
+                OK
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -225,16 +229,15 @@ const styles = StyleSheet.create({
   firstMain: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 2,
   },
   firstMainSub: {
-    height: hp(25),
+    height: wp(50),
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   header: {
-    height: hp(6),
+    height: wp(13),
     flexDirection: 'row',
     paddingHorizontal: wp(3),
     justifyContent: 'space-between',
@@ -246,22 +249,27 @@ const styles = StyleSheet.create({
   },
   headButtonContainer: {
     backgroundColor: COLORS.brand,
-    height: hp(4),
+    height: wp(9),
     width: wp(25),
     justifyContent: 'center',
     alignItems: 'center',
   },
   input: {
-    height: hp(4),
+    height: wp(8),
     width: wp(80),
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
     fontSize: RFPercentage(1.8),
     padding: 0,
   },
+  image: {
+    width: wp(40),
+    height: wp(40),
+    resizeMode: 'contain',
+  },
   button: {
     width: wp(80),
-    height: hp(5),
+    height: wp(11),
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
@@ -274,7 +282,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonSub: {
-    height: hp(12),
+    height: wp(26),
     justifyContent: 'space-between',
   },
   modal: {
@@ -287,22 +295,17 @@ const styles = StyleSheet.create({
     borderColor: COLORS.brand,
     borderWidth: 2,
     width: wp(80),
-    height: hp(57),
+    height: wp(120),
     alignItems: 'center',
   },
   modalButton: {
     backgroundColor: COLORS.brand,
     width: wp(30),
-    height: hp(4),
-    marginBottom: hp(2),
-    marginTop: hp(2),
+    height: wp(8),
+    marginBottom: wp(4),
+    marginTop: wp(4),
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  image: {
-    width: wp(40),
-    height: hp(20),
-    resizeMode: 'contain',
   },
   avatars: {
     width: wp(16),

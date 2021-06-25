@@ -14,30 +14,19 @@ import {hp, wp} from '../constants/theme';
 import Modal from 'react-native-modal';
 import {EndModal} from '../components/EndModal';
 import {
-  createGame,
-  createLeague,
-  createTeam,
-  createTeamPlayer,
-  createLeaguePlayer,
-  createSchedule,
-  deleteLeaguePlayer,
   updateLeague,
   updateSchedule,
   updateTeamPlayer,
   updateTeam,
-  deleteLeague,
   updatePlayer,
 } from '../graphql/mutations';
 import {
-  listGames,
   listLeagues,
   listPlayers,
   listTeamPlayers,
   listTeams,
-  listLeaguePlayers,
-  getTeam,
-  listSchedules,
 } from '../graphql/queries';
+
 import {AuthContext} from '../../App';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
@@ -466,7 +455,7 @@ export default function CountScreen({navigation, route}) {
           <View
             style={{
               width: wp(70),
-              height: hp(20),
+              height: wp(40),
               backgroundColor: COLORS.background,
               borderColor: COLORS.brand,
               borderWidth: 2,
@@ -475,7 +464,7 @@ export default function CountScreen({navigation, route}) {
             }}>
             <View
               style={{
-                height: hp(11),
+                height: wp(25),
                 flexDirection: 'column',
                 justifyContent: 'space-between',
               }}>
@@ -523,7 +512,7 @@ export default function CountScreen({navigation, route}) {
             width: wp(22),
             justifyContent: 'space-between',
             marginHorizontal: wp(39),
-            marginTop: hp(5.5),
+            marginTop: wp(12),
           }}>
           <TouchableOpacity
             onPress={() =>
@@ -663,7 +652,7 @@ export default function CountScreen({navigation, route}) {
             width: wp(22),
             justifyContent: 'space-between',
             marginHorizontal: wp(39),
-            marginTop: hp(5.5),
+            marginTop: wp(12),
           }}>
           <TouchableOpacity
             onPress={() =>
@@ -816,7 +805,7 @@ const styles = StyleSheet.create({
   modalBtnContainer: {
     backgroundColor: COLORS.brand,
     width: wp(50),
-    height: hp(4),
+    height: wp(9),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -868,7 +857,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: wp(9.6),
-    height: hp(4.43),
+    height: wp(9.6),
     marginTop: wp(2),
   },
   teamScoreContainer: {
@@ -878,7 +867,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: COLORS.brand,
     width: wp(22),
-    height: hp(5),
+    height: wp(11),
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: wp(39.1),
@@ -896,11 +885,11 @@ const styles = StyleSheet.create({
   removeBtn: {
     resizeMode: 'contain',
     width: wp(10),
-    height: hp(5.2),
+    height: wp(10),
   },
   backBtn: {
     width: wp(9.6),
-    height: hp(4.43),
+    height: wp(9.6),
     opacity: 0.5,
   },
 });

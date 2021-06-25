@@ -10,6 +10,8 @@ import {
   ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
+  ScrollView,
 } from 'react-native';
 
 import {wp, hp, COLORS, FONTS} from '../constants/theme';
@@ -29,12 +31,17 @@ import {
   listSchedules,
   listTeamPlayers,
 } from '../graphql/queries';
+
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
 import IntroModal from '../components/IntroModal';
 import {images} from '../constants';
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 Amplify.configure({
   ...awsmobile,
@@ -63,7 +70,6 @@ const Match = ({item, onPress, user}) => {
     if (item !== null) {
       setImgLoad(false);
     }
-    // console.log(`item.homeImage`, item.homeImage);
     let homeImages1 = item.homeImage.split('[');
     let homeImages2 = homeImages1[1].split(']');
     let homeImages = homeImages2[0].split(', ');
@@ -72,23 +78,16 @@ const Match = ({item, onPress, user}) => {
     let awayImages = awayImages2[0].split(', ');
     setHome(homeImages);
     setAway(awayImages);
-    // let homePlayers = await fetchTeamPlayers(item.home.id);
-    // console.log('homePlayers', homePlayers);
-    // let awayPlayers = await fetchTeamPlayers(item.away.id);
-    // console.log(`awayPlayers`, awayPlayers);
+
     let findHome = await findTeam(user.id, item.home.id);
     let findAway = await findTeam(user.id, item.away.id);
-    // console.log(`findHome`, findHome);
-    // console.log(`findAway`, findAway);
-    // console.log(`item.home.id`, item.home.id);
-    // console.log(`item.away.id`, item.away.id);
+
     if (findHome) {
       setFind('home');
     } else if (findAway) {
       setFind('away');
     }
-    console.log(`Home`, Home);
-  }, [Home, item, user.id]);
+  }, [item]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -128,7 +127,7 @@ const Match = ({item, onPress, user}) => {
           onPress={onPress}
           style={{
             width: wp(100),
-            height: hp(13.8),
+            height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
             // borderWidth: 1,
@@ -137,7 +136,7 @@ const Match = ({item, onPress, user}) => {
           <View style={{flexDirection: 'row'}}>
             <View
               style={{
-                height: hp(9.35),
+                height: wp(23),
                 width: wp(39),
                 alignItems: 'center',
               }}>
@@ -168,13 +167,13 @@ const Match = ({item, onPress, user}) => {
             </View>
             <View
               style={{
-                heigh: hp(9.35),
+                heigh: wp(23),
                 width: wp(20),
               }}>
               <View
                 style={{
                   width: wp(20),
-                  height: hp(6.65),
+                  height: wp(15),
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
@@ -209,7 +208,7 @@ const Match = ({item, onPress, user}) => {
 
             <View
               style={{
-                height: hp(9.35),
+                height: wp(23),
                 width: wp(39),
                 alignItems: 'center',
               }}>
@@ -243,9 +242,9 @@ const Match = ({item, onPress, user}) => {
         </View>
         <View
           style={{
-            height: hp(0.1),
-            backgroundColor: COLORS.white,
-            width: wp(80),
+            height: wp(0.2),
+            backgroundColor: COLORS.greyText,
+            width: wp(88),
             justifyContent: 'center',
             alignSelf: 'center',
           }}
@@ -260,7 +259,7 @@ const Match = ({item, onPress, user}) => {
           onPress={onPress}
           style={{
             width: wp(100),
-            height: hp(13.8),
+            height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
             // borderWidth: 1,
@@ -269,7 +268,7 @@ const Match = ({item, onPress, user}) => {
           <View style={{flexDirection: 'row'}}>
             <View
               style={{
-                height: hp(9.35),
+                height: wp(23),
                 width: wp(39),
                 alignItems: 'center',
               }}>
@@ -296,17 +295,18 @@ const Match = ({item, onPress, user}) => {
                   textAlign: 'center',
                 }}>
                 {item.home.name}
+                {/* MMMMMMMMMMMMMMMMMMMM */}
               </Text>
             </View>
             <View
               style={{
-                heigh: hp(9.35),
+                heigh: wp(23),
                 width: wp(20),
               }}>
               <View
                 style={{
                   width: wp(20),
-                  height: hp(6.65),
+                  height: wp(15),
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
@@ -322,7 +322,7 @@ const Match = ({item, onPress, user}) => {
 
             <View
               style={{
-                height: hp(9.35),
+                height: wp(23),
                 width: wp(39),
                 alignItems: 'center',
               }}>
@@ -355,9 +355,9 @@ const Match = ({item, onPress, user}) => {
         </TouchableOpacity>
         <View
           style={{
-            height: hp(0.1),
-            backgroundColor: COLORS.white,
-            width: wp(80),
+            height: wp(0.2),
+            backgroundColor: COLORS.greyText,
+            width: wp(88),
             justifyContent: 'center',
             alignSelf: 'center',
           }}
@@ -375,18 +375,27 @@ const GameScreen = ({navigation}) => {
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = useState(null);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [playerId, setId] = useState('');
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
   const [introModal, setIntroModal] = useState(false);
+  const [userInfoSeted, setUserInfoSeted] = useState(false);
 
   useEffect(() => {
     fetchLeague();
     findGreet();
     getName();
     getSchedule();
-    console.log('userInfo   as d as ', userInfo);
+  }, [getName, getSchedule]);
+
+  const onRefresh = React.useCallback(() => {
+    fetchLeague();
+    findGreet();
+    getName();
+    getSchedule();
+    wait(500).then(() => setRefreshing(false));
   }, [getName, getSchedule]);
 
   const press = item => {
@@ -402,7 +411,7 @@ const GameScreen = ({navigation}) => {
       <Avatar
         item={item}
         onPress={() => press(item)}
-        // backgroundColor={{backgroundColor}}
+        backgroundColor={{backgroundColor}}
       />
     );
   };
@@ -419,7 +428,11 @@ const GameScreen = ({navigation}) => {
   }
 
   const Item = ({item, onPress}) => (
-    <View style={{marginLeft: wp(4), marginTop: hp(2), borderRadius: 20}}>
+    <View
+      style={{
+        marginLeft: wp(4),
+        marginVertical: wp(3),
+      }}>
       <TouchableOpacity
         onPress={onPress}
         style={[styles.item, {backgroundColor: COLORS.background}]}>
@@ -428,16 +441,16 @@ const GameScreen = ({navigation}) => {
             uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
           }}
           style={{
-            width: wp(60),
-            height: hp(36),
+            width: wp(52),
+            height: wp(68),
           }}
           imageStyle={{
-            borderRadius: 50,
-            resizeMode: 'contain',
+            borderRadius: wp(12),
+            // resizeMode: 'contain',
             backgroundColor: COLORS.background,
           }}>
           <LinearGradient
-            style={{flex: 1, borderRadius: 50}}
+            style={{flex: 1, borderRadius: wp(12)}}
             start={{x: 1, y: 0}}
             end={{x: 1, y: 1}}
             colors={['#00000000', '#000']}>
@@ -500,14 +513,14 @@ const GameScreen = ({navigation}) => {
     const playerData = await API.graphql(graphqlOperation(listPlayers));
     setName(user.attributes['custom:Name']);
 
-    setLoading(false);
     let existing = await checkPlayer(playerData, user.username);
     if (existing) {
       getAvatar();
     } else {
       findUser(user);
     }
-    findUser(user);
+    await findUser(user);
+    setLoading(false);
   }, [checkPlayer, findUser, getAvatar]);
 
   const findUser = React.useCallback(
@@ -518,7 +531,7 @@ const GameScreen = ({navigation}) => {
           return item;
         }
       });
-      console.log(`finded`, finded);
+      console.log('finded', finded);
       setUserInfo(finded);
     },
     [setUserInfo],
@@ -570,9 +583,11 @@ const GameScreen = ({navigation}) => {
     },
     [selectedItem],
   );
-  var date = new Date();
+
+  let date = new Date();
   date.setDate(date.getDate());
-  console.log(date.toLocaleDateString());
+  // console.log(date.toLocaleDateString());
+
   const getSchedule = React.useCallback(async () => {
     try {
       const scheduleData = await API.graphql(
@@ -593,107 +608,122 @@ const GameScreen = ({navigation}) => {
   function close() {
     setIntroModal(false);
   }
-  return (
+  return isLoading ? (
+    <SafeAreaView>
+      <Modal
+        isVisible={true}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: COLORS.background,
+          margin: 0,
+        }}>
+        <View style={{width: wp(50), height: wp(50)}}>
+          <LottieView
+            autoPlay
+            source={require('../assets/Lottie/game-loading.json')}
+          />
+        </View>
+      </Modal>
+    </SafeAreaView>
+  ) : (
     <SafeAreaView style={styles.mainContainer}>
-      <StatusBar barStyle="light-content" />
-      {isLoading ? (
-        <SkeletonPlaceholder
-          speed={800}
-          backgroundColor={COLORS.count}
-          highlightColor={'gray'}>
-          <View style={{paddingHorizontal: wp(4)}}>
-            <View style={styles.skeletonFirstContainer}>
-              <View style={{marginHorizontal: wp(5)}}>
-                <View style={styles.skeletonFirstSub} />
-                <View style={styles.skeletonFirstSub} />
-              </View>
-              <View style={styles.skeletonFirstSubSub} />
-            </View>
-            <View style={styles.skeletonSecondContainer}>
-              <View style={styles.skeletonSecondFirstSub} />
-              <View style={styles.skeletonSecondSecondSub} />
-              <View style={styles.skeletonSecondThirdSub} />
-            </View>
-            <View style={styles.skeletonThirdContainer} />
-          </View>
-        </SkeletonPlaceholder>
-      ) : (
-        <View>
-          <View style={styles.header}>
-            <View>
-              <Text
-                style={[
-                  styles.greeting,
-                  {fontSize: RFPercentage(1.8), color: COLORS.greyText},
-                ]}>{`Good ${greet} `}</Text>
-              <Text
-                style={[
-                  styles.greeting,
-                  {marginTop: hp(1), fontSize: RFPercentage(2.5)},
-                ]}>
-                {userInfo === undefined ? 'Hello' : `${userInfo.name}`}
-              </Text>
-            </View>
-            <View>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Tabs', {screen: 'Profile'})
-                }>
-                {userInfo === undefined ? (
-                  <Image source={images.nullPic} style={styles.profileImage} />
-                ) : (
-                  <Image source={userInfo.avatar} style={styles.profileImage} />
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View>
-            {LeagueList.length !== 0 ? (
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={LeagueList}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-                extraData={selectedId}
-                onPress={() => {}}
-              />
-            ) : (
-              <View>
-                <View style={styles.lottie}>
-                  <LottieView
-                    autoPlay
-                    source={require('../assets/Lottie/game-loading.json')}
-                  />
-                  <Text style={styles.lottieText}>LEAGUE CREATING...</Text>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            tintColor={COLORS.brand}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <StatusBar barStyle="light-content" />
+        {isLoading ? (
+          <SkeletonPlaceholder
+            speed={800}
+            backgroundColor={COLORS.count}
+            highlightColor={'gray'}>
+            <View style={{paddingHorizontal: wp(4)}}>
+              <View style={styles.skeletonFirstContainer}>
+                <View style={{marginHorizontal: wp(5)}}>
+                  <View style={styles.skeletonFirstSub} />
+                  <View style={styles.skeletonFirstSub} />
                 </View>
+                <View style={styles.skeletonFirstSubSub} />
               </View>
-            )}
-          </View>
-          <Text
-            style={{
-              color: COLORS.greyText,
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.7),
-              marginLeft: wp(4),
-              marginVertical: hp(2),
-            }}>
-            PLAYING TODAY
-          </Text>
-          <View style={{height: hp(26)}}>
-            <FlatList
-              data={schedule}
-              keyExtractor={item => item.id}
-              renderItem={renderSchedule}
-            />
-          </View>
-          {/* <View>
-            <TouchableOpacity
-              onPress={() => {
-                showNotification(
-                  'Hippo League ehleh gej baina!',
-                  'burtguulne uu!',
-                );
+              <View style={styles.skeletonSecondContainer}>
+                <View style={styles.skeletonSecondFirstSub} />
+                <View style={styles.skeletonSecondSecondSub} />
+                <View style={styles.skeletonSecondThirdSub} />
+              </View>
+              <View style={styles.skeletonThirdContainer} />
+            </View>
+          </SkeletonPlaceholder>
+        ) : (
+          <View>
+            <View style={styles.header}>
+              <View>
+                <Text
+                  style={[
+                    styles.greeting,
+                    {fontSize: RFPercentage(1.8), color: COLORS.greyText},
+                  ]}>{`Good ${greet} `}</Text>
+                <Text
+                  style={[
+                    styles.greeting,
+                    {marginTop: hp(1), fontSize: RFPercentage(2.5)},
+                  ]}>
+                  {userInfo === undefined ? 'Hello' : `${userInfo.name}`}
+                </Text>
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Tabs', {screen: 'Profile'})
+                  }>
+                  {userInfo === undefined ? (
+                    <Image
+                      source={images.nullPic}
+                      style={styles.profileImage}
+                    />
+                  ) : (
+                    <Image
+                      source={userInfo.avatar}
+                      style={styles.profileImage}
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View>
+              {LeagueList.length !== 0 ? (
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  data={LeagueList}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id}
+                  extraData={selectedId}
+                  onPress={() => {}}
+                  style={{
+                    height: wp(75),
+                  }}
+                />
+              ) : (
+                <View>
+                  <View style={styles.lottie}>
+                    <LottieView
+                      autoPlay
+                      source={require('../assets/Lottie/game-loading.json')}
+                    />
+                    <Text style={styles.lottieText}>LEAGUE CREATING...</Text>
+                  </View>
+                </View>
+              )}
+            </View>
+            <View
+              style={{
+                height: wp(12),
+                justifyContent: 'center',
               }}>
               <Text
                 style={{
@@ -701,82 +731,65 @@ const GameScreen = ({navigation}) => {
                   fontFamily: FONTS.brandFont,
                   fontSize: RFPercentage(1.7),
                   marginLeft: wp(4),
-                  marginVertical: hp(2),
                 }}>
-                Test notification
+                PLAYING TODAY
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                handleScheduleNotification(
-                  'Hippo League ehleh gej baina!',
-                  'burtguulne uu!',
-                )
-              }>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.7),
-                  marginLeft: wp(4),
-                  marginVertical: hp(2),
-                }}>
-                Test scheduled notification
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleCancel()}>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.7),
-                  marginLeft: wp(4),
-                  marginVertical: hp(2),
-                }}>
-                Cancel all notification
-              </Text>
-            </TouchableOpacity>
-          </View> */}
-        </View>
-      )}
-      <Modal
-        animationIn="rubberBand"
-        isVisible={AvatarModal}
-        style={styles.modal}>
-        <View style={styles.modalContainer}>
-          <Text
-            style={{
-              color: COLORS.white,
-              fontFamily: FONTS.brandFont,
-              fontSize: RFPercentage(1.8),
-              marginTop: hp(3),
-              marginBottom: hp(2),
-            }}>
-            Choose your avatar
-          </Text>
-          <FlatList
-            data={Avatars}
-            renderItem={avatarsRender}
-            keyExtractor={item => item.id}
-            extraData={selectedId}
-            numColumns={4}
-            showsHorizontalScrollIndicator={false}
-          />
-          <TouchableOpacity
-            onPress={() => setAvatar()}
-            style={styles.modalButton}>
+            </View>
+            <View style={{height: wp(76)}}>
+              <FlatList
+                data={schedule}
+                keyExtractor={item => item.id}
+                renderItem={renderSchedule}
+              />
+              {/* <View
+              style={{
+                height: hp(11),
+                width: '100%',
+                backgroundColor: 'red',
+              }}
+            /> */}
+            </View>
+          </View>
+        )}
+        <Modal
+          animationIn="rubberBand"
+          isVisible={AvatarModal}
+          style={styles.modal}>
+          <View style={styles.modalContainer}>
             <Text
               style={{
                 color: COLORS.white,
                 fontFamily: FONTS.brandFont,
                 fontSize: RFPercentage(1.8),
+                marginTop: hp(3),
+                marginBottom: hp(2),
               }}>
-              OK
+              Choose your avatar
             </Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-      <IntroModal visible={introModal} close={close} />
+            <FlatList
+              data={Avatars}
+              renderItem={avatarsRender}
+              keyExtractor={item => item.id}
+              extraData={selectedId}
+              numColumns={4}
+              showsHorizontalScrollIndicator={false}
+            />
+            <TouchableOpacity
+              onPress={() => setAvatar()}
+              style={styles.modalButton}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.8),
+                }}>
+                OK
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+        <IntroModal visible={introModal} close={close} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -792,14 +805,15 @@ const styles = StyleSheet.create({
   },
   matchPointContainer: {
     width: wp(21.6),
-    height: hp(3.65),
+    height: wp(8),
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
   },
   avatar: {
+    resizeMode: 'contain',
     width: wp(14.4),
-    height: hp(6.65),
+    height: wp(14.4),
   },
   skeletonFirstContainer: {
     flexDirection: 'row',
@@ -846,27 +860,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: wp(4),
-  },
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 0,
-  },
-  modalContainer: {
-    backgroundColor: COLORS.background,
-    borderColor: COLORS.brand,
-    borderWidth: 2,
-    width: wp(80),
-    height: hp(57),
-    alignItems: 'center',
-  },
-  modalButton: {
-    backgroundColor: COLORS.brand,
-    width: wp(30),
-    height: hp(4),
-    marginBottom: hp(2),
-    marginTop: hp(2),
-    justifyContent: 'center',
+    height: wp(16),
     alignItems: 'center',
   },
   lottieText: {
@@ -879,13 +873,36 @@ const styles = StyleSheet.create({
   profileImage: {
     resizeMode: 'contain',
     width: wp(14.4),
-    height: hp(6.65),
+    height: wp(14.4),
   },
   leagueStatus: {
     flex: 1,
     justifyContent: 'flex-end',
     marginBottom: hp(5),
     marginHorizontal: wp(5),
+  },
+
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0,
+  },
+  modalContainer: {
+    backgroundColor: COLORS.background,
+    borderColor: COLORS.brand,
+    borderWidth: 2,
+    width: wp(80),
+    height: wp(120),
+    alignItems: 'center',
+  },
+  modalButton: {
+    backgroundColor: COLORS.brand,
+    width: wp(30),
+    height: wp(8),
+    marginBottom: wp(4),
+    marginTop: wp(4),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   avatars: {
     width: wp(16),

@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: wp(80),
-    height: hp(30),
+    height: wp(60),
     backgroundColor: COLORS.background,
     borderColor: COLORS.brand,
     borderWidth: 2,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.brand,
     borderWidth: 2,
     width: wp(28),
-    height: hp(5),
+    height: wp(10),
     justifyContent: 'center',
     alignItems: 'center',
   },

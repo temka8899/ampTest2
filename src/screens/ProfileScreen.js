@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
+  RefreshControl,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
@@ -107,7 +108,7 @@ const Match = ({item, onPress, user}) => {
         <View
           style={{
             width: wp(100),
-            height: hp(10.2),
+            height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
             // borderWidth: 1,
@@ -116,7 +117,7 @@ const Match = ({item, onPress, user}) => {
           <View style={{flexDirection: 'row'}}>
             <View
               style={{
-                height: hp(10.2),
+                height: wp(22),
                 width: wp(28.13),
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -197,7 +198,7 @@ const Match = ({item, onPress, user}) => {
 
             <View
               style={{
-                height: hp(10.2),
+                height: wp(22),
                 width: wp(28.13),
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -235,8 +236,8 @@ const Match = ({item, onPress, user}) => {
         </View>
         <View
           style={{
-            height: hp(0.1),
-            backgroundColor: COLORS.white,
+            height: wp(0.2),
+            backgroundColor: COLORS.greyText,
             width: wp(83),
             justifyContent: 'center',
             alignSelf: 'center',
@@ -248,6 +249,10 @@ const Match = ({item, onPress, user}) => {
     return <View></View>;
   }
 };
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('');
@@ -258,12 +263,17 @@ const Profile = ({navigation}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   // const [xpCount, setXpCount] = useState(true);
   const [scheduleData, setScheduleData] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     getXp();
     fetchTeamPlayers();
   }, []);
-
+  // const onRefresh = React.useCallback(() => {
+  //   // checkInLeague();
+  //   useEffect();
+  //   wait(500).then(() => setRefreshing(false));
+  // }, []);
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
@@ -293,7 +303,11 @@ const Profile = ({navigation}) => {
       console.log('error fetching schedulePerDay', err);
     }
   }
+
   const getXp = React.useCallback(async () => {
+    // let income = true;
+    // while (income) {
+    //   if (userInfo !== undefined) {
     let count = true;
     let value = userInfo.xp;
     let diff = 0;
@@ -320,6 +334,12 @@ const Profile = ({navigation}) => {
     setLoading(false);
 
     setXpPercent((xp * 100) / max);
+    // income = false;
+    //   }
+    //   setTimeout(() => {
+    //     onRefresh();
+    //   }, 1000);
+    // }
   }, []);
 
   const updateLevel = React.useCallback(
@@ -343,7 +363,7 @@ const Profile = ({navigation}) => {
       }
       findUser(user);
     },
-    [findUser, userInfo.id],
+    [findUser],
   );
 
   async function fetchTeamPlayers() {
@@ -596,7 +616,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: wp(9.6),
-    height: hp(4.43),
+    height: wp(9.6),
   },
   mainContainer: {
     flex: 1,
@@ -609,7 +629,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: wp(100),
-    height: hp(7),
+    height: wp(14),
     paddingHorizontal: wp(3),
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -617,13 +637,13 @@ const styles = StyleSheet.create({
   },
   subContainer: {
     width: wp(100),
-    height: hp(16),
+    height: wp(40),
     justifyContent: 'center',
     alignItems: 'center',
   },
   subSubContainer: {
     width: wp(100),
-    height: hp(16),
+    height: wp(40),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -637,12 +657,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   levelContainer: {
+    marginTop: wp(1),
     flexDirection: 'row',
     alignItems: 'center',
   },
   editButton: {
-    width: wp(7.53),
-    height: hp(6.09),
+    width: wp(7),
+    height: wp(7),
     resizeMode: 'contain',
     marginLeft: wp(2),
   },
@@ -721,7 +742,7 @@ const styles = StyleSheet.create({
     marginTop: hp(1),
   },
   chooseButton: {
-    height: hp(6),
+    height: wp(13),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -747,7 +768,7 @@ const styles = StyleSheet.create({
   plusBtn: {
     resizeMode: 'contain',
     width: wp(7.4),
-    height: hp(3.2),
+    height: wp(7.4),
     borderColor: 'white',
   },
 });
