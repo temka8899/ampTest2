@@ -106,7 +106,6 @@ const Match = ({item, onPress, user}) => {
     let homeId1 = teamId.split('[');
     let homeId2 = homeId1[1].split(']');
     let homeId = homeId2[0].split(', ');
-    console.log('>>>>>>>>>>>>>>>>>>>>', homeId);
     if (homeId[0] == id) {
       return true;
     } else if (homeId[1] == id) {
@@ -114,22 +113,6 @@ const Match = ({item, onPress, user}) => {
     } else {
       return false;
     }
-    // try {
-    //   const leagueData = await API.graphql(
-    //     graphqlOperation(listTeamPlayers, {
-    //       filter: {playerID: {eq: `${id}`}, teamID: {eq: `${teamid}`}},
-    //     }),
-    //   );
-    //   const todos = leagueData.data.listTeamPlayers.items;
-    //   // console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
-    //   if (todos.length === 1) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // } catch (err) {
-    //   console.log('error fetching todos', err);
-    // }
   }
   if (item.awayScore === 10 || item.homeScore === 10) {
     return (
@@ -141,8 +124,6 @@ const Match = ({item, onPress, user}) => {
             height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
-            // borderWidth: 1,
-            // borderColor: 'red',
           }}>
           <View style={{flexDirection: 'row'}}>
             <View

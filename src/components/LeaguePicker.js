@@ -32,12 +32,20 @@ const LeaguePicker = props => {
   const option = LeagueList.map((item, index) => {
     return (
       <>
-        {item.isStart && (
+        {item.isStart == true ? (
           <TouchableOpacity
             style={styles.option}
             key={index}
             onPress={() => onPressItem(item)}>
             <Text style={styles.text}>{item.game.name}</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.option}
+            disabled={true}
+            key={index}
+            onPress={() => onPressItem(item)}>
+            <Text style={styles.text}>{item.game.name} starting...</Text>
           </TouchableOpacity>
         )}
       </>
