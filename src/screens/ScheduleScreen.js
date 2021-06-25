@@ -56,21 +56,10 @@ const Match = ({item, onPress, user}) => {
     let awayImages = awayImages2[0].split(', ');
     setHome(homeImages);
     setAway(awayImages);
-    // let homePlayers = await fetchTeamPlayers(item.home.id);
-    // console.log('homePlayers', homePlayers);
-    // let awayPlayers = await fetchTeamPlayers(item.away.id);
-    // console.log(`awayPlayers`, awayPlayers);
 
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //let findHome = await findTeam(user.id, item.home.id);
-    //let findAway = await findTeam(user.id, item.away.id);
     let findHome = await findTeam(user.id, item.homePlayers);
     let findAway = await findTeam(user.id, item.awayPlayers);
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    // console.log(`findHome`, findHome);
-    // console.log(`findAway`, findAway);
-    // console.log(`item.home.id`, item.home.id);
-    // console.log(`item.away.id`, item.away.id);
+
     if (findHome) {
       setFind('home');
     } else if (findAway) {
@@ -92,17 +81,9 @@ const Match = ({item, onPress, user}) => {
     }
   }
   async function findTeam(id, teamId) {
-    // try {
-    //   const leagueData = await API.graphql(
-    //     graphqlOperation(listTeamPlayers, {
-    //       filter: {playerID: {eq: `${id}`}, teamID: {eq: `${teamid}`}},
-    //     }),
-    //   );
-    //   const todos = leagueData.data.listTeamPlayers.items;
     let homeId1 = teamId.split('[');
     let homeId2 = homeId1[1].split(']');
     let homeId = homeId2[0].split(', ');
-    console.log('>>>>>>>>>>>>>>>>>>>>', homeId);
     if (homeId[0] == id) {
       return true;
     } else if (homeId[1] == id) {
@@ -110,15 +91,6 @@ const Match = ({item, onPress, user}) => {
     } else {
       return false;
     }
-
-    // if (todos.length === 1) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
-    // } catch (err) {
-    //   console.log('error fetching todos', err);
-    // }
   }
 
   if (item.awayScore === 10 || item.homeScore === 10) {
@@ -522,6 +494,7 @@ const ScheduleScreen = ({navigation, route}) => {
     if (s % perDay !== 0) {
       count++;
     }
+    count = count + 3;
     return count;
   }
 

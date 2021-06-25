@@ -286,6 +286,8 @@ const AdminScreen = ({navigation}) => {
             awayImage: playerAvatar2,
             homePlayers: playerID1,
             awayPlayers: playerID2,
+            playOffIndex: 0,
+            finalsIndex: 0,
           },
         }),
       );

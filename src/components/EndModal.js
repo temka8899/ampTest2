@@ -8,7 +8,6 @@ import {COLORS, FONTS, wp} from '../constants/theme';
 
 export const EndModal = props => {
   const [allData, setAllData] = useState(props.allData);
-  console.log(`allData`, allData);
   const [winner, setWinner] = useState({
     one: {
       point: 0,
