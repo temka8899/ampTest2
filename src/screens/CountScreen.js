@@ -82,9 +82,7 @@ export default function CountScreen({navigation, route}) {
 
   const getPlayerData = React.useCallback(async item => {
     let homePlayers = await fetchTeamPlayers(item.home.id);
-    console.log('homePlayers>>>>>>>', homePlayers);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
-    console.log(`awayPlayers>>>>>>>`, awayPlayers);
     setHome(homePlayers);
     setAway(awayPlayers);
     initMatch(homePlayers, awayPlayers);
@@ -146,8 +144,6 @@ export default function CountScreen({navigation, route}) {
   }
   const cancelBtnPress = () => {
     // setCancelPress(true);
-    console.log('object');
-    console.log(`findMistake`, findMistake);
     switch (findMistake) {
       case 1:
         setAllPoint(prev => ({
@@ -220,7 +216,6 @@ export default function CountScreen({navigation, route}) {
         }
       });
       setUserInfo(finded);
-      console.log('context player model data', finded);
     },
     [setUserInfo],
   );
@@ -533,15 +528,6 @@ export default function CountScreen({navigation, route}) {
         _teamID4.push(player4[0].player.id);
         _teamID4.push(player4[1].player.id);
 
-        console.log(_teamAvatar1);
-        console.log(_teamAvatar2);
-        console.log(_teamAvatar3);
-        console.log(_teamAvatar4);
-        console.log(_teamID1);
-        console.log(_teamID2);
-        console.log(_teamID3);
-        console.log(_teamID4);
-
         _addSchedule(
           sorted[1].id,
           sorted[2].id,
@@ -574,7 +560,6 @@ export default function CountScreen({navigation, route}) {
         if (date2 == 6) {
           date.setDate(date.getDate() + 2);
         }
-        console.log('>>>>>', date);
 
         _addSchedule(
           sorted[0].id,
@@ -624,7 +609,7 @@ export default function CountScreen({navigation, route}) {
         for (var i = 0; i < 2; i++) {
           sorted.push(teams[i]);
         }
-        console.log('>???????????', sorted);
+
         var date = new Date();
         date.setDate(date.getDate() + 1);
         var date2 = date.getDay();
@@ -730,7 +715,6 @@ export default function CountScreen({navigation, route}) {
           },
         }),
       );
-      // console.log('Schedule Created');
     } catch (err) {
       console.log('error creating Schedule:', err);
     }

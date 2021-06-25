@@ -84,7 +84,6 @@ const Match = ({item, onPress, user}) => {
     let homeId1 = teamId.split('[');
     let homeId2 = homeId1[1].split(']');
     let homeId = homeId2[0].split(', ');
-    console.log('>>>>>>>>>>>>>>>>>>>>', homeId);
     if (homeId[0] == id) {
       return true;
     } else if (homeId[1] == id) {
@@ -495,6 +494,7 @@ const ScheduleScreen = ({navigation, route}) => {
     if (s % perDay !== 0) {
       count++;
     }
+    count = count + 3;
     return count;
   }
 
