@@ -146,9 +146,8 @@ const StandingsScreen = ({navigation, route}) => {
   );
 
   const onRefresh = React.useCallback(() => {
-    setData(chooseData);
     wait(500).then(() => setRefreshing(false));
-  }, [chooseData, setData]);
+  }, []);
 
   const fetchTeam = React.useCallback(async lgID => {
     try {
