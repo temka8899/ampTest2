@@ -50,218 +50,6 @@ const styles1 = StyleSheet.create({
   },
 });
 
-const Match = ({item, onPress, user}) => {
-  const [Home, setHome] = useState(undefined);
-  const [Away, setAway] = useState(undefined);
-  const [imgLoad, setImgLoad] = useState(true);
-  const [find, setFind] = useState('');
-  const [win, setWin] = useState(false);
-
-  useEffect(() => {
-    getPlayerData();
-  }, [getPlayerData]);
-
-  const getPlayerData = React.useCallback(async () => {
-    let homePlayers = await fetchTeamPlayers(item.home.id);
-    let awayPlayers = await fetchTeamPlayers(item.away.id);
-    let finded = await findTeam(user.id);
-    // setMyTeam(finded);
-    if (item.home.id === finded[0].teamID) {
-      setFind('home');
-    } else if (item.away.id === finded[0].teamID) {
-      setFind('away');
-    }
-    if (item.awayScore === 10) {
-      if (find === 'away') {
-        setWin(true);
-      } else {
-        setWin(false);
-      }
-    } else {
-      if (find === 'home') {
-        setWin(true);
-      } else {
-        setWin(false);
-      }
-    }
-    setHome(homePlayers);
-    setAway(awayPlayers);
-    setImgLoad(false);
-  }, [find, item.away.id, item.awayScore, item.home.id, user.id]);
-
-  async function fetchTeamPlayers(id) {
-    try {
-      const leagueData = await API.graphql(
-        graphqlOperation(listTeamPlayers, {
-          filter: {teamID: {eq: id}},
-        }),
-      );
-      const todos = leagueData.data.listTeamPlayers.items;
-      return todos;
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
-  }
-  async function findTeam(id) {
-    try {
-      const leagueData = await API.graphql(
-        graphqlOperation(listTeamPlayers, {
-          filter: {playerID: {eq: `${id}`}},
-        }),
-      );
-      const todos = leagueData.data.listTeamPlayers.items;
-      return todos;
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
-  }
-  if ((item.awayScore === 10 || item.homeScore === 10) && find !== '') {
-    return (
-      <View>
-        <View
-          style={{
-            width: wp(100),
-            height: wp(28),
-            justifyContent: 'center',
-            alignItems: 'center',
-            // borderWidth: 1,
-            // borderColor: 'red',
-          }}>
-          <View style={{flexDirection: 'row'}}>
-            <View
-              style={{
-                height: wp(22),
-                width: wp(28.13),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              {Home && (
-                <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
-                </View>
-              )}
-              <Text
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                style={{
-                  color: find === 'home' ? COLORS.brand : COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  width: wp(28.13),
-                  marginTop: wp(2.5),
-                  textAlign: 'center',
-                }}>
-                {item.home.name}
-              </Text>
-            </View>
-            <View style={styles.matchPointContainer}>
-              <View
-                style={{
-                  width: wp(8),
-                  alignItems: 'center',
-                }}>
-                <Text style={[styles.matchPoint, {color: COLORS.greyText}]}>
-                  {item.homeScore}
-                </Text>
-              </View>
-
-              {win ? (
-                <Text
-                  style={[
-                    styles.matchPoint,
-                    {
-                      color: COLORS.green,
-                      fontSize: RFPercentage(1.6),
-                    },
-                  ]}>
-                  Win
-                </Text>
-              ) : (
-                <Text
-                  style={[
-                    styles.matchPoint,
-                    {
-                      color: COLORS.red,
-                      fontSize: RFPercentage(1.6),
-                    },
-                  ]}>
-                  Lose
-                </Text>
-              )}
-              <View
-                style={{
-                  width: wp(8),
-                  alignItems: 'center',
-                }}>
-                <Text style={[styles.matchPoint, {color: COLORS.greyText}]}>
-                  {item.awayScore}
-                </Text>
-              </View>
-            </View>
-
-            <View
-              style={{
-                height: wp(22),
-                width: wp(28.13),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              {Away && (
-                <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => (
-                    <>
-                      {imgLoad ? (
-                        <ActivityIndicator size={'small'} color={'red'} />
-                      ) : (
-                        <Image
-                          source={_item.player.avatar}
-                          style={styles.avatar}
-                        />
-                      )}
-                    </>
-                  ))}
-                </View>
-              )}
-              <Text
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                style={{
-                  color: find === 'away' ? COLORS.brand : COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  width: wp(28.13),
-                  marginTop: wp(2.5),
-                  textAlign: 'center',
-                }}>
-                {item.away.name}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            height: wp(0.2),
-            backgroundColor: COLORS.greyText,
-            width: wp(83),
-            justifyContent: 'center',
-            alignSelf: 'center',
-          }}
-        />
-      </View>
-    );
-  } else {
-    return <View></View>;
-  }
-};
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
@@ -279,25 +67,237 @@ const Profile = ({navigation}) => {
   const [teamNames, setTeamNames] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
+  const Match = ({item, onPress, user}) => {
+    const [Home, setHome] = useState(undefined);
+    const [Away, setAway] = useState(undefined);
+    const [imgLoad, setImgLoad] = useState(true);
+    const [find, setFind] = useState('');
+    const [win, setWin] = useState(false);
+
+    useEffect(() => {
+      getPlayerData();
+    }, [getPlayerData]);
+
+    const getPlayerData = React.useCallback(async () => {
+      let homePlayers = await fetchTeamPlayers(item.home.id);
+      let awayPlayers = await fetchTeamPlayers(item.away.id);
+      let finded = await findTeam(user.id);
+      // setMyTeam(finded);
+      if (item.home.id === finded[0].teamID) {
+        setFind('home');
+      } else if (item.away.id === finded[0].teamID) {
+        setFind('away');
+      }
+      if (item.awayScore === 10) {
+        if (find === 'away') {
+          setWin(true);
+        } else {
+          setWin(false);
+        }
+      } else {
+        if (find === 'home') {
+          setWin(true);
+        } else {
+          setWin(false);
+        }
+      }
+      setHome(homePlayers);
+      setAway(awayPlayers);
+      setImgLoad(false);
+    }, [find, item.away.id, item.awayScore, item.home.id, user.id]);
+    async function fetchTeamPlayers(id) {
+      try {
+        const leagueData = await API.graphql(
+          graphqlOperation(listTeamPlayers, {
+            filter: {teamID: {eq: id}},
+          }),
+        );
+        const todos = leagueData.data.listTeamPlayers.items;
+        return todos;
+      } catch (err) {
+        console.log('error fetching todos', err);
+      }
+    }
+    async function findTeam(id) {
+      try {
+        const leagueData = await API.graphql(
+          graphqlOperation(listTeamPlayers, {
+            filter: {playerID: {eq: `${id}`}},
+          }),
+        );
+        const todos = leagueData.data.listTeamPlayers.items;
+        return todos;
+      } catch (err) {
+        console.log('error fetching todos', err);
+      }
+    }
+    if ((item.awayScore === 10 || item.homeScore === 10) && find !== '') {
+      return (
+        <View>
+          <View
+            style={{
+              width: wp(100),
+              height: wp(28),
+              justifyContent: 'center',
+              alignItems: 'center',
+              // borderWidth: 1,
+              // borderColor: 'red',
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <View
+                style={{
+                  height: wp(22),
+                  width: wp(28.13),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {Home && (
+                  <View style={{flexDirection: 'row'}}>
+                    {Home.map(_item => (
+                      <>
+                        {imgLoad ? (
+                          <ActivityIndicator size={'small'} color={'red'} />
+                        ) : (
+                          <Image
+                            source={_item.player.avatar}
+                            style={styles.avatar}
+                          />
+                        )}
+                      </>
+                    ))}
+                  </View>
+                )}
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={{
+                    color: find === 'home' ? COLORS.brand : COLORS.greyText,
+                    fontFamily: FONTS.brandFont,
+                    width: wp(28.13),
+                    marginTop: wp(2.5),
+                    textAlign: 'center',
+                  }}>
+                  {item.home.name}
+                </Text>
+              </View>
+              <View style={styles.matchPointContainer}>
+                <View
+                  style={{
+                    width: wp(8),
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={[
+                      styles.matchPoint,
+                      {
+                        color: item.homeScore == 10 ? 'green' : COLORS.red,
+                      },
+                    ]}>
+                    {item.homeScore}
+                  </Text>
+                </View>
+                <Text
+                  style={[
+                    styles.matchPoint,
+                    {
+                      color: COLORS.white,
+                      fontSize: RFPercentage(1.6),
+                    },
+                  ]}>
+                  -
+                </Text>
+
+                <View
+                  style={{
+                    width: wp(8),
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={[
+                      styles.matchPoint,
+                      {color: item.awayScore == 10 ? COLORS.green : COLORS.red},
+                    ]}>
+                    {item.awayScore}
+                  </Text>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  height: wp(22),
+                  width: wp(28.13),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {Away && (
+                  <View style={{flexDirection: 'row'}}>
+                    {Away.map(_item => (
+                      <>
+                        {imgLoad ? (
+                          <ActivityIndicator size={'small'} color={'red'} />
+                        ) : (
+                          <Image
+                            source={_item.player.avatar}
+                            style={styles.avatar}
+                          />
+                        )}
+                      </>
+                    ))}
+                  </View>
+                )}
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={{
+                    color: find === 'away' ? COLORS.brand : COLORS.greyText,
+                    fontFamily: FONTS.brandFont,
+                    width: wp(28.13),
+                    marginTop: wp(2.5),
+                    textAlign: 'center',
+                  }}>
+                  {item.away.name}
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              height: wp(0.2),
+              backgroundColor: COLORS.greyText,
+              width: wp(83),
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}
+          />
+        </View>
+      );
+    } else {
+      return <View></View>;
+    }
+  };
+
   useEffect(() => {
     getXp();
     fetchTeamPlayers();
     _teamNames(userInfo.id);
   }, []);
-  // const onRefresh = React.useCallback(() => {
-  //   // checkInLeague();
-  //   useEffect();
-  //   wait(500).then(() => setRefreshing(false));
-  // }, []);
+
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
 
-  const setData = async option => {
+  // const onRefresh = React.useCallback(() => {
+  //   // mat.ref.get
+  //   wait(500).then(() => setRefreshing(false));
+  // }, []);
+
+  const setData = React.useCallback(async option => {
     setChooseData(option);
     let Data = await getSchedule(option);
+    console.log('hsitrory data :>> ', Data);
     setScheduleData(Data);
-  };
+  }, []);
+
   async function getSchedule(item) {
     try {
       const scheduleData = await API.graphql(
@@ -395,14 +395,7 @@ const Profile = ({navigation}) => {
   }
 
   function renderSchedule({item}) {
-    return (
-      <Match
-        item={item}
-        // onPress={() => startMatch(item)}
-        // selectedId={selectedId}
-        user={userInfo}
-      />
-    );
+    return <Match item={item} user={userInfo} />;
   }
   const findUser = React.useCallback(
     async user => {
@@ -417,13 +410,6 @@ const Profile = ({navigation}) => {
     [setUserInfo],
   );
 
-  async function isAdmin() {
-    if (userInfo.admin) {
-      setAdminVisible(true);
-    } else {
-      setAdminVisible(false);
-    }
-  }
   const modalHide = () => {
     setLogoutModalVisible(false);
   };
@@ -503,12 +489,14 @@ const Profile = ({navigation}) => {
         <View>
           <View style={styles.header}>
             <View>
-              {/* {adminVisible ? ( */}
-              <TouchableOpacity
-                onPress={() => navigation.navigate('AdminScreen')}>
-                <Image source={icons.plus} style={styles.plusBtn} />
-              </TouchableOpacity>
-              {/* ) : null} */}
+              <>
+                {userInfo.admin && (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('AdminScreen')}>
+                    <Image source={icons.plus} style={styles.plusBtn} />
+                  </TouchableOpacity>
+                )}
+              </>
             </View>
             <TouchableOpacity onPress={() => setLogoutModalVisible(true)}>
               <Image source={icons.logOut} style={styles.plusBtn} />
@@ -540,7 +528,7 @@ const Profile = ({navigation}) => {
               </View>
             </View>
           </View>
-          <View style={{}}>
+          <View style={{borderColor: 'red', borderWidth: 1}}>
             {teamNames.map((_team, ind) => (
               <UselessTextInput key={ind} value={_team.team.name} />
             ))}
@@ -569,7 +557,6 @@ const Profile = ({navigation}) => {
             </Text>
             <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
-
           <Modal
             transparent={true}
             animationType="fade"

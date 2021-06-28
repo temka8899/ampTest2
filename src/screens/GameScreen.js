@@ -87,7 +87,7 @@ const Match = ({item, onPress, user}) => {
     } else if (findAway) {
       setFind('away');
     }
-  }, [item]);
+  }, [item, user.id]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -374,6 +374,8 @@ const GameScreen = ({navigation}) => {
   const [greet, setGreet] = useState('');
   const [introModal, setIntroModal] = useState(false);
   const [userInfoSeted, setUserInfoSeted] = useState(false);
+
+  console.log('userInfo :>> ', userInfo);
 
   useEffect(() => {
     fetchLeague();

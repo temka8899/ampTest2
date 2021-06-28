@@ -245,7 +245,6 @@ export default function CountScreen({navigation, route}) {
     }
     startPlayoff();
   }
-  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   function _updateSchedule() {
     try {
       API.graphql(
@@ -418,7 +417,6 @@ export default function CountScreen({navigation, route}) {
     );
     console.log('TeamPlayer PlayerScore Updated');
 
-    //>>>>>>>>>>>>>
     const playerData = await API.graphql(
       graphqlOperation(listPlayers, {
         filter: {id: {eq: playerid}},
@@ -465,7 +463,6 @@ export default function CountScreen({navigation, route}) {
         if (date2 == 6) {
           date.setDate(date.getDate() + 2);
         }
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         const _teamPlayerData1 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
             filter: {
@@ -481,7 +478,6 @@ export default function CountScreen({navigation, route}) {
         _teamID1.push(player1[0].player.id);
         _teamID1.push(player1[1].player.id);
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         const _teamPlayerData2 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
             filter: {
@@ -497,7 +493,6 @@ export default function CountScreen({navigation, route}) {
         _teamID2.push(player2[0].player.id);
         _teamID2.push(player2[1].player.id);
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         const _teamPlayerData3 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
             filter: {
@@ -513,7 +508,6 @@ export default function CountScreen({navigation, route}) {
         _teamID3.push(player3[0].player.id);
         _teamID3.push(player3[1].player.id);
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         const _teamPlayerData4 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
             filter: {
@@ -617,7 +611,6 @@ export default function CountScreen({navigation, route}) {
         if (date2 == 6) {
           date.setDate(date.getDate() + 2);
         }
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         const _teamPlayerData1 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
             filter: {
@@ -633,7 +626,6 @@ export default function CountScreen({navigation, route}) {
         _teamID1.push(player1[0].player.id);
         _teamID1.push(player1[1].player.id);
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         const _teamPlayerData2 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
             filter: {
