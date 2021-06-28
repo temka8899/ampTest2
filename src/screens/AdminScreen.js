@@ -16,6 +16,8 @@ import {
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import LoadBtn from '../components/Loading';
+
+import moment from 'moment';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -158,14 +160,15 @@ const AdminScreen = ({navigation}) => {
         setBtnLoad(false);
         //Update League
         var date = new Date();
-        date.setDate(date.getDate());
+        date = moment(date).format('MM/D/YY');
+        console.log(`date start>>>>>>>`, date);
         let n = todos.length / 2 - 1;
         await API.graphql(
           graphqlOperation(updateLeague, {
             input: {
               id: leagueID,
               isStart: true,
-              startedDate: `${date.toLocaleDateString()}`,
+              startedDate: date,
               maxSchedule: `${(n * (n + 1)) / 2}`,
               currentSchedule: 0,
             },
@@ -271,6 +274,7 @@ const AdminScreen = ({navigation}) => {
     playerID1,
     playerID2,
   ) {
+    date = moment(date).format('MM/D/YY');
     try {
       await API.graphql(
         graphqlOperation(createSchedule, {

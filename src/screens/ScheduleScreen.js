@@ -387,7 +387,7 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
   let localDay = moment(firstDate).format('ddd');
-  firstDate = moment(firstDate).format('M/D/YYYY');
+  firstDate = moment(firstDate).format('MM/D/YY');
   const [localId, setlocalId] = useState(localDay);
   const [selectedId, setSelectedId] = useState(firstDate);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
@@ -417,12 +417,14 @@ const ScheduleScreen = ({navigation, route}) => {
   }, [getDay, selectedId]);
 
   const getSchedule = React.useCallback(async (item, option = null) => {
+    let date = new Date(item);
+    date = moment(date).format('MM/D/YY');
     try {
       let param = option === null ? myValue : option;
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
-            date: {eq: item},
+            date: {eq: date},
             leagueID: {eq: `${param.id}`},
           },
         }),
@@ -499,18 +501,20 @@ const ScheduleScreen = ({navigation, route}) => {
   }
 
   const getDayData = React.useCallback((number, date) => {
-    let newDate = new Date(date);
+    date = new Date(date);
+    date = moment(date).format('MM/D/YY');
+    console.log(`ehniiii date`, date);
     let odor;
     for (let i = 0; i < number; i++) {
       odor = moment(date).format('dddd');
       if (odor === 'Saturday') {
-        date = new Date(newDate.setDate(newDate.getDate() + 2));
+        date = moment(date).add(2, 'day');
       } else if (odor === 'Sunday') {
-        date = new Date(newDate.setDate(newDate.getDate() + 1));
+        date = moment(date).add(1, 'day');
       }
-      date = moment(date).format('M/D/YYYY');
+      date = moment(date).format('MM/D/YY');
       setDayData(prev => [...prev, date]);
-      date = new Date(newDate.setDate(newDate.getDate() + 1));
+      date = moment(date).add(1, 'day');
     }
   }, []);
 
@@ -523,13 +527,15 @@ const ScheduleScreen = ({navigation, route}) => {
       setDayData([]);
       myValue = option;
       await setChooseData(option);
+      console.log(`firstDate`, firstDate);
       getDay(firstDate, option);
       setLoading(false);
       let teamNumber = await getTeamNumber(option);
       let duration = await getDuration(teamNumber, 4);
       getDayData(duration, option.startedDate);
+      console.log(`dayData`, dayData);
     },
-    [getDay, getDayData],
+    [dayData, getDay, getDayData],
   );
 
   return (

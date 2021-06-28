@@ -18,7 +18,6 @@ import {
 import {icons, images} from '../constants';
 import {wp, hp, FONTS, COLORS} from '../constants/theme';
 import FormInput from '../components/FormInput';
-import RadioButton from '../components/RadioButton';
 
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
