@@ -55,39 +55,44 @@ const createGameScreen = ({navigation}) => {
         setFile123(file);
         setUploadImage(image.path);
       });
+      console.log('Image picked');
     } catch (err) {
       console.log('Error uploading file:', err);
     }
   };
   const blobber = async file => {
+    //const config = {level: 'public'};
     const response = await fetch(file.uri);
     const blob = await response.blob();
     const fileName = file.name;
     setFileName(fileName);
     await Storage.put(fileName, blob, {
-      contentType: 'image/jpeg',
+      //contentType: 'image/jpeg',
       level: 'public',
     })
       .then(console.log('Upload Success'))
       .catch(err => console.log('Blobber error>>>>', err));
   };
+
   async function addGame() {
-    console.log('FormState name: ', formState.name);
-    console.log('Filename: ', file123.name);
     try {
       await blobber(file123);
       const todo = {...formState};
-      setTodos([...todos, todo]);
-      setFormState(initialState);
-      console.log('Success');
-      await API.graphql(
+      await setTodos([...todos, todo]);
+      await setFormState(initialState);
+
+      console.log('>>>>>>', formState);
+      console.log('FormState name: ', formState.name);
+      console.log('Filename: ', file123.name);
+      const temp = await API.graphql(
         graphqlOperation(createGame, {
           input: {
             name: formState.name,
-            image: fileName123,
+            image: file123.name,
           },
         }),
       );
+      console.log('temp', temp);
     } catch (err) {
       console.log('error creating todo:', err);
     }
