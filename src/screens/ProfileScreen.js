@@ -528,7 +528,7 @@ const Profile = ({navigation}) => {
               </View>
             </View>
           </View>
-          <View style={{}}>
+          <View style={{borderColor: 'red', borderWidth: 1}}>
             {teamNames.map((_team, ind) => (
               <UselessTextInput key={ind} value={_team.team.name} />
             ))}

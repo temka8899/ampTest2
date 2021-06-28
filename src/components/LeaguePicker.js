@@ -45,7 +45,7 @@ const LeaguePicker = props => {
             disabled={true}
             key={index}
             onPress={() => onPressItem(item)}>
-            <Text style={styles.text}>{item.game.name} starting...</Text>
+            <Text style={styles.text}>{item.game.name} </Text>
           </TouchableOpacity>
         )}
       </>

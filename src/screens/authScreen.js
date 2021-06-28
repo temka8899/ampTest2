@@ -18,7 +18,6 @@ import {
 import {icons, images} from '../constants';
 import {wp, hp, FONTS, COLORS} from '../constants/theme';
 import FormInput from '../components/FormInput';
-import RadioButton from '../components/RadioButton';
 
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
@@ -161,7 +160,7 @@ const SwitchView = ({value, onPress}) => {
     case 2:
       return (
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={styles.container}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.signupContainer}>
@@ -224,7 +223,7 @@ const SwitchView = ({value, onPress}) => {
     case 3:
       return (
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={styles.container}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.confirmCodeContainer}>
@@ -263,7 +262,7 @@ const SwitchView = ({value, onPress}) => {
     case 4:
       return (
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={styles.container}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.forgotPassContainer}>
@@ -303,7 +302,7 @@ const SwitchView = ({value, onPress}) => {
     case 5:
       return (
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          behavior={Platform.OS === 'ios' ? 'padding' : null}>
           <View style={styles.forgotPassContainer}>
             <FlashMessage position="top" />
             <Text style={styles.text}>Enter your code from email</Text>
@@ -348,7 +347,7 @@ const SwitchView = ({value, onPress}) => {
     // case 6:
     //   return (
     //     <KeyboardAvoidingView
-    //       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    //       behavior={Platform.OS === 'ios' ? 'padding' : null}>
     //       <View style={styles.forgotPassContainer}>
     //         <FlashMessage position="top" />
     //         <Text style={styles.text}>Enter new password</Text>
@@ -413,7 +412,7 @@ const SignInScreen = ({navigation, onPress}) => {
   };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? '' : null}
       style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={[styles.signInModal, {paddingBottom: hp(4)}]}>
@@ -543,7 +542,8 @@ export default function AuthScreen() {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ImageBackground
         source={images.backgroundImage}
-        style={styles.backgroundImg}>
+        style={styles.backgroundImg}
+        imageStyle={{}}>
         <FlashMessage position="top" />
         <SafeAreaView style={styles.mainContainer}>
           <StatusBar barStyle="light-content" />
@@ -602,14 +602,10 @@ const styles = StyleSheet.create({
   twoButtonContainer: {
     flex: 1,
   },
-  backgroundImage: {
-    flex: 1,
-    alignItems: 'center',
-  },
   backgroundImg: {
     flex: 1,
-    resizeMode: 'cover',
     alignItems: 'center',
+    backgroundColor: COLORS.background,
   },
   btnContainer: {
     width: wp(81.28),
@@ -647,7 +643,7 @@ const styles = StyleSheet.create({
   },
   signupContainer: {
     width: wp(75.5),
-    height: wp(86),
+    height: wp(85),
     backgroundColor: '#00032590',
     borderRadius: 15,
     alignItems: 'center',
