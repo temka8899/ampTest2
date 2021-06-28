@@ -133,14 +133,6 @@ const SwitchView = ({value, onPress}) => {
     }
   }
 
-  // const onRadioBtnClick = item => {
-  //   let updateState = gender.map(genderItem =>
-  //     genderItem.id == item.id
-  //       ? {...genderItem, selected: true}
-  //       : {...genderItem, selected: false},
-  //   );
-  //   setGender(updateState);
-  // };
   switch (value) {
     case 0:
       return (

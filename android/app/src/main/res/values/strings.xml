@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Hippoleague</string>
-</resources>
+     <string name="app_name">ampTest2</string>
+     <string moduleConfig="true" name="CodePushDeploymentKey">5pJP11_woGU-3G6a0ddRYB4NCel22oj0aC-gv</string>
+ </resources>
