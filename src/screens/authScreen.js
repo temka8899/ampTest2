@@ -420,7 +420,7 @@ const SignInScreen = ({navigation, onPress}) => {
   };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? '' : null}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
       style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={[styles.signInModal, {paddingBottom: hp(4)}]}>
@@ -566,7 +566,7 @@ export default function AuthScreen() {
                   height: wp(10),
                   marginTop: wp(14),
 
-                  marginLeft: -wp(5),
+                  marginLeft: -wp(10),
                 }}
               />
             </TouchableOpacity>

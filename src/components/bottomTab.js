@@ -7,7 +7,7 @@ import GameScreen from '../screens/GameScreen';
 import Profile from '../screens/ProfileScreen';
 import Standings from '../screens/StandingsScreen';
 import ScheduleScreen from '../screens/ScheduleScreen';
-import Admin from '../screens/EditProfileScreen';
+import Admin from '../screens/CreateLeague';
 
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -52,7 +52,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="ScheduleScreen"
-        component={ScheduleScreen}
+        component={Admin}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>

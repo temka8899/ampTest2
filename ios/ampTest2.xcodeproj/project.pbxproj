@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		5B9FB0A219FC4769B13D42EF /* CursedTimerULiL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B794843D449F4002BB6BA1A9 /* CursedTimerULiL.ttf */; };
 		5DAA38772677643D0016B391 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAA38762677643D0016B391 /* File.swift */; };
 		65EC43B9C6639276886CE2E2 /* libPods-ampTest2-ampTest2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15EB0C0C7E6741FDB9D694F9 /* libPods-ampTest2-ampTest2Tests.a */; };
 		66D4383132AA6E8202D2C4E7 /* libPods-ampTest2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1521AA0BBC74D057DCA9095A /* libPods-ampTest2.a */; };
@@ -52,6 +53,7 @@
 		99F646BA033BCAF2388AEF4A /* Pods-ampTest2-ampTest2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2-ampTest2Tests.release.xcconfig"; path = "Target Support Files/Pods-ampTest2-ampTest2Tests/Pods-ampTest2-ampTest2Tests.release.xcconfig"; sourceTree = "<group>"; };
 		9F68E8E4649E2D9BC064CBE8 /* Pods-ampTest2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampTest2.release.xcconfig"; path = "Target Support Files/Pods-ampTest2/Pods-ampTest2.release.xcconfig"; sourceTree = "<group>"; };
 		A7D5702C22054C91B465C1A8 /* BaronNeueItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = BaronNeueItalic.ttf; path = ../src/assets/fonts/BaronNeueItalic.ttf; sourceTree = "<group>"; };
+		B794843D449F4002BB6BA1A9 /* CursedTimerULiL.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = CursedTimerULiL.ttf; path = ../src/assets/fonts/CursedTimerULiL.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -166,6 +168,7 @@
 			children = (
 				072ABBB944B94BADABE0DDD8 /* PressStart2P-Regular.ttf */,
 				A7D5702C22054C91B465C1A8 /* BaronNeueItalic.ttf */,
+				B794843D449F4002BB6BA1A9 /* CursedTimerULiL.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F2B71F45475448BFB43F4764 /* PressStart2P-Regular.ttf in Resources */,
 				D155C454139141C488955F5A /* BaronNeueItalic.ttf in Resources */,
+				5B9FB0A219FC4769B13D42EF /* CursedTimerULiL.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
