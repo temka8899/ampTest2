@@ -15,9 +15,10 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
+
 import {icons, images} from '../constants';
-import {wp, hp, FONTS, COLORS} from '../constants/theme';
 import FormInput from '../components/FormInput';
+import {wp, hp, FONTS, COLORS} from '../constants/theme';
 
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
@@ -35,6 +36,7 @@ Amplify.configure({
     disabled: true,
   },
 });
+
 const SwitchView = ({value, onPress}) => {
   const navigation = useNavigation();
   const [email, setSignUpEmail] = useState('');

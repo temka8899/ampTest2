@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, TextInput, Button, Image} from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
-import {createGame, createLeague} from '../graphql/mutations';
-import {listGames, listLeagues} from '../graphql/queries';
+
 import awsmobile from '../aws-exports';
+import ImagePicker from 'react-native-image-crop-picker';
+import {listGames, listLeagues} from '../graphql/queries';
+import {createGame, createLeague} from '../graphql/mutations';
+import {View, StyleSheet, TextInput, Button, Image} from 'react-native';
+import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+
 import {withAuthenticator} from 'aws-amplify-react-native';
 import {S3Image} from 'aws-amplify-react-native/dist/Storage';
 import {userData} from '../data/Players';
