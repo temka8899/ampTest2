@@ -19,6 +19,7 @@ Amplify.configure({
 });
 
 const initialState = {name: '', description: ''};
+
 const Home = ({navigation}) => {
   const [formState, setFormState] = useState(initialState);
   const [todos, setTodos] = useState([]);
