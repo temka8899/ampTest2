@@ -11,6 +11,7 @@ import ScheduleScreen from './src/screens/ScheduleScreen';
 import createLeagueScreen from './src/screens/CreateLeague';
 import EditProfileScreen from './src/screens/EditProfileScreen';
 import ParticipatesScreen from './src/screens/ParticipatesScreen';
+import FormInterface from './src/screens/FormInterface';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -34,6 +35,11 @@ function App() {
           <Stack.Screen
             name="EditProfileScreen"
             component={EditProfileScreen}
+            options={{gestureEnabled: false}}
+          />
+          <Stack.Screen
+            name="FormInterface"
+            component={FormInterface}
             options={{gestureEnabled: false}}
           />
           <Stack.Screen
