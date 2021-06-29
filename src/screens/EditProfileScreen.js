@@ -11,7 +11,9 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Keyboard,
+  KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  Platform,
 } from 'react-native';
 
 import {AuthContext} from '../../App';
@@ -106,46 +108,52 @@ export default function EditProfileScreen({navigation}) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer}>
         <StatusBar barStyle="light-content" />
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.headButtonContainer}
-            onPress={() => navigation.pop()}>
-            <Text style={[{color: COLORS.background}, styles.headButton]}>
-              Cancel
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.firstMain}>
-          <View style={styles.firstMainSub}>
-            <Image source={newImage} style={styles.image} />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
+          style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.headButtonContainer}
+              onPress={() => navigation.pop()}>
+              <Text style={[{color: COLORS.background}, styles.headButton]}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View>
-            <Text
-              style={{
-                color: COLORS.greyText,
-                fontFamily: FONTS.brandFont,
-                fontSize: RFPercentage(1.5),
-                marginBottom: wp(2),
-                marginTop: wp(4),
-              }}>
-              New name
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder={userInfo.name}
-              maxLength={10}
-              onChangeText={text => setNewName(text)}
-              placeholderTextColor={COLORS.purpleText}
-            />
-            <View
-              style={{
-                height: wp(0.4),
-                width: wp(80),
-                backgroundColor: COLORS.purpleText,
-              }}
-            />
+          <View style={styles.firstMain}>
+            <View style={styles.firstMainSub}>
+              <Image source={newImage} style={styles.image} />
+            </View>
+            <View>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.5),
+                  marginBottom: wp(2),
+                  marginTop: wp(4),
+                }}>
+                New name
+              </Text>
+
+              <TextInput
+                style={styles.input}
+                placeholder={userInfo.name}
+                maxLength={10}
+                onChangeText={text => setNewName(text)}
+                placeholderTextColor={COLORS.purpleText}
+              />
+              <View
+                style={{
+                  height: wp(0.4),
+                  width: wp(80),
+                  backgroundColor: COLORS.purpleText,
+                }}
+              />
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
+
         <View style={styles.buttonMain}>
           <View style={styles.buttonSub}>
             <TouchableOpacity

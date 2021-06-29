@@ -736,6 +736,10 @@ const GameScreen = ({navigation}) => {
                 PLAYING TODAY
               </Text>
             </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('FormInterface')}>
+              <Text style={{color: 'white', fontSize: 20}}>Start</Text>
+            </TouchableOpacity>
             <View style={{height: wp(76)}}>
               <FlatList
                 data={schedule}
