@@ -61,13 +61,13 @@ const createGameScreen = ({navigation}) => {
     }
   };
   const blobber = async file => {
-    //const config = {level: 'public'};
+    // const config = {level: 'public'};
     const response = await fetch(file.uri);
     const blob = await response.blob();
     const fileName = file.name;
     setFileName(fileName);
     await Storage.put(fileName, blob, {
-      //contentType: 'image/jpeg',
+      contentType: 'image/jpeg',
       level: 'public',
     })
       .then(console.log('Upload Success'))
