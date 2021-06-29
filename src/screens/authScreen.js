@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+
 import {
   View,
   Text,
@@ -23,6 +24,7 @@ import {wp, hp, FONTS, COLORS} from '../constants/theme';
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
 import FlashMessage, {

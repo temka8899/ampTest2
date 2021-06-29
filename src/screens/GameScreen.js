@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+
 import {
   Text,
   View,
@@ -25,6 +26,7 @@ import LottieView from 'lottie-react-native';
 
 import {createPlayer} from '../graphql/mutations';
 import LinearGradient from 'react-native-linear-gradient';
+
 import {
   listPlayers,
   listLeagues,
