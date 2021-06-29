@@ -14,6 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		5B9FB0A219FC4769B13D42EF /* CursedTimerULiL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B794843D449F4002BB6BA1A9 /* CursedTimerULiL.ttf */; };
 		5DAA38772677643D0016B391 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAA38762677643D0016B391 /* File.swift */; };
+		6A64C5D3036C97F3CF72F06D /* libPods-ampTest2-ampTest2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 052BC33C4839083A6DA1AA77 /* libPods-ampTest2-ampTest2Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8466A154267DA46B004F141A /* BaronNeueItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D5702C22054C91B465C1A8 /* BaronNeueItalic.ttf */; };
 		D155C454139141C488955F5A /* BaronNeueItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D5702C22054C91B465C1A8 /* BaronNeueItalic.ttf */; };
@@ -62,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48923D84D5183B084DEA7BBE /* libPods-ampTest2-ampTest2Tests.a in Frameworks */,
+				6A64C5D3036C97F3CF72F06D /* libPods-ampTest2-ampTest2Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

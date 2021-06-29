@@ -12,15 +12,6 @@ target 'ampTest2' do
     :hermes_enabled => false
   )
 
-
-
-
-  pod 'appcenter-core', :path => '../node_modules/appcenter'
-
-  pod 'appcenter-analytics', :path => '../node_modules/appcenter-analytics'
-
-  pod 'appcenter-crashes', :path => '../node_modules/appcenter-crashes'
-
   target 'ampTest2Tests' do
     inherit! :complete
     # Pods for testing
