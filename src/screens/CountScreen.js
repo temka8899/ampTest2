@@ -243,6 +243,7 @@ export default function CountScreen({navigation, route}) {
       _updateHome2();
       await _updateAway2();
     }
+    console.log('Playoff ehlehgej bn');
     startPlayoff();
   }
   function _updateSchedule() {
