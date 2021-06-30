@@ -37,6 +37,7 @@ export const onDeleteGame = /* GraphQL */ `
 export const onCreateLeague = /* GraphQL */ `
   subscription OnCreateLeague {
     onCreateLeague {
+      minPlayer
       maxSchedule
       currentSchedule
       startedDate
@@ -60,6 +61,7 @@ export const onCreateLeague = /* GraphQL */ `
 export const onUpdateLeague = /* GraphQL */ `
   subscription OnUpdateLeague {
     onUpdateLeague {
+      minPlayer
       maxSchedule
       currentSchedule
       startedDate
@@ -83,6 +85,7 @@ export const onUpdateLeague = /* GraphQL */ `
 export const onDeleteLeague = /* GraphQL */ `
   subscription OnDeleteLeague {
     onDeleteLeague {
+      minPlayer
       maxSchedule
       currentSchedule
       startedDate
@@ -153,6 +156,7 @@ export const onCreateTeam = /* GraphQL */ `
     onCreateTeam {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -185,6 +189,7 @@ export const onUpdateTeam = /* GraphQL */ `
     onUpdateTeam {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -217,6 +222,7 @@ export const onDeleteTeam = /* GraphQL */ `
     onDeleteTeam {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -251,6 +257,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -295,6 +302,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -339,6 +347,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -381,6 +390,7 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
     onCreateLeaguePlayer {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -422,6 +432,7 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
     onUpdateLeaguePlayer {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -463,6 +474,7 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
     onDeleteLeaguePlayer {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -507,9 +519,11 @@ export const onCreateSchedule = /* GraphQL */ `
       playOffIndex
       finalsIndex
       leagueID
+      gameID
       home {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -531,6 +545,7 @@ export const onCreateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -569,9 +584,11 @@ export const onUpdateSchedule = /* GraphQL */ `
       playOffIndex
       finalsIndex
       leagueID
+      gameID
       home {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -593,6 +610,7 @@ export const onUpdateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -631,9 +649,11 @@ export const onDeleteSchedule = /* GraphQL */ `
       playOffIndex
       finalsIndex
       leagueID
+      gameID
       home {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -655,6 +675,7 @@ export const onDeleteSchedule = /* GraphQL */ `
       away {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate

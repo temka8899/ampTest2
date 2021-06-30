@@ -33,6 +33,7 @@ export const listGames = /* GraphQL */ `
 export const getLeague = /* GraphQL */ `
   query GetLeague($id: ID!) {
     getLeague(id: $id) {
+      minPlayer
       maxSchedule
       currentSchedule
       startedDate
@@ -61,6 +62,7 @@ export const listLeagues = /* GraphQL */ `
   ) {
     listLeagues(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -125,6 +127,7 @@ export const getTeam = /* GraphQL */ `
     getTeam(id: $id) {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -162,6 +165,7 @@ export const listTeams = /* GraphQL */ `
       items {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -191,6 +195,7 @@ export const getTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -272,6 +277,7 @@ export const getLeaguePlayer = /* GraphQL */ `
     getLeaguePlayer(id: $id) {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -318,6 +324,7 @@ export const listLeaguePlayers = /* GraphQL */ `
       items {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -357,9 +364,11 @@ export const getSchedule = /* GraphQL */ `
       playOffIndex
       finalsIndex
       leagueID
+      gameID
       home {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -381,6 +390,7 @@ export const getSchedule = /* GraphQL */ `
       away {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -424,6 +434,7 @@ export const listSchedules = /* GraphQL */ `
         playOffIndex
         finalsIndex
         leagueID
+        gameID
         home {
           id
           leagueID

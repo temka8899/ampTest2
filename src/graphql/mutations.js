@@ -49,6 +49,7 @@ export const createLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     createLeague(input: $input, condition: $condition) {
+      minPlayer
       maxSchedule
       currentSchedule
       startedDate
@@ -75,6 +76,7 @@ export const updateLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     updateLeague(input: $input, condition: $condition) {
+      minPlayer
       maxSchedule
       currentSchedule
       startedDate
@@ -101,6 +103,7 @@ export const deleteLeague = /* GraphQL */ `
     $condition: ModelLeagueConditionInput
   ) {
     deleteLeague(input: $input, condition: $condition) {
+      minPlayer
       maxSchedule
       currentSchedule
       startedDate
@@ -183,6 +186,7 @@ export const createTeam = /* GraphQL */ `
     createTeam(input: $input, condition: $condition) {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -218,6 +222,7 @@ export const updateTeam = /* GraphQL */ `
     updateTeam(input: $input, condition: $condition) {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -253,6 +258,7 @@ export const deleteTeam = /* GraphQL */ `
     deleteTeam(input: $input, condition: $condition) {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -290,6 +296,7 @@ export const createTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -337,6 +344,7 @@ export const updateTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -384,6 +392,7 @@ export const deleteTeamPlayer = /* GraphQL */ `
       team {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -429,6 +438,7 @@ export const createLeaguePlayer = /* GraphQL */ `
     createLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -473,6 +483,7 @@ export const updateLeaguePlayer = /* GraphQL */ `
     updateLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -517,6 +528,7 @@ export const deleteLeaguePlayer = /* GraphQL */ `
     deleteLeaguePlayer(input: $input, condition: $condition) {
       id
       league {
+        minPlayer
         maxSchedule
         currentSchedule
         startedDate
@@ -564,9 +576,11 @@ export const createSchedule = /* GraphQL */ `
       playOffIndex
       finalsIndex
       leagueID
+      gameID
       home {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -588,6 +602,7 @@ export const createSchedule = /* GraphQL */ `
       away {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -629,9 +644,11 @@ export const updateSchedule = /* GraphQL */ `
       playOffIndex
       finalsIndex
       leagueID
+      gameID
       home {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -653,6 +670,7 @@ export const updateSchedule = /* GraphQL */ `
       away {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -694,9 +712,11 @@ export const deleteSchedule = /* GraphQL */ `
       playOffIndex
       finalsIndex
       leagueID
+      gameID
       home {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate
@@ -718,6 +738,7 @@ export const deleteSchedule = /* GraphQL */ `
       away {
         id
         league {
+          minPlayer
           maxSchedule
           currentSchedule
           startedDate

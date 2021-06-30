@@ -5,6 +5,7 @@ type Game @model {
 }
 
 type League @model {
+  minPlayer: Int
   maxSchedule: Int
   currentSchedule: Int
   startedDate: String
@@ -58,6 +59,7 @@ type Schedule @model {
   playOffIndex: Int
   finalsIndex: Int
   leagueID: String
+  gameID: String
   home: Team! @connection
   away: Team! @connection
   homeImage: String

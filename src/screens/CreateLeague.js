@@ -38,7 +38,7 @@ Amplify.configure({
   },
 });
 
-const playerNumber = ['4', '6', '8', '10', '12', '14', '16'];
+const playerAmount = [4, 6, 8, 10, 12, 14, 16];
 
 const CreateLeagueScreen = ({navigation}) => {
   // const [date, setDate] = useState('09-10-2020');
@@ -107,6 +107,7 @@ const CreateLeagueScreen = ({navigation}) => {
             leagueGameId: `${leagueGameId}`,
             description: `${leagueDescription}`,
             isStart: false,
+            minPlayer: minimumPlayer,
           },
         }),
       );
@@ -245,8 +246,12 @@ const CreateLeagueScreen = ({navigation}) => {
                   onValueChange={(itemValue, itemIndex) =>
                     setMinimumPlayer(itemValue)
                   }>
-                  {playerNumber.map((item, ind) => (
-                    <Picker.Item label={item} value={item} key={ind} />
+                  {playerAmount.map((item, ind) => (
+                    <Picker.Item
+                      label={item.toString()}
+                      value={item}
+                      key={ind}
+                    />
                   ))}
                 </Picker>
               </View>
