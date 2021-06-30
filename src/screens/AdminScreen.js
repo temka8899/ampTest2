@@ -42,6 +42,7 @@ import {
   updateLeague,
 } from '../graphql/mutations';
 import CustomButton from '../components/Loading';
+import {min} from 'moment';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -98,14 +99,11 @@ const AdminScreen = ({navigation}) => {
           }),
         );
         const todos = leaguePlayerData.data.listLeaguePlayers.items.length;
-        console.log('todos :>> ', todos);
         let item = new Object();
         item = leagueData.data.listLeagues.items[i];
         item.playerQuantity = todos;
         myArr.push(item);
       }
-      console.log('playerLength :>> ', playerLength);
-      console.log('myArr :>> ', myArr);
       setLeagueList(myArr);
     } catch (err) {
       console.log('err :>> ', err);
@@ -136,7 +134,8 @@ const AdminScreen = ({navigation}) => {
     let newState = LeagueList;
     newState[index].loading = true;
     setLeagueList(newState);
-    // Get Soccer League Players
+
+    // Get League Players
     setBtnLoad(true);
     const leaguePlayerData = await API.graphql(
       graphqlOperation(listLeaguePlayers, {
@@ -146,11 +145,12 @@ const AdminScreen = ({navigation}) => {
         },
       }),
     );
-    const todos = leaguePlayerData.data.listLeaguePlayers.items;
-    let tooluur = 1;
 
+    const todos = leaguePlayerData.data.listLeaguePlayers.items;
+    const minPlayer = todos[0].league.minPlayer;
+    let tooluur = 1;
     const sorted = todos.sort((a, b) => b.player.level - a.player.level);
-    if (sorted.length % 2 == 0 && sorted.length >= 8) {
+    if (sorted.length % 2 == 0 && sorted.length >= minPlayer) {
       let last = sorted.length - 1;
       for (var i = 0; i < sorted.length / 2; i = i + 1) {
         console.log(i);
@@ -208,7 +208,9 @@ const AdminScreen = ({navigation}) => {
       setBtnLoad(false);
     } else {
       console.log('Soccer League Players not even or not enough');
-      Alert.alert('League player not enough');
+      Alert.alert(
+        `Players are not even or not enough. Minimum Players: ${minPlayer}`,
+      );
       setBtnLoad(false);
     }
 
