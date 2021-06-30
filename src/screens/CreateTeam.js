@@ -801,10 +801,20 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
+  async function getLeague() {
+    try {
+      let temp = await API.graphql(graphqlOperation(listLeagues));
+      console.log(`>>>>`, temp.data.listLeagues.items[0]);
+    } catch (err) {
+      console.log('error deleting League:', err);
+    }
+  }
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content"></StatusBar>
       <View>
+        <Button onPress={() => getLeague()} title="get LEague" />
         <Button onPress={() => startPlayoff()} title="Start Playoff?" />
         <Button onPress={() => addLeaguePlayer()} title="add League Player" />
         <Button onPress={() => fetchTeam()} title="Fetch Team" />

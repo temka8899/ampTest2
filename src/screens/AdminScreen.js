@@ -53,7 +53,7 @@ const AdminScreen = ({navigation}) => {
   const [LeagueList, setLeagueList] = React.useState([]);
   const [GameData, setGameData] = useState([]);
   const [btnLoad, setBtnLoad] = useState(false);
-  const [isStarted, setIsStarted] = useState(false);
+  const [leagueData, setLeagueData] = useState(false);
 
   const onRefresh = React.useCallback(() => {
     // checkInLeague();
@@ -105,88 +105,86 @@ const AdminScreen = ({navigation}) => {
     newState[index].loading = true;
     setLeagueList(newState);
     // Get Soccer League Players
-    try {
-      setBtnLoad(true);
-      const leaguePlayerData = await API.graphql(
-        graphqlOperation(listLeaguePlayers, {
-          filter: {
-            //LeagueID
-            leagueID: {eq: leagueID},
+    setBtnLoad(true);
+    const leaguePlayerData = await API.graphql(
+      graphqlOperation(listLeaguePlayers, {
+        filter: {
+          //LeagueID
+          leagueID: {eq: leagueID},
+        },
+      }),
+    );
+    const todos = leaguePlayerData.data.listLeaguePlayers.items;
+    let tooluur = 1;
+
+    const sorted = todos.sort((a, b) => b.player.level - a.player.level);
+    if (sorted.length % 2 == 0 && sorted.length >= 8) {
+      let last = sorted.length - 1;
+      for (var i = 0; i < sorted.length / 2; i = i + 1) {
+        console.log(i);
+        // Add Team loop
+        try {
+          const temp = await API.graphql(
+            graphqlOperation(createTeam, {
+              input: {
+                name: `team${tooluur}`,
+                leagueID: leagueID,
+                teamLeagueId: leagueID,
+                win: 0,
+                lose: 0,
+              },
+            }),
+          );
+          console.log(`Team${i} created `);
+          //Add Team Player
+          addStartTeamPlayer(
+            temp.data.createTeam.id,
+            sorted[i].playerID,
+            sorted[i].player.avatar,
+          );
+          addStartTeamPlayer(
+            temp.data.createTeam.id,
+            sorted[last].playerID,
+            sorted[last].player.avatar,
+          );
+          last--;
+        } catch (err) {
+          console.log('error creating League2:', err);
+        }
+        tooluur++;
+      }
+      setTimeout(() => {
+        onRefresh();
+      }, 1000);
+      setBtnLoad(false);
+      //Update League
+      var date = new Date();
+      date = moment(date).format('MM/D/YY');
+      console.log(`date start>>>>>>>`, date);
+      let n = todos.length / 2 - 1;
+      var _leagueData = await API.graphql(
+        graphqlOperation(updateLeague, {
+          input: {
+            id: leagueID,
+            isStart: true,
+            startedDate: date,
+            maxSchedule: `${(n * (n + 1)) / 2}`,
+            currentSchedule: 0,
           },
         }),
       );
-      const todos = leaguePlayerData.data.listLeaguePlayers.items;
-      let tooluur = 1;
-
-      const sorted = todos.sort((a, b) => b.player.level - a.player.level);
-      if (sorted.length % 2 == 0 && sorted.length >= 8) {
-        let last = sorted.length - 1;
-        for (var i = 0; i < sorted.length / 2; i = i + 1) {
-          console.log(i);
-          // Add Team loop
-          try {
-            const temp = await API.graphql(
-              graphqlOperation(createTeam, {
-                input: {
-                  name: `team${tooluur}`,
-                  leagueID: leagueID,
-                  teamLeagueId: leagueID,
-                  win: 0,
-                  lose: 0,
-                },
-              }),
-            );
-            console.log(`Team${i} created `);
-            //Add Team Player
-            addStartTeamPlayer(
-              temp.data.createTeam.id,
-              sorted[i].playerID,
-              sorted[i].player.avatar,
-            );
-            addStartTeamPlayer(
-              temp.data.createTeam.id,
-              sorted[last].playerID,
-              sorted[last].player.avatar,
-            );
-            last--;
-          } catch (err) {
-            console.log('error creating League2:', err);
-          }
-          tooluur++;
-        }
-        setTimeout(() => {
-          onRefresh();
-        }, 1000);
-        setBtnLoad(false);
-        //Update League
-        var date = new Date();
-        date = moment(date).format('MM/D/YY');
-        console.log(`date start>>>>>>>`, date);
-        let n = todos.length / 2 - 1;
-        await API.graphql(
-          graphqlOperation(updateLeague, {
-            input: {
-              id: leagueID,
-              isStart: true,
-              startedDate: date,
-              maxSchedule: `${(n * (n + 1)) / 2}`,
-              currentSchedule: 0,
-            },
-          }),
-        );
-        setBtnLoad(false);
-      } else {
-        console.log('Soccer League Players not even or not enough');
-        setBtnLoad(false);
-      }
-    } catch (err) {
-      console.log('error fetching League Players', err);
+      // console.log('>>>>>>>>>>>>>>>>>>>>>>', leagueDataTemp);
+      // setLeagueData(leagueDataTemp);
+      setBtnLoad(false);
+    } else {
+      console.log('Soccer League Players not even or not enough');
       setBtnLoad(false);
     }
-    addScheduleLoop(startLeagueId);
+
+    addScheduleLoop(startLeagueId, _leagueData);
   };
 
-  async function addScheduleLoop(startLeagueId) {
+  async function addScheduleLoop(startLeagueId, _leagueData) {
     try {
       const teamData = await API.graphql(
         graphqlOperation(listTeams, {
@@ -251,6 +249,7 @@ const AdminScreen = ({navigation}) => {
             playerAvatar2,
             playerID1,
             playerID2,
+            _leagueData,
           );
           dateNemeh++;
           tooluur++;
@@ -273,6 +272,7 @@ const AdminScreen = ({navigation}) => {
     playerAvatar2,
     playerID1,
     playerID2,
+    _leagueData,
   ) {
     date = moment(date).format('MM/D/YY');
     try {
@@ -292,6 +292,7 @@ const AdminScreen = ({navigation}) => {
             awayPlayers: playerID2,
             playOffIndex: 0,
             finalsIndex: 0,
+            gameID: _leagueData.data.updateLeague.game.id,
           },
         }),
       );
