@@ -417,7 +417,7 @@ const AdminScreen = ({navigation}) => {
               </TouchableOpacity>
             ) : (
               <CustomButton
-                text={'Start League'}
+                text={'Start'}
                 disabled={btnLoad}
                 loading={item.loading}
                 styleAdd={styles.startBtn}
@@ -429,7 +429,7 @@ const AdminScreen = ({navigation}) => {
               disabled={btnLoad}
               onPress={() => DeleteLeague(item.id)}
               style={styles.deleteBtn}>
-              <Text style={styles.btnText}>Delete league</Text>
+              <Text style={styles.btnText}>Delete</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -475,7 +475,7 @@ const AdminScreen = ({navigation}) => {
               disabled={btnLoad}
               onPress={() => DeleteGame(item.id)}
               style={styles.deleteBtn}>
-              <Text style={styles.btnText}>Delete game</Text>
+              <Text style={styles.btnText}>Delete</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -589,8 +589,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   deleteBtn: {
-    width: wp(35),
+    width: wp(20),
     height: hp(3),
+    borderRadius: 50,
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',
@@ -598,8 +599,9 @@ const styles = StyleSheet.create({
     marginLeft: wp(1),
   },
   startBtn: {
-    width: wp(35),
+    width: wp(20),
     height: hp(3),
+    borderRadius: 50,
     backgroundColor: COLORS.green,
     justifyContent: 'center',
     alignItems: 'center',
@@ -607,8 +609,9 @@ const styles = StyleSheet.create({
     marginLeft: wp(1),
   },
   onGoingBtn: {
-    width: wp(35),
+    width: wp(20),
     height: hp(3),
+    borderRadius: 50,
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',
