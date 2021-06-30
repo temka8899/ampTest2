@@ -52,7 +52,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="ScheduleScreen"
-        component={Admin}
+        component={ScheduleScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>
