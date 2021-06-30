@@ -53,7 +53,7 @@ const AdminScreen = ({navigation}) => {
   const [LeagueList, setLeagueList] = React.useState([]);
   const [GameData, setGameData] = useState([]);
   const [btnLoad, setBtnLoad] = useState(false);
-  const [leagueData, setLeagueData] = useState(false);
+  const [playerQty, setPlayerQty] = useState(false);
 
   const onRefresh = React.useCallback(() => {
     // checkInLeague();
@@ -68,13 +68,34 @@ const AdminScreen = ({navigation}) => {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       // const todos = leagueData.data.listTeams.items;
       //
+      let playerLength = [];
       let myData = [];
+      let myArr = [];
       leagueData.data.listLeagues.items.map(item => {
         let custom = item;
         custom.loading = false;
         myData.push(custom);
       });
-      setLeagueList(leagueData.data.listLeagues.items);
+
+      console.log('league->>>>> :>> ', leagueData.data.listLeagues.items);
+      for (let i = 0; i < leagueData.data.listLeagues.items.length; i++) {
+        const leaguePlayerData = await API.graphql(
+          graphqlOperation(listLeaguePlayers, {
+            filter: {
+              leagueID: {eq: leagueData.data.listLeagues.items[i].id},
+            },
+          }),
+        );
+        const todos = leaguePlayerData.data.listLeaguePlayers.items.length;
+        console.log('todos :>> ', todos);
+        let item = new Object();
+        item = leagueData.data.listLeagues.items[i];
+        item.playerQuantity = todos;
+        myArr.push(item);
+      }
+      console.log('playerLength :>> ', playerLength);
+      console.log('myArr :>> ', myArr);
+      setLeagueList(myArr);
     } catch (err) {
       console.log('err :>> ', err);
     }
@@ -387,7 +408,7 @@ const AdminScreen = ({navigation}) => {
               fontFamily: FONTS.brandFont,
               fontSize: RFPercentage(1.5),
             }}>
-            {item.startedDate}
+            {item.playerQuantity} / 8
           </Text>
           <View>
             {item.isStart ? (
