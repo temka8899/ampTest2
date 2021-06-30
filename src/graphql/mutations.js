@@ -769,3 +769,90 @@ export const deleteSchedule = /* GraphQL */ `
     }
   }
 `;
+export const createXP = /* GraphQL */ `
+  mutation CreateXP($input: CreateXPInput!, $condition: ModelXPConditionInput) {
+    createXP(input: $input, condition: $condition) {
+      id
+      xp
+      level
+      league {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        avatar
+        admin
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateXP = /* GraphQL */ `
+  mutation UpdateXP($input: UpdateXPInput!, $condition: ModelXPConditionInput) {
+    updateXP(input: $input, condition: $condition) {
+      id
+      xp
+      level
+      league {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        avatar
+        admin
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteXP = /* GraphQL */ `
+  mutation DeleteXP($input: DeleteXPInput!, $condition: ModelXPConditionInput) {
+    deleteXP(input: $input, condition: $condition) {
+      id
+      xp
+      level
+      league {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        avatar
+        admin
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;

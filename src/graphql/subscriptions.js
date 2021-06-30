@@ -706,3 +706,90 @@ export const onDeleteSchedule = /* GraphQL */ `
     }
   }
 `;
+export const onCreateXP = /* GraphQL */ `
+  subscription OnCreateXP {
+    onCreateXP {
+      id
+      xp
+      level
+      league {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        avatar
+        admin
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateXP = /* GraphQL */ `
+  subscription OnUpdateXP {
+    onUpdateXP {
+      id
+      xp
+      level
+      league {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        avatar
+        admin
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteXP = /* GraphQL */ `
+  subscription OnDeleteXP {
+    onDeleteXP {
+      id
+      xp
+      level
+      league {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        avatar
+        admin
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
