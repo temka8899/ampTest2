@@ -16,7 +16,9 @@ import {EndModalForm} from '../components/EndModalForm';
 import * as Animatable from 'react-native-animatable';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import API, {graphqlOperation} from '@aws-amplify/api';
-import {listTeamPlayers} from '../graphql/queries';
+import {listPlayers, listTeamPlayers} from '../graphql/queries';
+import Auth from '@aws-amplify/auth';
+import {AuthContext} from '../../App';
 
 const tempData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 const tempData2 = ['+1', '+2', '+3', 'OK'];
@@ -85,6 +87,8 @@ export default function FormInterface({navigation, route}) {
   const [imgLoad, setImgLoad] = useState(true);
   const [HomeName, setHomeName] = useState();
   const [AwayName, setAwayName] = useState();
+  const [loading, setLoading] = useState(false);
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
 
   useEffect(() => {
     const ScheduleData = route.params.match;
@@ -272,16 +276,33 @@ export default function FormInterface({navigation, route}) {
       }
     }
   };
-  const EndBtnPress = async () => {
-    //  setLoading(true);
-    //  await UpdateSchedule();
-    //  const user = await Auth.currentUserInfo();
-    //  findUser(user);
-    //  toggleEndModal(false);
-    //  setLoading(false);
-    //  navigation.pop();
-    //  console.log('allpoint', allPoint);
+  const toggleEndModal = bool => {
+    setEndModalVisible(bool);
   };
+  const cancelBtnPress = () => {
+    toggleEndModal(false);
+  };
+  const EndBtnPress = async () => {
+    setLoading(true);
+    await UpdateSchedule();
+    const user = await Auth.currentUserInfo();
+    findUser(user);
+    toggleEndModal(false);
+    setLoading(false);
+    navigation.pop();
+  };
+  const findUser = React.useCallback(
+    async user => {
+      const playerData = await API.graphql(graphqlOperation(listPlayers));
+      let finded = playerData.data.listPlayers.items.find((item, index) => {
+        if (user.username === item.c_id) {
+          return item;
+        }
+      });
+      setUserInfo(finded);
+    },
+    [setUserInfo],
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -564,11 +585,11 @@ export default function FormInterface({navigation, route}) {
             AwayID={AwayID}
             HomeName={HomeName}
             AwayName={AwayName}
-            // navigateSchedule={endMatch}
-            // cancelbtn={cancelBtnPress}
+            HomeAvatars={HomeAvatars}
+            AwayAvatars={AwayAvatars}
+            cancelbtn={cancelBtnPress}
             EndBtn={EndBtnPress}
-            // allData={allPoint}
-            // loading={loading}
+            loading={loading}
           />
         )}
       </View>

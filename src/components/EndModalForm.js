@@ -28,58 +28,42 @@ export const EndModalForm = props => {
     getWinner();
   }, []);
   function getWinner() {
-    if (props.Home) {
+    if (props.HomeScore > props.AwayScore) {
       setWinner(prev => ({
         ...prev,
-        one: {
-          point: allData.one.point,
-          name: allData.one.name,
-          image: allData.one.image,
-        },
-        two: {
-          point: allData.two.point,
-          name: allData.two.name,
-          image: allData.two.image,
+        team: {
+          point: props.HomeScore,
+          name: props.HomeName,
+          avatar1: props.HomeAvatars[0],
+          avatar2: props.HomeAvatars[1],
         },
       }));
       setLoser(prev => ({
         ...prev,
-        one: {
-          point: allData.three.point,
-          name: allData.three.name,
-          image: allData.three.image,
-        },
-        two: {
-          point: allData.four.point,
-          name: allData.four.name,
-          image: allData.four.image,
+        team: {
+          point: props.AwayScore,
+          name: props.AwayName,
+          avatar1: props.AwayAvatars[0],
+          avatar2: props.AwayAvatars[1],
         },
       }));
     } else {
       setWinner(prev => ({
         ...prev,
-        one: {
-          point: allData.three.point,
-          name: allData.three.name,
-          image: allData.three.image,
-        },
-        two: {
-          point: allData.four.point,
-          name: allData.four.name,
-          image: allData.four.image,
+        team: {
+          point: props.AwayScore,
+          name: props.AwayName,
+          avatar1: props.AwayAvatars[0],
+          avatar2: props.AwayAvatars[1],
         },
       }));
       setLoser(prev => ({
         ...prev,
-        one: {
-          point: allData.one.point,
-          name: allData.one.name,
-          image: allData.one.image,
-        },
-        two: {
-          point: allData.two.point,
-          name: allData.two.name,
-          image: allData.two.image,
+        team: {
+          point: props.HomeScore,
+          name: props.HomeName,
+          avatar1: props.HomeAvatars[0],
+          avatar2: props.HomeAvatars[1],
         },
       }));
     }
@@ -123,11 +107,17 @@ export const EndModalForm = props => {
                   marginTop: wp(3),
                   marginBottom: wp(3),
                 }}>
-                <Image source={winner.one.image} style={[styles.winnerImage]} />
+                <Image
+                  source={winner.team.avatar1}
+                  style={[styles.winnerImage]}
+                />
                 <Text style={[{color: COLORS.green}, styles.score]}>
-                  {winner.one.point + winner.two.point}
+                  {winner.team.point}
                 </Text>
-                <Image source={winner.two.image} style={[styles.winnerImage]} />
+                <Image
+                  source={winner.team.avatar1}
+                  style={[styles.winnerImage]}
+                />
               </View>
               <View
                 style={{
@@ -139,11 +129,11 @@ export const EndModalForm = props => {
                   justifyContent: 'space-between',
                   marginBottom: wp(5),
                 }}>
-                <Image source={loser.one.image} style={[styles.image]} />
+                <Image source={loser.team.avatar1} style={[styles.image]} />
                 <Text style={[{color: COLORS.red}, styles.score]}>
-                  {loser.one.point + loser.two.point}
+                  {loser.team.point}
                 </Text>
-                <Image source={loser.two.image} style={[styles.image]} />
+                <Image source={loser.team.avatar2} style={[styles.image]} />
               </View>
             </View>
             <View

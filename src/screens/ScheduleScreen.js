@@ -526,6 +526,7 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const setData = React.useCallback(
     async option => {
+      console.log('111');
       setDayData([]);
       myValue = option;
       await setChooseData(option);

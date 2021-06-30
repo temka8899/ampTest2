@@ -75,6 +75,6 @@ type XP @model {
   id: ID!
   xp: Int
   level: Int
-  league: Game @connection
+  game: Game @connection
   player: Player @connection
 }

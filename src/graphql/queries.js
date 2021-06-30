@@ -473,7 +473,7 @@ export const getXP = /* GraphQL */ `
       id
       xp
       level
-      league {
+      game {
         id
         name
         image
@@ -503,7 +503,7 @@ export const listXPs = /* GraphQL */ `
         id
         xp
         level
-        league {
+        game {
           id
           name
           image

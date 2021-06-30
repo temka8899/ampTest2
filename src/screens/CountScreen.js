@@ -227,7 +227,7 @@ export default function CountScreen({navigation, route}) {
     _updateSchedule();
 
     //League iin current index update
-    _updateLeague();
+    await _updateLeague();
 
     updateProfile(Home[0].id, Home[0].player.id, allPoint.one.point);
     updateProfile(Home[1].id, Home[1].player.id, allPoint.two.point);

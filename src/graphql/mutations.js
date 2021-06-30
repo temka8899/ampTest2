@@ -775,7 +775,7 @@ export const createXP = /* GraphQL */ `
       id
       xp
       level
-      league {
+      game {
         id
         name
         image
@@ -804,7 +804,7 @@ export const updateXP = /* GraphQL */ `
       id
       xp
       level
-      league {
+      game {
         id
         name
         image
@@ -833,7 +833,7 @@ export const deleteXP = /* GraphQL */ `
       id
       xp
       level
-      league {
+      game {
         id
         name
         image
