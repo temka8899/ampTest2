@@ -14,6 +14,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TextComponent,
 } from 'react-native';
 
 import {COLORS, FONTS, icons, images} from '../constants';
@@ -26,6 +27,7 @@ import {createLeague} from '../graphql/mutations';
 import {listGames, listLeagues} from '../graphql/queries';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+import {Picker} from '@react-native-picker/picker';
 import LeaguePicker from '../components/LeaguePicker';
 import MyText from '../components/MyText';
 
@@ -36,7 +38,9 @@ Amplify.configure({
   },
 });
 
-const createLeagueScreen = ({navigation}) => {
+const playerNumber = ['4', '6', '8', '10', '12', '14', '16'];
+
+const CreateLeagueScreen = ({navigation}) => {
   // const [date, setDate] = useState('09-10-2020');
   const [uploadImage, setUploadImage] = useState('');
   const [GameList, setGameList] = useState([]);
@@ -49,6 +53,7 @@ const createLeagueScreen = ({navigation}) => {
   const [date, setdate] = useState('2021-06-01');
   const [leagueGameId, setLeagueGameId] = useState();
   const [leagueDescription, setleagueDescription] = useState();
+  const [minimumPlayer, setMinimumPlayer] = useState();
   function setInput(key, value) {
     setFormState({...formState, [key]: value});
   }
@@ -171,7 +176,6 @@ const createLeagueScreen = ({navigation}) => {
                 setData={setData}
               />
             </Modal>
-
             <View style={styles.formContainer}>
               <TextInput
                 multiline
@@ -187,40 +191,65 @@ const createLeagueScreen = ({navigation}) => {
                 placeholderTextColor={COLORS.purpleText}
               />
             </View>
-
-            <View style={{marginHorizontal: wp(4), marginTop: hp(3)}}>
-              <Text style={[styles.text, {color: COLORS.purpleText}]}>
-                Start
-              </Text>
-              {/* <Text style={[styles.text, {color: COLORS.greyText}]}>{hrs}</Text> */}
-              <DatePicker
-                style={styles.datePickerStyle}
-                date={startDate}
-                mode="date"
-                placeholder="select date"
-                format="YYYY MM DD"
-                minDate="2021-06-01"
-                maxDate="2022-06-01"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    width: 0,
-                    height: 0,
-                  },
-                  dateInput: {
-                    borderWidth: 0,
-                    alignItems: 'flex-start',
-                  },
-                  dateText: {
-                    color: COLORS.white,
-                    fontFamily: FONTS.brandFont,
-                  },
-                }}
-                onDateChange={startDate => {
-                  setStartDate(startDate);
-                }}
-              />
+            <View
+              style={{
+                marginHorizontal: wp(4),
+                marginTop: hp(3),
+                flexDirection: 'row',
+              }}>
+              <View>
+                <Text style={[styles.text, {color: COLORS.purpleText}]}>
+                  Start
+                </Text>
+                <DatePicker
+                  style={styles.datePickerStyle}
+                  date={startDate}
+                  mode="date"
+                  placeholder="select date"
+                  format="YYYY MM DD"
+                  minDate="2021-06-01"
+                  maxDate="2022-06-01"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      width: 0,
+                      height: 0,
+                    },
+                    dateInput: {
+                      borderWidth: 0,
+                      alignItems: 'flex-start',
+                    },
+                    dateText: {
+                      color: COLORS.white,
+                      fontFamily: FONTS.brandFont,
+                    },
+                  }}
+                  onDateChange={startDate => {
+                    setStartDate(startDate);
+                  }}
+                />
+              </View>
+              <View>
+                <Text style={[styles.text, {color: COLORS.purpleText}]}>
+                  Min player
+                </Text>
+                <Picker
+                  itemStyle={{color: 'white'}}
+                  dropdownIconColor={'white'}
+                  mode={'dropdown'}
+                  style={{
+                    width: wp(40),
+                  }}
+                  selectedValue={minimumPlayer}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setMinimumPlayer(itemValue)
+                  }>
+                  {playerNumber.map((item, ind) => (
+                    <Picker.Item label={item} value={item} key={ind} />
+                  ))}
+                </Picker>
+              </View>
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -323,4 +352,4 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.brandFont,
   },
 });
-export default createLeagueScreen;
+export default CreateLeagueScreen;

@@ -185,7 +185,7 @@ const StandingsScreen = ({navigation, route}) => {
       const sorted = leagueData
         .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
         .reverse();
-      console.log('sorted Unique league data:>> ', sorted);
+      console.log('sorted Unique league data:>> sort hiisen ni  ', sorted);
       setTeamData(sorted);
       setLoading(false);
       setLogoLoad(false);
