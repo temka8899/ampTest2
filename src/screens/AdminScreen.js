@@ -12,6 +12,7 @@ import {
   RefreshControl,
   ScrollView,
   Modal,
+  Alert,
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';
@@ -204,11 +205,10 @@ const AdminScreen = ({navigation}) => {
           },
         }),
       );
-      // console.log('>>>>>>>>>>>>>>>>>>>>>>', leagueDataTemp);
-      // setLeagueData(leagueDataTemp);
       setBtnLoad(false);
     } else {
       console.log('Soccer League Players not even or not enough');
+      Alert.alert('League player not enough');
       setBtnLoad(false);
     }
 
@@ -432,8 +432,7 @@ const AdminScreen = ({navigation}) => {
                 loading={item.loading}
                 styleAdd={styles.startBtn}
                 typStyle={styles.btnText}
-                // onPress={() => StartLeague(item.id, index)}
-                onPress={() => changeModalVisible(true)}
+                onPress={() => StartLeague(item.id, index)}
               />
             )}
             <TouchableOpacity
