@@ -70,3 +70,11 @@ type Schedule @model {
   awayScore: Int
   date: String!
 }
+
+type XP @model {
+  id: ID!
+  xp: Int
+  level: Int
+  league: Game @connection
+  player: Player @connection
+}

@@ -467,3 +467,64 @@ export const listSchedules = /* GraphQL */ `
     }
   }
 `;
+export const getXP = /* GraphQL */ `
+  query GetXP($id: ID!) {
+    getXP(id: $id) {
+      id
+      xp
+      level
+      league {
+        id
+        name
+        image
+        createdAt
+        updatedAt
+      }
+      player {
+        id
+        avatar
+        admin
+        c_id
+        name
+        level
+        xp
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listXPs = /* GraphQL */ `
+  query ListXPs($filter: ModelXPFilterInput, $limit: Int, $nextToken: String) {
+    listXPs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        xp
+        level
+        league {
+          id
+          name
+          image
+          createdAt
+          updatedAt
+        }
+        player {
+          id
+          avatar
+          admin
+          c_id
+          name
+          level
+          xp
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
