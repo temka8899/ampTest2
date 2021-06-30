@@ -438,9 +438,15 @@ const ScheduleScreen = ({navigation, route}) => {
   }, []);
 
   const startMatch = item => {
-    navigation.navigate('CountScreen', {
-      match: item,
-    });
+    if (item.gameID === '76b343a7-74aa-4dd9-bcfb-68328b83e558') {
+      navigation.navigate('CountScreen', {
+        match: item,
+      });
+    } else {
+      navigation.navigate('FormInterface', {
+        match: item,
+      });
+    }
   };
   function renderSchedule({item}) {
     return (

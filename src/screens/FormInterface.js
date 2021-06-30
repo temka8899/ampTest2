@@ -1,5 +1,6 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   StyleSheet,
@@ -10,9 +11,12 @@ import {
 import {COLORS, FONTS, hp, wp} from '../constants/theme';
 import {icons, images} from '../constants';
 import Modal from 'react-native-modal';
+import {EndModalForm} from '../components/EndModalForm';
 
 import * as Animatable from 'react-native-animatable';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import API, {graphqlOperation} from '@aws-amplify/api';
+import {listTeamPlayers} from '../graphql/queries';
 
 const tempData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 const tempData2 = ['+1', '+2', '+3', 'OK'];
@@ -67,16 +71,68 @@ function ScoreButton3({item, onPress}) {
   );
 }
 
-export default function FormInterface({navigation}) {
+export default function FormInterface({navigation, route}) {
   const [CancelModalVisible, setCancelModalVisible] = useState(false);
-  const pulseAnimRef = useRef();
+  const [EndModalVisible, setEndModalVisible] = useState(false);
   const [select, setSelect] = useState('');
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
+  const [MatchData, setMatchData] = useState();
+  const [HomeID, setHomeID] = useState();
+  const [AwayID, setAwayID] = useState();
+  const [HomeAvatars, setHomeAvatars] = useState();
+  const [AwayAvatars, setAwayAvatars] = useState();
+  const [imgLoad, setImgLoad] = useState(true);
+  const [HomeName, setHomeName] = useState();
+  const [AwayName, setAwayName] = useState();
 
+  useEffect(() => {
+    const ScheduleData = route.params.match;
+    setMatchData(ScheduleData);
+    console.log(`ScheduleData`, ScheduleData.home.name);
+    getPlayerData(ScheduleData);
+  }, [getPlayerData, route.params.match]);
   const toggleCancelModal = bool => {
     setCancelModalVisible(bool);
   };
+  const getPlayerData = React.useCallback(item => {
+    if (item !== null) {
+      setImgLoad(false);
+    }
+    let homePlayersID1 = item.homePlayers.split('[');
+    let homePlayersID2 = homePlayersID1[1].split(']');
+    let homePlayersID = homePlayersID2[0].split(', ');
+    let awayPlayersID1 = item.awayPlayers.split('[');
+    let awayPlayersID2 = awayPlayersID1[1].split(']');
+    let awayPlayersID = awayPlayersID2[0].split(', ');
+    setHomeID(homePlayersID);
+    setAwayID(awayPlayersID);
+    let homeImages1 = item.homeImage.split('[');
+    let homeImages2 = homeImages1[1].split(']');
+    let homeImages = homeImages2[0].split(', ');
+    let awayImages1 = item.awayImage.split('[');
+    let awayImages2 = awayImages1[1].split(']');
+    let awayImages = awayImages2[0].split(', ');
+    setHomeAvatars(homeImages);
+    setAwayAvatars(awayImages);
+    setHomeName(item.home.name);
+    setAwayName(item.away.name);
+  }, []);
+
+  // async function fetchTeamPlayers(id) {
+  //   try {
+  //     const leagueData = await API.graphql(
+  //       graphqlOperation(listTeamPlayers, {
+  //         filter: {teamID: {eq: `${id}`}},
+  //       }),
+  //     );
+  //     const todos = leagueData.data.listTeamPlayers.items;
+  //     console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
+  //     return todos;
+  //   } catch (err) {
+  //     console.log('error fetching todos', err);
+  //   }
+  // }
   function CancelModal() {
     return (
       <View>
@@ -216,6 +272,17 @@ export default function FormInterface({navigation}) {
       }
     }
   };
+  const EndBtnPress = async () => {
+    //  setLoading(true);
+    //  await UpdateSchedule();
+    //  const user = await Auth.currentUserInfo();
+    //  findUser(user);
+    //  toggleEndModal(false);
+    //  setLoading(false);
+    //  navigation.pop();
+    //  console.log('allpoint', allPoint);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity onPress={() => toggleCancelModal(true)}>
@@ -235,18 +302,23 @@ export default function FormInterface({navigation}) {
               fontSize: wp(4),
               marginBottom: wp(2),
             }}>
-            TEAM GANG
+            {HomeName}
           </Text>
-          <View style={{flexDirection: 'row'}}>
-            <Image
-              source={images.men2}
-              style={{width: wp(13), height: wp(13)}}
-            />
-            <Image
-              source={images.men2}
-              style={{width: wp(13), height: wp(13)}}
-            />
-          </View>
+          {HomeAvatars && (
+            <View style={{flexDirection: 'row'}}>
+              {HomeAvatars.map(_item => {
+                return imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image source={_item} style={styles.avatar} />
+                );
+              })}
+            </View>
+          )}
         </View>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Text
@@ -256,18 +328,23 @@ export default function FormInterface({navigation}) {
               fontSize: wp(4),
               marginBottom: wp(2),
             }}>
-            TEAM GANG
+            {AwayName}
           </Text>
-          <View style={{flexDirection: 'row'}}>
-            <Image
-              source={images.men2}
-              style={{width: wp(13), height: wp(13)}}
-            />
-            <Image
-              source={images.men2}
-              style={{width: wp(13), height: wp(13)}}
-            />
-          </View>
+          {AwayAvatars && (
+            <View style={{flexDirection: 'row'}}>
+              {AwayAvatars.map(_item => {
+                return imgLoad ? (
+                  <ActivityIndicator
+                    style={styles.avatar}
+                    size={'small'}
+                    color={COLORS.brand}
+                  />
+                ) : (
+                  <Image source={_item} style={styles.avatar} />
+                );
+              })}
+            </View>
+          )}
         </View>
       </View>
 
@@ -473,10 +550,27 @@ export default function FormInterface({navigation}) {
         }}>
         <TouchableOpacity
           style={styles.modalBtnContainer}
-          onPress={() => navigation.pop()}>
+          onPress={() => setEndModalVisible(true)}>
           <Text style={styles.modalBtnText}>End Match</Text>
         </TouchableOpacity>
         {CancelModal()}
+        {EndModalVisible && (
+          <EndModalForm
+            isVisible={EndModalVisible}
+            onBackdropPress={() => setEndModalVisible(false)}
+            HomeScore={homeScore}
+            AwayScore={awayScore}
+            HomeID={HomeID}
+            AwayID={AwayID}
+            HomeName={HomeName}
+            AwayName={AwayName}
+            // navigateSchedule={endMatch}
+            // cancelbtn={cancelBtnPress}
+            EndBtn={EndBtnPress}
+            // allData={allPoint}
+            // loading={loading}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -556,6 +650,10 @@ const styles = StyleSheet.create({
     fontFamily: 'CursedTimerULiL',
     color: '#ffffff10',
     fontSize: wp(18),
+  },
+  avatar: {
+    width: wp(13),
+    height: wp(13),
   },
   homeAway: {
     width: wp(45),
