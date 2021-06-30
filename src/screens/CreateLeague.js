@@ -54,6 +54,7 @@ const CreateLeagueScreen = ({navigation}) => {
   const [leagueGameId, setLeagueGameId] = useState();
   const [leagueDescription, setleagueDescription] = useState();
   const [minimumPlayer, setMinimumPlayer] = useState();
+
   function setInput(key, value) {
     setFormState({...formState, [key]: value});
   }

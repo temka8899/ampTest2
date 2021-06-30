@@ -562,10 +562,7 @@ const Profile = ({navigation}) => {
             animationType="fade"
             visible={modalVisible}
             nRequestClose={() => changeModalVisible(false)}>
-            <LeaguePicker
-              changeModalVisible={changeModalVisible}
-              setData={setData}
-            />
+            <Text> asddas </Text>
           </Modal>
           <FlatList
             data={scheduleData}

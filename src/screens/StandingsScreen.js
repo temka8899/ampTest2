@@ -41,6 +41,7 @@ const StandingsScreen = ({navigation, route}) => {
   const [PlayerInfo, setPlayerInfo] = useState([]);
   const [logoLoad, setLogoLoad] = useState();
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
+  const [minimumPlayer, setMinimumPlayer] = useState();
 
   const rotateValue = useState(new Animated.Value(0))[0];
   const RotateData = rotateValue.interpolate({
@@ -209,16 +210,6 @@ const StandingsScreen = ({navigation, route}) => {
             </Text>
             <Image source={icons.drop} style={styles.dropButton} />
           </TouchableOpacity>
-          <Modal
-            transparent={true}
-            animationType="fade"
-            visible={modalVisible}
-            nRequestClose={() => changeModalVisible(false)}>
-            <LeaguePicker
-              changeModalVisible={changeModalVisible}
-              setData={setData}
-            />
-          </Modal>
           <View>
             {teamData.length != 0 ? (
               <FlatList

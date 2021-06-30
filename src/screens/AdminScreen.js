@@ -11,11 +11,14 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
+  Modal,
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import LoadBtn from '../components/Loading';
+
+import {Picker} from '@react-native-picker/picker';
 
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
@@ -43,6 +46,8 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
+const playerAmount = [4, 6, 8, 10, 12, 14, 16];
+
 const AdminScreen = ({navigation}) => {
   useEffect(() => {
     fetchLeague();
@@ -53,7 +58,12 @@ const AdminScreen = ({navigation}) => {
   const [LeagueList, setLeagueList] = React.useState([]);
   const [GameData, setGameData] = useState([]);
   const [btnLoad, setBtnLoad] = useState(false);
-  const [playerQty, setPlayerQty] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [minimumPlayer, setMinimumPlayer] = useState();
+
+  const changeModalVisible = bool => {
+    setModalVisible(bool);
+  };
 
   const onRefresh = React.useCallback(() => {
     // checkInLeague();
@@ -422,7 +432,8 @@ const AdminScreen = ({navigation}) => {
                 loading={item.loading}
                 styleAdd={styles.startBtn}
                 typStyle={styles.btnText}
-                onPress={() => StartLeague(item.id, index)}
+                // onPress={() => StartLeague(item.id, index)}
+                onPress={() => changeModalVisible(true)}
               />
             )}
             <TouchableOpacity
@@ -509,6 +520,15 @@ const AdminScreen = ({navigation}) => {
             <Text style={styles.textStyle}> refresh </Text>
           </TouchableOpacity>
         </View>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={modalVisible}
+          nRequestClose={() => changeModalVisible(false)}>
+          {playerAmount.map((item, ind) => (
+            <Picker.Item label={item.toString()} value={item} key={ind} />
+          ))}
+        </Modal>
         <View>
           {LeagueList.length !== 0 ? (
             <FlatList
