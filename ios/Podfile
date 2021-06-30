@@ -12,9 +12,6 @@ target 'ampTest2' do
     :hermes_enabled => false
   )
 
-
-
-
   target 'ampTest2Tests' do
     inherit! :complete
     # Pods for testing

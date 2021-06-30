@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CodePushDeploymentKey</key>
+	<string>vh3ahByKDzGeGO_grg5q8VMQEMKHD59TVcaX3</string>
 	<key>CFBundleDisplayName</key>
 	<string>Hippoleague</string>
 	<key>CFBundleExecutable</key>

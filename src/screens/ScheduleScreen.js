@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+
 import Modal from 'react-native-modal';
 import {AuthContext} from '../../App';
 
@@ -24,7 +25,6 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
 import API, {graphqlOperation} from '@aws-amplify/api';
-// import {useMemo} from 'react';
 
 let myValue;
 
@@ -233,8 +233,6 @@ const Match = ({item, onPress, user}) => {
             height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
-            // borderWidth: 1,
-            // borderColor: 'red',
           }}>
           <View style={{flexDirection: 'row'}}>
             <View
@@ -266,7 +264,6 @@ const Match = ({item, onPress, user}) => {
                   textAlign: 'center',
                 }}>
                 {item.home.name}
-                {/* MMMMMMMMMMMMMMMMMMMM */}
               </Text>
             </View>
             <View
@@ -398,8 +395,6 @@ const ScheduleScreen = ({navigation, route}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       onRefresh();
     });
-
-    // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [getDay, onRefresh, selectedId, navigation]);
 
@@ -441,10 +436,6 @@ const ScheduleScreen = ({navigation, route}) => {
       console.log('error fetching schedulePerDay', err);
     }
   }, []);
-
-  // const matches = ({item}) => {
-  //   renderSchedule(item);
-  // };
 
   const startMatch = item => {
     navigation.navigate('CountScreen', {

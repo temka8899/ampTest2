@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+
 import {
   Text,
   View,
@@ -25,6 +26,7 @@ import LottieView from 'lottie-react-native';
 
 import {createPlayer} from '../graphql/mutations';
 import LinearGradient from 'react-native-linear-gradient';
+
 import {
   listPlayers,
   listLeagues,
@@ -360,6 +362,7 @@ const Match = ({item, onPress, user}) => {
 };
 
 const GameScreen = ({navigation}) => {
+  const [imgLoad, setImgLoad] = useState(true);
   const [schedule, setSchedule] = useState([]);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [AvatarModal, setAvatarModal] = useState(false);
@@ -427,43 +430,50 @@ const GameScreen = ({navigation}) => {
         marginLeft: wp(4),
         marginVertical: wp(3),
       }}>
-      <TouchableOpacity
-        onPress={onPress}
-        style={[styles.item, {backgroundColor: COLORS.background}]}>
-        <ImageBackground
-          source={{
-            uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
-          }}
-          style={{
-            width: wp(52),
-            height: wp(68),
-          }}
-          imageStyle={{
-            borderRadius: wp(12),
-            // resizeMode: 'contain',
-            backgroundColor: COLORS.background,
-          }}>
-          <LinearGradient
-            style={{flex: 1, borderRadius: wp(12)}}
-            start={{x: 1, y: 0}}
-            end={{x: 1, y: 1}}
-            colors={['#00000000', '#000']}>
-            <View style={styles.leagueStatus}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  fontFamily: FONTS.brandFont,
-                  paddingVertical: hp(1),
-                }}>
-                {item.game.name}
-              </Text>
-              <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
-                {item.startDate}
-              </Text>
-            </View>
-          </LinearGradient>
-        </ImageBackground>
-      </TouchableOpacity>
+      <>
+        {imgLoad ? (
+          <ActivityIndicator size={'large'} color={COLORS.brand} />
+        ) : (
+          <TouchableOpacity
+            onPress={onPress}
+            style={[styles.item, {backgroundColor: COLORS.background}]}>
+            <ImageBackground
+              source={{
+                uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
+              }}
+              style={{
+                width: wp(52),
+                height: wp(68),
+              }}
+              imageStyle={{
+                borderRadius: wp(12),
+                // resizeMode: 'contain',
+                backgroundColor: COLORS.background,
+              }}>
+              <LinearGradient
+                style={{flex: 1, borderRadius: wp(12)}}
+                start={{x: 1, y: 0}}
+                end={{x: 1, y: 1}}
+                colors={['#00000000', '#000']}>
+                <View style={styles.leagueStatus}>
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      fontFamily: FONTS.brandFont,
+                      paddingVertical: hp(1),
+                    }}>
+                    {item.game.name}
+                  </Text>
+                  <Text
+                    style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
+                    {item.startDate}
+                  </Text>
+                </View>
+              </LinearGradient>
+            </ImageBackground>
+          </TouchableOpacity>
+        )}
+      </>
     </View>
   );
 
@@ -537,6 +547,7 @@ const GameScreen = ({navigation}) => {
       //
 
       setLeagueList(leagueData.data.listLeagues.items);
+      setImgLoad(false);
     } catch (err) {}
   };
 

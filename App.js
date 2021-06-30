@@ -1,5 +1,8 @@
 import * as React from 'react';
 
+// import codePush from 'react-native-code-push';
+import codePush from 'react-native-code-push';
+
 import Home from './src/screens/uploadScreen';
 import Tabs from './src/components/BottomTab';
 import authScreen from './src/screens/authScreen';
@@ -15,6 +18,7 @@ import FormInterface from './src/screens/FormInterface';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+
 const Stack = createStackNavigator();
 function App() {
   return (
@@ -72,4 +76,8 @@ const ContextProvider = ({children}) => {
   );
 };
 
-export default App;
+const codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+};
+
+export default codePush(codePushOptions)(App);

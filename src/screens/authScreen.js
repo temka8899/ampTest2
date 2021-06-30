@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+
 import {
   View,
   Text,
@@ -15,13 +16,15 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
+
 import {icons, images} from '../constants';
-import {wp, hp, FONTS, COLORS} from '../constants/theme';
 import FormInput from '../components/FormInput';
+import {wp, hp, FONTS, COLORS} from '../constants/theme';
 
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
 import FlashMessage, {
@@ -35,6 +38,7 @@ Amplify.configure({
     disabled: true,
   },
 });
+
 const SwitchView = ({value, onPress}) => {
   const navigation = useNavigation();
   const [email, setSignUpEmail] = useState('');
@@ -132,14 +136,6 @@ const SwitchView = ({value, onPress}) => {
     }
   }
 
-  // const onRadioBtnClick = item => {
-  //   let updateState = gender.map(genderItem =>
-  //     genderItem.id == item.id
-  //       ? {...genderItem, selected: true}
-  //       : {...genderItem, selected: false},
-  //   );
-  //   setGender(updateState);
-  // };
   switch (value) {
     case 0:
       return (
