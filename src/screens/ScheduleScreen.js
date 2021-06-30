@@ -489,7 +489,6 @@ const ScheduleScreen = ({navigation, route}) => {
   }
 
   // ene league heden odor urgejlehiin avah function
-
   async function getDuration(number, perDay) {
     let s = 0,
       count;
@@ -500,6 +499,8 @@ const ScheduleScreen = ({navigation, route}) => {
     if (s % perDay !== 0) {
       count++;
     }
+
+    //Playoff, finals iin 3 odor nemeh
     count = count + 3;
     return count;
   }

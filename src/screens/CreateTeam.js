@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Button, SafeAreaView, StatusBar} from 'react-native';
 
 import ImagePicker from 'react-native-image-crop-picker';
-
+import {AuthContext} from '../../App';
 import {
   createTeam,
   createTeamPlayer,
@@ -39,6 +39,7 @@ Amplify.configure({
 });
 
 const createTeamScreen = ({navigation}) => {
+  const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const initialState = {name: ''};
   const [formState, setFormState] = useState(initialState);
   let unfinishedMatch = 0;
@@ -624,15 +625,31 @@ const createTeamScreen = ({navigation}) => {
 
   async function getSchedule() {
     try {
-      const scheduleData = await API.graphql(
-        graphqlOperation(listSchedules, {
-          filter: {
-            leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
-          },
-        }),
-      );
+      let updateScheduleHome = [];
+      let updateScheduleAway = [];
+      const scheduleData = await API.graphql(graphqlOperation(listSchedules));
       const todos = scheduleData.data.listSchedules.items;
-      console.log('Schedule>>>>>>>>>>>>>>', todos);
+      for (let i = 0; i < todos.length; i++) {
+        let homePlayers1 = todos[i].homePlayers.split('[');
+        let homePlayers2 = homePlayers1[1].split(']');
+        let homePlayers = homePlayers2[0].split(', ');
+        let awayPlayers1 = todos[i].awayPlayers.split('[');
+        let awayPlayers2 = awayPlayers1[1].split(']');
+        let awayPlayers = awayPlayers2[0].split(', ');
+
+        console.log(`Home Players${i}`, homePlayers);
+        console.log(`Away Players${i}`, awayPlayers);
+        if (userInfo.id == homePlayers[0] || userInfo.id == homePlayers[1]) {
+          console.log(`User finded at homePlayers${i}`, todos[i]);
+          updateScheduleHome.push(todos[i].id);
+        }
+        if (userInfo.id == awayPlayers[0] || userInfo.id == awayPlayers[1]) {
+          console.log(`User finded at awayPlayers${i}`, todos[i]);
+          updateScheduleAway.push(todos[i].id);
+        }
+      }
+      console.log('Update Home', updateScheduleHome);
+      console.log('Update Away', updateScheduleAway);
     } catch (err) {
       console.log('error fetching todos', err);
     }
