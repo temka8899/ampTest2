@@ -11,11 +11,15 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
+  Modal,
+  Alert,
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';
 import {hp, wp} from '../constants/theme';
 import LoadBtn from '../components/Loading';
+
+import {Picker} from '@react-native-picker/picker';
 
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
@@ -43,6 +47,8 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
+const playerAmount = [4, 6, 8, 10, 12, 14, 16];
+
 const AdminScreen = ({navigation}) => {
   useEffect(() => {
     fetchLeague();
@@ -53,7 +59,12 @@ const AdminScreen = ({navigation}) => {
   const [LeagueList, setLeagueList] = React.useState([]);
   const [GameData, setGameData] = useState([]);
   const [btnLoad, setBtnLoad] = useState(false);
-  const [leagueData, setLeagueData] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [minimumPlayer, setMinimumPlayer] = useState();
+
+  const changeModalVisible = bool => {
+    setModalVisible(bool);
+  };
 
   const onRefresh = React.useCallback(() => {
     // checkInLeague();
@@ -68,13 +79,34 @@ const AdminScreen = ({navigation}) => {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       // const todos = leagueData.data.listTeams.items;
       //
+      let playerLength = [];
       let myData = [];
+      let myArr = [];
       leagueData.data.listLeagues.items.map(item => {
         let custom = item;
         custom.loading = false;
         myData.push(custom);
       });
-      setLeagueList(leagueData.data.listLeagues.items);
+
+      console.log('league->>>>> :>> ', leagueData.data.listLeagues.items);
+      for (let i = 0; i < leagueData.data.listLeagues.items.length; i++) {
+        const leaguePlayerData = await API.graphql(
+          graphqlOperation(listLeaguePlayers, {
+            filter: {
+              leagueID: {eq: leagueData.data.listLeagues.items[i].id},
+            },
+          }),
+        );
+        const todos = leaguePlayerData.data.listLeaguePlayers.items.length;
+        console.log('todos :>> ', todos);
+        let item = new Object();
+        item = leagueData.data.listLeagues.items[i];
+        item.playerQuantity = todos;
+        myArr.push(item);
+      }
+      console.log('playerLength :>> ', playerLength);
+      console.log('myArr :>> ', myArr);
+      setLeagueList(myArr);
     } catch (err) {
       console.log('err :>> ', err);
     }
@@ -173,11 +205,10 @@ const AdminScreen = ({navigation}) => {
           },
         }),
       );
-      // console.log('>>>>>>>>>>>>>>>>>>>>>>', leagueDataTemp);
-      // setLeagueData(leagueDataTemp);
       setBtnLoad(false);
     } else {
       console.log('Soccer League Players not even or not enough');
+      Alert.alert('League player not enough');
       setBtnLoad(false);
     }
 
@@ -387,7 +418,7 @@ const AdminScreen = ({navigation}) => {
               fontFamily: FONTS.brandFont,
               fontSize: RFPercentage(1.5),
             }}>
-            {item.startedDate}
+            {item.playerQuantity} / 8
           </Text>
           <View>
             {item.isStart ? (
@@ -396,7 +427,7 @@ const AdminScreen = ({navigation}) => {
               </TouchableOpacity>
             ) : (
               <CustomButton
-                text={'Start League'}
+                text={'Start'}
                 disabled={btnLoad}
                 loading={item.loading}
                 styleAdd={styles.startBtn}
@@ -408,7 +439,7 @@ const AdminScreen = ({navigation}) => {
               disabled={btnLoad}
               onPress={() => DeleteLeague(item.id)}
               style={styles.deleteBtn}>
-              <Text style={styles.btnText}>Delete league</Text>
+              <Text style={styles.btnText}>Delete</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -454,7 +485,7 @@ const AdminScreen = ({navigation}) => {
               disabled={btnLoad}
               onPress={() => DeleteGame(item.id)}
               style={styles.deleteBtn}>
-              <Text style={styles.btnText}>Delete game</Text>
+              <Text style={styles.btnText}>Delete</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -488,6 +519,15 @@ const AdminScreen = ({navigation}) => {
             <Text style={styles.textStyle}> refresh </Text>
           </TouchableOpacity>
         </View>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={modalVisible}
+          nRequestClose={() => changeModalVisible(false)}>
+          {playerAmount.map((item, ind) => (
+            <Picker.Item label={item.toString()} value={item} key={ind} />
+          ))}
+        </Modal>
         <View>
           {LeagueList.length !== 0 ? (
             <FlatList
@@ -568,8 +608,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   deleteBtn: {
-    width: wp(35),
+    width: wp(20),
     height: hp(3),
+    borderRadius: 50,
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',
@@ -577,8 +618,9 @@ const styles = StyleSheet.create({
     marginLeft: wp(1),
   },
   startBtn: {
-    width: wp(35),
+    width: wp(20),
     height: hp(3),
+    borderRadius: 50,
     backgroundColor: COLORS.green,
     justifyContent: 'center',
     alignItems: 'center',
@@ -586,8 +628,9 @@ const styles = StyleSheet.create({
     marginLeft: wp(1),
   },
   onGoingBtn: {
-    width: wp(35),
+    width: wp(20),
     height: hp(3),
+    borderRadius: 50,
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',
