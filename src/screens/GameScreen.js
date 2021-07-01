@@ -537,6 +537,7 @@ const GameScreen = ({navigation}) => {
         }
       });
       setUserInfo(finded);
+      console.log('finded :>> ', finded);
       storeData(finded.c_id);
     },
     [setUserInfo],

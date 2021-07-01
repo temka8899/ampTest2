@@ -21,62 +21,59 @@ import {createStackNavigator} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
+const Root = createStackNavigator();
 
-const App = ({navigation}) => {
-  const [cogID, setCogId] = React.useState();
-
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@userID');
-      if (value !== null) {
-        setCogId(value);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-
-  React.useEffect(() => {
-    getData();
-  }, []);
+const App = () => {
+  const {userInfo} = React.useContext(AuthContext);
 
   return (
     <NavigationContainer>
       <ContextProvider>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen name="Auth" component={authScreen} />
-          <Stack.Screen name="Tabs" component={Tabs} />
-          <Stack.Screen
-            name="BracketScreen"
-            component={BracketScreen}
-            options={{gestureEnabled: false}}
-          />
-          <Stack.Screen
-            name="CountScreen"
-            component={CountScreen}
-            options={{gestureEnabled: false}}
-          />
-          <Stack.Screen
-            options={{gestureEnabled: false}}
-            name="FormInterface"
-            component={FormInterface}
-          />
-          <Stack.Screen name="EditScreen" component={EditProfileScreen} />
-          <Stack.Screen name="AdminScreen" component={AdminScreen} />
-          <Stack.Screen
-            name="CreateLeagueScreen"
-            component={CreateLeagueScreen}
-          />
-          <Stack.Screen name="CreateGameScreen" component={CreateGameScreen} />
-          <Stack.Screen name="CreateTeamScreen" component={CreateTeamScreen} />
-          <Stack.Screen
-            name="ParticipatesScreen"
-            component={ParticipatesScreen}
-          />
-        </Stack.Navigator>
+        {userInfo === 'logout' ? (
+          <Stack.Navigator>
+            <Stack.Screen name="Auth" component={authScreen} />
+          </Stack.Navigator>
+        ) : (
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name="Tabs" component={Tabs} />
+            <Stack.Screen
+              name="BracketScreen"
+              component={BracketScreen}
+              options={{gestureEnabled: false}}
+            />
+            <Stack.Screen
+              name="CountScreen"
+              component={CountScreen}
+              options={{gestureEnabled: false}}
+            />
+            <Stack.Screen
+              options={{gestureEnabled: false}}
+              name="FormInterface"
+              component={FormInterface}
+            />
+            <Stack.Screen name="EditScreen" component={EditProfileScreen} />
+            <Stack.Screen name="AdminScreen" component={AdminScreen} />
+            <Stack.Screen
+              name="CreateLeagueScreen"
+              component={CreateLeagueScreen}
+            />
+            <Stack.Screen
+              name="CreateGameScreen"
+              component={CreateGameScreen}
+            />
+            <Stack.Screen
+              name="CreateTeamScreen"
+              component={CreateTeamScreen}
+            />
+            <Stack.Screen
+              name="ParticipatesScreen"
+              component={ParticipatesScreen}
+            />
+          </Stack.Navigator>
+        )}
       </ContextProvider>
     </NavigationContainer>
   );

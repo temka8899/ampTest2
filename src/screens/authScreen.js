@@ -398,7 +398,7 @@ const SignInScreen = ({navigation, onPress}) => {
       setLoading(true);
       let response = await Auth.signIn(username, password);
 
-      navigation.replace('Tabs');
+      navigation.navigate('Tabs');
       console.log('✅ Sign In Success');
       setLoading(false);
       setUsername('');
