@@ -379,7 +379,7 @@ const GameScreen = ({navigation}) => {
   const [introModal, setIntroModal] = useState(false);
   const [userInfoSeted, setUserInfoSeted] = useState(false);
 
-  console.log('userInfo :>> ', userInfo);
+  //console.log('userInfo :>> ', userInfo);
 
   useEffect(() => {
     fetchLeague();
