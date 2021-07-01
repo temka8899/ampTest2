@@ -49,7 +49,7 @@ const App = ({navigation}) => {
           }}>
           <Stack.Screen name="Auth" component={authScreen} />
           <Stack.Screen name="Tabs" component={Tabs} />
-          <Stack.Screen44
+          <Stack.Screen
             name="BracketScreen"
             component={BracketScreen}
             options={{gestureEnabled: false}}
