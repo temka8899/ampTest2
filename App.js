@@ -10,7 +10,6 @@ import AdminScreen from './src/screens/AdminScreen';
 import CountScreen from './src/screens/CountScreen';
 import createTeamScreen from './src/screens/CreateTeam';
 import createGameScreen from './src/screens/CreateGame';
-import ScheduleScreen from './src/screens/ScheduleScreen';
 import createLeagueScreen from './src/screens/CreateLeague';
 import EditProfileScreen from './src/screens/EditProfileScreen';
 import ParticipatesScreen from './src/screens/ParticipatesScreen';
@@ -22,9 +21,16 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// const wait = timeout => {
+//   return new Promise(resolve => setTimeout(resolve, timeout));
+// };
+
 const Stack = createStackNavigator();
-function App() {
+
+const App = ({navigation}) => {
+  // const [refreshing, setRefreshing] = React.useState(false);
   const [cogID, setCogId] = React.useState();
+
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@userID');
@@ -35,6 +41,10 @@ function App() {
       // error reading value
     }
   };
+
+  // const onRefresh = React.useCallback(() => {
+  //   wait(500).then(() => setRefreshing(false));
+  // }, []);
 
   React.useEffect(() => {
     getData();
@@ -47,46 +57,19 @@ function App() {
           screenOptions={{
             headerShown: false,
           }}>
-          {cogID == null && <Stack.Screen name="Auth" component={authScreen} />}
+          <Stack.Screen name="Auth" component={authScreen} />
           <Stack.Screen name="Tabs" component={Tabs} />
           <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen
-            name="CreateLeagueScreen"
-            component={createLeagueScreen}
-          />
-          <Stack.Screen
-            name="EditProfileScreen"
-            component={EditProfileScreen}
-            options={{gestureEnabled: false}}
-          />
           <Stack.Screen
             name="BracketScreen"
             component={BracketScreen}
             options={{gestureEnabled: false}}
           />
-          <Stack.Screen
-            name="FormInterface"
-            component={FormInterface}
-            options={{gestureEnabled: false}}
-          />
-          <Stack.Screen
-            name="ParticipatesScreen"
-            component={ParticipatesScreen}
-          />
-          <Stack.Screen name="createTeamScreen" component={createTeamScreen} />
-          <Stack.Screen name="createGameScreen" component={createGameScreen} />
-          <Stack.Screen name="AdminScreen" component={AdminScreen} />
-          <Stack.Screen
-            name="CountScreen"
-            component={CountScreen}
-            options={{gestureEnabled: false}}
-          />
-          <Stack.Screen name="ScheduleScreen" component={ScheduleScreen} />
         </Stack.Navigator>
       </ContextProvider>
     </NavigationContainer>
   );
-}
+};
 
 export const AuthContext = React.createContext([]);
 

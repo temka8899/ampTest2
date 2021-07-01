@@ -11,7 +11,6 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
-  Modal,
   Alert,
 } from 'react-native';
 
@@ -21,6 +20,7 @@ import LoadBtn from '../components/Loading';
 
 import {Picker} from '@react-native-picker/picker';
 
+import Modal from 'react-native-modal';
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -568,12 +568,12 @@ const AdminScreen = ({navigation}) => {
       </ScrollView>
       <View style={styles.ButtonContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('createGameScreen')}
+          onPress={() => navigation.navigate('CreateGame')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Create Game</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CreateLeagueScreen')}
+          onPress={() => navigation.navigate('CreateLeague')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Create League</Text>
         </TouchableOpacity>
@@ -587,39 +587,42 @@ const AdminScreen = ({navigation}) => {
           <Text style={{color: 'white'}}> modal tester </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('createTeamScreen')}
+          onPress={() => navigation.navigate('CreateTeam')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Team</Text>
         </TouchableOpacity>
       </View>
-      <Modal transparent={true} animationType="fade" visible={modalVisible}>
-        <TouchableOpacity
-          onPress={() => changeModalVisible(false)}
-          style={styles.modalContainer}>
-          <View style={styles.modal}>
-            <Text
-              style={{
-                color: COLORS.white,
-                fontFamily: FONTS.brandFont,
-                paddingVertical: hp(1),
-                alignSelf: 'center',
-              }}>
-              Match per day
-            </Text>
-            <Picker
-              itemStyle={{color: 'white'}}
-              dropdownIconColor={'white'}
-              mode={'dropdown'}
-              selectedValue={minimumPlayer}
-              onValueChange={(itemValue, itemIndex) =>
-                setMinimumPlayer(itemValue)
-              }>
-              {matchAmount.map((item, ind) => (
-                <Picker.Item label={item.toString()} value={item} key={ind} />
-              ))}
-            </Picker>
-          </View>
-        </TouchableOpacity>
+      <Modal
+        transparent={true}
+        animationType="fade"
+        isVisible={modalVisible}
+        style={styles.modalContainer}>
+        <View style={styles.modal}>
+          <TouchableOpacity onPress={() => changeModalVisible(false)}>
+            <Text>sdgf</Text>
+          </TouchableOpacity>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              paddingVertical: hp(1),
+              alignSelf: 'center',
+            }}>
+            Match per day
+          </Text>
+          <Picker
+            itemStyle={{color: 'white'}}
+            dropdownIconColor={'white'}
+            mode={'dropdown'}
+            selectedValue={minimumPlayer}
+            onValueChange={(itemValue, itemIndex) =>
+              setMinimumPlayer(itemValue)
+            }>
+            {matchAmount.map((item, ind) => (
+              <Picker.Item label={item.toString()} value={item} key={ind} />
+            ))}
+          </Picker>
+        </View>
       </Modal>
     </SafeAreaView>
   );
@@ -737,7 +740,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#00000080',
+    margin: 0,
   },
 });
 export default AdminScreen;

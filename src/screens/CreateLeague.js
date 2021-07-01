@@ -113,7 +113,7 @@ const CreateLeagueScreen = ({navigation}) => {
         }),
       );
       console.log('League Created');
-      navigation.navigate('AdminScreen');
+      navigation.pop();
     } catch (err) {
       console.log('error creating League:', err);
     }
@@ -124,7 +124,7 @@ const CreateLeagueScreen = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="light-content" />
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
+          <TouchableOpacity onPress={() => navigation.pop()}>
             <Image source={icons.backBtn} style={styles.backBtn} />
           </TouchableOpacity>
         </View>
