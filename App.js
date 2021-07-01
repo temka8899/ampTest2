@@ -3,7 +3,6 @@ import * as React from 'react';
 // import codePush from 'react-native-code-push';
 import codePush from 'react-native-code-push';
 
-import Home from './src/screens/uploadScreen';
 import Tabs from './src/components/BottomTab';
 import authScreen from './src/screens/authScreen';
 import AdminScreen from './src/screens/AdminScreen';
@@ -21,14 +20,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const wait = timeout => {
-//   return new Promise(resolve => setTimeout(resolve, timeout));
-// };
-
 const Stack = createStackNavigator();
 
 const App = ({navigation}) => {
-  // const [refreshing, setRefreshing] = React.useState(false);
   const [cogID, setCogId] = React.useState();
 
   const getData = async () => {
@@ -41,10 +35,6 @@ const App = ({navigation}) => {
       // error reading value
     }
   };
-
-  // const onRefresh = React.useCallback(() => {
-  //   wait(500).then(() => setRefreshing(false));
-  // }, []);
 
   React.useEffect(() => {
     getData();
@@ -59,7 +49,6 @@ const App = ({navigation}) => {
           }}>
           <Stack.Screen name="Auth" component={authScreen} />
           <Stack.Screen name="Tabs" component={Tabs} />
-          <Stack.Screen name="Home" component={Home} />
           <Stack.Screen
             name="BracketScreen"
             component={BracketScreen}
