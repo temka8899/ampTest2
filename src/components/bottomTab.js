@@ -4,16 +4,28 @@ import {StyleSheet, Image, View, Text} from 'react-native';
 import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons} from '../constants';
 import GameScreen from '../screens/GameScreen';
-import Profile from '../screens/ProfileScreen';
-import Standings from '../screens/StandingsScreen';
+import CountScreen from '../screens/CountScreen';
+import AdminScreen from '../screens/AdminScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import CreateGameScreen from '../screens/CreateGame';
 import ScheduleScreen from '../screens/ScheduleScreen';
-import Admin from '../screens/CreateLeague';
+import StandingsScreen from '../screens/StandingsScreen';
+import CreateLeagueScreen from '../screens/CreateLeague';
+import ParticipatesScreen from '../screens/ParticipatesScreen';
+// import EditProfileScreen from '../screens/EditProfileScreen';
 
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import createTeamScreen from '../screens/CreateTeam';
+import EditProfileScreen from '../screens/EditProfileScreen';
+import FormInterface from '../screens/FormInterface';
 
 const Tab = createBottomTabNavigator();
+const GameStack = createStackNavigator();
+const ScheduleStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 
 const Tabs = () => {
   const insets = useSafeAreaInsets();
@@ -30,7 +42,7 @@ const Tabs = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={GameScreen}
+        component={GameStackScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>
@@ -52,7 +64,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="ScheduleScreen"
-        component={ScheduleScreen}
+        component={ScheduleStackScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>
@@ -74,7 +86,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Standings"
-        component={Standings}
+        component={StandingsScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>
@@ -96,7 +108,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileStackScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>
@@ -119,7 +131,60 @@ const Tabs = () => {
     </Tab.Navigator>
   );
 };
+
 export default Tabs;
+
+const GameStackScreen = ({navigation}) => {
+  return (
+    <GameStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <GameStack.Screen name="Game" component={GameScreen} />
+      <GameStack.Screen
+        name="ParticipatesScreen"
+        component={ParticipatesScreen}
+      />
+    </GameStack.Navigator>
+  );
+};
+
+const ScheduleStackScreen = ({navigation}) => {
+  return (
+    <ScheduleStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <ScheduleStack.Screen name="Schedule" component={ScheduleScreen} />
+      <ScheduleStack.Screen
+        options={{gestureEnabled: false}}
+        name="CountScreen"
+        component={CountScreen}
+      />
+      <ScheduleStack.Screen
+        options={{gestureEnabled: false}}
+        name="FormInterface"
+        component={FormInterface}
+      />
+    </ScheduleStack.Navigator>
+  );
+};
+
+const ProfileStackScreen = ({navigation}) => {
+  return (
+    <ProfileStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen name="Edit" component={EditProfileScreen} />
+      <ProfileStack.Screen name="Admin" component={AdminScreen} />
+      <ProfileStack.Screen name="CreateLeague" component={CreateLeagueScreen} />
+      <ProfileStack.Screen name="CreateGame" component={CreateGameScreen} />
+      <ProfileStack.Screen name="CreateTeam" component={createTeamScreen} />
+    </ProfileStack.Navigator>
+  );
+};
 
 const styles = StyleSheet.create({
   icon: {

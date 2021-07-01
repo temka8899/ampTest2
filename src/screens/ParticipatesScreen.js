@@ -248,7 +248,7 @@ const ParticipatesScreen = ({navigation, route}) => {
       <StatusBar barStyle="light-content" />
       <AppBar />
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
+        <TouchableOpacity onPress={() => navigation.pop()}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
         {isLoading ? (

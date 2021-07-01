@@ -567,12 +567,12 @@ const AdminScreen = ({navigation}) => {
       </ScrollView>
       <View style={styles.ButtonContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('createGameScreen')}
+          onPress={() => navigation.navigate('CreateGame')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Create Game</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CreateLeagueScreen')}
+          onPress={() => navigation.navigate('CreateLeague')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Create League</Text>
         </TouchableOpacity>
@@ -586,7 +586,7 @@ const AdminScreen = ({navigation}) => {
           <Text style={{color: 'white'}}> modal tester </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('createTeamScreen')}
+          onPress={() => navigation.navigate('CreateTeam')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Team</Text>
         </TouchableOpacity>

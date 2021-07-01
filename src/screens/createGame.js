@@ -101,7 +101,7 @@ const createGameScreen = ({navigation}) => {
     <SafeAreaView style={styles.Container}>
       <StatusBar barStyle="light-content" />
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Tabs')}>
+        <TouchableOpacity onPress={() => navigation.pop()}>
           <Image source={icons.backBtn} style={styles.backBtn} />
         </TouchableOpacity>
       </View>

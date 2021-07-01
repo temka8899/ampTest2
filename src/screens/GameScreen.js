@@ -418,7 +418,7 @@ const GameScreen = ({navigation}) => {
     return (
       <Match
         item={item}
-        onPress={() => navigation.navigate('ScheduleScreen')}
+        onPress={() => navigation.navigate('Tabs', {screen: 'ScheduleScreen'})}
         selectedId={selectedId}
         user={userInfo}
       />
