@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {COLORS, images} from '../constants';
+import {COLORS, icons, images} from '../constants';
 import {FONTS, wp} from '../constants/theme';
 
 export default function BracketScreen() {
@@ -186,7 +186,7 @@ export default function BracketScreen() {
                 // borderColor: 'red',
               }}>
               <Image
-                source={images.line1agrey}
+                source={icons.line1agrey}
                 style={{
                   width: wp(17.06),
                   height: wp(16),
@@ -195,7 +195,7 @@ export default function BracketScreen() {
                 }}
               />
               <Image
-                source={images.line1bgreen}
+                source={icons.line1bgreen}
                 style={{
                   width: wp(17.06),
                   height: wp(16),
@@ -212,7 +212,7 @@ export default function BracketScreen() {
                 // borderColor: 'red',
               }}>
               <Image
-                source={images.line1agrey}
+                source={icons.line1agrey}
                 style={{
                   width: wp(17.06),
                   height: wp(16),
@@ -221,7 +221,7 @@ export default function BracketScreen() {
                 }}
               />
               <Image
-                source={images.line1bgreen}
+                source={icons.line1bgreen}
                 style={{
                   width: wp(17.06),
                   height: wp(16),
@@ -343,7 +343,7 @@ export default function BracketScreen() {
                 borderColor: 'red',
               }}>
               <Image
-                source={images.line2agreen}
+                source={icons.line2agreen}
                 style={{
                   width: wp(16),
                   height: wp(41.06),
@@ -352,21 +352,12 @@ export default function BracketScreen() {
                 }}
               />
               <Image
-                source={images.line2bgrey}
+                source={icons.line2bgrey}
                 style={{
                   width: wp(16),
                   height: wp(41.06),
                   position: 'absolute',
                   marginTop: wp(54.1),
-                }}
-              />
-              <View
-                style={{
-                  height: wp(2),
-                  width: wp(10),
-                  position: 'absolute',
-                  marginTop: wp(54.5),
-                  backgroundColor: 'red',
                 }}
               />
             </View>

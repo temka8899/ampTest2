@@ -77,9 +77,12 @@ export default function FormInterface({navigation, route}) {
   const [CancelModalVisible, setCancelModalVisible] = useState(false);
   const [EndModalVisible, setEndModalVisible] = useState(false);
   const [select, setSelect] = useState('');
+  // onoo
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
+  //gol data shcedule
   const [MatchData, setMatchData] = useState();
+  // bagiin id
   const [HomeID, setHomeID] = useState();
   const [AwayID, setAwayID] = useState();
   const [HomeAvatars, setHomeAvatars] = useState();
