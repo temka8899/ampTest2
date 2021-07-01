@@ -20,6 +20,7 @@ import CircleXp from '../components/CircleXp';
 import {COLORS, FONTS, icons} from '../constants';
 import {LogoutModal} from '../components/LogoutModal';
 import LeaguePicker from '../components/LeaguePicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -68,6 +69,7 @@ const Profile = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const Match = ({item, onPress, user}) => {
+    console.log(`item`, item);
     const [Home, setHome] = useState(undefined);
     const [Away, setAway] = useState(undefined);
     const [imgLoad, setImgLoad] = useState(true);
@@ -413,9 +415,10 @@ const Profile = ({navigation}) => {
   const modalHide = () => {
     setLogoutModalVisible(false);
   };
-  const logout = () => {
+  const logout = async () => {
     setLogoutModalVisible(false);
-    setUserInfo('');
+    // setUserInfo('');
+    await AsyncStorage.removeItem('@userID');
     navigation.navigate('Auth');
   };
   return (
@@ -562,7 +565,10 @@ const Profile = ({navigation}) => {
             animationType="fade"
             visible={modalVisible}
             nRequestClose={() => changeModalVisible(false)}>
-            <Text> asddas </Text>
+            <LeaguePicker
+              changeModalVisible={changeModalVisible}
+              setData={setData}
+            />
           </Modal>
           <FlatList
             data={scheduleData}

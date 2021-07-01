@@ -15,6 +15,14 @@ export const removeBtn = require('../assets/icons/removeBtn.png');
 export const backWhiteBtn = require('../assets/icons/backWhiteBtn.png');
 export const signBackBtn = require('../assets/icons/signBackBtn.png');
 export const star = require('../assets/icons/star.png');
+export const line1agreen = require('../assets/icons/bracketLines/line1agreen.png');
+export const line1bgreen = require('../assets/icons/bracketLines/line1bgreen.png');
+export const line1agrey = require('../assets/icons/bracketLines/line1agrey.png');
+export const line1bgrey = require('../assets/icons/bracketLines/line1bgrey.png');
+export const line2agreen = require('../assets/icons/bracketLines/line2agreen.png');
+export const line2bgreen = require('../assets/icons/bracketLines/line2bgreen.png');
+export const line2agrey = require('../assets/icons/bracketLines/line2agrey.png');
+export const line2bgrey = require('../assets/icons/bracketLines/line2bgrey.png');
 
 export default {
   Home,
@@ -34,4 +42,12 @@ export default {
   backBtn,
   drop,
   logOut,
+  line2agreen,
+  line2bgreen,
+  line2agrey,
+  line2bgrey,
+  line1agreen,
+  line1bgreen,
+  line1agrey,
+  line1bgrey,
 };
