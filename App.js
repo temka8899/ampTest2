@@ -19,6 +19,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CreateLeagueScreen from './src/screens/CreateLeague';
 
 const Stack = createStackNavigator();
 
@@ -53,6 +54,25 @@ const App = ({navigation}) => {
             name="BracketScreen"
             component={BracketScreen}
             options={{gestureEnabled: false}}
+          />
+          <Stack.Screen
+            name="CountScreen"
+            component={CountScreen}
+            options={{gestureEnabled: false}}
+          />
+          <Stack.Screen
+            options={{gestureEnabled: false}}
+            name="FormInterface"
+            component={FormInterface}
+          />
+          <Stack.Screen name="Edit" component={EditProfileScreen} />
+          <Stack.Screen name="Admin" component={AdminScreen} />
+          <Stack.Screen name="CreateLeague" component={CreateLeagueScreen} />
+          <Stack.Screen name="CreateGame" component={createGameScreen} />
+          <Stack.Screen name="CreateTeam" component={createTeamScreen} />
+          <Stack.Screen
+            name="ParticipatesScreen"
+            component={ParticipatesScreen}
           />
         </Stack.Navigator>
       </ContextProvider>

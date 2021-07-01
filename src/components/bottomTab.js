@@ -32,6 +32,7 @@ const Tabs = () => {
 
   return (
     <Tab.Navigator
+      shifting={false}
       tabBarOptions={{
         showLabel: false,
         style: {
@@ -141,10 +142,6 @@ const GameStackScreen = ({navigation}) => {
         headerShown: false,
       }}>
       <GameStack.Screen name="Game" component={GameScreen} />
-      <GameStack.Screen
-        name="ParticipatesScreen"
-        component={ParticipatesScreen}
-      />
     </GameStack.Navigator>
   );
 };
@@ -156,16 +153,6 @@ const ScheduleStackScreen = ({navigation}) => {
         headerShown: false,
       }}>
       <ScheduleStack.Screen name="Schedule" component={ScheduleScreen} />
-      <ScheduleStack.Screen
-        options={{gestureEnabled: false}}
-        name="CountScreen"
-        component={CountScreen}
-      />
-      <ScheduleStack.Screen
-        options={{gestureEnabled: false}}
-        name="FormInterface"
-        component={FormInterface}
-      />
     </ScheduleStack.Navigator>
   );
 };
@@ -177,11 +164,6 @@ const ProfileStackScreen = ({navigation}) => {
         headerShown: false,
       }}>
       <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-      <ProfileStack.Screen name="Edit" component={EditProfileScreen} />
-      <ProfileStack.Screen name="Admin" component={AdminScreen} />
-      <ProfileStack.Screen name="CreateLeague" component={CreateLeagueScreen} />
-      <ProfileStack.Screen name="CreateGame" component={CreateGameScreen} />
-      <ProfileStack.Screen name="CreateTeam" component={createTeamScreen} />
     </ProfileStack.Navigator>
   );
 };
