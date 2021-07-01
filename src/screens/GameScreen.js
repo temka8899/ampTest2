@@ -26,6 +26,7 @@ import LottieView from 'lottie-react-native';
 
 import {createPlayer} from '../graphql/mutations';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   listPlayers,
@@ -536,9 +537,18 @@ const GameScreen = ({navigation}) => {
         }
       });
       setUserInfo(finded);
+      storeData(finded.c_id);
     },
     [setUserInfo],
   );
+
+  const storeData = async c_id => {
+    try {
+      await AsyncStorage.setItem('@userID', c_id);
+    } catch (e) {
+      // saving error
+    }
+  };
 
   const fetchLeague = async () => {
     try {

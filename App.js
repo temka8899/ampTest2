@@ -20,17 +20,34 @@ import BracketScreen from './src/screens/BracketScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Stack = createStackNavigator();
 function App() {
+  const [cogID, setCogId] = React.useState();
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@userID');
+      if (value !== null) {
+        setCogId(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  React.useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <NavigationContainer>
       <ContextProvider>
         <Stack.Navigator
-          initialRouteName="Auth"
           screenOptions={{
             headerShown: false,
           }}>
-          <Stack.Screen name="Auth" component={authScreen} />
+          {cogID == null && <Stack.Screen name="Auth" component={authScreen} />}
           <Stack.Screen name="Tabs" component={Tabs} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen

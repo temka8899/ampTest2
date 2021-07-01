@@ -48,7 +48,7 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const playerAmount = [4, 6, 8, 10, 12, 14, 16];
+const matchAmount = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const AdminScreen = ({navigation}) => {
   useEffect(() => {
@@ -420,7 +420,7 @@ const AdminScreen = ({navigation}) => {
               fontFamily: FONTS.brandFont,
               fontSize: RFPercentage(1.5),
             }}>
-            {item.playerQuantity} / 8
+            {item.playerQuantity} / {item.minPlayer}
           </Text>
           <View>
             {item.isStart ? (
@@ -521,15 +521,6 @@ const AdminScreen = ({navigation}) => {
             <Text style={styles.textStyle}> refresh </Text>
           </TouchableOpacity>
         </View>
-        <Modal
-          transparent={true}
-          animationType="fade"
-          visible={modalVisible}
-          nRequestClose={() => changeModalVisible(false)}>
-          {playerAmount.map((item, ind) => (
-            <Picker.Item label={item.toString()} value={item} key={ind} />
-          ))}
-        </Modal>
         <View>
           {LeagueList.length !== 0 ? (
             <FlatList
@@ -589,11 +580,46 @@ const AdminScreen = ({navigation}) => {
 
       <View style={styles.bottomContainer}>
         <TouchableOpacity
+          onPress={() => {
+            changeModalVisible(true);
+          }}>
+          <Text style={{color: 'white'}}> modal tester </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => navigation.navigate('createTeamScreen')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Team</Text>
         </TouchableOpacity>
       </View>
+      <Modal transparent={true} animationType="fade" visible={modalVisible}>
+        <TouchableOpacity
+          onPress={() => changeModalVisible(false)}
+          style={styles.modalContainer}>
+          <View style={styles.modal}>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontFamily: FONTS.brandFont,
+                paddingVertical: hp(1),
+                alignSelf: 'center',
+              }}>
+              Match per day
+            </Text>
+            <Picker
+              itemStyle={{color: 'white'}}
+              dropdownIconColor={'white'}
+              mode={'dropdown'}
+              selectedValue={minimumPlayer}
+              onValueChange={(itemValue, itemIndex) =>
+                setMinimumPlayer(itemValue)
+              }>
+              {matchAmount.map((item, ind) => (
+                <Picker.Item label={item.toString()} value={item} key={ind} />
+              ))}
+            </Picker>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -700,6 +726,17 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(1.7),
     alignSelf: 'center',
     marginTop: hp(5),
+  },
+  modal: {
+    width: wp(80),
+    backgroundColor: COLORS.brand,
+    borderRadius: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#00000080',
   },
 });
 export default AdminScreen;

@@ -20,6 +20,7 @@ import CircleXp from '../components/CircleXp';
 import {COLORS, FONTS, icons} from '../constants';
 import {LogoutModal} from '../components/LogoutModal';
 import LeaguePicker from '../components/LeaguePicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -414,9 +415,10 @@ const Profile = ({navigation}) => {
   const modalHide = () => {
     setLogoutModalVisible(false);
   };
-  const logout = () => {
+  const logout = async () => {
     setLogoutModalVisible(false);
-    setUserInfo('');
+    // setUserInfo('');
+    await AsyncStorage.removeItem('@userID');
     navigation.navigate('Auth');
   };
   return (
