@@ -68,6 +68,7 @@ const Profile = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const Match = ({item, onPress, user}) => {
+    console.log(`item`, item);
     const [Home, setHome] = useState(undefined);
     const [Away, setAway] = useState(undefined);
     const [imgLoad, setImgLoad] = useState(true);
@@ -562,7 +563,10 @@ const Profile = ({navigation}) => {
             animationType="fade"
             visible={modalVisible}
             nRequestClose={() => changeModalVisible(false)}>
-            <Text> asddas </Text>
+            <LeaguePicker
+              changeModalVisible={changeModalVisible}
+              setData={setData}
+            />
           </Modal>
           <FlatList
             data={scheduleData}

@@ -739,7 +739,7 @@ const GameScreen = ({navigation}) => {
               </Text>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('FormInterface')}>
+              onPress={() => navigation.navigate('BracketScreen')}>
               <Text style={{color: 'white', fontSize: 20}}>Start</Text>
             </TouchableOpacity>
             <View style={{height: wp(76)}}>

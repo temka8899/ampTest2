@@ -137,6 +137,12 @@ export default function FormInterface({navigation, route}) {
   //     console.log('error fetching todos', err);
   //   }
   // }
+
+  const endMatchButton = () => {
+    if (homeScore !== awayScore) {
+      setEndModalVisible(true);
+    }
+  };
   function CancelModal() {
     return (
       <View>
@@ -571,7 +577,7 @@ export default function FormInterface({navigation, route}) {
         }}>
         <TouchableOpacity
           style={styles.modalBtnContainer}
-          onPress={() => setEndModalVisible(true)}>
+          onPress={() => endMatchButton}>
           <Text style={styles.modalBtnText}>End Match</Text>
         </TouchableOpacity>
         {CancelModal()}
