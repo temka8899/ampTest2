@@ -184,6 +184,7 @@ export const createTeam = /* GraphQL */ `
     $condition: ModelTeamConditionInput
   ) {
     createTeam(input: $input, condition: $condition) {
+      leagueStatus
       id
       league {
         minPlayer
@@ -220,6 +221,7 @@ export const updateTeam = /* GraphQL */ `
     $condition: ModelTeamConditionInput
   ) {
     updateTeam(input: $input, condition: $condition) {
+      leagueStatus
       id
       league {
         minPlayer
@@ -256,6 +258,7 @@ export const deleteTeam = /* GraphQL */ `
     $condition: ModelTeamConditionInput
   ) {
     deleteTeam(input: $input, condition: $condition) {
+      leagueStatus
       id
       league {
         minPlayer
@@ -294,6 +297,7 @@ export const createTeamPlayer = /* GraphQL */ `
     createTeamPlayer(input: $input, condition: $condition) {
       id
       team {
+        leagueStatus
         id
         league {
           minPlayer
@@ -342,6 +346,7 @@ export const updateTeamPlayer = /* GraphQL */ `
     updateTeamPlayer(input: $input, condition: $condition) {
       id
       team {
+        leagueStatus
         id
         league {
           minPlayer
@@ -390,6 +395,7 @@ export const deleteTeamPlayer = /* GraphQL */ `
     deleteTeamPlayer(input: $input, condition: $condition) {
       id
       team {
+        leagueStatus
         id
         league {
           minPlayer
@@ -578,6 +584,7 @@ export const createSchedule = /* GraphQL */ `
       leagueID
       gameID
       home {
+        leagueStatus
         id
         league {
           minPlayer
@@ -600,6 +607,7 @@ export const createSchedule = /* GraphQL */ `
         updatedAt
       }
       away {
+        leagueStatus
         id
         league {
           minPlayer
@@ -646,6 +654,7 @@ export const updateSchedule = /* GraphQL */ `
       leagueID
       gameID
       home {
+        leagueStatus
         id
         league {
           minPlayer
@@ -668,6 +677,7 @@ export const updateSchedule = /* GraphQL */ `
         updatedAt
       }
       away {
+        leagueStatus
         id
         league {
           minPlayer
@@ -714,6 +724,7 @@ export const deleteSchedule = /* GraphQL */ `
       leagueID
       gameID
       home {
+        leagueStatus
         id
         league {
           minPlayer
@@ -736,6 +747,7 @@ export const deleteSchedule = /* GraphQL */ `
         updatedAt
       }
       away {
+        leagueStatus
         id
         league {
           minPlayer

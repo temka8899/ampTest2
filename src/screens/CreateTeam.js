@@ -25,6 +25,7 @@ import {
   listLeaguePlayers,
   listSchedules,
 } from '../graphql/queries';
+import moment from 'moment';
 import awsmobile from '../aws-exports';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
@@ -764,11 +765,11 @@ const createTeamScreen = ({navigation}) => {
     }
   }
 
-  async function getDate() {
+  async function getleagueDate() {
     var date = new Date();
-    var numberOfDaysToAdd = 0;
-    let dateNemeh = 0;
-    date.setDate(date.getDate() + numberOfDaysToAdd);
+    date = moment(date).add(3, 'd').format('MM/D/YY');
+    var date2 = moment(date).format('dddd');
+    console.log(date2);
   }
 
   async function DeleteLeaguePlayer() {
@@ -814,6 +815,7 @@ const createTeamScreen = ({navigation}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
       <StatusBar barStyle="light-content"></StatusBar>
       <View>
+        <Button onPress={() => getleagueDate()} title="get date" />
         <Button onPress={() => getLeague()} title="get LEague" />
         <Button onPress={() => startPlayoff()} title="Start Playoff?" />
         <Button onPress={() => addLeaguePlayer()} title="add League Player" />
@@ -833,7 +835,6 @@ const createTeamScreen = ({navigation}) => {
         <Button onPress={() => startLeague()} title="Start League" />
         <Button onPress={() => leagueIsStart()} title="update League" />
         <Button onPress={() => addScheduleLoop()} title="add Schedule" />
-        <Button onPress={() => getDate()} title="get Date" />
         <Button onPress={() => getSchedule()} title="get Schedule" />
         <Button onPress={() => UpdateSchedule()} title="update Schedule" />
         <Button

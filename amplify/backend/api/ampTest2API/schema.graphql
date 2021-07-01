@@ -28,6 +28,7 @@ type Player @model {
 }
 
 type Team @model {
+  leagueStatus: String
   id: ID!
   league: League @connection
   leagueID: String
