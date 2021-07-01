@@ -7,9 +7,9 @@ import Tabs from './src/components/BottomTab';
 import authScreen from './src/screens/authScreen';
 import AdminScreen from './src/screens/AdminScreen';
 import CountScreen from './src/screens/CountScreen';
-import createTeamScreen from './src/screens/CreateTeam';
-import createGameScreen from './src/screens/CreateGame';
-import createLeagueScreen from './src/screens/CreateLeague';
+import CreateTeamScreen from './src/screens/CreateTeam';
+import CreateGameScreen from './src/screens/CreateGame';
+import CreateLeagueScreen from './src/screens/CreateLeague';
 import EditProfileScreen from './src/screens/EditProfileScreen';
 import ParticipatesScreen from './src/screens/ParticipatesScreen';
 import FormInterface from './src/screens/FormInterface';
@@ -19,7 +19,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CreateLeagueScreen from './src/screens/CreateLeague';
 
 const Stack = createStackNavigator();
 
@@ -50,7 +49,7 @@ const App = ({navigation}) => {
           }}>
           <Stack.Screen name="Auth" component={authScreen} />
           <Stack.Screen name="Tabs" component={Tabs} />
-          <Stack.Screen
+          <Stack.Screen44
             name="BracketScreen"
             component={BracketScreen}
             options={{gestureEnabled: false}}
@@ -65,11 +64,14 @@ const App = ({navigation}) => {
             name="FormInterface"
             component={FormInterface}
           />
-          <Stack.Screen name="Edit" component={EditProfileScreen} />
-          <Stack.Screen name="Admin" component={AdminScreen} />
-          <Stack.Screen name="CreateLeague" component={CreateLeagueScreen} />
-          <Stack.Screen name="CreateGame" component={createGameScreen} />
-          <Stack.Screen name="CreateTeam" component={createTeamScreen} />
+          <Stack.Screen name="EditScreen" component={EditProfileScreen} />
+          <Stack.Screen name="AdminScreen" component={AdminScreen} />
+          <Stack.Screen
+            name="CreateLeagueScreen"
+            component={CreateLeagueScreen}
+          />
+          <Stack.Screen name="CreateGameScreen" component={CreateGameScreen} />
+          <Stack.Screen name="CreateTeamScreen" component={CreateTeamScreen} />
           <Stack.Screen
             name="ParticipatesScreen"
             component={ParticipatesScreen}
