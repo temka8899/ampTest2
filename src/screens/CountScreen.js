@@ -27,7 +27,7 @@ import {
   listTeamPlayers,
   listTeams,
 } from '../graphql/queries';
-
+import moment from 'moment';
 import {AuthContext} from '../../App';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
@@ -77,7 +77,6 @@ export default function CountScreen({navigation, route}) {
   useEffect(() => {
     const ScheduleData = route.params.match;
     setMatchData(ScheduleData);
-    console.log(`ScheduleData`, ScheduleData);
     getPlayerData(ScheduleData);
   }, [getPlayerData, route.params.match]);
 
@@ -131,7 +130,6 @@ export default function CountScreen({navigation, route}) {
         }),
       );
       const todos = leagueData.data.listTeamPlayers.items;
-      console.log('TeamPlayers>>>>>>>>>>>>>>', todos);
       return todos;
     } catch (err) {
       console.log('error fetching todos', err);
@@ -226,26 +224,26 @@ export default function CountScreen({navigation, route}) {
     // Bagiin avsan onoog update hiine
     _updateSchedule();
 
-    //League iin current index update
-    await _updateLeague();
-
     updateProfile(Home[0].id, Home[0].player.id, allPoint.one.point);
     updateProfile(Home[1].id, Home[1].player.id, allPoint.two.point);
     updateProfile(Away[0].id, Away[0].player.id, allPoint.three.point);
     updateProfile(Away[1].id, Away[1].player.id, allPoint.four.point);
 
+    //League iin current index update
+    await _updateLeague();
+
     if (allPoint.one.point + allPoint.two.point === 10) {
       //toglogch yalahad bagiin onoog update
       _updateHome1();
-      await _updateAway1();
+      _updateAway1();
     } else {
       //toglogch yalagdahad bagiin onoog update
       _updateHome2();
-      await _updateAway2();
+      _updateAway2();
     }
-    console.log('Playoff ehlehgej bn');
     startPlayoff();
   }
+
   function _updateSchedule() {
     try {
       API.graphql(
@@ -445,6 +443,14 @@ export default function CountScreen({navigation, route}) {
           filter: {leagueID: {eq: _leagueID}},
         }),
       );
+
+      const _league = await API.graphql(
+        graphqlOperation(listLeagues, {
+          filter: {id: {eq: _leagueID}},
+        }),
+      );
+      const _playoffGameID = _league.data.listLeagues.items[0].game.id;
+
       if (
         leagueData.data.listTeams.items[0].league.currentSchedule ==
           leagueData.data.listTeams.items[0].league.maxSchedule &&
@@ -459,10 +465,10 @@ export default function CountScreen({navigation, route}) {
           sorted.push(teams[i]);
         }
         var date = new Date();
-        date.setDate(date.getDate() + 1);
-        var date2 = date.getDay();
-        if (date2 == 6) {
-          date.setDate(date.getDate() + 2);
+        date = moment(date).add(1, 'd').format('MM/D/YY');
+        var date2 = moment(date).format('dddd');
+        if (date2 == 'Saturday') {
+          date = moment(date).add(2, 'd').format('MM/D/YY');
         }
         const _teamPlayerData1 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
@@ -527,7 +533,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           sorted[1].id,
           sorted[2].id,
-          date.toLocaleDateString(),
+          date,
           _leagueID,
           1,
           1,
@@ -536,11 +542,12 @@ export default function CountScreen({navigation, route}) {
           _teamAvatar3,
           _teamID3,
           0,
+          _playoffGameID,
         );
         _addSchedule(
           sorted[1].id,
           sorted[2].id,
-          date.toLocaleDateString(),
+          date,
           _leagueID,
           2,
           2,
@@ -549,18 +556,19 @@ export default function CountScreen({navigation, route}) {
           _teamAvatar3,
           _teamID3,
           0,
+          _playoffGameID,
         );
 
-        await date.setDate(date.getDate() + 1);
-        date2 = date.getDay();
-        if (date2 == 6) {
-          date.setDate(date.getDate() + 2);
+        await moment(date).add(1, 'd').format('MM/D/YY');
+        date2 = moment(date).format('dddd');
+        if (date2 == 'Saturday') {
+          date = moment(date).add(2, 'd').format('MM/D/YY');
         }
 
         _addSchedule(
           sorted[0].id,
           sorted[3].id,
-          date.toLocaleDateString(),
+          date,
           _leagueID,
           3,
           1,
@@ -569,11 +577,12 @@ export default function CountScreen({navigation, route}) {
           _teamAvatar1,
           _teamID1,
           0,
+          _playoffGameID,
         );
         _addSchedule(
           sorted[0].id,
           sorted[3].id,
-          date.toLocaleDateString(),
+          date,
           _leagueID,
           4,
           2,
@@ -582,6 +591,7 @@ export default function CountScreen({navigation, route}) {
           _teamAvatar1,
           _teamID1,
           0,
+          _playoffGameID,
         );
         await API.graphql(
           graphqlOperation(updateLeague, {
@@ -607,11 +617,12 @@ export default function CountScreen({navigation, route}) {
         }
 
         var date = new Date();
-        date.setDate(date.getDate() + 1);
-        var date2 = date.getDay();
-        if (date2 == 6) {
-          date.setDate(date.getDate() + 2);
+        date = moment(date).add(1, 'd').format('MM/D/YY');
+        var date2 = moment(date).format('dddd');
+        if (date2 == 'Saturday') {
+          date = moment(date).add(2, 'd').format('MM/D/YY');
         }
+
         const _teamPlayerData1 = await API.graphql(
           graphqlOperation(await listTeamPlayers, {
             filter: {
@@ -645,7 +656,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           sorted[0].id,
           sorted[1].id,
-          date.toLocaleDateString(),
+          date,
           _leagueID,
           1,
           0,
@@ -654,11 +665,12 @@ export default function CountScreen({navigation, route}) {
           _teamAvatar2,
           _teamID2,
           1,
+          _playoffGameID,
         );
         _addSchedule(
           sorted[0].id,
           sorted[1].id,
-          date.toLocaleDateString(),
+          date,
           _leagueID,
           2,
           0,
@@ -667,6 +679,7 @@ export default function CountScreen({navigation, route}) {
           _teamAvatar2,
           _teamID2,
           2,
+          _playoffGameID,
         );
       } else {
         console.log('League not ended');
@@ -688,6 +701,7 @@ export default function CountScreen({navigation, route}) {
     awayAvatar,
     awayID,
     _finalsIndex,
+    _playoffGameID,
   ) {
     try {
       await API.graphql(
@@ -706,6 +720,7 @@ export default function CountScreen({navigation, route}) {
             homePlayers: homeID,
             awayPlayers: awayID,
             finalsIndex: _finalsIndex,
+            gameID: _playoffGameID,
           },
         }),
       );

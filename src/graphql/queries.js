@@ -125,6 +125,7 @@ export const listPlayers = /* GraphQL */ `
 export const getTeam = /* GraphQL */ `
   query GetTeam($id: ID!) {
     getTeam(id: $id) {
+      leagueStatus
       id
       league {
         minPlayer
@@ -163,6 +164,7 @@ export const listTeams = /* GraphQL */ `
   ) {
     listTeams(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        leagueStatus
         id
         league {
           minPlayer
@@ -193,6 +195,7 @@ export const getTeamPlayer = /* GraphQL */ `
     getTeamPlayer(id: $id) {
       id
       team {
+        leagueStatus
         id
         league {
           minPlayer
@@ -243,6 +246,7 @@ export const listTeamPlayers = /* GraphQL */ `
       items {
         id
         team {
+          leagueStatus
           id
           leagueID
           name
@@ -366,6 +370,7 @@ export const getSchedule = /* GraphQL */ `
       leagueID
       gameID
       home {
+        leagueStatus
         id
         league {
           minPlayer
@@ -388,6 +393,7 @@ export const getSchedule = /* GraphQL */ `
         updatedAt
       }
       away {
+        leagueStatus
         id
         league {
           minPlayer
@@ -436,6 +442,7 @@ export const listSchedules = /* GraphQL */ `
         leagueID
         gameID
         home {
+          leagueStatus
           id
           leagueID
           name
@@ -445,6 +452,7 @@ export const listSchedules = /* GraphQL */ `
           updatedAt
         }
         away {
+          leagueStatus
           id
           leagueID
           name
