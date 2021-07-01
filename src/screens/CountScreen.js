@@ -220,8 +220,10 @@ export default function CountScreen({navigation, route}) {
   );
 
   async function UpdateSchedule() {
+    await _updateLeague();
     // Updating Schedule data
     // Bagiin avsan onoog update hiine
+
     _updateSchedule();
 
     updateProfile(Home[0].id, Home[0].player.id, allPoint.one.point);
@@ -230,7 +232,6 @@ export default function CountScreen({navigation, route}) {
     updateProfile(Away[1].id, Away[1].player.id, allPoint.four.point);
 
     //League iin current index update
-    await _updateLeague();
 
     if (allPoint.one.point + allPoint.two.point === 10) {
       //toglogch yalahad bagiin onoog update
@@ -432,7 +433,7 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log('League updated');
+    console.log('Player updated');
   }
 
   async function startPlayoff() {
@@ -463,6 +464,26 @@ export default function CountScreen({navigation, route}) {
         const sorted = [];
         for (var i = 0; i < 4; i++) {
           sorted.push(teams[i]);
+          API.graphql(
+            graphqlOperation(updateTeam, {
+              input: {
+                id: `${teams[i].id}`,
+                leagueStatus: 'Playoff',
+              },
+            }),
+          );
+        }
+        if (teams.length > 4) {
+          for (var i = 4; teams.length; i++) {
+            API.graphql(
+              graphqlOperation(updateTeam, {
+                input: {
+                  id: `${teams[i].id}`,
+                  leagueStatus: 'Ended',
+                },
+              }),
+            );
+          }
         }
         var date = new Date();
         date = moment(date).add(1, 'd').format('MM/D/YY');
