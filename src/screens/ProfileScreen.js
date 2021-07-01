@@ -495,7 +495,7 @@ const Profile = ({navigation}) => {
               <>
                 {userInfo.admin && (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('Admin')}>
+                    onPress={() => navigation.navigate('AdminScreen')}>
                     <Image source={icons.plus} style={styles.plusBtn} />
                   </TouchableOpacity>
                 )}
