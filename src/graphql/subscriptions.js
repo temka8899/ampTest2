@@ -53,6 +53,7 @@ export const onCreateLeague = /* GraphQL */ `
         updatedAt
       }
       description
+      isPlayoff
       createdAt
       updatedAt
     }
@@ -77,6 +78,7 @@ export const onUpdateLeague = /* GraphQL */ `
         updatedAt
       }
       description
+      isPlayoff
       createdAt
       updatedAt
     }
@@ -101,6 +103,7 @@ export const onDeleteLeague = /* GraphQL */ `
         updatedAt
       }
       description
+      isPlayoff
       createdAt
       updatedAt
     }
@@ -173,6 +176,7 @@ export const onCreateTeam = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -207,6 +211,7 @@ export const onUpdateTeam = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -241,6 +246,7 @@ export const onDeleteTeam = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -270,6 +276,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -316,6 +323,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -362,6 +370,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -412,6 +421,7 @@ export const onCreateLeaguePlayer = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -454,6 +464,7 @@ export const onUpdateLeaguePlayer = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -496,6 +507,7 @@ export const onDeleteLeaguePlayer = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -539,6 +551,7 @@ export const onCreateSchedule = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -562,6 +575,7 @@ export const onCreateSchedule = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -606,6 +620,7 @@ export const onUpdateSchedule = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -629,6 +644,7 @@ export const onUpdateSchedule = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -673,6 +689,7 @@ export const onDeleteSchedule = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -696,6 +713,7 @@ export const onDeleteSchedule = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
