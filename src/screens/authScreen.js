@@ -24,6 +24,7 @@ import {wp, hp, FONTS, COLORS} from '../constants/theme';
 import awsmobile from '../aws-exports';
 import {useNavigation} from '@react-navigation/core';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
@@ -347,42 +348,7 @@ const SwitchView = ({value, onPress}) => {
           </View>
         </KeyboardAvoidingView>
       );
-    // //Forgot password3
-    // case 6:
-    //   return (
-    //     <KeyboardAvoidingView
-    //       behavior={Platform.OS === 'ios' ? 'padding' : null}>
-    //       <View style={styles.forgotPassContainer}>
-    //         <FlashMessage position="top" />
-    //         <Text style={styles.text}>Enter new password</Text>
 
-    //         <FormInput
-    //           value={authCode}
-    //           autoCorrect={false}
-    //           onChangeText={text2 => setConfirmCode(text2)}
-    //           placeholder="Password"
-    //           secureTextEntry
-    //         />
-
-    //         <TouchableOpacity onPress={() => onPress(1)}>
-    //           <ImageBackground
-    //             source={images.button}
-    //             style={styles.smallButton}>
-    //             <Text
-    //               style={{
-    //                 fontFamily: FONTS.brandFont,
-    //                 color: COLORS.white,
-    //                 paddingTop: hp(0.6),
-    //                 margin: hp(1),
-    //                 fontSize: RFPercentage(1.7),
-    //               }}>
-    //               CONFIRM
-    //             </Text>
-    //           </ImageBackground>
-    //         </TouchableOpacity>
-    //       </View>
-    //     </KeyboardAvoidingView>
-    //   );
     default:
       return;
   }
@@ -397,8 +363,8 @@ const SignInScreen = ({navigation, onPress}) => {
     try {
       setLoading(true);
       let response = await Auth.signIn(username, password);
-
-      navigation.replace('Tabs');
+      await AsyncStorage.setItem('@userID', response.attributes.sub);
+      navigation.navigate('Tabs');
       console.log('✅ Sign In Success');
       setLoading(false);
       setUsername('');
@@ -472,9 +438,10 @@ const SignInScreen = ({navigation, onPress}) => {
   );
 };
 
-export default function AuthScreen() {
+export default function AuthScreen({navigation}) {
   const [whichScreen, setWhichScreen] = useState(0);
   const [keyboardStatus, setKeyboardStatus] = useState('Keyboard Hidden');
+  const [cogID, setCogID] = useState('');
 
   const startValue = useRef(new Animated.Value(1)).current;
 
@@ -494,7 +461,20 @@ export default function AuthScreen() {
     imgMoveBack();
   }, [imgMoveBack, imgScaleBack]);
 
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@userID');
+      if (value !== null) {
+        setCogID(value);
+        navigation.navigate('Tabs');
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
   useEffect(() => {
+    getData();
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
     Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
 

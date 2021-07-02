@@ -32,6 +32,7 @@ const Tabs = () => {
 
   return (
     <Tab.Navigator
+      shifting={false}
       tabBarOptions={{
         showLabel: false,
         style: {
@@ -42,7 +43,7 @@ const Tabs = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={GameStackScreen}
+        component={GameScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>
@@ -64,7 +65,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="ScheduleScreen"
-        component={ScheduleStackScreen}
+        component={ScheduleScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>
@@ -108,7 +109,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileStackScreen}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={[styles.tabItems, {top: insets.bottom / 2}]}>
@@ -134,57 +135,38 @@ const Tabs = () => {
 
 export default Tabs;
 
-const GameStackScreen = ({navigation}) => {
-  return (
-    <GameStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <GameStack.Screen name="Game" component={GameScreen} />
-      <GameStack.Screen
-        name="ParticipatesScreen"
-        component={ParticipatesScreen}
-      />
-    </GameStack.Navigator>
-  );
-};
+// const GameStackScreen = ({navigation}) => {
+//   return (
+//     <GameStack.Navigator
+//       screenOptions={{
+//         headerShown: false,
+//       }}>
+//       <GameStack.Screen name="Game" component={GameScreen} />
+//     </GameStack.Navigator>
+//   );
+// };
 
-const ScheduleStackScreen = ({navigation}) => {
-  return (
-    <ScheduleStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <ScheduleStack.Screen name="Schedule" component={ScheduleScreen} />
-      <ScheduleStack.Screen
-        options={{gestureEnabled: false}}
-        name="CountScreen"
-        component={CountScreen}
-      />
-      <ScheduleStack.Screen
-        options={{gestureEnabled: false}}
-        name="FormInterface"
-        component={FormInterface}
-      />
-    </ScheduleStack.Navigator>
-  );
-};
+// const ScheduleStackScreen = ({navigation}) => {
+//   return (
+//     <ScheduleStack.Navigator
+//       screenOptions={{
+//         headerShown: false,
+//       }}>
+//       <ScheduleStack.Screen name="Schedule" component={ScheduleScreen} />
+//     </ScheduleStack.Navigator>
+//   );
+// };
 
-const ProfileStackScreen = ({navigation}) => {
-  return (
-    <ProfileStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-      <ProfileStack.Screen name="Edit" component={EditProfileScreen} />
-      <ProfileStack.Screen name="Admin" component={AdminScreen} />
-      <ProfileStack.Screen name="CreateLeague" component={CreateLeagueScreen} />
-      <ProfileStack.Screen name="CreateGame" component={CreateGameScreen} />
-      <ProfileStack.Screen name="CreateTeam" component={createTeamScreen} />
-    </ProfileStack.Navigator>
-  );
-};
+// const ProfileStackScreen = ({navigation}) => {
+//   return (
+//     <ProfileStack.Navigator
+//       screenOptions={{
+//         headerShown: false,
+//       }}>
+//       <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+//     </ProfileStack.Navigator>
+//   );
+// };
 
 const styles = StyleSheet.create({
   icon: {

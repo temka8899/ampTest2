@@ -30,6 +30,10 @@ import Auth from '@aws-amplify/auth';
 import {listPlayers, listSchedules, listTeamPlayers} from '../graphql/queries';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const UselessTextInput = ({value}) => {
   const [text, onChangeText] = React.useState(value);
   return (
@@ -50,10 +54,6 @@ const styles1 = StyleSheet.create({
     color: 'white',
   },
 });
-
-const wait = timeout => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-};
 
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
@@ -417,9 +417,8 @@ const Profile = ({navigation}) => {
   };
   const logout = async () => {
     setLogoutModalVisible(false);
-    // setUserInfo('');
     await AsyncStorage.removeItem('@userID');
-    navigation.replace('Auth');
+    wait(1000).then(() => navigation.navigate('Auth'));
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -495,7 +494,7 @@ const Profile = ({navigation}) => {
               <>
                 {userInfo.admin && (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('Admin')}>
+                    onPress={() => navigation.navigate('AdminScreen')}>
                     <Image source={icons.plus} style={styles.plusBtn} />
                   </TouchableOpacity>
                 )}
@@ -514,7 +513,8 @@ const Profile = ({navigation}) => {
                     style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
                     {userInfo === undefined ? `Player` : `${userInfo.name}`}
                   </Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Edit')}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('EditScreen')}>
                     <Image source={icons.editBtn} style={styles.editButton} />
                   </TouchableOpacity>
                 </View>

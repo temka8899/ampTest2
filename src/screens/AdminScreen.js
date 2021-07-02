@@ -12,6 +12,7 @@ import {
   RefreshControl,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';
@@ -61,8 +62,9 @@ const AdminScreen = ({navigation}) => {
   const [GameData, setGameData] = useState([]);
   const [btnLoad, setBtnLoad] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [minimumPlayer, setMinimumPlayer] = useState();
-
+  const [matchPerDay, setMatchPerDay] = useState();
+  const [myLeagueID, setMyLeagueID] = useState();
+  const [leagueIndex, setLeagueIndex] = useState();
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
@@ -129,7 +131,7 @@ const AdminScreen = ({navigation}) => {
     }
   };
 
-  const StartLeague = async (leagueID, index) => {
+  const StartLeague = async (leagueID, index, _matchPerDay) => {
     const startLeagueId = leagueID;
     let newState = LeagueList;
     newState[index].loading = true;
@@ -190,6 +192,7 @@ const AdminScreen = ({navigation}) => {
         onRefresh();
       }, 1000);
       setBtnLoad(false);
+      setModalVisible(false);
       //Update League
       var date = new Date();
       date = moment(date).format('MM/D/YY');
@@ -203,16 +206,19 @@ const AdminScreen = ({navigation}) => {
             startedDate: date,
             maxSchedule: `${(n * (n + 1)) / 2}`,
             currentSchedule: 0,
+            perDay: _matchPerDay,
           },
         }),
       );
       setBtnLoad(false);
+      setModalVisible(false);
     } else {
       console.log('Soccer League Players not even or not enough');
       Alert.alert(
         `Players are not even or not enough. Minimum Players: ${minPlayer}`,
       );
       setBtnLoad(false);
+      setModalVisible(false);
     }
 
     addScheduleLoop(startLeagueId, _leagueData);
@@ -387,6 +393,12 @@ const AdminScreen = ({navigation}) => {
     }
   }
 
+  const showModal = (item, index) => {
+    setModalVisible(true);
+    setMyLeagueID(item);
+    setLeagueIndex(index);
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <View style={styles.LeagueContainer}>
@@ -435,7 +447,7 @@ const AdminScreen = ({navigation}) => {
                 loading={item.loading}
                 styleAdd={styles.startBtn}
                 typStyle={styles.btnText}
-                onPress={() => StartLeague(item.id, index)}
+                onPress={() => showModal(item.id, index)}
               />
             )}
             <TouchableOpacity
@@ -568,12 +580,12 @@ const AdminScreen = ({navigation}) => {
       </ScrollView>
       <View style={styles.ButtonContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CreateGame')}
+          onPress={() => navigation.navigate('CreateGameScreen')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Create Game</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CreateLeague')}
+          onPress={() => navigation.navigate('CreateLeagueScreen')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Create League</Text>
         </TouchableOpacity>
@@ -587,7 +599,7 @@ const AdminScreen = ({navigation}) => {
           <Text style={{color: 'white'}}> modal tester </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CreateTeam')}
+          onPress={() => navigation.navigate('CreateTeamScreen')}
           style={styles.createBtn}>
           <Text style={styles.createBtnText}>Team</Text>
         </TouchableOpacity>
@@ -598,9 +610,6 @@ const AdminScreen = ({navigation}) => {
         isVisible={modalVisible}
         style={styles.modalContainer}>
         <View style={styles.modal}>
-          <TouchableOpacity onPress={() => changeModalVisible(false)}>
-            <Text>sdgf</Text>
-          </TouchableOpacity>
           <Text
             style={{
               color: COLORS.white,
@@ -614,14 +623,38 @@ const AdminScreen = ({navigation}) => {
             itemStyle={{color: 'white'}}
             dropdownIconColor={'white'}
             mode={'dropdown'}
-            selectedValue={minimumPlayer}
-            onValueChange={(itemValue, itemIndex) =>
-              setMinimumPlayer(itemValue)
-            }>
+            selectedValue={matchPerDay}
+            onValueChange={(itemValue, itemIndex) => setMatchPerDay(itemValue)}>
             {matchAmount.map((item, ind) => (
               <Picker.Item label={item.toString()} value={item} key={ind} />
             ))}
           </Picker>
+          <TouchableOpacity
+            disabled={btnLoad}
+            onPress={() => StartLeague(myLeagueID, leagueIndex, matchPerDay)}>
+            <View
+              style={{
+                backgroundColor: COLORS.green,
+                alignSelf: 'center',
+                borderRadius: 10,
+                padding: 8,
+              }}>
+              <>
+                {btnLoad ? (
+                  <ActivityIndicator size={'small'} color={COLORS.brand} />
+                ) : (
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      fontFamily: FONTS.brandFont,
+                      paddingVertical: hp(1),
+                    }}>
+                    Start league
+                  </Text>
+                )}
+              </>
+            </View>
+          </TouchableOpacity>
         </View>
       </Modal>
     </SafeAreaView>
@@ -735,12 +768,11 @@ const styles = StyleSheet.create({
     width: wp(80),
     backgroundColor: COLORS.brand,
     borderRadius: 10,
+    paddingVertical: hp(2),
   },
   modalContainer: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 0,
   },
 });
 export default AdminScreen;
