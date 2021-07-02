@@ -49,6 +49,7 @@ export const getLeague = /* GraphQL */ `
         updatedAt
       }
       description
+      isPlayoff
       createdAt
       updatedAt
     }
@@ -78,6 +79,7 @@ export const listLeagues = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -144,6 +146,7 @@ export const getTeam = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -176,6 +179,7 @@ export const listTeams = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -207,6 +211,7 @@ export const getTeamPlayer = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -297,6 +302,7 @@ export const getLeaguePlayer = /* GraphQL */ `
           updatedAt
         }
         description
+        isPlayoff
         createdAt
         updatedAt
       }
@@ -337,6 +343,7 @@ export const listLeaguePlayers = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -382,6 +389,7 @@ export const getSchedule = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }
@@ -405,6 +413,7 @@ export const getSchedule = /* GraphQL */ `
           isStart
           startDate
           description
+          isPlayoff
           createdAt
           updatedAt
         }

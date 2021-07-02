@@ -15,6 +15,7 @@ type League @model {
   startDate: String!
   game: Game @connection
   description: String
+  isPlayoff: Boolean
 }
 
 type Player @model {
