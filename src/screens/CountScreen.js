@@ -444,7 +444,6 @@ export default function CountScreen({navigation, route}) {
           filter: {leagueID: {eq: _leagueID}},
         }),
       );
-
       const _league = await API.graphql(
         graphqlOperation(listLeagues, {
           filter: {id: {eq: _leagueID}},
