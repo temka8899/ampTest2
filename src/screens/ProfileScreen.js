@@ -417,8 +417,7 @@ const Profile = ({navigation}) => {
   };
   const logout = async () => {
     setLogoutModalVisible(false);
-    await setUserInfo('logout');
-    console.log('userInfo :>> ', userInfo);
+    await AsyncStorage.removeItem('@userID');
     wait(1000).then(() => navigation.navigate('Auth'));
   };
   return (
