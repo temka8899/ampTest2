@@ -339,7 +339,7 @@ const Match = ({item, onPress, user}) => {
   }
 };
 
-const PlayOff = ({item, onPress, user}) => {
+const PlayOff = ({data}) => {
   return (
     <ScrollView
       horizontal
@@ -363,7 +363,7 @@ const PlayOff = ({item, onPress, user}) => {
                   ellipsizeMode="tail"
                   numberOfLines={1}
                   style={styles.textStyle}>
-                  T1
+                  {data[0].away.name}
                 </Text>
               </View>
 
@@ -383,7 +383,7 @@ const PlayOff = ({item, onPress, user}) => {
                   ellipsizeMode="tail"
                   numberOfLines={1}
                   style={styles.textStyle}>
-                  T2
+                  {data[1].away.name}
                 </Text>
               </View>
             </View>
@@ -403,10 +403,9 @@ const PlayOff = ({item, onPress, user}) => {
                   ellipsizeMode="tail"
                   numberOfLines={1}
                   style={styles.textStyle}>
-                  T3
+                  {data[2].away.name}
                 </Text>
               </View>
-
               <View style={styles.space}></View>
               <View style={styles.teamContainer}>
                 <View style={{flexDirection: 'row'}}>
@@ -423,7 +422,7 @@ const PlayOff = ({item, onPress, user}) => {
                   ellipsizeMode="tail"
                   numberOfLines={1}
                   style={styles.textStyle}>
-                  T4
+                  {data[0].home.name}
                 </Text>
               </View>
             </View>
@@ -695,17 +694,6 @@ const ScheduleScreen = ({navigation, route}) => {
     );
   }
 
-  function renderSchedulePlayOff({item}) {
-    return (
-      <PlayOff
-        item={item}
-        onPress={() => startMatch(item)}
-        selectedId={selectedId}
-        user={userInfo}
-      />
-    );
-  }
-
   const renderItem = ({item}) => {
     return (
       <Item item={item} onPress={() => getDay(item)} selectedId={selectedId} />
@@ -936,7 +924,7 @@ const ScheduleScreen = ({navigation, route}) => {
                 </View>
               ) : (
                 <View>
-                  {scheduleData[0].playOffIndex === 0 ? (
+                  {scheduleData[0].playOffIndex === 1 ? (
                     <FlatList
                       data={scheduleData}
                       renderItem={renderSchedule}
@@ -953,7 +941,7 @@ const ScheduleScreen = ({navigation, route}) => {
                       }}
                     />
                   ) : (
-                    <PlayOff item={scheduleData} />
+                    <PlayOff data={scheduleData} />
                   )}
                 </View>
               )}
