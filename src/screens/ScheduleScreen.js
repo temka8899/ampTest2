@@ -699,7 +699,7 @@ const ScheduleScreen = ({navigation, route}) => {
                   }
                   keyExtractor={item => item.id}
                   style={{
-                    height: hp(85),
+                    height: hp(68),
                   }}
                 />
               )}
