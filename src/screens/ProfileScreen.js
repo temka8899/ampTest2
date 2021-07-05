@@ -574,7 +574,7 @@ const Profile = ({navigation}) => {
             renderItem={renderSchedule}
             keyExtractor={item => item.id}
             style={{
-              height: hp(85),
+              height: hp(20),
             }}
           />
           <View>
