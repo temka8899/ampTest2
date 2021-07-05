@@ -426,9 +426,6 @@ const ScheduleScreen = ({navigation, route}) => {
       );
 
       const schedulePerDay = scheduleData.data.listSchedules.items;
-      //  console.log('>>>>>>>>>>>>', scheduleData);
-      //  console.log('>>>>>>>>>>>>', item);
-      //  console.log('>>>>>>>>>>>>', param.id);
       const sorted = schedulePerDay.sort((a, b) => a.index - b.index);
       setScheduleData(sorted);
       // return schedulePerDay;
@@ -699,7 +696,7 @@ const ScheduleScreen = ({navigation, route}) => {
                   }
                   keyExtractor={item => item.id}
                   style={{
-                    height: hp(68),
+                    height: hp(69),
                   }}
                 />
               )}
