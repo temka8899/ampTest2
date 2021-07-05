@@ -321,6 +321,7 @@ const Match = ({item, onPress, user}) => {
             </View>
           </View>
         </TouchableOpacity>
+
         <View
           style={{
             height: wp(0.2),
@@ -426,6 +427,7 @@ const ScheduleScreen = ({navigation, route}) => {
       );
 
       const schedulePerDay = scheduleData.data.listSchedules.items;
+      console.log('schedulePerDay :>> ', schedulePerDay);
       const sorted = schedulePerDay.sort((a, b) => a.index - b.index);
       setScheduleData(sorted);
       // return schedulePerDay;
