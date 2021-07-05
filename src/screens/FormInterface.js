@@ -12,11 +12,23 @@ import {COLORS, FONTS, hp, wp} from '../constants/theme';
 import {icons, images} from '../constants';
 import Modal from 'react-native-modal';
 import {EndModalForm} from '../components/EndModalForm';
-
+import {
+  updateLeague,
+  updateSchedule,
+  updateTeamPlayer,
+  updateTeam,
+  updatePlayer,
+  createSchedule,
+} from '../graphql/mutations';
+import {
+  listLeagues,
+  listPlayers,
+  listTeamPlayers,
+  listTeams,
+} from '../graphql/queries';
 import * as Animatable from 'react-native-animatable';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import API, {graphqlOperation} from '@aws-amplify/api';
-import {listPlayers, listTeamPlayers} from '../graphql/queries';
 import Auth from '@aws-amplify/auth';
 import {AuthContext} from '../../App';
 
@@ -96,7 +108,6 @@ export default function FormInterface({navigation, route}) {
   useEffect(() => {
     const ScheduleData = route.params.match;
     setMatchData(ScheduleData);
-    console.log(`ScheduleData`, ScheduleData.home.name);
     getPlayerData(ScheduleData);
   }, [getPlayerData, route.params.match]);
   const toggleCancelModal = bool => {
@@ -142,7 +153,7 @@ export default function FormInterface({navigation, route}) {
   // }
 
   const endMatchButton = () => {
-    if (homeScore !== awayScore) {
+    if (homeScore != awayScore) {
       setEndModalVisible(true);
     }
   };
@@ -312,6 +323,160 @@ export default function FormInterface({navigation, route}) {
     },
     [setUserInfo],
   );
+
+  async function UpdateSchedule() {
+    await _updateLeague();
+    _updateSchedule();
+    if (homeScore > awayScore) {
+      //toglogch yalahad bagiin win-lose update
+      _updateHome1();
+      _updateAway1();
+    } else {
+      //toglogch yalagdahad bagiin win-lose update
+      _updateHome2();
+      _updateAway2();
+    }
+  }
+
+  async function _updateLeague() {
+    const updateLeagueID = MatchData.leagueID;
+    //Getting League current Schedule
+    const leagueData = await API.graphql(
+      graphqlOperation(await listLeagues, {
+        filter: {
+          id: {eq: updateLeagueID},
+        },
+      }),
+    );
+    let updateCurrentSchedule =
+      leagueData.data.listLeagues.items[0].currentSchedule;
+
+    //Updating League current schedule
+    API.graphql(
+      graphqlOperation(updateLeague, {
+        input: {
+          id: updateLeagueID,
+          currentSchedule: updateCurrentSchedule + 1,
+        },
+      }),
+    );
+  }
+
+  function _updateSchedule() {
+    API.graphql(
+      graphqlOperation(updateSchedule, {
+        input: {
+          //Schedule id
+          id: MatchData.id,
+          homeScore: `${homeScore}`,
+          awayScore: `${awayScore}`,
+        },
+      }),
+    );
+  }
+
+  async function _updateHome1() {
+    //getting Team home win-lose data to update
+    const teamData = await API.graphql(
+      graphqlOperation(listTeams, {
+        filter: {
+          //Team id
+          id: {eq: `${MatchData.home.id}`},
+        },
+      }),
+    );
+    const win = teamData.data.listTeams.items[0].win;
+    const lose = teamData.data.listTeams.items[0].lose;
+
+    // Updating Team home win-lose datas
+    API.graphql(
+      graphqlOperation(updateTeam, {
+        input: {
+          //Team id
+          id: `${MatchData.home.id}`,
+          win: `${win + 1}`,
+          lose: `${lose}`,
+        },
+      }),
+    );
+  }
+
+  async function _updateAway1() {
+    //getting Team away win-lose data to update
+    const teamData1 = await API.graphql(
+      graphqlOperation(listTeams, {
+        filter: {
+          //Team id
+          id: {eq: `${MatchData.away.id}`},
+        },
+      }),
+    );
+    const win1 = teamData1.data.listTeams.items[0].win;
+    const lose1 = teamData1.data.listTeams.items[0].lose;
+
+    // Updating Team away win-lose datas
+    API.graphql(
+      graphqlOperation(updateTeam, {
+        input: {
+          //Team id
+          id: `${MatchData.away.id}`,
+          win: `${win1}`,
+          lose: `${lose1 + 1}`,
+        },
+      }),
+    );
+  }
+
+  async function _updateHome2() {
+    const teamData1 = await API.graphql(
+      graphqlOperation(listTeams, {
+        filter: {
+          //Team id
+          id: {eq: `${MatchData.home.id}`},
+        },
+      }),
+    );
+    const win1 = teamData1.data.listTeams.items[0].win;
+    const lose1 = teamData1.data.listTeams.items[0].lose;
+
+    // Updating Team win-lose datas
+    API.graphql(
+      graphqlOperation(updateTeam, {
+        input: {
+          //Team id
+          id: `${MatchData.home.id}`,
+          win: `${win1}`,
+          lose: `${lose1 + 1}`,
+        },
+      }),
+    );
+  }
+
+  async function _updateAway2() {
+    //getting Team win-lose data to update
+    const teamData = await API.graphql(
+      graphqlOperation(listTeams, {
+        filter: {
+          //Team id
+          id: {eq: `${MatchData.away.id}`},
+        },
+      }),
+    );
+    const win = teamData.data.listTeams.items[0].win;
+    const lose = teamData.data.listTeams.items[0].lose;
+
+    // Updating Team win-lose datas
+    await API.graphql(
+      graphqlOperation(updateTeam, {
+        input: {
+          //Team id
+          id: `${MatchData.away.id}`,
+          win: `${win + 1}`,
+          lose: `${lose}`,
+        },
+      }),
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -580,7 +745,7 @@ export default function FormInterface({navigation, route}) {
         }}>
         <TouchableOpacity
           style={styles.modalBtnContainer}
-          onPress={() => endMatchButton}>
+          onPress={() => endMatchButton()}>
           <Text style={styles.modalBtnText}>End Match</Text>
         </TouchableOpacity>
         {CancelModal()}

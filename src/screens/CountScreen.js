@@ -220,25 +220,25 @@ export default function CountScreen({navigation, route}) {
   );
 
   async function UpdateSchedule() {
+    //League iin current index update
     await _updateLeague();
+
     // Updating Schedule data
     // Bagiin avsan onoog update hiine
-
     _updateSchedule();
 
+    //Toglogchdiin avsan onoog update
     updateProfile(Home[0].id, Home[0].player.id, allPoint.one.point);
     updateProfile(Home[1].id, Home[1].player.id, allPoint.two.point);
     updateProfile(Away[0].id, Away[0].player.id, allPoint.three.point);
     updateProfile(Away[1].id, Away[1].player.id, allPoint.four.point);
 
-    //League iin current index update
-
     if (allPoint.one.point + allPoint.two.point === 10) {
-      //toglogch yalahad bagiin onoog update
+      //toglogch yalahad bagiin win-lose update
       _updateHome1();
       _updateAway1();
     } else {
-      //toglogch yalagdahad bagiin onoog update
+      //toglogch yalagdahad bagiin win-lose update
       _updateHome2();
       _updateAway2();
     }
@@ -246,21 +246,16 @@ export default function CountScreen({navigation, route}) {
   }
 
   function _updateSchedule() {
-    try {
-      API.graphql(
-        graphqlOperation(updateSchedule, {
-          input: {
-            //Schedule id
-            id: MatchData.id,
-            homeScore: `${allPoint.one.point + allPoint.two.point}`,
-            awayScore: `${allPoint.three.point + allPoint.four.point}`,
-          },
-        }),
-      );
-      console.log('>>>>>>>>>>>>>>>> Schedule Updated');
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
+    API.graphql(
+      graphqlOperation(updateSchedule, {
+        input: {
+          //Schedule id
+          id: MatchData.id,
+          homeScore: `${allPoint.one.point + allPoint.two.point}`,
+          awayScore: `${allPoint.three.point + allPoint.four.point}`,
+        },
+      }),
+    );
   }
 
   async function _updateHome1() {
@@ -287,7 +282,6 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log('>>>>>>>>>>>>>>>> UpdateHome1');
   }
 
   async function _updateAway1() {
@@ -314,7 +308,6 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log('>>>>>>>>>>>>>>>>> UpdateAway1');
   }
 
   async function _updateHome2() {
@@ -340,7 +333,6 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log('>>>>>>>>>>>>>>>>> UpdateHome2');
   }
 
   async function _updateAway2() {
@@ -367,7 +359,6 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log('>>>>>>>>>>>>>>>>> UpdateAway2');
   }
 
   async function _updateLeague() {
@@ -382,7 +373,6 @@ export default function CountScreen({navigation, route}) {
     );
     let updateCurrentSchedule =
       leagueData.data.listLeagues.items[0].currentSchedule;
-    console.log(updateCurrentSchedule);
 
     //Updating League current schedule
     API.graphql(
@@ -393,7 +383,6 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log('>>>>>>>>>>>>> UpdateLeague');
   }
 
   async function updateProfile(id, playerid, point) {
@@ -405,7 +394,6 @@ export default function CountScreen({navigation, route}) {
       }),
     );
     const score = teamPlayerData.data.listTeamPlayers.items[0].playerScore;
-    //console.log(`score`, score);
 
     await API.graphql(
       graphqlOperation(updateTeamPlayer, {
@@ -415,7 +403,6 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log('TeamPlayer PlayerScore Updated');
 
     const playerData = await API.graphql(
       graphqlOperation(listPlayers, {
@@ -433,7 +420,6 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log('Player updated');
   }
 
   async function startPlayoff() {
