@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 
 import {hp, wp} from '../constants/theme';
@@ -26,8 +27,9 @@ Amplify.configure({
   },
 });
 
-const createGameScreen = ({navigation}) => {
+const CreateGameScreen = ({navigation}) => {
   const initialState = {name: ''};
+  const [isLoading, setLoading] = useState('');
   const [formState, setFormState] = useState(initialState);
   const [todos, setTodos] = useState([]);
   const [uploadImage, setUploadImage] = useState('');
@@ -76,6 +78,7 @@ const createGameScreen = ({navigation}) => {
 
   async function addGame() {
     try {
+      setLoading(true);
       await blobber(file123);
       const todo = {...formState};
       await setTodos([...todos, todo]);
@@ -93,7 +96,10 @@ const createGameScreen = ({navigation}) => {
         }),
       );
       console.log('temp', temp);
+      setLoading(false);
+      navigation.pop();
     } catch (err) {
+      setLoading(false);
       console.log('error creating todo:', err);
     }
   }
@@ -157,9 +163,18 @@ const createGameScreen = ({navigation}) => {
           style={styles.button}>
           <Text style={styles.btnText}>Choose an image</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={addGame}>
-          <Text style={styles.btnText}>Create game</Text>
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity
+            disabled={isLoading}
+            style={styles.button}
+            onPress={addGame}>
+            {isLoading ? (
+              <ActivityIndicator size={'small'} color={COLORS.white} />
+            ) : (
+              <Text style={styles.btnText}>Create game</Text>
+            )}
+          </TouchableOpacity>
+        </>
       </View>
     </SafeAreaView>
   );
@@ -223,4 +238,4 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(1.4),
   },
 });
-export default createGameScreen;
+export default CreateGameScreen;

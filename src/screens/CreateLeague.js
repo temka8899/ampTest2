@@ -15,6 +15,7 @@ import {
   Platform,
   ScrollView,
   TextComponent,
+  ActivityIndicator,
 } from 'react-native';
 
 import {COLORS, FONTS, icons, images} from '../constants';
@@ -45,6 +46,7 @@ const CreateLeagueScreen = ({navigation}) => {
   const [uploadImage, setUploadImage] = useState('');
   const [GameList, setGameList] = useState([]);
   const [LeagueList, setLeagueList] = useState([]);
+  const [isLoading, setLoading] = useState('');
   const [chooseData, setChooseData] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const initialState = {name: ''};
@@ -101,6 +103,7 @@ const CreateLeagueScreen = ({navigation}) => {
 
   async function addLeague() {
     try {
+      setLoading(true);
       await API.graphql(
         graphqlOperation(createLeague, {
           input: {
@@ -113,6 +116,7 @@ const CreateLeagueScreen = ({navigation}) => {
         }),
       );
       console.log('League Created');
+      setLoading(false);
       navigation.pop();
     } catch (err) {
       console.log('error creating League:', err);
@@ -259,9 +263,14 @@ const CreateLeagueScreen = ({navigation}) => {
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
+                disabeled={isLoading}
                 onPress={() => addLeague()}
                 style={styles.createBtn}>
-                <Text style={styles.createBtnText}>Create League</Text>
+                {isLoading ? (
+                  <ActivityIndicator size={'small'} color={COLORS.white} />
+                ) : (
+                  <Text style={styles.createBtnText}>Create League</Text>
+                )}
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
