@@ -6,12 +6,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {COLORS, icons, images} from '../constants';
 import {FONTS, wp} from '../constants/theme';
 
-export default function BracketScreen() {
+export default function BracketScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -234,7 +235,7 @@ export default function BracketScreen() {
                       fontFamily: FONTS.brandFont,
                       fontSize: wp(2.66),
                     }}>
-                    T3 or T4
+                    Finalist
                   </Text>
                 </View>
               </View>

@@ -30,7 +30,6 @@ const App = () => {
     <NavigationContainer>
       <ContextProvider>
         <Stack.Navigator
-          initialRouteName="BracketScreen"
           screenOptions={{
             headerShown: false,
           }}>
