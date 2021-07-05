@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 
 import {wp, hp, COLORS, FONTS} from '../constants/theme';
-
+import moment from 'moment';
 import {Avatars} from '../data/Avatars';
 import {AuthContext} from '../../App';
 
@@ -505,7 +505,7 @@ const GameScreen = ({navigation}) => {
         }
       });
       setUserInfo(finded);
-      console.log('finded :>> ', finded);
+      //console.log('finded :>> ', finded);
     },
     [setUserInfo],
   );
@@ -559,21 +559,20 @@ const GameScreen = ({navigation}) => {
   );
 
   const getSchedule = React.useCallback(async () => {
-    let date = new Date();
-    console.log('object :>> ', date.toLocaleDateString());
-    date.setDate(date.getDate());
+    var date = new Date();
+    date = moment(date).format('MM/D/YY');
     try {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
             // date: {eq: `${date.toLocaleDateString()}`},
-            date: {eq: '7/5/21'},
+            date: {eq: `${date}`},
           },
         }),
       );
       const todos = scheduleData.data.listSchedules.items;
       const sorted = todos.sort((a, b) => a.index - b.index);
-      console.log('sorted', sorted);
+      // console.log('sorted', sorted);
       setSchedule(sorted);
     } catch (err) {}
   }, []);

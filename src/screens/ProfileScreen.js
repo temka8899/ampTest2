@@ -327,7 +327,7 @@ const Profile = ({navigation}) => {
       );
       const todos = leagueData.data.listTeamPlayers.items;
       setTeamNames(todos);
-      console.log('>>>>>>>>>>>>>>>', todos);
+      //console.log('>>>>>>>>>>>>>>>', todos);
     } catch (err) {
       console.log('error fetching todos', err);
     }
