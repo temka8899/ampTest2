@@ -55,7 +55,11 @@ const AdminScreen = ({navigation}) => {
   useEffect(() => {
     fetchLeague();
     fetchGame();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      onRefresh();
+    });
+    return unsubscribe;
+  }, [navigation, onRefresh]);
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [LeagueList, setLeagueList] = React.useState([]);
@@ -592,12 +596,6 @@ const AdminScreen = ({navigation}) => {
       </View>
 
       <View style={styles.bottomContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            changeModalVisible(true);
-          }}>
-          <Text style={{color: 'white'}}> modal tester </Text>
-        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('CreateTeamScreen')}
           style={styles.createBtn}>

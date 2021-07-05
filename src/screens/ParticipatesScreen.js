@@ -26,12 +26,7 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 
 import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
 
-import {
-  listPlayers,
-  listLeaguePlayers,
-  getTeam,
-  getLeague,
-} from '../graphql/queries';
+import {listPlayers, listLeaguePlayers} from '../graphql/queries';
 
 import {
   createLeaguePlayer,
@@ -46,7 +41,7 @@ const wait = timeout => {
 const ParticipatesScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [deleteID, setDeleteID] = useState('');
-  const [PlayerID, setPlayerID] = useState('');
+  const [imgLoad, setImgLoad] = useState(true);
   const [myID, setMyID] = useState('');
   const [leaguePlayers, setLeaguePlayers] = useState([]);
   const {userInfo} = React.useContext(AuthContext);
@@ -173,7 +168,11 @@ const ParticipatesScreen = ({navigation, route}) => {
         }),
       );
       const todos = leaguePlayerData.data.listLeaguePlayers.items;
-    } catch (err) {}
+      setImgLoad(false);
+    } catch (err) {
+      console.log('err :>> ', err);
+      setImgLoad(false);
+    }
   }, [LeagueId]);
 
   const LeaguePlayers = React.useCallback(async () => {
@@ -297,32 +296,37 @@ const ParticipatesScreen = ({navigation, route}) => {
           height: hp(40),
           marginTop: hp(1),
         }}>
-        <ImageBackground
-          source={{
-            uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${gameInfo.game.image}`,
-          }}
-          style={styles.backgroundImage}
-          imageStyle={styles.backgroundImageSub}>
-          <LinearGradient
-            style={styles.linear}
-            start={{x: 1, y: 0}}
-            end={{x: 1, y: 1}}
-            colors={['#00000000', '#000']}>
-            <View style={styles.linearText}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  fontFamily: FONTS.brandFont,
-                  paddingVertical: hp(1),
-                }}>
-                {gameInfo.game.name}
-              </Text>
-              <Text style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
-                {gameInfo.startDate}
-              </Text>
-            </View>
-          </LinearGradient>
-        </ImageBackground>
+        {imgLoad ? (
+          <ActivityIndicator size={'large'} color={COLORS.brand} />
+        ) : (
+          <ImageBackground
+            source={{
+              uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${gameInfo.game.image}`,
+            }}
+            style={styles.backgroundImage}
+            imageStyle={styles.backgroundImageSub}>
+            <LinearGradient
+              style={styles.linear}
+              start={{x: 1, y: 0}}
+              end={{x: 1, y: 1}}
+              colors={['#00000000', '#000']}>
+              <View style={styles.linearText}>
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    fontFamily: FONTS.brandFont,
+                    paddingVertical: hp(1),
+                  }}>
+                  {gameInfo.game.name}
+                </Text>
+                <Text
+                  style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
+                  {gameInfo.startDate}
+                </Text>
+              </View>
+            </LinearGradient>
+          </ImageBackground>
+        )}
       </View>
       <View style={styles.descriptionContainer}>
         <Text style={styles.description}>{gameInfo.description}</Text>

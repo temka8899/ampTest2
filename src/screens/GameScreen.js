@@ -40,6 +40,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import Amplify, {API, graphqlOperation, Auth} from 'aws-amplify';
 import IntroModal from '../components/IntroModal';
 import {images} from '../constants';
+import LoadImage from '../components/LoadImage';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -362,22 +363,18 @@ const Match = ({item, onPress, user}) => {
 };
 
 const GameScreen = ({navigation}) => {
-  const [imgLoad, setImgLoad] = useState(true);
   const [imgLoadGame, setImgLoadGame] = useState(true);
   const [schedule, setSchedule] = useState([]);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [AvatarModal, setAvatarModal] = useState(false);
-  const [permissions, setPermissions] = useState({});
   const [LeagueList, setLeagueList] = useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [playerId, setId] = useState('');
   const [name, setName] = useState();
   const [greet, setGreet] = useState('');
   const [introModal, setIntroModal] = useState(false);
-  const [userInfoSeted, setUserInfoSeted] = useState(false);
 
   //console.log('userInfo :>> ', userInfo);
 
@@ -432,51 +429,19 @@ const GameScreen = ({navigation}) => {
         marginVertical: wp(3),
       }}>
       <>
-        {imgLoadGame ? (
-          <View style={[styles.item, {backgroundColor: COLORS.background}]}>
-            <ActivityIndicator size={'small'} color={COLORS.brand} />
-          </View>
-        ) : (
-          <TouchableOpacity
-            onPress={onPress}
-            style={[styles.item, {backgroundColor: COLORS.background}]}>
-            <ImageBackground
-              source={{
-                uri: `https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`,
-              }}
-              style={{
-                width: wp(52),
-                height: wp(68),
-              }}
-              imageStyle={{
-                borderRadius: wp(12),
-                // resizeMode: 'contain',
-                backgroundColor: COLORS.background,
-              }}>
-              <LinearGradient
-                style={{flex: 1, borderRadius: wp(12)}}
-                start={{x: 1, y: 0}}
-                end={{x: 1, y: 1}}
-                buh
-                colors={['#00000000', '#000']}>
-                <View style={styles.leagueStatus}>
-                  <Text
-                    style={{
-                      color: COLORS.white,
-                      fontFamily: FONTS.brandFont,
-                      paddingVertical: hp(1),
-                    }}>
-                    {item.game.name}
-                  </Text>
-                  <Text
-                    style={{color: COLORS.white, fontFamily: FONTS.brandFont}}>
-                    {item.startDate}
-                  </Text>
-                </View>
-              </LinearGradient>
-            </ImageBackground>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={onPress}
+          style={[styles.item, {backgroundColor: COLORS.background}]}>
+          {imgLoadGame ? (
+            <ActivityIndicator size={'large'} color={COLORS.brand} />
+          ) : (
+            <LoadImage
+              gameTitle={item.game.name}
+              gameDate={item.startDate}
+              imgURL={`https://amptest2project1ff67101811247b8a7fc664ba3fce889170617-dev.s3.amazonaws.com/public/${item.game.image}`}
+            />
+          )}
+        </TouchableOpacity>
       </>
     </View>
   );
@@ -593,16 +558,16 @@ const GameScreen = ({navigation}) => {
     [selectedItem],
   );
 
-  let date = new Date();
-  date.setDate(date.getDate());
-
   const getSchedule = React.useCallback(async () => {
+    let date = new Date();
+    console.log('object :>> ', date.toLocaleDateString());
+    date.setDate(date.getDate());
     try {
       const scheduleData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {
-            date: {eq: `${date.toLocaleDateString()}`},
-            // leagueID: {eq: 'afe7d6a5-8053-4007-ae6a-c52be55ed7fa'},
+            // date: {eq: `${date.toLocaleDateString()}`},
+            date: {eq: '7/5/21'},
           },
         }),
       );
@@ -743,23 +708,12 @@ const GameScreen = ({navigation}) => {
                 PLAYING TODAY
               </Text>
             </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('BracketScreen')}>
-              <Text style={{color: 'white', fontSize: 20}}>Start</Text>
-            </TouchableOpacity>
             <View style={{height: wp(76)}}>
               <FlatList
                 data={schedule}
                 keyExtractor={item => item.id}
                 renderItem={renderSchedule}
               />
-              {/* <View
-              style={{
-                height: hp(11),
-                width: '100%',
-                backgroundColor: 'red',
-              }}
-            /> */}
             </View>
           </View>
         )}
