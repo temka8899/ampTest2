@@ -93,7 +93,7 @@ const Match = ({item, onPress, user}) => {
     }
   }
 
-  if (item.awayScore === 10 || item.homeScore === 10) {
+  if (item.awayScore !== 0 || item.homeScore !== 0) {
     return (
       <View>
         <View
@@ -155,7 +155,7 @@ const Match = ({item, onPress, user}) => {
                   ]}>
                   End
                 </Text>
-                {item.homeScore === 10 ? (
+                {item.homeScore > item.awayScore ? (
                   <View style={styles.matchPointContainer}>
                     <Text style={[styles.matchPoint, {color: COLORS.green}]}>
                       {item.homeScore}

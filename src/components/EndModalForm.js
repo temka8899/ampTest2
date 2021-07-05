@@ -115,7 +115,7 @@ export const EndModalForm = props => {
                   {winner.team.point}
                 </Text>
                 <Image
-                  source={winner.team.avatar1}
+                  source={winner.team.avatar2}
                   style={[styles.winnerImage]}
                 />
               </View>
