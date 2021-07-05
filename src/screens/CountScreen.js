@@ -374,7 +374,7 @@ export default function CountScreen({navigation, route}) {
     const updateLeagueID = MatchData.leagueID;
     //Getting League current Schedule
     const leagueData = await API.graphql(
-      graphqlOperation(listLeagues, {
+      graphqlOperation(await listLeagues, {
         filter: {
           id: {eq: updateLeagueID},
         },
@@ -405,7 +405,7 @@ export default function CountScreen({navigation, route}) {
       }),
     );
     const score = teamPlayerData.data.listTeamPlayers.items[0].playerScore;
-    console.log(`score`, score);
+    //console.log(`score`, score);
 
     await API.graphql(
       graphqlOperation(updateTeamPlayer, {
@@ -451,7 +451,14 @@ export default function CountScreen({navigation, route}) {
         }),
       );
       const _playoffGameID = _league.data.listLeagues.items[0].game.id;
-
+      console.log(
+        'Current schedule',
+        leagueData.data.listTeams.items[0].league.currentSchedule,
+      );
+      console.log(
+        'max schedule',
+        leagueData.data.listTeams.items[0].league.maxSchedule,
+      );
       if (
         leagueData.data.listTeams.items[0].league.currentSchedule ==
           leagueData.data.listTeams.items[0].league.maxSchedule &&
@@ -556,7 +563,7 @@ export default function CountScreen({navigation, route}) {
           sorted[2].id,
           date,
           _leagueID,
-          1,
+          0,
           1,
           _teamAvatar2,
           _teamID2,
@@ -570,7 +577,7 @@ export default function CountScreen({navigation, route}) {
           sorted[2].id,
           date,
           _leagueID,
-          2,
+          0,
           2,
           _teamAvatar2,
           _teamID2,
@@ -591,12 +598,12 @@ export default function CountScreen({navigation, route}) {
           sorted[3].id,
           date,
           _leagueID,
+          0,
           3,
-          1,
-          _teamAvatar4,
-          _teamID4,
           _teamAvatar1,
           _teamID1,
+          _teamAvatar4,
+          _teamID4,
           0,
           _playoffGameID,
         );
@@ -605,12 +612,12 @@ export default function CountScreen({navigation, route}) {
           sorted[3].id,
           date,
           _leagueID,
+          0,
           4,
-          2,
-          _teamAvatar4,
-          _teamID4,
           _teamAvatar1,
           _teamID1,
+          _teamAvatar4,
+          _teamID4,
           0,
           _playoffGameID,
         );
@@ -679,7 +686,7 @@ export default function CountScreen({navigation, route}) {
           sorted[1].id,
           date,
           _leagueID,
-          1,
+          0,
           0,
           _teamAvatar1,
           _teamID1,
@@ -693,7 +700,7 @@ export default function CountScreen({navigation, route}) {
           sorted[1].id,
           date,
           _leagueID,
-          2,
+          0,
           0,
           _teamAvatar1,
           _teamID1,

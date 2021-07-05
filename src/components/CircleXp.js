@@ -22,7 +22,7 @@ const CircleXp = props => {
         duration={750}
         lineCap="round"
         tintColor={COLORS.brand}
-        onAnimationComplete={() => console.log('onAnimationComplete')}
+        //onAnimationComplete={() => console.log('onAnimationComplete')}
         backgroundColor="#F74C1130">
         {fill => (
           <View>

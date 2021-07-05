@@ -41,7 +41,7 @@ const UselessTextInput = ({value}) => {
       style={styles1.input}
       onChangeText={onChangeText}
       value={text}
-      onPressOut={console.log('onPressOut')}
+      //onPressOut={console.log('onPressOut')}
       editable={false}
     />
   );
@@ -69,7 +69,7 @@ const Profile = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const Match = ({item, onPress, user}) => {
-    console.log(`item`, item);
+    //console.log(`item`, item);
     const [Home, setHome] = useState(undefined);
     const [Away, setAway] = useState(undefined);
     const [imgLoad, setImgLoad] = useState(true);

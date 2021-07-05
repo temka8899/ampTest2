@@ -426,9 +426,9 @@ const ScheduleScreen = ({navigation, route}) => {
       );
 
       const schedulePerDay = scheduleData.data.listSchedules.items;
-      console.log('>>>>>>>>>>>>', scheduleData);
-      console.log('>>>>>>>>>>>>', item);
-      console.log('>>>>>>>>>>>>', param.id);
+      //  console.log('>>>>>>>>>>>>', scheduleData);
+      //  console.log('>>>>>>>>>>>>', item);
+      //  console.log('>>>>>>>>>>>>', param.id);
       const sorted = schedulePerDay.sort((a, b) => a.index - b.index);
       setScheduleData(sorted);
       // return schedulePerDay;
@@ -505,7 +505,7 @@ const ScheduleScreen = ({navigation, route}) => {
   const getDayData = React.useCallback((number, date) => {
     date = new Date(date);
     date = moment(date).format('MM/D/YY');
-    console.log(`ehniiii date`, date);
+    //console.log(`ehniiii date`, date);
     let odor;
     for (let i = 0; i < number; i++) {
       odor = moment(date).format('dddd');
@@ -526,11 +526,10 @@ const ScheduleScreen = ({navigation, route}) => {
 
   const setData = React.useCallback(
     async option => {
-      console.log('111');
       setDayData([]);
       myValue = option;
       await setChooseData(option);
-      console.log(`firstDate`, firstDate);
+      //console.log(`firstDate`, firstDate);
       getDay(firstDate, option);
       setLoading(false);
       let teamNumber = await getTeamNumber(option);
