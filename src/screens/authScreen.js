@@ -461,7 +461,7 @@ export default function AuthScreen({navigation}) {
     imgMoveBack();
   }, [imgMoveBack, imgScaleBack]);
 
-  const getData = async () => {
+  const getData = React.useCallback(async () => {
     try {
       const value = await AsyncStorage.getItem('@userID');
       if (value !== null) {
@@ -471,7 +471,7 @@ export default function AuthScreen({navigation}) {
     } catch (e) {
       // error reading value
     }
-  };
+  }, [navigation]);
 
   useEffect(() => {
     getData();
@@ -482,7 +482,7 @@ export default function AuthScreen({navigation}) {
       Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
       Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
     };
-  }, [_keyboardDidHide, _keyboardDidShow]);
+  }, [_keyboardDidHide, _keyboardDidShow, getData]);
 
   const imgScale = React.useCallback(() => {
     Animated.timing(startValue, {

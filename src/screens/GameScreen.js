@@ -70,7 +70,6 @@ const Match = ({item, onPress, user}) => {
 
   const getPlayerData = React.useCallback(async () => {
     if (item !== null) {
-      setImgLoad(false);
     }
     let homeImages1 = item.homeImage.split('[');
     let homeImages2 = homeImages1[1].split(']');
@@ -83,6 +82,7 @@ const Match = ({item, onPress, user}) => {
 
     let findHome = await findTeam(user.id, item.homePlayers);
     let findAway = await findTeam(user.id, item.awayPlayers);
+    setImgLoad(false);
 
     if (findHome) {
       setFind('home');
@@ -363,6 +363,7 @@ const Match = ({item, onPress, user}) => {
 
 const GameScreen = ({navigation}) => {
   const [imgLoad, setImgLoad] = useState(true);
+  const [imgLoadGame, setImgLoadGame] = useState(true);
   const [schedule, setSchedule] = useState([]);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [AvatarModal, setAvatarModal] = useState(false);
@@ -431,8 +432,10 @@ const GameScreen = ({navigation}) => {
         marginVertical: wp(3),
       }}>
       <>
-        {imgLoad ? (
-          <ActivityIndicator size={'large'} color={COLORS.brand} />
+        {imgLoadGame ? (
+          <View style={[styles.item, {backgroundColor: COLORS.background}]}>
+            <ActivityIndicator size={'small'} color={COLORS.brand} />
+          </View>
         ) : (
           <TouchableOpacity
             onPress={onPress}
@@ -454,6 +457,7 @@ const GameScreen = ({navigation}) => {
                 style={{flex: 1, borderRadius: wp(12)}}
                 start={{x: 1, y: 0}}
                 end={{x: 1, y: 1}}
+                buh
                 colors={['#00000000', '#000']}>
                 <View style={styles.leagueStatus}>
                   <Text
@@ -548,7 +552,7 @@ const GameScreen = ({navigation}) => {
       //
 
       setLeagueList(leagueData.data.listLeagues.items);
-      setImgLoad(false);
+      setImgLoadGame(false);
     } catch (err) {}
   };
 
