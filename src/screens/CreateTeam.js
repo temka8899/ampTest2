@@ -374,9 +374,18 @@ const createTeamScreen = ({navigation}) => {
   async function fetchLeague() {
     try {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
-      // const todos = leagueData.data.listTeams.items;
-      // console.log('Teams>>>>>>>>>>>>>>', todos);
-      console.log('Leagues>>>>>>>>>>>>>>', leagueData.data.listLeagues.items);
+      const league = leagueData.data.listLeagues.items;
+      console.log(league);
+      for (var i = 0; i < league.legth; i++) {
+        await API.graphql(
+          graphqlOperation(updateLeague, {
+            input: {
+              id: league[i].id,
+              isPlayoff: false,
+            },
+          }),
+        );
+      }
     } catch (err) {
       console.log('error fetching todos', err);
     }
