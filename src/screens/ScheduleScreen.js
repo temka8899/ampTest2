@@ -922,7 +922,7 @@ const ScheduleScreen = ({navigation, route}) => {
                 </View>
               ) : (
                 <View>
-                  {scheduleData[0].playOffIndex === 0 ? (
+                  {scheduleData[0].playOffIndex !== 0 ? (
                     <FlatList
                       data={scheduleData}
                       renderItem={renderSchedule}
