@@ -34,7 +34,11 @@ const App = () => {
             headerShown: false,
           }}>
           <Stack.Screen name="Auth" component={authScreen} />
-          <Stack.Screen name="Tabs" component={Tabs} />
+          <Stack.Screen
+            name="Tabs"
+            component={Tabs}
+            options={{gestureEnabled: false}}
+          />
           <Stack.Screen
             name="BracketScreen"
             component={BracketScreen}
