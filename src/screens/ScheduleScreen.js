@@ -617,8 +617,6 @@ const ScheduleScreen = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [dayData, setDayData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
-  console.log('scheduleData :>> ', scheduleData);
-
   const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
   let localDay = moment(firstDate).format('ddd');
   firstDate = moment(firstDate).format('MM/D/YY');
@@ -665,7 +663,7 @@ const ScheduleScreen = ({navigation, route}) => {
       const schedulePerDay = scheduleData.data.listSchedules.items;
       const sorted = schedulePerDay.sort((a, b) => a.index - b.index);
       setScheduleData(sorted);
-      console.log('sorted :>> ', sorted);
+      // console.log('sorted :>> ', sorted);
       // return schedulePerDay;
     } catch (err) {
       console.log('error fetching schedulePerDay', err);

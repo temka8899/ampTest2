@@ -20,6 +20,7 @@ import {
   updatePlayer,
   createSchedule,
 } from '../graphql/mutations';
+import moment from 'moment';
 import {
   listLeagues,
   listPlayers,
@@ -641,7 +642,7 @@ export default function FormInterface({navigation, route}) {
           date,
           _leagueID,
           0,
-          3,
+          1,
           _teamAvatar1,
           _teamID1,
           _teamAvatar4,
@@ -655,7 +656,7 @@ export default function FormInterface({navigation, route}) {
           date,
           _leagueID,
           0,
-          4,
+          2,
           _teamAvatar1,
           _teamID1,
           _teamAvatar4,

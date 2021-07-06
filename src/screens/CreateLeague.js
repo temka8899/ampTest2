@@ -112,6 +112,7 @@ const CreateLeagueScreen = ({navigation}) => {
             description: `${leagueDescription}`,
             isStart: false,
             minPlayer: minimumPlayer,
+            isPlayoff: false,
           },
         }),
       );
