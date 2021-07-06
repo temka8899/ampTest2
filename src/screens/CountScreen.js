@@ -460,7 +460,7 @@ export default function CountScreen({navigation, route}) {
             graphqlOperation(updateTeam, {
               input: {
                 id: `${teams[i].id}`,
-                leagueStatus: `Playoff${i}`,
+                leagueStatus: `Playoff${i + 1}`,
               },
             }),
           );
