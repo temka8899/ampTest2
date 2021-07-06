@@ -8,7 +8,6 @@ import {
   StatusBar,
   StyleSheet,
   SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
@@ -25,7 +24,6 @@ import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
 
 import {createPlayer} from '../graphql/mutations';
-import LinearGradient from 'react-native-linear-gradient';
 
 import {
   listPlayers,
@@ -634,11 +632,14 @@ const GameScreen = ({navigation}) => {
           <View>
             <View style={styles.header}>
               <View>
-                <Text
-                  style={[
-                    styles.greeting,
-                    {fontSize: RFPercentage(1.8), color: COLORS.greyText},
-                  ]}>{`Good ${greet} `}</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('BracketScreen')}>
+                  <Text
+                    style={[
+                      styles.greeting,
+                      {fontSize: RFPercentage(1.8), color: COLORS.greyText},
+                    ]}>{`Good ${greet} `}</Text>
+                </TouchableOpacity>
                 <Text
                   style={[
                     styles.greeting,

@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
+  ScrollView,
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -95,132 +96,134 @@ const Match = ({item, onPress, user}) => {
 
   if (item.awayScore !== 0 || item.homeScore !== 0) {
     return (
-      <View>
-        <View
-          onPress={onPress}
-          style={{
-            width: wp(100),
-            height: wp(28),
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row'}}>
-            <View
-              style={{
-                height: wp(23),
-                width: wp(39),
-                alignItems: 'center',
-              }}>
-              {Home && (
-                <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => {
-                    return imgLoad ? (
-                      <ActivityIndicator
-                        style={styles.avatar}
-                        size={'small'}
-                        color={COLORS.brand}
-                      />
-                    ) : (
-                      <Image source={_item} style={styles.avatar} />
-                    );
-                  })}
-                </View>
-              )}
-              <Text
-                style={{
-                  color: find === 'home' ? COLORS.brand : COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  marginTop: wp(2.5),
-                  textAlign: 'center',
-                }}>
-                {item.home.name}
-              </Text>
-            </View>
-            <View
-              style={{
-                heigh: wp(23),
-                width: wp(20),
-              }}>
+      <>
+        <View>
+          <View
+            onPress={onPress}
+            style={{
+              width: wp(100),
+              height: wp(28),
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View style={{flexDirection: 'row'}}>
               <View
                 style={{
-                  width: wp(20),
-                  height: wp(15),
+                  height: wp(23),
+                  width: wp(39),
                   alignItems: 'center',
-                  justifyContent: 'center',
                 }}>
-                <Text
-                  style={[
-                    styles.matchPoint,
-                    {fontSize: RFPercentage(1.5), color: COLORS.greyText},
-                  ]}>
-                  End
-                </Text>
-                {item.homeScore > item.awayScore ? (
-                  <View style={styles.matchPointContainer}>
-                    <Text style={[styles.matchPoint, {color: COLORS.green}]}>
-                      {item.homeScore}
-                    </Text>
-                    <Text style={[styles.matchPoint, {color: COLORS.red}]}>
-                      {item.awayScore}
-                    </Text>
-                  </View>
-                ) : (
-                  <View style={styles.matchPointContainer}>
-                    <Text style={[styles.matchPoint, {color: COLORS.red}]}>
-                      {item.homeScore}
-                    </Text>
-                    <Text style={[styles.matchPoint, {color: COLORS.green}]}>
-                      {item.awayScore}
-                    </Text>
+                {Home && (
+                  <View style={{flexDirection: 'row'}}>
+                    {Home.map(_item => {
+                      return imgLoad ? (
+                        <ActivityIndicator
+                          style={styles.avatar}
+                          size={'small'}
+                          color={COLORS.brand}
+                        />
+                      ) : (
+                        <Image source={_item} style={styles.avatar} />
+                      );
+                    })}
                   </View>
                 )}
+                <Text
+                  style={{
+                    color: find === 'home' ? COLORS.brand : COLORS.greyText,
+                    fontFamily: FONTS.brandFont,
+                    marginTop: wp(2.5),
+                    textAlign: 'center',
+                  }}>
+                  {item.home.name}
+                </Text>
+              </View>
+              <View
+                style={{
+                  heigh: wp(23),
+                  width: wp(20),
+                }}>
+                <View
+                  style={{
+                    width: wp(20),
+                    height: wp(15),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text
+                    style={[
+                      styles.matchPoint,
+                      {fontSize: RFPercentage(1.5), color: COLORS.greyText},
+                    ]}>
+                    End
+                  </Text>
+                  {item.homeScore > item.awayScore ? (
+                    <View style={styles.matchPointContainer}>
+                      <Text style={[styles.matchPoint, {color: COLORS.green}]}>
+                        {item.homeScore}
+                      </Text>
+                      <Text style={[styles.matchPoint, {color: COLORS.red}]}>
+                        {item.awayScore}
+                      </Text>
+                    </View>
+                  ) : (
+                    <View style={styles.matchPointContainer}>
+                      <Text style={[styles.matchPoint, {color: COLORS.red}]}>
+                        {item.homeScore}
+                      </Text>
+                      <Text style={[styles.matchPoint, {color: COLORS.green}]}>
+                        {item.awayScore}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+
+              <View
+                style={{
+                  height: wp(23),
+                  width: wp(39),
+                  alignItems: 'center',
+                }}>
+                {Away && (
+                  <View style={{flexDirection: 'row'}}>
+                    {Away.map(_item => {
+                      return imgLoad ? (
+                        <ActivityIndicator
+                          style={styles.avatar}
+                          size={'small'}
+                          color={COLORS.brand}
+                        />
+                      ) : (
+                        <Image source={_item} style={styles.avatar} />
+                      );
+                    })}
+                  </View>
+                )}
+
+                <Text
+                  style={{
+                    color: find === 'away' ? COLORS.brand : COLORS.greyText,
+                    fontFamily: FONTS.brandFont,
+                    marginTop: wp(2.5),
+                    textAlign: 'center',
+                  }}>
+                  {item.away.name}
+                </Text>
               </View>
             </View>
-
-            <View
-              style={{
-                height: wp(23),
-                width: wp(39),
-                alignItems: 'center',
-              }}>
-              {Away && (
-                <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => {
-                    return imgLoad ? (
-                      <ActivityIndicator
-                        style={styles.avatar}
-                        size={'small'}
-                        color={COLORS.brand}
-                      />
-                    ) : (
-                      <Image source={_item} style={styles.avatar} />
-                    );
-                  })}
-                </View>
-              )}
-
-              <Text
-                style={{
-                  color: find === 'away' ? COLORS.brand : COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  marginTop: wp(2.5),
-                  textAlign: 'center',
-                }}>
-                {item.away.name}
-              </Text>
-            </View>
           </View>
+          <View
+            style={{
+              height: wp(0.2),
+              backgroundColor: COLORS.greyText,
+              width: wp(88),
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}
+          />
         </View>
-        <View
-          style={{
-            height: wp(0.2),
-            backgroundColor: COLORS.greyText,
-            width: wp(88),
-            justifyContent: 'center',
-            alignSelf: 'center',
-          }}
-        />
-      </View>
+      </>
     );
   } else {
     return (
@@ -321,6 +324,7 @@ const Match = ({item, onPress, user}) => {
             </View>
           </View>
         </TouchableOpacity>
+
         <View
           style={{
             height: wp(0.2),
@@ -333,6 +337,238 @@ const Match = ({item, onPress, user}) => {
       </View>
     );
   }
+};
+
+const PlayOff = ({data}) => {
+  return (
+    <ScrollView
+      horizontal
+      contentContainerStyle={{alignItems: 'center', width: wp(110)}}>
+      <View>
+        <View style={styles.bracketContainer}>
+          <View style={styles.sectionContainer}>
+            <View>
+              <View style={styles.teamContainer}>
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                </View>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={styles.textStyle}>
+                  {data[0].away.name}
+                </Text>
+              </View>
+
+              <View style={styles.space}></View>
+              <View style={styles.teamContainer}>
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                </View>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={styles.textStyle}>
+                  {data[1].away.name}
+                </Text>
+              </View>
+            </View>
+            <View>
+              <View style={styles.teamContainer}>
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                </View>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={styles.textStyle}>
+                  {data[2].away.name}
+                </Text>
+              </View>
+              <View style={styles.space}></View>
+              <View style={styles.teamContainer}>
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                </View>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={styles.textStyle}>
+                  {data[0].home.name}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.lineContainer}>
+            <View
+              style={{
+                height: wp(37.3),
+                width: wp(18),
+              }}>
+              <Image source={icons.line1agrey} style={styles.line1agrey} />
+              <Image source={icons.line1bgreen} style={styles.line1bgreen} />
+            </View>
+            <View
+              style={{
+                height: wp(47.46),
+                width: wp(18),
+              }}>
+              <Image
+                source={icons.line1agrey}
+                style={styles.line1agreyBottom}
+              />
+              <Image
+                source={icons.line1bgreen}
+                style={styles.line1bgreenBottom}
+              />
+            </View>
+          </View>
+          <View style={styles.section2}>
+            <View
+              style={{
+                height: wp(37.3),
+                width: wp(18),
+                paddingTop: wp(12),
+              }}>
+              <View style={styles.teamContainer}>
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                </View>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={styles.textStyle}>
+                  T1 or T2
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                height: wp(47.46),
+                width: wp(18),
+              }}>
+              <View
+                style={{
+                  height: wp(37.3),
+                  width: wp(18),
+                  paddingTop: wp(17.86),
+                }}>
+                <View style={styles.teamContainer}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Image
+                      source={images.men}
+                      style={{width: wp(9.6), height: wp(9.6)}}
+                    />
+                    <Image
+                      source={images.men}
+                      style={{width: wp(9.6), height: wp(9.6)}}
+                    />
+                  </View>
+                  <Text
+                    ellipsizeMode="tail"
+                    numberOfLines={1}
+                    style={{
+                      color: COLORS.greyText,
+                      fontFamily: FONTS.brandFont,
+                      fontSize: wp(2.66),
+                    }}>
+                    T3 or T4
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.sectionContainerFinal}>
+            <View
+              style={{
+                height: wp(117.6),
+                width: wp(16.89),
+                borderWidth: 1,
+              }}>
+              <Image
+                source={icons.line2agreen}
+                style={{
+                  width: wp(16),
+                  height: wp(41.06),
+                  position: 'absolute',
+                  marginTop: wp(16.26),
+                }}
+              />
+              <Image
+                source={icons.line2bgreen}
+                style={{
+                  width: wp(16),
+                  height: wp(41.06),
+                  position: 'absolute',
+                  marginTop: wp(54.1),
+                }}
+              />
+            </View>
+            <View style={{justifyContent: 'center'}}>
+              <View style={styles.teamContainerFinal}>
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                  <Image
+                    source={images.men}
+                    style={{width: wp(9.6), height: wp(9.6)}}
+                  />
+                </View>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={{
+                    color: COLORS.greyText,
+                    fontFamily: FONTS.brandFont,
+                    fontSize: wp(2.66),
+                  }}>
+                  Finalist
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
 };
 
 const Item = ({item, onPress, selectedId}) => {
@@ -381,6 +617,7 @@ const ScheduleScreen = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [dayData, setDayData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
+  console.log('scheduleData :>> ', scheduleData);
 
   const LocalDayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
   let localDay = moment(firstDate).format('ddd');
@@ -428,6 +665,7 @@ const ScheduleScreen = ({navigation, route}) => {
       const schedulePerDay = scheduleData.data.listSchedules.items;
       const sorted = schedulePerDay.sort((a, b) => a.index - b.index);
       setScheduleData(sorted);
+      console.log('sorted :>> ', sorted);
       // return schedulePerDay;
     } catch (err) {
       console.log('error fetching schedulePerDay', err);
@@ -455,6 +693,7 @@ const ScheduleScreen = ({navigation, route}) => {
       />
     );
   }
+
   const renderItem = ({item}) => {
     return (
       <Item item={item} onPress={() => getDay(item)} selectedId={selectedId} />
@@ -684,21 +923,27 @@ const ScheduleScreen = ({navigation, route}) => {
                   />
                 </View>
               ) : (
-                <FlatList
-                  data={scheduleData}
-                  renderItem={renderSchedule}
-                  refreshControl={
-                    <RefreshControl
-                      tintColor={COLORS.brand}
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
+                <View>
+                  {scheduleData[0].playOffIndex === 0 ? (
+                    <FlatList
+                      data={scheduleData}
+                      renderItem={renderSchedule}
+                      refreshControl={
+                        <RefreshControl
+                          tintColor={COLORS.brand}
+                          refreshing={refreshing}
+                          onRefresh={onRefresh}
+                        />
+                      }
+                      keyExtractor={item => item.id}
+                      style={{
+                        height: hp(69),
+                      }}
                     />
-                  }
-                  keyExtractor={item => item.id}
-                  style={{
-                    height: hp(69),
-                  }}
-                />
+                  ) : (
+                    <PlayOff data={scheduleData} />
+                  )}
+                </View>
               )}
             </View>
           </View>
@@ -790,6 +1035,84 @@ const styles = StyleSheet.create({
     fontFamily: 'PressStart2P-Regular',
     fontWeight: '800',
     fontSize: 15,
+  },
+  bracketContainer: {
+    borderWidth: 1,
+    width: wp(96),
+    height: wp(117.6),
+    flexDirection: 'row',
+  },
+
+  sectionContainer: {
+    height: wp(117.6),
+    width: wp(23),
+    borderWidth: 1,
+    justifyContent: 'space-between',
+  },
+  teamContainer: {
+    width: wp(23),
+    height: wp(17.3),
+    paddingVertical: wp(0.8),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  teamContainerFinal: {
+    width: wp(23),
+    height: wp(17.3),
+    paddingVertical: wp(0.8),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: COLORS.greyText,
+    fontFamily: FONTS.brandFont,
+    fontSize: wp(2.66),
+  },
+  space: {
+    width: wp(23),
+    height: wp(8),
+  },
+  lineContainer: {
+    height: wp(117.6),
+    width: wp(18),
+    borderWidth: 1,
+    justifyContent: 'space-between',
+  },
+  line1agrey: {
+    width: wp(17.06),
+    height: wp(16),
+    position: 'absolute',
+    marginTop: wp(4.26),
+  },
+  line1bgreen: {
+    width: wp(17.06),
+    height: wp(16),
+    position: 'absolute',
+    marginTop: wp(17.06),
+  },
+  line1agreyBottom: {
+    width: wp(17.06),
+    height: wp(16),
+    position: 'absolute',
+    marginTop: wp(9.6),
+  },
+  line1bgreenBottom: {
+    width: wp(17.06),
+    height: wp(16),
+    position: 'absolute',
+    marginTop: wp(22.13),
+  },
+  section2: {
+    height: wp(117.6),
+    width: wp(23),
+    borderWidth: 1,
+    justifyContent: 'space-between',
+  },
+  sectionContainerFinal: {
+    height: wp(117.6),
+    width: wp(32),
+    borderWidth: 1,
+    flexDirection: 'row',
   },
 });
 
