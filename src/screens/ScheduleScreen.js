@@ -922,25 +922,25 @@ const ScheduleScreen = ({navigation, route}) => {
                 </View>
               ) : (
                 <View>
-                  {scheduleData[0].playOffIndex !== 0 ? (
-                    <FlatList
-                      data={scheduleData}
-                      renderItem={renderSchedule}
-                      refreshControl={
-                        <RefreshControl
-                          tintColor={COLORS.brand}
-                          refreshing={refreshing}
-                          onRefresh={onRefresh}
-                        />
-                      }
-                      keyExtractor={item => item.id}
-                      style={{
-                        height: hp(69),
-                      }}
-                    />
-                  ) : (
+                  {/* {scheduleData[0].playOffIndex !== 0 ? ( */}
+                  <FlatList
+                    data={scheduleData}
+                    renderItem={renderSchedule}
+                    refreshControl={
+                      <RefreshControl
+                        tintColor={COLORS.brand}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                      />
+                    }
+                    keyExtractor={item => item.id}
+                    style={{
+                      height: hp(69),
+                    }}
+                  />
+                  {/* ) : (
                     <PlayOff data={scheduleData} />
-                  )}
+                  )} */}
                 </View>
               )}
             </View>
@@ -1060,11 +1060,6 @@ const styles = StyleSheet.create({
     paddingVertical: wp(0.8),
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  textStyle: {
-    color: COLORS.greyText,
-    fontFamily: FONTS.brandFont,
-    fontSize: wp(2.66),
   },
   space: {
     width: wp(23),
