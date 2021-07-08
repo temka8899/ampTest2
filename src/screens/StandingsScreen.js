@@ -61,6 +61,7 @@ const StandingsScreen = ({navigation, route}) => {
   const [logoLoad, setLogoLoad] = useState();
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [imgLoad, setImgLoad] = useState(true);
+  const [myOption, setMyOption] = useState();
   // const
   // const [Team1, setTeam1] = useState();
   // const [Team2, setTeam2] = useState();
@@ -174,13 +175,15 @@ const StandingsScreen = ({navigation, route}) => {
   };
 
   const onRefresh = React.useCallback(() => {
+    setData(myOption);
     wait(500).then(() => setRefreshing(false));
-  }, []);
+  }, [myOption, setData]);
 
   const setData = React.useCallback(
     async option => {
       await setChooseData(option);
       await fetchTeam(option.id);
+      setMyOption(option);
       if (option.isPlayoff === true) {
         await fetchPlayoffTeam(option.id);
         await fetchPlayoffSchedule(option.id);
@@ -341,7 +344,7 @@ const StandingsScreen = ({navigation, route}) => {
       const sorted = leagueData
         .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
         .reverse();
-      //console.log('sorted Unique league data:>> sort hiisen ni ', sorted);
+      console.log('sorted Unique league data:>> sort hiisen ni ', sorted);
       setTeamData(sorted);
       setLoading(false);
       setLogoLoad(false);
