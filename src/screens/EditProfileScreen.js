@@ -121,9 +121,11 @@ export default function EditProfileScreen({navigation}) {
             </TouchableOpacity>
           </View>
           <View style={styles.firstMain}>
-            <View style={styles.firstMainSub}>
+            <TouchableOpacity
+              onPress={() => setAvatarModal(true)}
+              style={styles.firstMainSub}>
               <Image source={newImage} style={styles.image} />
-            </View>
+            </TouchableOpacity>
             <View>
               <Text
                 style={{
@@ -137,6 +139,7 @@ export default function EditProfileScreen({navigation}) {
               </Text>
 
               <TextInput
+                // editable={true}
                 style={styles.input}
                 placeholder={userInfo.name}
                 maxLength={10}

@@ -75,6 +75,7 @@ const StandingsScreen = ({navigation, route}) => {
   const [win4, setWin4] = useState(0);
   const [final1, setFinal1] = useState(0);
   const [final2, setFinal2] = useState(0);
+  const [tempOption, setTempOption] = useState();
 
   const rotateValue = useState(new Animated.Value(0))[0];
   const RotateData = rotateValue.interpolate({
@@ -172,16 +173,19 @@ const StandingsScreen = ({navigation, route}) => {
   };
 
   const onRefresh = React.useCallback(() => {
+    setData(tempOption);
     wait(500).then(() => setRefreshing(false));
-  }, []);
+  }, [setData, tempOption]);
 
   const setData = React.useCallback(
     async option => {
       await setChooseData(option);
       await fetchTeam(option.id);
+      setTempOption(option);
       if (option.isPlayoff === true) {
         await fetchPlayoffTeam(option.id);
         await fetchPlayoffSchedule(option.id);
+
         setImgLoad(true);
         let homeImages1 = confA[0].homeImage.split('[');
         let homeImages2 = homeImages1[1].split(']');
@@ -214,10 +218,10 @@ const StandingsScreen = ({navigation, route}) => {
       console.log(`confA`, confA);
       console.log(`confB`, confB);
     },
-    [fetchPlayoffSchedule, fetchPlayoffTeam, fetchTeam],
+    [fetchPlayoffSchedule, fetchPlayoffTeam, fetchTeam, getWinner],
   );
 
-  const getWinner = () => {
+  const getWinner = React.useCallback(() => {
     for (let i = 0; i < confA.length; i++) {
       if (!(confA[i].homeScore === 0 && confA[i].awayScore === 0)) {
         if (confA[i].homeScore > confA[i].awayScore) {
@@ -236,7 +240,7 @@ const StandingsScreen = ({navigation, route}) => {
         }
       }
     }
-  };
+  }, [win1, win2, win3, win4]);
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
       const leagueData = await API.graphql(
@@ -755,7 +759,7 @@ const StandingsScreen = ({navigation, route}) => {
                 }
                 data={teamData}
                 style={{height: hp(100)}}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item}
                 renderItem={renderItem}
               />
             ) : (

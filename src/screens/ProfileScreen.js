@@ -27,7 +27,12 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {updatePlayer} from '../graphql/mutations';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
-import {listPlayers, listSchedules, listTeamPlayers} from '../graphql/queries';
+import {
+  listLeagues,
+  listPlayers,
+  listSchedules,
+  listTeamPlayers,
+} from '../graphql/queries';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const wait = timeout => {
@@ -54,7 +59,44 @@ const styles1 = StyleSheet.create({
     color: 'white',
   },
 });
+// let Lnames;
+const Names = ({item, onPress, user}) => {
+  const [LName1, setLName] = useState('');
+  console.log(`item.team.name`, item.team.name);
+  useEffect(() => {
+    getLName(item.team.leagueID);
+  }, [getLName, item]);
 
+  const getLName = React.useCallback(
+    async id => {
+      const LName = await _fetchleague(item.team.leagueID);
+      await setLName(LName);
+    },
+    [item.team.leagueID],
+  );
+
+  async function _fetchleague(id) {
+    try {
+      const leagueData = await API.graphql(
+        graphqlOperation(listLeagues, {
+          filter: {id: {eq: id}},
+        }),
+      );
+      const todos = leagueData.data.listLeagues.items;
+
+      return todos[0].game.name.toString();
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+  // console.log(`LName`, LName);
+  return (
+    <View>
+      <Text style={{color: 'white'}}>{LName1}</Text>
+      <Text style={{color: 'white'}}>{item.team.name}</Text>
+    </View>
+  );
+};
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('');
@@ -66,6 +108,7 @@ const Profile = ({navigation}) => {
   // const [xpCount, setXpCount] = useState(true);
   const [scheduleData, setScheduleData] = useState([]);
   const [teamNames, setTeamNames] = useState([]);
+  const [leagueNames, setLeagueNames] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
   const Match = ({item, onPress, user}) => {
@@ -107,6 +150,7 @@ const Profile = ({navigation}) => {
       setAway(awayPlayers);
       setImgLoad(false);
     }, [find, item.away.id, item.awayScore, item.home.id, user.id]);
+
     async function fetchTeamPlayers(id) {
       try {
         const leagueData = await API.graphql(
@@ -192,7 +236,7 @@ const Profile = ({navigation}) => {
                     style={[
                       styles.matchPoint,
                       {
-                        color: item.homeScore == 10 ? 'green' : COLORS.red,
+                        color: item.homeScore == 10 ? COLORS.green : COLORS.red,
                       },
                     ]}>
                     {item.homeScore}
@@ -325,11 +369,12 @@ const Profile = ({navigation}) => {
           filter: {playerID: {eq: id}},
         }),
       );
-      const todos = leagueData.data.listTeamPlayers.items;
-      setTeamNames(todos);
-      //console.log('>>>>>>>>>>>>>>>', todos);
+      const names = leagueData.data.listTeamPlayers.items;
+      setTeamNames(names);
+
+      console.log('>>>>>>>>>>>>>>>', names);
     } catch (err) {
-      console.log('error fetching todos', err);
+      console.log('error fetching names', err);
     }
   }
 
@@ -420,6 +465,23 @@ const Profile = ({navigation}) => {
     await AsyncStorage.removeItem('@userID');
     wait(1000).then(() => navigation.navigate('Auth'));
   };
+
+  const getMai = () => {
+    // console.log(`leagueNames`, leagueNames);
+    console.log(`teamNames`, teamNames);
+    // Lnames = leagueNames;
+  };
+
+  function renderName({item}) {
+    return (
+      <Names
+        item={item}
+        // onPress={() => setlocalId(item)}
+        // selectedId={localId}
+      />
+    );
+  }
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
@@ -489,6 +551,7 @@ const Profile = ({navigation}) => {
         </SkeletonPlaceholder>
       ) : (
         <View>
+          {getMai()}
           <View style={styles.header}>
             <View>
               <>
@@ -531,9 +594,19 @@ const Profile = ({navigation}) => {
             </View>
           </View>
           <View style={{borderColor: 'red', borderWidth: 1}}>
-            {teamNames.map((_team, ind) => (
+            <FlatList
+              data={teamNames}
+              horizontal
+              renderItem={renderName}
+              keyExtractor={item => item}
+              style={{
+                borderBottomColor: COLORS.brand,
+                borderBottomWidth: 1,
+              }}
+            />
+            {/* {teamNames.map((_team, ind) => (
               <UselessTextInput key={ind} value={_team.team.name} />
-            ))}
+            ))} */}
             <View style={styles.formContainer}></View>
           </View>
           <View
