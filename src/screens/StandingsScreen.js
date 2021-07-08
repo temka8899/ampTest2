@@ -154,7 +154,9 @@ const StandingsScreen = ({navigation, route}) => {
                 style={{
                   fontFamily: FONTS.brandFont,
                   color: COLORS.white,
-                }}>{`-`}</Text>
+                }}>
+                {'-'}
+              </Text>
               <Text style={{color: COLORS.red}}>{item.lose}</Text>
             </Text>
           </View>
@@ -241,6 +243,10 @@ const StandingsScreen = ({navigation, route}) => {
       }
     }
   }, [win1, win2, win3, win4]);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 559051396b1539d3a4a16b5b161e91e883e12103
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
       const leagueData = await API.graphql(
@@ -368,7 +374,6 @@ const StandingsScreen = ({navigation, route}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.brand}}>
       <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
         <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
-
         <View>
           <AppBar />
           <TouchableOpacity
@@ -430,7 +435,6 @@ const StandingsScreen = ({navigation, route}) => {
                               {confAhomeName}
                             </Text>
                           </View>
-
                           <View style={styles.space}>
                             <Text
                               style={[
