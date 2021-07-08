@@ -6,9 +6,6 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.microsoft.codepush.react.CodePush;
-import com.microsoft.appcenter.reactnative.crashes.AppCenterReactNativeCrashesPackage;
-import com.microsoft.appcenter.reactnative.analytics.AppCenterReactNativeAnalyticsPackage;
-import com.microsoft.appcenter.reactnative.appcenter.AppCenterReactNativePackage;
 import com.imagepicker.ImagePickerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
@@ -28,25 +25,23 @@ public class MainApplication extends Application implements ReactApplication {
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
         }
-        
-        @Override
-        protected String getJSBundleFile() {
-            return CodePush.getJSBundleFile();
-        }
 
-        
-        
         @Override
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-          packages.add(new AppCenterReactNativeCrashesPackage(this.application, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)));
-      packages.add(new AppCenterReactNativeAnalyticsPackage(this.application, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)));
-      packages.add(new AppCenterReactNativePackage(this.application));
+      //     packages.add(new AppCenterReactNativeCrashesPackage(this.application, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)));
+      // packages.add(new AppCenterReactNativeAnalyticsPackage(this.application, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)));
+      // packages.add(new AppCenterReactNativePackage(this.application));
           packages.add(new LottiePackage());
           return packages;
+        }
+
+        @Override
+        protected String getJSBundleFile() {
+            return CodePush.getJSBundleFile();
         }
 
         @Override

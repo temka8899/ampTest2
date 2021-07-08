@@ -153,7 +153,9 @@ const StandingsScreen = ({navigation, route}) => {
                 style={{
                   fontFamily: FONTS.brandFont,
                   color: COLORS.white,
-                }}>{`-`}</Text>
+                }}>
+                {'-'}
+              </Text>
               <Text style={{color: COLORS.red}}>{item.lose}</Text>
             </Text>
           </View>
@@ -214,10 +216,10 @@ const StandingsScreen = ({navigation, route}) => {
       console.log(`confA`, confA);
       console.log(`confB`, confB);
     },
-    [fetchPlayoffSchedule, fetchPlayoffTeam, fetchTeam],
+    [fetchPlayoffSchedule, fetchPlayoffTeam, fetchTeam, getWinner],
   );
 
-  const getWinner = () => {
+  const getWinner = React.useCallback(() => {
     for (let i = 0; i < confA.length; i++) {
       if (!(confA[i].homeScore === 0 && confA[i].awayScore === 0)) {
         if (confA[i].homeScore > confA[i].awayScore) {
@@ -236,7 +238,8 @@ const StandingsScreen = ({navigation, route}) => {
         }
       }
     }
-  };
+  }, [win1, win2, win3, win4]);
+
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
       const leagueData = await API.graphql(
@@ -364,7 +367,6 @@ const StandingsScreen = ({navigation, route}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.brand}}>
       <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
         <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
-
         <View>
           <AppBar />
           <TouchableOpacity
@@ -426,7 +428,6 @@ const StandingsScreen = ({navigation, route}) => {
                               {confAhomeName}
                             </Text>
                           </View>
-
                           <View style={styles.space}>
                             <Text
                               style={[
