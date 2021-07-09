@@ -431,6 +431,8 @@ export const getSchedule = /* GraphQL */ `
       homeScore
       awayScore
       date
+      scheduleHomeId
+      scheduleAwayId
       createdAt
       updatedAt
     }
@@ -477,6 +479,8 @@ export const listSchedules = /* GraphQL */ `
         homeScore
         awayScore
         date
+        scheduleHomeId
+        scheduleAwayId
         createdAt
         updatedAt
       }

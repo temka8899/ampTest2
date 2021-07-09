@@ -22,10 +22,11 @@ import {COLORS} from '../constants';
 import {FONTS, hp, wp} from '../constants/theme';
 
 import Modal from 'react-native-modal';
-import {listPlayers} from '../graphql/queries';
-import {updatePlayer} from '../graphql/mutations';
+import {listPlayers, listSchedules, listTeamPlayers} from '../graphql/queries';
+import {updatePlayer, updateSchedule} from '../graphql/mutations';
 import {API, Auth, graphqlOperation} from 'aws-amplify';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import {LoadingModal} from '../components/LoadingModal';
 
 const Avatar = ({item, onPress, backgroundColor}) => (
   <TouchableOpacity onPress={onPress} style={[styles.avatars, backgroundColor]}>
@@ -33,6 +34,7 @@ const Avatar = ({item, onPress, backgroundColor}) => (
   </TouchableOpacity>
 );
 
+let newAvatar;
 export default function EditProfileScreen({navigation}) {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [newName, setNewName] = useState();
@@ -68,11 +70,16 @@ export default function EditProfileScreen({navigation}) {
     );
   };
   const setAvatar = () => {
-    setNewImage(selectedItem);
+    if (selectedItem === null) {
+      setNewImage(userInfo.avatar);
+    } else {
+      setNewImage(selectedItem);
+    }
     setAvatarModal(false);
   };
   async function updateProfile() {
     const user = await Auth.currentUserInfo();
+    newAvatar = newImage;
     try {
       setBtnLoading(true);
       const temp = await API.graphql(
@@ -84,14 +91,112 @@ export default function EditProfileScreen({navigation}) {
           },
         }),
       );
-      setBtnLoading(false);
     } catch (err) {
       setBtnLoading(false);
       console.log('error updating League: ', err);
     }
-    findUser(user);
+
+    if (newImage !== userInfo.avatar) {
+      await changeTeamAvatar();
+    }
+
+    await findUser(user);
+    setBtnLoading(false);
+
     navigation.pop();
   }
+  const changeTeamAvatar = React.useCallback(async () => {
+    try {
+      const myTeams = await API.graphql(
+        graphqlOperation(listTeamPlayers, {
+          filter: {
+            playerID: {eq: userInfo.id},
+          },
+        }),
+      );
+      const todos = myTeams.data.listTeamPlayers.items;
+      for (let i = 0; i < todos.length; i++) {
+        await getAndChange(todos[0].teamID);
+      }
+    } catch (err) {
+      console.log('error creating myTeams:', err);
+    }
+  }, []);
+
+  const getAndChange = React.useCallback(async id => {
+    try {
+      const myAwaySchedules = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            or: [{scheduleAwayId: {eq: id}}, {scheduleHomeId: {eq: id}}],
+          },
+        }),
+      );
+      const todos = myAwaySchedules.data.listSchedules.items;
+
+      for (let i = 0; i < todos.length; i++) {
+        if (todos[i].scheduleHomeId === id) {
+          let homeImages1 = todos[i].homeImage.split('[');
+          let homeImages2 = homeImages1[1].split(']');
+          let homeImages = homeImages2[0].split(', ');
+          const _newHomeImages = [];
+          if (homeImages[0] === userInfo.avatar) {
+            _newHomeImages.push(newAvatar);
+            _newHomeImages.push(homeImages[1]);
+          } else {
+            _newHomeImages.push(newAvatar);
+            _newHomeImages.push(homeImages[0]);
+          }
+          await updateScheduleHomeImages(todos[i].id, _newHomeImages, true);
+        } else {
+          let awayImages1 = todos[i].awayImage.split('[');
+          let awayImages2 = awayImages1[1].split(']');
+          let awayImages = awayImages2[0].split(', ');
+          const _newAwayImages = [];
+          if (awayImages[0] === userInfo.avatar) {
+            _newAwayImages.push(newAvatar);
+            _newAwayImages.push(awayImages[1]);
+          } else {
+            _newAwayImages.push(newAvatar);
+            _newAwayImages.push(awayImages[0]);
+          }
+          await updateScheduleHomeImages(todos[i].id, _newAwayImages, false);
+        }
+      }
+    } catch (err) {
+      console.log('error creating mySchedules:', err);
+    }
+  }, []);
+
+  async function updateScheduleHomeImages(id, images, ishome) {
+    try {
+      if (ishome) {
+        await API.graphql(
+          graphqlOperation(updateSchedule, {
+            input: {
+              //Schedule id
+              id: id,
+              homeImage: images,
+            },
+          }),
+        );
+      } else {
+        await API.graphql(
+          graphqlOperation(updateSchedule, {
+            input: {
+              //Schedule id
+              id: id,
+              awayImage: images,
+            },
+          }),
+        );
+      }
+      console.log('Schedule iin zurag soliglooo');
+    } catch (err) {
+      console.log('error fetching updateschedule', err);
+    }
+  }
+
   const findUser = React.useCallback(
     async user => {
       const playerData = await API.graphql(graphqlOperation(listPlayers));
@@ -220,6 +325,7 @@ export default function EditProfileScreen({navigation}) {
             </TouchableOpacity>
           </View>
         </Modal>
+        <LoadingModal bool={btnLoading} />
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

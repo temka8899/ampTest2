@@ -34,6 +34,7 @@ import moment from 'moment';
 import {AuthContext} from '../../App';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
+import {LoadingModal} from '../components/LoadingModal';
 
 export default function CountScreen({navigation, route}) {
   const [CancelModalVisible, setCancelModalVisible] = useState(false);
@@ -218,8 +219,8 @@ export default function CountScreen({navigation, route}) {
         if (user.username === item.c_id) {
           return item;
         }
-        setUserInfo(finded);
       });
+      setUserInfo(finded);
     },
     [setUserInfo],
   );
@@ -1134,26 +1135,7 @@ export default function CountScreen({navigation, route}) {
             loading={loading}
           />
         )}
-        <Modal
-          isVisible={initLoad}
-          style={{margin: 0, justifyContent: 'center', alignItems: 'center'}}>
-          <View
-            style={{
-              backgroundColor: COLORS.background,
-              width: wp(40),
-              height: wp(30),
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderColor: COLORS.brand,
-              borderWidth: 2,
-            }}>
-            <LottieView
-              autoPlay
-              source={require('../assets/Lottie/game-loader.json')}
-              style={{width: wp(50), height: wp(50)}}
-            />
-          </View>
-        </Modal>
+        <LoadingModal bool={initLoad} />
       </View>
     </View>
   );

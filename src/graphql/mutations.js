@@ -650,6 +650,8 @@ export const createSchedule = /* GraphQL */ `
       homeScore
       awayScore
       date
+      scheduleHomeId
+      scheduleAwayId
       createdAt
       updatedAt
     }
@@ -722,6 +724,8 @@ export const updateSchedule = /* GraphQL */ `
       homeScore
       awayScore
       date
+      scheduleHomeId
+      scheduleAwayId
       createdAt
       updatedAt
     }
@@ -794,6 +798,8 @@ export const deleteSchedule = /* GraphQL */ `
       homeScore
       awayScore
       date
+      scheduleHomeId
+      scheduleAwayId
       createdAt
       updatedAt
     }

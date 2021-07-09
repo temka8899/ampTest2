@@ -55,6 +55,9 @@ let finalAName;
 let finalBImage;
 let finalBName;
 
+let champImage;
+let champName;
+
 const StandingsScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
@@ -224,6 +227,8 @@ const StandingsScreen = ({navigation, route}) => {
 
         getWinner();
         initFinal();
+        initChamp();
+        getChamp();
       }
       // console.log(`Team1`, Team1);
       // console.log(`Team2`, Team2);
@@ -242,6 +247,8 @@ const StandingsScreen = ({navigation, route}) => {
     await setFinal1(0);
     await setFinal2(0);
   }
+  const initChamp = React.useCallback(() => {}, []);
+  const getChamp = React.useCallback(() => {}, []);
   const initFinal = React.useCallback(() => {
     if (win1 === 2 || win2 === 2) {
       if (win1 === 2) {
@@ -830,14 +837,29 @@ const StandingsScreen = ({navigation, route}) => {
                             }}>
                             <View style={styles.teamContainer}>
                               <View style={{flexDirection: 'row'}}>
-                                <Image
-                                  source={images.logo}
-                                  style={{width: wp(9.6), height: wp(9.6)}}
-                                />
-                                <Image
-                                  source={images.logo}
-                                  style={{width: wp(9.6), height: wp(9.6)}}
-                                />
+                                {finalBImage ? (
+                                  <View style={{flexDirection: 'row'}}>
+                                    {finalBImage.map(_item => {
+                                      return (
+                                        <Image
+                                          source={_item}
+                                          style={styles.teamAvatar}
+                                        />
+                                      );
+                                    })}
+                                  </View>
+                                ) : (
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                  </View>
+                                )}
                               </View>
                               <Text
                                 ellipsizeMode="tail"
