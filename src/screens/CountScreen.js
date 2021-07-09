@@ -430,7 +430,7 @@ export default function CountScreen({navigation, route}) {
         },
       }),
     );
-    console.log(_updatedLeague);
+    console.log('Updated league', _updatedLeague);
   }
 
   async function updateProfile(id, playerid, point) {
