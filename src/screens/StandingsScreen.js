@@ -297,29 +297,60 @@ const StandingsScreen = ({navigation, route}) => {
     // console.log(`win3`, win3);
     // console.log(`win4`, win4);
   }, []);
+  async function initShedule() {
+    Team1 = null;
+    Team2 = null;
+    Team3 = null;
+    Team4 = null;
 
+    confA = null;
+    confB = null;
+
+    confAhomeImage = null;
+    confAawayImage = null;
+    confBhomeImage = null;
+    confBawayImage = null;
+
+    confAhomeName = null;
+    confAawayName = null;
+    confBhomeName = null;
+    confBawayName = null;
+
+    finalAImage = null;
+    finalAName = null;
+    finalBImage = null;
+    finalBName = null;
+  }
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
+      await initShedule();
       const leagueData = await API.graphql(
         graphqlOperation(listSchedules, {
           filter: {leagueID: {eq: lgID}, playOffIndex: {ne: 0}},
         }),
       );
+
       const schedules = leagueData.data.listSchedules.items;
+
+      console.log(`schedules`, schedules);
       const temp = schedules.filter(
         element =>
           element.away.leagueStatus === 'Playoff4' ||
           element.away.leagueStatus === 'Playoff1',
       );
+      console.log(`temp`, temp);
       confA = temp;
       confAhomeName = temp[0].home.name;
       confAawayName = temp[0].away.name;
+      console.log('2');
       const temp1 = schedules.filter(
         element =>
           element.away.leagueStatus === 'Playoff2' ||
           element.away.leagueStatus === 'Playoff3',
       );
+      console.log('3');
       confB = temp1;
+
       confBhomeName = temp1[0].home.name;
       confBawayName = temp1[0].away.name;
       console.log(`playoffSchedule`, schedules);
@@ -338,24 +369,24 @@ const StandingsScreen = ({navigation, route}) => {
       );
       const teams = leagueData.data.listTeams.items;
       console.log(`teams`, teams);
-      for (let i = 0; i < teams.length; i++) {
-        switch (teams[i].leagueStatus) {
-          case 'Playoff1':
-            Team1 = teams[i];
-            break;
-          case 'Playoff2':
-            Team2 = teams[i];
-            break;
-          case 'Playoff3':
-            Team3 = teams[i];
-            break;
-          case 'Playoff4':
-            Team4 = teams[i];
-            break;
-          default:
-            break;
-        }
-      }
+      // for (let i = 0; i < teams.length; i++) {
+      //   switch (teams[i].leagueStatus) {
+      //     case 'Playoff1':
+      //       Team1 = teams[i];
+      //       break;
+      //     case 'Playoff2':
+      //       Team2 = teams[i];
+      //       break;
+      //     case 'Playoff3':
+      //       Team3 = teams[i];
+      //       break;
+      //     case 'Playoff4':
+      //       Team4 = teams[i];
+      //       break;
+      //     default:
+      //       break;
+      //   }
+      // }
       console.log(`playoffTeams`, teams);
       return teams;
     } catch (err) {
@@ -496,21 +527,27 @@ const StandingsScreen = ({navigation, route}) => {
                         <View>
                           <View style={styles.teamContainer}>
                             <View style={{flexDirection: 'row'}}>
-                              {confAhomeImage && (
+                              {confAhomeImage ? (
                                 <View style={{flexDirection: 'row'}}>
                                   {confAhomeImage.map(_item => {
-                                    return imgLoad ? (
-                                      <Image
-                                        source={images.logo}
-                                        style={styles.teamAvatar}
-                                      />
-                                    ) : (
+                                    return (
                                       <Image
                                         source={_item}
                                         style={styles.teamAvatar}
                                       />
                                     );
                                   })}
+                                </View>
+                              ) : (
+                                <View style={{flexDirection: 'row'}}>
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
                                 </View>
                               )}
                             </View>
@@ -552,21 +589,27 @@ const StandingsScreen = ({navigation, route}) => {
                           </View>
                           <View style={styles.teamContainer}>
                             <View style={{flexDirection: 'row'}}>
-                              {confAawayImage && (
+                              {confAawayImage ? (
                                 <View style={{flexDirection: 'row'}}>
                                   {confAawayImage.map(_item => {
-                                    return imgLoad ? (
-                                      <Image
-                                        source={images.logo}
-                                        style={styles.teamAvatar}
-                                      />
-                                    ) : (
+                                    return (
                                       <Image
                                         source={_item}
                                         style={styles.teamAvatar}
                                       />
                                     );
                                   })}
+                                </View>
+                              ) : (
+                                <View style={{flexDirection: 'row'}}>
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
                                 </View>
                               )}
                             </View>
@@ -581,21 +624,27 @@ const StandingsScreen = ({navigation, route}) => {
                         <View>
                           <View style={styles.teamContainer}>
                             <View style={{flexDirection: 'row'}}>
-                              {confBhomeImage && (
+                              {confBhomeImage ? (
                                 <View style={{flexDirection: 'row'}}>
                                   {confBhomeImage.map(_item => {
-                                    return imgLoad ? (
-                                      <Image
-                                        source={images.logo}
-                                        style={styles.teamAvatar}
-                                      />
-                                    ) : (
+                                    return (
                                       <Image
                                         source={_item}
                                         style={styles.teamAvatar}
                                       />
                                     );
                                   })}
+                                </View>
+                              ) : (
+                                <View style={{flexDirection: 'row'}}>
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
                                 </View>
                               )}
                             </View>
@@ -637,21 +686,27 @@ const StandingsScreen = ({navigation, route}) => {
                           </View>
                           <View style={styles.teamContainer}>
                             <View style={{flexDirection: 'row'}}>
-                              {confBawayImage && (
+                              {confBawayImage ? (
                                 <View style={{flexDirection: 'row'}}>
                                   {confBawayImage.map(_item => {
-                                    return imgLoad ? (
-                                      <Image
-                                        source={images.logo}
-                                        style={styles.teamAvatar}
-                                      />
-                                    ) : (
+                                    return (
                                       <Image
                                         source={_item}
                                         style={styles.teamAvatar}
                                       />
                                     );
                                   })}
+                                </View>
+                              ) : (
+                                <View style={{flexDirection: 'row'}}>
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
                                 </View>
                               )}
                             </View>
