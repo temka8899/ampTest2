@@ -922,25 +922,25 @@ const ScheduleScreen = ({navigation, route}) => {
                 </View>
               ) : (
                 <View>
-                  {scheduleData[0].playOffIndex !== 0 ? (
-                    <FlatList
-                      data={scheduleData}
-                      renderItem={renderSchedule}
-                      refreshControl={
-                        <RefreshControl
-                          tintColor={COLORS.brand}
-                          refreshing={refreshing}
-                          onRefresh={onRefresh}
-                        />
-                      }
-                      keyExtractor={item => item.id}
-                      style={{
-                        height: hp(69),
-                      }}
-                    />
-                  ) : (
-                    <PlayOff data={scheduleData} />
-                  )}
+                  {/* {scheduleData[0].playOffIndex !== 0 ? ( */}
+                  <FlatList
+                    data={scheduleData}
+                    renderItem={renderSchedule}
+                    refreshControl={
+                      <RefreshControl
+                        tintColor={COLORS.brand}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                      />
+                    }
+                    keyExtractor={item => item.id}
+                    style={{
+                      height: hp(69),
+                    }}
+                  />
+                  {/* ) : (
+                     <PlayOff data={scheduleData} />
+                   )} */}
                 </View>
               )}
             </View>
