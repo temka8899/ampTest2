@@ -26,6 +26,7 @@ import {
 import {
   listLeagues,
   listPlayers,
+  listSchedules,
   listTeamPlayers,
   listTeams,
 } from '../graphql/queries';
@@ -80,6 +81,7 @@ export default function CountScreen({navigation, route}) {
   useEffect(() => {
     const ScheduleData = route.params.match;
     setMatchData(ScheduleData);
+    console.log(ScheduleData);
     getPlayerData(ScheduleData);
   }, [getPlayerData, route.params.match]);
 
@@ -189,16 +191,15 @@ export default function CountScreen({navigation, route}) {
         }));
         break;
       default:
+        toggleEndModal(false);
         break;
     }
-    toggleEndModal(false);
   };
   const toggleCancelModal = bool => {
     setCancelModalVisible(bool);
-  };
-  const toggleEndModal = bool => {
     setEndModalVisible(bool);
   };
+  const toggleEndModal = bool => {};
   const EndBtnPress = async () => {
     setLoading(true);
     await UpdateSchedule();
@@ -217,8 +218,8 @@ export default function CountScreen({navigation, route}) {
         if (user.username === item.c_id) {
           return item;
         }
+        setUserInfo(finded);
       });
-      setUserInfo(finded);
     },
     [setUserInfo],
   );
@@ -229,7 +230,7 @@ export default function CountScreen({navigation, route}) {
 
     // Updating Schedule data
     // Bagiin avsan onoog update hiine
-    _updateSchedule();
+    await _updateSchedule();
 
     //Toglogchdiin avsan onoog update
     updateProfile(Home[0].id, Home[0].player.id, allPoint.one.point);
@@ -237,6 +238,7 @@ export default function CountScreen({navigation, route}) {
     updateProfile(Away[0].id, Away[0].player.id, allPoint.three.point);
     updateProfile(Away[1].id, Away[1].player.id, allPoint.four.point);
 
+    _checkGame3();
     if (allPoint.one.point + allPoint.two.point === 10) {
       //toglogch yalahad bagiin win-lose update
       _updateHome1();
@@ -247,6 +249,46 @@ export default function CountScreen({navigation, route}) {
       _updateAway2();
     }
     startPlayoff();
+  }
+
+  async function _checkGame3() {
+    //Playoff
+    if (MatchData.playOffIndex > 0) {
+      const _scheduleData1 = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            homePlayers: {eq: MatchData.homePlayers},
+            awayPlayers: {eq: MatchData.awayPlayers},
+            playOffIndex: {gt: 0},
+          },
+        }),
+      );
+      const _schedule1 = _scheduleData1.data.listSchedules.items;
+      console.log('Playoff schedule', _schedule1);
+    }
+
+    //Finals
+    if (MatchData.finalsIndex > 0) {
+      const _scheduleData2 = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            homePlayers: {eq: MatchData.homePlayers},
+            awayPlayers: {eq: MatchData.awayPlayers},
+            finalsIndex: {gt: 0},
+          },
+        }),
+      );
+      const _schedule2 = _scheduleData2.data.listSchedules.items;
+      console.log('Finals schedule', _schedule2);
+      if (
+        _schedule < 3 && [
+          _schedule[0].homeScore > _schedule[0].awayScore,
+          _schedule[1].homeScore < _schedule[1].awayScore,
+        ]
+      ) {
+        console.log('>>>>>>>>>>>>check');
+      }
+    }
   }
 
   function _updateSchedule() {
@@ -379,14 +421,16 @@ export default function CountScreen({navigation, route}) {
       leagueData.data.listLeagues.items[0].currentSchedule;
 
     //Updating League current schedule
-    API.graphql(
+    const _updatedLeague = await API.graphql(
       graphqlOperation(updateLeague, {
         input: {
           id: updateLeagueID,
           currentSchedule: updateCurrentSchedule + 1,
+          isPlayoff: true,
         },
       }),
     );
+    console.log(_updatedLeague);
   }
 
   async function updateProfile(id, playerid, point) {
@@ -451,7 +495,7 @@ export default function CountScreen({navigation, route}) {
       if (
         leagueData.data.listTeams.items[0].league.currentSchedule ==
           leagueData.data.listTeams.items[0].league.maxSchedule &&
-        leagueData.data.listTeams.items[0].league.maxSchedule > 4
+        leagueData.data.listTeams.items[0].league.maxSchedule >= 6
       ) {
         console.log('Season Ended');
         const teams = leagueData.data.listTeams.items
@@ -558,6 +602,7 @@ export default function CountScreen({navigation, route}) {
           _teamID2,
           _teamAvatar3,
           _teamID3,
+
           0,
           _playoffGameID,
         );
