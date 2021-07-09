@@ -50,6 +50,11 @@ let confAawayName;
 let confBhomeName;
 let confBawayName;
 
+let finalAImage;
+let finalAName;
+let finalBImage;
+let finalBName;
+
 const StandingsScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [chooseData, setChooseData] = useState('');
@@ -218,6 +223,7 @@ const StandingsScreen = ({navigation, route}) => {
         console.log(`confBawayImage`, confBawayImage);
 
         getWinner();
+        initFinal();
       }
       // console.log(`Team1`, Team1);
       // console.log(`Team2`, Team2);
@@ -226,19 +232,39 @@ const StandingsScreen = ({navigation, route}) => {
       console.log(`confA`, confA);
       console.log(`confB`, confB);
     },
-    [fetchPlayoffSchedule, fetchPlayoffTeam, fetchTeam, getWinner],
+    [fetchPlayoffSchedule, fetchPlayoffTeam, fetchTeam, getWinner, initFinal],
   );
   async function initWin() {
     await setWin1(0);
     await setWin2(0);
     await setWin3(0);
     await setWin4(0);
+    await setFinal1(0);
+    await setFinal2(0);
   }
+  const initFinal = React.useCallback(() => {
+    if (win1 === 2 || win2 === 2) {
+      if (win1 === 2) {
+        finalAImage = confAhomeImage;
+        finalAName = confAhomeName;
+      } else {
+        finalAImage = confAawayImage;
+        finalAName = confAawayName;
+      }
+      if (win3 === 2) {
+        finalBImage = confBhomeImage;
+        finalBName = confBhomeName;
+      } else {
+        finalBImage = confBawayImage;
+        finalBName = confBawayName;
+      }
+    }
+  }, []);
   const getWinner = React.useCallback(() => {
-    console.log(`win1>>`, win1);
-    console.log(`win2>>`, win2);
-    console.log(`win3>>`, win3);
-    console.log(`win4>>`, win4);
+    // console.log(`win1>>`, win1);
+    // console.log(`win2>>`, win2);
+    // console.log(`win3>>`, win3);
+    // console.log(`win4>>`, win4);
     console.log('ajiiljiin');
     for (let i = 0; i < confA.length; i++) {
       if (!(confA[i].homeScore === 0 && confA[i].awayScore === 0)) {
@@ -266,11 +292,11 @@ const StandingsScreen = ({navigation, route}) => {
         }
       }
     }
-    console.log(`win1`, win1);
-    console.log(`win2`, win2);
-    console.log(`win3`, win3);
-    console.log(`win4`, win4);
-  }, [win1, win2, win3, win4]);
+    // console.log(`win1`, win1);
+    // console.log(`win2`, win2);
+    // console.log(`win3`, win3);
+    // console.log(`win4`, win4);
+  }, []);
 
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
@@ -383,10 +409,10 @@ const StandingsScreen = ({navigation, route}) => {
   }, []);
 
   const getColor = (a, b) => {
-    console.log(`win1>>>>>>>>>>`, win1);
-    console.log(`win2>>>>>>>>>>`, win2);
-    console.log(`win3>>>>>>>>>>`, win3);
-    console.log(`win4>>>>>>>>>>`, win4);
+    // console.log(`win1>>>>>>>>>>`, win1);
+    // console.log(`win2>>>>>>>>>>`, win2);
+    // console.log(`win3>>>>>>>>>>`, win3);
+    // console.log(`win4>>>>>>>>>>`, win4);
     if (a === 2 || b === 2) {
       if (a > b) {
         return COLORS.green;
@@ -704,14 +730,29 @@ const StandingsScreen = ({navigation, route}) => {
                           }}>
                           <View style={styles.teamContainer}>
                             <View style={{flexDirection: 'row'}}>
-                              <Image
-                                source={images.logo}
-                                style={{width: wp(9.6), height: wp(9.6)}}
-                              />
-                              <Image
-                                source={images.logo}
-                                style={{width: wp(9.6), height: wp(9.6)}}
-                              />
+                              {finalAImage ? (
+                                <View style={{flexDirection: 'row'}}>
+                                  {finalAImage.map(_item => {
+                                    return (
+                                      <Image
+                                        source={_item}
+                                        style={styles.teamAvatar}
+                                      />
+                                    );
+                                  })}
+                                </View>
+                              ) : (
+                                <View style={{flexDirection: 'row'}}>
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
+                                  <Image
+                                    source={images.logo}
+                                    style={styles.teamAvatar}
+                                  />
+                                </View>
+                              )}
                             </View>
                             <Text
                               ellipsizeMode="tail"
