@@ -27,6 +27,8 @@ import {
   listTeamPlayers,
   listTeams,
 } from '../graphql/queries';
+import LottieView from 'lottie-react-native';
+
 import * as Animatable from 'react-native-animatable';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import API, {graphqlOperation} from '@aws-amplify/api';
@@ -104,17 +106,22 @@ export default function FormInterface({navigation, route}) {
   const [HomeName, setHomeName] = useState();
   const [AwayName, setAwayName] = useState();
   const [loading, setLoading] = useState(false);
+  const [itsme, setMe] = useState();
+  const [readyEnd, setReadyEnd] = useState(false);
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
+  const [initLoad, setinitLoad] = useState(true);
 
   useEffect(() => {
     const ScheduleData = route.params.match;
     setMatchData(ScheduleData);
     getPlayerData(ScheduleData);
+    setinitLoad(false);
   }, [getPlayerData, route.params.match]);
   const toggleCancelModal = bool => {
     setCancelModalVisible(bool);
   };
   const getPlayerData = React.useCallback(item => {
+    console.log(`item`, item);
     if (item !== null) {
       setImgLoad(false);
     }
@@ -136,6 +143,13 @@ export default function FormInterface({navigation, route}) {
     setAwayAvatars(awayImages);
     setHomeName(item.home.name);
     setAwayName(item.away.name);
+
+    var inhome = homePlayersID.filter(element => element === userInfo.id);
+    if (inhome.length === 0) {
+      setMe('away');
+    } else {
+      setMe('home');
+    }
   }, []);
 
   // async function fetchTeamPlayers(id) {
@@ -280,6 +294,7 @@ export default function FormInterface({navigation, route}) {
         }
       } else {
         setHomeScore(homeScore);
+        setReadyEnd(true);
         setSelect('');
       }
     } else {
@@ -293,6 +308,8 @@ export default function FormInterface({navigation, route}) {
         }
       } else {
         setAwayScore(awayScore);
+        setReadyEnd(true);
+
         setSelect('');
       }
     }
@@ -800,7 +817,17 @@ export default function FormInterface({navigation, route}) {
       console.log('error creating Schedule:', err);
     }
   }
-
+  const hide = () => {
+    if (homeScore === 0 && awayScore === 0) {
+      return false;
+    } else {
+      if (readyEnd) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity onPress={() => toggleCancelModal(true)}>
@@ -815,7 +842,7 @@ export default function FormInterface({navigation, route}) {
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Text
             style={{
-              color: COLORS.white,
+              color: itsme === 'home' ? COLORS.brand : COLORS.white,
               fontFamily: FONTS.brandFont,
               fontSize: wp(4),
               marginBottom: wp(2),
@@ -841,7 +868,7 @@ export default function FormInterface({navigation, route}) {
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Text
             style={{
-              color: COLORS.white,
+              color: itsme === 'away' ? COLORS.brand : COLORS.white,
               fontFamily: FONTS.brandFont,
               fontSize: wp(4),
               marginBottom: wp(2),
@@ -954,7 +981,7 @@ export default function FormInterface({navigation, route}) {
             alignItems: 'center',
           }}>
           <TouchableOpacity
-            onPress={() => setSelect('home')}
+            onPress={() => [setSelect('home'), setReadyEnd(false)]}
             style={[
               styles.selectSide,
               {
@@ -981,7 +1008,7 @@ export default function FormInterface({navigation, route}) {
             alignItems: 'center',
           }}>
           <TouchableOpacity
-            onPress={() => setSelect('away')}
+            onPress={() => [setSelect('away'), setReadyEnd(false)]}
             style={[
               styles.selectSide,
               {
@@ -1071,6 +1098,18 @@ export default function FormInterface({navigation, route}) {
           onPress={() => endMatchButton()}>
           <Text style={styles.modalBtnText}>End Match</Text>
         </TouchableOpacity>
+        <View
+          style={{
+            backgroundColor: COLORS.background,
+            width: wp(50),
+            height: wp(9),
+            justifyContent: 'center',
+            alignItems: 'center',
+            opacity: 0.7,
+            zIndex: hide() ? -1 : 2,
+            position: 'absolute',
+          }}
+        />
         {CancelModal()}
         {EndModalVisible && (
           <EndModalForm
@@ -1089,6 +1128,26 @@ export default function FormInterface({navigation, route}) {
             loading={loading}
           />
         )}
+        <Modal
+          isVisible={initLoad}
+          style={{margin: 0, justifyContent: 'center', alignItems: 'center'}}>
+          <View
+            style={{
+              backgroundColor: COLORS.background,
+              width: wp(40),
+              height: wp(30),
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderColor: COLORS.brand,
+              borderWidth: 2,
+            }}>
+            <LottieView
+              autoPlay
+              source={require('../assets/Lottie/game-loader.json')}
+              style={{width: wp(50), height: wp(50)}}
+            />
+          </View>
+        </Modal>
       </View>
     </SafeAreaView>
   );
