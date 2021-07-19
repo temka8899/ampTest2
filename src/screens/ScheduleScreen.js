@@ -54,6 +54,7 @@ const Match = ({item, onPress, user}) => {
     let awayImages1 = item.awayImage.split('[');
     let awayImages2 = awayImages1[1].split(']');
     let awayImages = awayImages2[0].split(', ');
+    console.log(`homeImages`, homeImages);
     setHome(homeImages);
     setAway(awayImages);
 

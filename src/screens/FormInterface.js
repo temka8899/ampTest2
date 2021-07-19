@@ -34,9 +34,13 @@ import LottieView from 'lottie-react-native';
 
 import Auth from '@aws-amplify/auth';
 import {AuthContext} from '../../App';
+<<<<<<< HEAD
 import * as Animatable from 'react-native-animatable';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+=======
+import {LoadingModal} from '../components/LoadingModal';
+>>>>>>> 4cb2ba4d8b44d9775209aed68009e138e32dfebe
 
 const tempData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 const tempData2 = ['+1', '+2', '+3', 'OK'];
@@ -534,7 +538,7 @@ export default function FormInterface({navigation, route}) {
             graphqlOperation(updateTeam, {
               input: {
                 id: `${teams[i].id}`,
-                leagueStatus: `Playoff${i}`,
+                leagueStatus: `Playoff${i + 1}`,
               },
             }),
           );
@@ -1127,26 +1131,7 @@ export default function FormInterface({navigation, route}) {
             loading={loading}
           />
         )}
-        <Modal
-          isVisible={initLoad}
-          style={{margin: 0, justifyContent: 'center', alignItems: 'center'}}>
-          <View
-            style={{
-              backgroundColor: COLORS.background,
-              width: wp(40),
-              height: wp(30),
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderColor: COLORS.brand,
-              borderWidth: 2,
-            }}>
-            <LottieView
-              autoPlay
-              source={require('../assets/Lottie/game-loader.json')}
-              style={{width: wp(50), height: wp(50)}}
-            />
-          </View>
-        </Modal>
+        <LoadingModal bool={initLoad} />
       </View>
     </SafeAreaView>
   );

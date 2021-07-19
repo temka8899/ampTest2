@@ -23,7 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {updatePlayer} from '../graphql/mutations';
+import {updatePlayer, updateTeam} from '../graphql/mutations';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
 import {
@@ -37,6 +37,7 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
+let newTeamName;
 const UselessTextInput = ({value}) => {
   const [text, onChangeText] = React.useState(value);
   return (
@@ -59,8 +60,21 @@ const styles1 = StyleSheet.create({
 });
 // let Lnames;
 const Names = ({item, onPress, user}) => {
+  const styles1 = StyleSheet.create({
+    input: {
+      height: wp(8),
+      width: wp(35),
+      color: COLORS.white,
+      fontFamily: FONTS.brandFont,
+      fontSize: wp(3),
+      padding: 0,
+      textAlign: 'center',
+    },
+  });
+
   const [LName1, setLName] = useState('');
-  console.log(`item.team.name`, item.team.name);
+  const [readyChange, setReadyChange] = useState(false);
+
   useEffect(() => {
     getLName(item.team.leagueID);
   }, [getLName, item]);
@@ -87,11 +101,125 @@ const Names = ({item, onPress, user}) => {
       console.log('error fetching todos', err);
     }
   }
-  // console.log(`LName`, LName);
+  const changeTeamName = React.useCallback(async () => {
+    console.log(`newTeamName`, newTeamName);
+    try {
+      await API.graphql(
+        graphqlOperation(updateTeam, {
+          input: {
+            //Team id
+            id: item.teamID,
+            name: newTeamName,
+          },
+        }),
+      );
+      console.log('Team ner soligdloo');
+      setReadyChange(false);
+    } catch (err) {
+      console.log('error updating Teams', err);
+    }
+  }, []);
   return (
-    <View>
-      <Text style={{color: 'white'}}>{LName1}</Text>
-      <Text style={{color: 'white'}}>{item.team.name}</Text>
+    <View
+      style={{
+        width: wp(35),
+        alignItems: 'center',
+      }}>
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        style={{
+          color: COLORS.brand,
+          fontFamily: FONTS.brandFont,
+          fontSize: wp(4),
+          marginTop: wp(2),
+        }}>
+        {LName1}
+      </Text>
+      {readyChange ? (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <TextInput
+            // editable={true}
+            style={styles1.input}
+            autoCapitalize={false}
+            autoCompleteType={false}
+            placeholder={item.team.name}
+            maxLength={20}
+            onChangeText={text => (newTeamName = text)}
+            placeholderTextColor={COLORS.purpleText}
+          />
+        </View>
+      ) : (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: wp(8),
+            width: wp(35),
+          }}>
+          <Text
+            ellipsizeMode="tail"
+            numberOfLines={1}
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              marginVertical: wp(2),
+              fontSize: wp(3),
+            }}>
+            {item.team.name}
+          </Text>
+        </View>
+      )}
+
+      {readyChange ? (
+        <TouchableOpacity
+          style={{
+            width: wp(20),
+            height: wp(8),
+            borderWidth: 2,
+            borderColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: wp(1),
+            backgroundColor: COLORS.brand,
+          }}
+          onPress={() => changeTeamName()}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              fontSize: wp(2.8),
+            }}>
+            Save
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={{
+            width: wp(20),
+            height: wp(8),
+            borderWidth: 2,
+            borderColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: wp(1),
+            backgroundColor: COLORS.brand,
+          }}
+          onPress={() => setReadyChange(true)}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              fontSize: wp(2.8),
+            }}>
+            Change
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
