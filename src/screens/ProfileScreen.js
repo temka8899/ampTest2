@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Text,
   View,
@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
 
 import {AuthContext} from '../../App';
@@ -21,6 +22,7 @@ import {LogoutModal} from '../components/LogoutModal';
 import LeaguePicker from '../components/LeaguePicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// import Toast from 'react-native-simple-toast';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {updatePlayer, updateTeam} from '../graphql/mutations';
@@ -38,6 +40,62 @@ const wait = timeout => {
 };
 
 let newTeamName;
+const getRandomMessage = () => {
+  const number = Math.trunc(Math.random() * 10000);
+  return 'Random message ' + number;
+};
+const Message = props => {
+  const opacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.delay(2000),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      props.onHide();
+    });
+  }, []);
+
+  return (
+    <Animated.View
+      style={{
+        opacity,
+        transform: [
+          {
+            translateY: opacity.interpolate({
+              inputRange: [0, 1],
+              outputRange: [-20, 0],
+            }),
+          },
+        ],
+        margin: 10,
+        marginBottom: 5,
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 4,
+        shadowColor: 'black',
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 5,
+        elevation: 6,
+      }}>
+      <Text>{props.message}</Text>
+    </Animated.View>
+  );
+};
+
 const UselessTextInput = ({value}) => {
   const [text, onChangeText] = React.useState(value);
   return (
@@ -236,6 +294,8 @@ const Profile = ({navigation}) => {
   const [teamNames, setTeamNames] = useState([]);
   const [leagueNames, setLeagueNames] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const [messages, setMessages] = useState([]);
 
   const Match = ({item, onPress, user}) => {
     //console.log(`item`, item);
@@ -678,6 +738,28 @@ const Profile = ({navigation}) => {
       ) : (
         <View>
           {getMai()}
+          <View
+            style={{
+              position: 'absolute',
+              top: 45,
+              left: 0,
+              right: 0,
+              zIndex: 12,
+            }}>
+            {messages.map(message => (
+              <Message
+                key={message}
+                message={message}
+                onHide={() => {
+                  setMessages(messages =>
+                    messages.filter(
+                      currentMessage => currentMessage !== message,
+                    ),
+                  );
+                }}
+              />
+            ))}
+          </View>
           <View style={styles.header}>
             <View>
               <>
@@ -740,6 +822,13 @@ const Profile = ({navigation}) => {
               marginTop: hp(8),
               marginBottom: hp(2),
             }}>
+            <TouchableOpacity
+              onPress={() => {
+                const message = getRandomMessage();
+                setMessages([...messages, message]);
+              }}>
+              <Text>dsgds</Text>
+            </TouchableOpacity>
             <Text
               style={{
                 color: COLORS.greyText,

@@ -541,7 +541,6 @@ export default function AuthScreen({navigation}) {
                   width: wp(14),
                   height: wp(10),
                   marginTop: wp(14),
-
                   marginLeft: -wp(10),
                 }}
               />

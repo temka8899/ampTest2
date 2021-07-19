@@ -235,7 +235,15 @@ const StandingsScreen = ({navigation, route}) => {
       console.log(`confA`, confA);
       console.log(`confB`, confB);
     },
-    [fetchPlayoffSchedule, fetchPlayoffTeam, fetchTeam, getWinner, initFinal],
+    [
+      fetchPlayoffSchedule,
+      fetchPlayoffTeam,
+      fetchTeam,
+      getChamp,
+      getWinner,
+      initChamp,
+      initFinal,
+    ],
   );
   async function initWin() {
     await setWin1(0);
@@ -462,382 +470,80 @@ const StandingsScreen = ({navigation, route}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.brand}}>
       <SafeAreaView style={{flex: 1, backgroundColor: COLORS.background}}>
-        <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
-        <View>
-          <AppBar />
-          <TouchableOpacity
-            onPress={() => changeModalVisible(true)}
-            style={styles.chooseButton}>
-            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData === '' ? 'Select' : chooseData.game.name}
-            </Text>
-            <Image source={icons.drop} style={styles.dropButton} />
-          </TouchableOpacity>
-          <Modal
-            transparent={true}
-            animationType="fade"
-            visible={modalVisible}
-            nRequestClose={() => changeModalVisible(false)}>
-            <LeaguePicker
-              changeModalVisible={changeModalVisible}
-              setData={setData}
-            />
-          </Modal>
+        <ScrollView>
+          <StatusBar barStyle="light-content" backgroundColor="#F74C11" />
           <View>
-            {chooseData.isPlayoff === true ? (
-              <View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: wp(100),
-                    height: wp(20),
-                    flexDirection: 'row',
-                  }}>
-                  <Text
+            <AppBar />
+            <TouchableOpacity
+              onPress={() => changeModalVisible(true)}
+              style={styles.chooseButton}>
+              <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+                {chooseData === '' ? 'Select' : chooseData.game.name}
+              </Text>
+              <Image source={icons.drop} style={styles.dropButton} />
+            </TouchableOpacity>
+            <Modal
+              transparent={true}
+              animationType="fade"
+              visible={modalVisible}
+              nRequestClose={() => changeModalVisible(false)}>
+              <LeaguePicker
+                changeModalVisible={changeModalVisible}
+                setData={setData}
+              />
+            </Modal>
+            <View>
+              {chooseData.isPlayoff === true ? (
+                <View>
+                  <View
                     style={{
-                      color: COLORS.brand,
-                      fontFamily: FONTS.brandFont,
-                      fontSize: wp(4),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: wp(100),
+                      height: wp(20),
+                      flexDirection: 'row',
                     }}>
-                    PLAYOFF
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => onRefresh()}
-                  style={{
-                    position: 'absolute',
-                    alignSelf: 'flex-end',
-                    flexDirection: 'row',
-                    marginTop: wp(3),
-                  }}>
-                  <Text
+                    <Text
+                      style={{
+                        color: COLORS.brand,
+                        fontFamily: FONTS.brandFont,
+                        fontSize: wp(4),
+                      }}>
+                      PLAYOFF
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => onRefresh()}
                     style={{
-                      color: COLORS.greyText,
-                      fontFamily: FONTS.brandFont,
-                      fontSize: wp(3),
+                      position: 'absolute',
+                      alignSelf: 'flex-end',
+                      flexDirection: 'row',
+                      marginTop: wp(3),
                     }}>
-                    refresh
-                  </Text>
-                </TouchableOpacity>
-                <ScrollView
-                  horizontal
-                  contentContainerStyle={{
-                    alignItems: 'center',
-                    width: wp(110),
-                  }}>
-                  <View>
-                    <View style={styles.bracketContainer}>
-                      <View style={styles.sectionContainer}>
-                        <View>
-                          <View style={styles.teamContainer}>
-                            <View style={{flexDirection: 'row'}}>
-                              {confAhomeImage ? (
-                                <View style={{flexDirection: 'row'}}>
-                                  {confAhomeImage.map(_item => {
-                                    return (
-                                      <Image
-                                        source={_item}
-                                        style={styles.teamAvatar}
-                                      />
-                                    );
-                                  })}
-                                </View>
-                              ) : (
-                                <View style={{flexDirection: 'row'}}>
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                </View>
-                              )}
-                            </View>
-                            <Text
-                              ellipsizeMode="tail"
-                              numberOfLines={1}
-                              style={styles.textStyle}>
-                              {confAhomeName}
-                            </Text>
-                          </View>
-                          <View style={styles.space}>
-                            <Text
-                              style={[
-                                styles.seriesText,
-                                {
-                                  color: getColor(win1, win2),
-                                },
-                              ]}>
-                              {win1}
-                            </Text>
-                            <Text
-                              style={[
-                                styles.seriesText,
-                                {color: COLORS.greyText},
-                              ]}>
-                              {' '}
-                              -{' '}
-                            </Text>
-
-                            <Text
-                              style={[
-                                styles.seriesText,
-                                {
-                                  color: getColor(win2, win1),
-                                },
-                              ]}>
-                              {win2}
-                            </Text>
-                          </View>
-                          <View style={styles.teamContainer}>
-                            <View style={{flexDirection: 'row'}}>
-                              {confAawayImage ? (
-                                <View style={{flexDirection: 'row'}}>
-                                  {confAawayImage.map(_item => {
-                                    return (
-                                      <Image
-                                        source={_item}
-                                        style={styles.teamAvatar}
-                                      />
-                                    );
-                                  })}
-                                </View>
-                              ) : (
-                                <View style={{flexDirection: 'row'}}>
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                </View>
-                              )}
-                            </View>
-                            <Text
-                              ellipsizeMode="tail"
-                              numberOfLines={1}
-                              style={styles.textStyle}>
-                              {confAawayName}
-                            </Text>
-                          </View>
-                        </View>
-                        <View>
-                          <View style={styles.teamContainer}>
-                            <View style={{flexDirection: 'row'}}>
-                              {confBhomeImage ? (
-                                <View style={{flexDirection: 'row'}}>
-                                  {confBhomeImage.map(_item => {
-                                    return (
-                                      <Image
-                                        source={_item}
-                                        style={styles.teamAvatar}
-                                      />
-                                    );
-                                  })}
-                                </View>
-                              ) : (
-                                <View style={{flexDirection: 'row'}}>
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                </View>
-                              )}
-                            </View>
-                            <Text
-                              ellipsizeMode="tail"
-                              numberOfLines={1}
-                              style={styles.textStyle}>
-                              {confBhomeName}
-                            </Text>
-                          </View>
-                          <View style={styles.space}>
-                            <Text
-                              style={[
-                                styles.seriesText,
-                                {
-                                  color: getColor(win3, win4),
-                                },
-                              ]}>
-                              {win3}
-                            </Text>
-                            <Text
-                              style={[
-                                styles.seriesText,
-                                {color: COLORS.greyText},
-                              ]}>
-                              {' '}
-                              -{' '}
-                            </Text>
-
-                            <Text
-                              style={[
-                                styles.seriesText,
-                                {
-                                  color: getColor(win4, win3),
-                                },
-                              ]}>
-                              {win4}
-                            </Text>
-                          </View>
-                          <View style={styles.teamContainer}>
-                            <View style={{flexDirection: 'row'}}>
-                              {confBawayImage ? (
-                                <View style={{flexDirection: 'row'}}>
-                                  {confBawayImage.map(_item => {
-                                    return (
-                                      <Image
-                                        source={_item}
-                                        style={styles.teamAvatar}
-                                      />
-                                    );
-                                  })}
-                                </View>
-                              ) : (
-                                <View style={{flexDirection: 'row'}}>
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                </View>
-                              )}
-                            </View>
-                            <Text
-                              ellipsizeMode="tail"
-                              numberOfLines={1}
-                              style={styles.textStyle}>
-                              {confBawayName}
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
-
-                      <View style={styles.lineContainer}>
-                        <View
-                          style={{
-                            height: wp(37.3),
-                            width: wp(18),
-                          }}>
-                          <Image
-                            source={
-                              win1 === 2 ? icons.line1agreen : icons.line1agrey
-                            }
-                            style={[
-                              {zIndex: win1 !== 2 ? 0 : 1, marginTop: wp(4.4)},
-                              styles.line1,
-                            ]}
-                          />
-                          <Image
-                            source={
-                              win2 === 2 ? icons.line1bgreen : icons.line1bgrey
-                            }
-                            style={[
-                              {
-                                zIndex: win2 !== 2 ? 0 : 1,
-                                marginTop: wp(17.06),
-                              },
-                              styles.line1,
-                            ]}
-                          />
-                        </View>
-                        <View
-                          style={{
-                            height: wp(47.46),
-                            width: wp(18),
-                          }}>
-                          <Image
-                            source={
-                              win3 === 2 ? icons.line1agreen : icons.line1agrey
-                            }
-                            style={[
-                              {zIndex: win3 !== 2 ? 0 : 1, marginTop: wp(9.6)},
-                              styles.line1,
-                            ]}
-                          />
-                          <Image
-                            source={
-                              win4 === 2 ? icons.line1bgreen : icons.line1bgrey
-                            }
-                            style={[
-                              {
-                                zIndex: win4 !== 2 ? 0 : 1,
-                                marginTop: wp(22.13),
-                              },
-                              styles.line1,
-                            ]}
-                          />
-                        </View>
-                      </View>
-                      <View style={styles.section2}>
-                        <View
-                          style={{
-                            height: wp(37.3),
-                            width: wp(18),
-                            paddingTop: wp(12),
-                          }}>
-                          <View style={styles.teamContainer}>
-                            <View style={{flexDirection: 'row'}}>
-                              {finalAImage ? (
-                                <View style={{flexDirection: 'row'}}>
-                                  {finalAImage.map(_item => {
-                                    return (
-                                      <Image
-                                        source={_item}
-                                        style={styles.teamAvatar}
-                                      />
-                                    );
-                                  })}
-                                </View>
-                              ) : (
-                                <View style={{flexDirection: 'row'}}>
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                  <Image
-                                    source={images.logo}
-                                    style={styles.teamAvatar}
-                                  />
-                                </View>
-                              )}
-                            </View>
-                            <Text
-                              ellipsizeMode="tail"
-                              numberOfLines={1}
-                              style={styles.textStyle}>
-                              T1 or T2
-                            </Text>
-                          </View>
-                        </View>
-                        <View
-                          style={{
-                            height: wp(47.46),
-                            width: wp(18),
-                          }}>
-                          <View
-                            style={{
-                              height: wp(37.3),
-                              width: wp(18),
-                              paddingTop: wp(17.86),
-                            }}>
+                    <Text
+                      style={{
+                        color: COLORS.greyText,
+                        fontFamily: FONTS.brandFont,
+                        fontSize: wp(3),
+                      }}>
+                      refresh
+                    </Text>
+                  </TouchableOpacity>
+                  <ScrollView
+                    horizontal
+                    contentContainerStyle={{
+                      alignItems: 'center',
+                      width: wp(110),
+                    }}>
+                    <View>
+                      <View style={styles.bracketContainer}>
+                        <View style={styles.sectionContainer}>
+                          <View>
                             <View style={styles.teamContainer}>
                               <View style={{flexDirection: 'row'}}>
-                                {finalBImage ? (
+                                {confAhomeImage ? (
                                   <View style={{flexDirection: 'row'}}>
-                                    {finalBImage.map(_item => {
+                                    {confAhomeImage.map(_item => {
                                       return (
                                         <Image
                                           source={_item}
@@ -862,99 +568,417 @@ const StandingsScreen = ({navigation, route}) => {
                               <Text
                                 ellipsizeMode="tail"
                                 numberOfLines={1}
+                                style={styles.textStyle}>
+                                {confAhomeName}
+                              </Text>
+                            </View>
+                            <View style={styles.space}>
+                              <Text
+                                style={[
+                                  styles.seriesText,
+                                  {
+                                    color: getColor(win1, win2),
+                                  },
+                                ]}>
+                                {win1}
+                              </Text>
+                              <Text
+                                style={[
+                                  styles.seriesText,
+                                  {color: COLORS.greyText},
+                                ]}>
+                                {' '}
+                                -{' '}
+                              </Text>
+
+                              <Text
+                                style={[
+                                  styles.seriesText,
+                                  {
+                                    color: getColor(win2, win1),
+                                  },
+                                ]}>
+                                {win2}
+                              </Text>
+                            </View>
+                            <View style={styles.teamContainer}>
+                              <View style={{flexDirection: 'row'}}>
+                                {confAawayImage ? (
+                                  <View style={{flexDirection: 'row'}}>
+                                    {confAawayImage.map(_item => {
+                                      return (
+                                        <Image
+                                          source={_item}
+                                          style={styles.teamAvatar}
+                                        />
+                                      );
+                                    })}
+                                  </View>
+                                ) : (
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                  </View>
+                                )}
+                              </View>
+                              <Text
+                                ellipsizeMode="tail"
+                                numberOfLines={1}
+                                style={styles.textStyle}>
+                                {confAawayName}
+                              </Text>
+                            </View>
+                          </View>
+                          <View>
+                            <View style={styles.teamContainer}>
+                              <View style={{flexDirection: 'row'}}>
+                                {confBhomeImage ? (
+                                  <View style={{flexDirection: 'row'}}>
+                                    {confBhomeImage.map(_item => {
+                                      return (
+                                        <Image
+                                          source={_item}
+                                          style={styles.teamAvatar}
+                                        />
+                                      );
+                                    })}
+                                  </View>
+                                ) : (
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                  </View>
+                                )}
+                              </View>
+                              <Text
+                                ellipsizeMode="tail"
+                                numberOfLines={1}
+                                style={styles.textStyle}>
+                                {confBhomeName}
+                              </Text>
+                            </View>
+                            <View style={styles.space}>
+                              <Text
+                                style={[
+                                  styles.seriesText,
+                                  {
+                                    color: getColor(win3, win4),
+                                  },
+                                ]}>
+                                {win3}
+                              </Text>
+                              <Text
+                                style={[
+                                  styles.seriesText,
+                                  {color: COLORS.greyText},
+                                ]}>
+                                {' '}
+                                -{' '}
+                              </Text>
+
+                              <Text
+                                style={[
+                                  styles.seriesText,
+                                  {
+                                    color: getColor(win4, win3),
+                                  },
+                                ]}>
+                                {win4}
+                              </Text>
+                            </View>
+                            <View style={styles.teamContainer}>
+                              <View style={{flexDirection: 'row'}}>
+                                {confBawayImage ? (
+                                  <View style={{flexDirection: 'row'}}>
+                                    {confBawayImage.map(_item => {
+                                      return (
+                                        <Image
+                                          source={_item}
+                                          style={styles.teamAvatar}
+                                        />
+                                      );
+                                    })}
+                                  </View>
+                                ) : (
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                  </View>
+                                )}
+                              </View>
+                              <Text
+                                ellipsizeMode="tail"
+                                numberOfLines={1}
+                                style={styles.textStyle}>
+                                {confBawayName}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+
+                        <View style={styles.lineContainer}>
+                          <View
+                            style={{
+                              height: wp(37.3),
+                              width: wp(18),
+                            }}>
+                            <Image
+                              source={
+                                win1 === 2
+                                  ? icons.line1agreen
+                                  : icons.line1agrey
+                              }
+                              style={[
+                                {
+                                  zIndex: win1 !== 2 ? 0 : 1,
+                                  marginTop: wp(4.4),
+                                },
+                                styles.line1,
+                              ]}
+                            />
+                            <Image
+                              source={
+                                win2 === 2
+                                  ? icons.line1bgreen
+                                  : icons.line1bgrey
+                              }
+                              style={[
+                                {
+                                  zIndex: win2 !== 2 ? 0 : 1,
+                                  marginTop: wp(17.06),
+                                },
+                                styles.line1,
+                              ]}
+                            />
+                          </View>
+                          <View
+                            style={{
+                              height: wp(47.46),
+                              width: wp(18),
+                            }}>
+                            <Image
+                              source={
+                                win3 === 2
+                                  ? icons.line1agreen
+                                  : icons.line1agrey
+                              }
+                              style={[
+                                {
+                                  zIndex: win3 !== 2 ? 0 : 1,
+                                  marginTop: wp(9.6),
+                                },
+                                styles.line1,
+                              ]}
+                            />
+                            <Image
+                              source={
+                                win4 === 2
+                                  ? icons.line1bgreen
+                                  : icons.line1bgrey
+                              }
+                              style={[
+                                {
+                                  zIndex: win4 !== 2 ? 0 : 1,
+                                  marginTop: wp(22.13),
+                                },
+                                styles.line1,
+                              ]}
+                            />
+                          </View>
+                        </View>
+                        <View style={styles.section2}>
+                          <View
+                            style={{
+                              height: wp(37.3),
+                              width: wp(18),
+                              paddingTop: wp(12),
+                            }}>
+                            <View style={styles.teamContainer}>
+                              <View style={{flexDirection: 'row'}}>
+                                {finalAImage ? (
+                                  <View style={{flexDirection: 'row'}}>
+                                    {finalAImage.map(_item => {
+                                      return (
+                                        <Image
+                                          source={_item}
+                                          style={styles.teamAvatar}
+                                        />
+                                      );
+                                    })}
+                                  </View>
+                                ) : (
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                    <Image
+                                      source={images.logo}
+                                      style={styles.teamAvatar}
+                                    />
+                                  </View>
+                                )}
+                              </View>
+                              <Text
+                                ellipsizeMode="tail"
+                                numberOfLines={1}
+                                style={styles.textStyle}>
+                                T1 or T2
+                              </Text>
+                            </View>
+                          </View>
+                          <View
+                            style={{
+                              height: wp(47.46),
+                              width: wp(18),
+                            }}>
+                            <View
+                              style={{
+                                height: wp(37.3),
+                                width: wp(18),
+                                paddingTop: wp(17.86),
+                              }}>
+                              <View style={styles.teamContainer}>
+                                <View style={{flexDirection: 'row'}}>
+                                  {finalBImage ? (
+                                    <View style={{flexDirection: 'row'}}>
+                                      {finalBImage.map(_item => {
+                                        return (
+                                          <Image
+                                            source={_item}
+                                            style={styles.teamAvatar}
+                                          />
+                                        );
+                                      })}
+                                    </View>
+                                  ) : (
+                                    <View style={{flexDirection: 'row'}}>
+                                      <Image
+                                        source={images.logo}
+                                        style={styles.teamAvatar}
+                                      />
+                                      <Image
+                                        source={images.logo}
+                                        style={styles.teamAvatar}
+                                      />
+                                    </View>
+                                  )}
+                                </View>
+                                <Text
+                                  ellipsizeMode="tail"
+                                  numberOfLines={1}
+                                  style={{
+                                    color: COLORS.greyText,
+                                    fontFamily: FONTS.brandFont,
+                                    fontSize: wp(2.66),
+                                  }}>
+                                  T3 or T4
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
+                        <View style={styles.sectionContainerFinal}>
+                          <View
+                            style={{
+                              height: wp(117.6),
+                              width: wp(16.89),
+                              borderWidth: 1,
+                            }}>
+                            <Image
+                              source={icons.line2agreen}
+                              style={{
+                                width: wp(16),
+                                height: wp(41.06),
+                                position: 'absolute',
+                                marginTop: wp(16.26),
+                              }}
+                            />
+                            <Image
+                              source={icons.line2bgreen}
+                              style={{
+                                width: wp(16),
+                                height: wp(41.06),
+                                position: 'absolute',
+                                marginTop: wp(54.1),
+                              }}
+                            />
+                          </View>
+                          <View style={{justifyContent: 'center'}}>
+                            <View style={styles.teamContainerFinal}>
+                              <View style={{flexDirection: 'row'}}>
+                                <Image
+                                  source={images.logo}
+                                  style={{width: wp(9.6), height: wp(9.6)}}
+                                />
+                                <Image
+                                  source={images.logo}
+                                  style={{width: wp(9.6), height: wp(9.6)}}
+                                />
+                              </View>
+                              <Text
+                                ellipsizeMode="tail"
+                                numberOfLines={1}
                                 style={{
                                   color: COLORS.greyText,
                                   fontFamily: FONTS.brandFont,
                                   fontSize: wp(2.66),
                                 }}>
-                                T3 or T4
+                                Finalist
                               </Text>
                             </View>
                           </View>
                         </View>
                       </View>
-                      <View style={styles.sectionContainerFinal}>
-                        <View
-                          style={{
-                            height: wp(117.6),
-                            width: wp(16.89),
-                            borderWidth: 1,
-                          }}>
-                          <Image
-                            source={icons.line2agreen}
-                            style={{
-                              width: wp(16),
-                              height: wp(41.06),
-                              position: 'absolute',
-                              marginTop: wp(16.26),
-                            }}
-                          />
-                          <Image
-                            source={icons.line2bgreen}
-                            style={{
-                              width: wp(16),
-                              height: wp(41.06),
-                              position: 'absolute',
-                              marginTop: wp(54.1),
-                            }}
-                          />
-                        </View>
-                        <View style={{justifyContent: 'center'}}>
-                          <View style={styles.teamContainerFinal}>
-                            <View style={{flexDirection: 'row'}}>
-                              <Image
-                                source={images.logo}
-                                style={{width: wp(9.6), height: wp(9.6)}}
-                              />
-                              <Image
-                                source={images.logo}
-                                style={{width: wp(9.6), height: wp(9.6)}}
-                              />
-                            </View>
-                            <Text
-                              ellipsizeMode="tail"
-                              numberOfLines={1}
-                              style={{
-                                color: COLORS.greyText,
-                                fontFamily: FONTS.brandFont,
-                                fontSize: wp(2.66),
-                              }}>
-                              Finalist
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
                     </View>
-                  </View>
-                </ScrollView>
-              </View>
-            ) : teamData.length !== 0 ? (
-              <FlatList
-                refreshControl={
-                  <RefreshControl
-                    tintColor={COLORS.brand}
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-                data={teamData}
-                style={{height: hp(100)}}
-                keyExtractor={item => item}
-                renderItem={renderItem}
-              />
-            ) : (
-              <View style={styles.logoContainer}>
-                <Animated.Image
-                  source={images.logo}
-                  style={[
-                    styles.logoStyle,
-                    {transform: [{rotate: RotateData}]},
-                  ]}
+                  </ScrollView>
+                </View>
+              ) : teamData.length !== 0 ? (
+                <FlatList
+                  refreshControl={
+                    <RefreshControl
+                      tintColor={COLORS.brand}
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                  data={teamData}
+                  style={{height: hp(100)}}
+                  keyExtractor={item => item}
+                  renderItem={renderItem}
                 />
-              </View>
-            )}
+              ) : (
+                <View style={styles.logoContainer}>
+                  <Animated.Image
+                    source={images.logo}
+                    style={[
+                      styles.logoStyle,
+                      {transform: [{rotate: RotateData}]},
+                    ]}
+                  />
+                </View>
+              )}
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </SafeAreaView>
   );

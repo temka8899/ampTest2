@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Text,
   View,
@@ -13,6 +13,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
 
 import {COLORS, FONTS, icons} from '../constants';
@@ -48,7 +49,71 @@ import {min} from 'moment';
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
+const getRandomMessage = () => {
+  // const number = Math.trunc(Math.random() * 10000);
+  return `League started`;
+};
+const Message = props => {
+  const opacity = useRef(new Animated.Value(0)).current;
 
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.delay(2000),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      props.onHide();
+    });
+  }, []);
+
+  return (
+    <Animated.View
+      style={{
+        opacity,
+        transform: [
+          {
+            translateY: opacity.interpolate({
+              inputRange: [0, 1],
+              outputRange: [-20, 0],
+            }),
+          },
+        ],
+        margin: wp(2),
+        marginBottom: wp(1),
+        backgroundColor: COLORS.brand,
+        padding: wp(2),
+        borderRadius: wp(1),
+        shadowColor: COLORS.brand,
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 5,
+        elevation: 6,
+        height: wp(8),
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Text
+        style={{
+          color: COLORS.white,
+          fontFamily: FONTS.brandFont,
+          fontSize: wp(3),
+        }}>
+        {props.message}
+      </Text>
+    </Animated.View>
+  );
+};
 const matchAmount = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const AdminScreen = ({navigation}) => {
@@ -69,6 +134,9 @@ const AdminScreen = ({navigation}) => {
   const [matchPerDay, setMatchPerDay] = useState();
   const [myLeagueID, setMyLeagueID] = useState();
   const [leagueIndex, setLeagueIndex] = useState();
+
+  const [messages, setMessages] = useState([]);
+
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
@@ -337,6 +405,7 @@ const AdminScreen = ({navigation}) => {
             playOffIndex: 0,
             finalsIndex: 0,
             gameID: _leagueData.data.updateLeague.game.id,
+            isPlaying: false,
           },
         }),
       );
@@ -515,6 +584,26 @@ const AdminScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
+      <View
+        style={{
+          position: 'absolute',
+          top: 45,
+          left: 0,
+          right: 0,
+          zIndex: 12,
+        }}>
+        {messages.map(message => (
+          <Message
+            key={message}
+            message={message}
+            onHide={() => {
+              setMessages(messages =>
+                messages.filter(currentMessage => currentMessage !== message),
+              );
+            }}
+          />
+        ))}
+      </View>
       <View style={styles.backButton}>
         <TouchableOpacity onPress={() => navigation.pop()}>
           <Image source={icons.backBtn} style={styles.backBtn} />
@@ -559,6 +648,13 @@ const AdminScreen = ({navigation}) => {
             </View>
           )}
         </View>
+        <TouchableOpacity
+          onPress={() => {
+            const message = getRandomMessage();
+            setMessages([...messages, message]);
+          }}>
+          <Text style={{color: 'white'}}>dsgds</Text>
+        </TouchableOpacity>
         <Text style={styles.textStyle}> Game List </Text>
         <View>
           {GameData.length !== 0 ? (
