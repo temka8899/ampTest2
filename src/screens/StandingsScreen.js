@@ -12,8 +12,6 @@ import {
   FlatList,
   RefreshControl,
   Animated,
-  Easing,
-  ActivityIndicator,
   ScrollView,
 } from 'react-native';
 
@@ -24,7 +22,7 @@ import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
-import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
+import {listSchedules, listTeams} from '../graphql/queries';
 import {graphqlOperation} from '@aws-amplify/api-graphql';
 import API from '@aws-amplify/api';
 
@@ -61,7 +59,6 @@ const StandingsScreen = ({navigation, route}) => {
   const [logoLoad, setLogoLoad] = useState();
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [imgLoad, setImgLoad] = useState(true);
-  const [myOption, setMyOption] = useState();
   // const
   // const [Team1, setTeam1] = useState();
   // const [Team2, setTeam2] = useState();
@@ -76,6 +73,7 @@ const StandingsScreen = ({navigation, route}) => {
   const [win4, setWin4] = useState(0);
   const [final1, setFinal1] = useState(0);
   const [final2, setFinal2] = useState(0);
+  const [tempOption, setTempOption] = useState();
 
   const rotateValue = useState(new Animated.Value(0))[0];
   const RotateData = rotateValue.interpolate({
@@ -175,18 +173,19 @@ const StandingsScreen = ({navigation, route}) => {
   };
 
   const onRefresh = React.useCallback(() => {
-    setData(myOption);
+    setData(tempOption);
     wait(500).then(() => setRefreshing(false));
-  }, [myOption, setData]);
+  }, [setData, tempOption]);
 
   const setData = React.useCallback(
     async option => {
       await setChooseData(option);
       await fetchTeam(option.id);
-      setMyOption(option);
+      setTempOption(option);
       if (option.isPlayoff === true) {
         await fetchPlayoffTeam(option.id);
         await fetchPlayoffSchedule(option.id);
+
         setImgLoad(true);
         let homeImages1 = confA[0].homeImage.split('[');
         let homeImages2 = homeImages1[1].split(']');
@@ -242,7 +241,6 @@ const StandingsScreen = ({navigation, route}) => {
       }
     }
   }, [win1, win2, win3, win4]);
-
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
       const leagueData = await API.graphql(
@@ -759,7 +757,7 @@ const StandingsScreen = ({navigation, route}) => {
                 }
                 data={teamData}
                 style={{height: hp(100)}}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item}
                 renderItem={renderItem}
               />
             ) : (

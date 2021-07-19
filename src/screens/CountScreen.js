@@ -13,6 +13,8 @@ import {COLORS, FONTS, icons, images} from '../constants';
 import {hp, wp} from '../constants/theme';
 import Modal from 'react-native-modal';
 import {EndModal} from '../components/EndModal';
+import LottieView from 'lottie-react-native';
+
 import {
   updateLeague,
   updateSchedule,
@@ -41,6 +43,7 @@ export default function CountScreen({navigation, route}) {
   const [Away, setAway] = useState();
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [initLoad, setinitLoad] = useState(true);
 
   const [allPoint, setAllPoint] = useState({
     one: {
@@ -86,6 +89,7 @@ export default function CountScreen({navigation, route}) {
     setHome(homePlayers);
     setAway(awayPlayers);
     initMatch(homePlayers, awayPlayers);
+    setinitLoad(false);
   }, []);
 
   const initMatch = (homePlayers, awayPlayers) => {
@@ -1085,6 +1089,26 @@ export default function CountScreen({navigation, route}) {
             loading={loading}
           />
         )}
+        <Modal
+          isVisible={initLoad}
+          style={{margin: 0, justifyContent: 'center', alignItems: 'center'}}>
+          <View
+            style={{
+              backgroundColor: COLORS.background,
+              width: wp(40),
+              height: wp(30),
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderColor: COLORS.brand,
+              borderWidth: 2,
+            }}>
+            <LottieView
+              autoPlay
+              source={require('../assets/Lottie/game-loader.json')}
+              style={{width: wp(50), height: wp(50)}}
+            />
+          </View>
+        </Modal>
       </View>
     </View>
   );
