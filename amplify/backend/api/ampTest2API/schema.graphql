@@ -73,6 +73,7 @@ type Schedule @model {
   date: String!
   scheduleHomeId: String
   scheduleAwayId: String
+  isPlaying: Boolean
 }
 
 type XP @model {

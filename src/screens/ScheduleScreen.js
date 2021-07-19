@@ -33,17 +33,29 @@ const wait = timeout => {
 };
 
 let firstDate = new Date();
+let touch;
 
 const Match = ({item, onPress, user}) => {
   const [Home, setHome] = useState(undefined);
   const [Away, setAway] = useState(undefined);
   const [imgLoad, setImgLoad] = useState(true);
   const [find, setFind] = useState('');
+  const [enable, setEnable] = useState();
 
   useEffect(() => {
     getPlayerData();
   }, [getPlayerData]);
 
+  const getTouch = React.useCallback(async () => {
+    console.log(`item.isPlaying || find === ''`, item.isPlaying || find === '');
+    if (item.isPlaying || find === '') {
+      console.log('1');
+      touch = true;
+    } else {
+      touch = false;
+    }
+    console.log(`touch`, touch);
+  }, [find, item.isPlaying]);
   const getPlayerData = React.useCallback(async () => {
     if (item !== null) {
       setImgLoad(false);
@@ -54,7 +66,6 @@ const Match = ({item, onPress, user}) => {
     let awayImages1 = item.awayImage.split('[');
     let awayImages2 = awayImages1[1].split(']');
     let awayImages = awayImages2[0].split(', ');
-    console.log(`homeImages`, homeImages);
     setHome(homeImages);
     setAway(awayImages);
 
@@ -66,7 +77,17 @@ const Match = ({item, onPress, user}) => {
     } else if (findAway) {
       setFind('away');
     }
-  }, [item, user.id]);
+
+    console.log(`item.isPlaying || find === ''`, item.isPlaying || find === '');
+    if (item.isPlaying || find === '') {
+      console.log('1');
+      touch = true;
+    } else {
+      touch = false;
+    }
+    setEnable(touch);
+    console.log(`touch`, touch);
+  }, [find, item, user.id]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -243,8 +264,9 @@ const Match = ({item, onPress, user}) => {
   } else {
     return (
       <View>
+        {console.log(`enable`, enable)}
         <TouchableOpacity
-          disabled={find === '' ? true : false}
+          disabled={enable ? true : false}
           onPress={onPress}
           style={{
             width: wp(100),
@@ -296,14 +318,25 @@ const Match = ({item, onPress, user}) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <Text
-                  style={{
-                    color: COLORS.white,
-                    fontFamily: FONTS.brandFont,
-                    fontSize: wp(3.2),
-                  }}>
-                  {getVS()}
-                </Text>
+                {item.isPlaying ? (
+                  <Text
+                    style={{
+                      color: COLORS.greyText,
+                      fontFamily: FONTS.brandFont,
+                      fontSize: wp(2.5),
+                    }}>
+                    In Match
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      fontFamily: FONTS.brandFont,
+                      fontSize: wp(3.2),
+                    }}>
+                    {getVS()}
+                  </Text>
+                )}
               </View>
             </View>
 
