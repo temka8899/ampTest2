@@ -218,19 +218,26 @@ export default function CountScreen({navigation, route}) {
         if (user.username === item.c_id) {
           return item;
         }
-        setUserInfo(finded);
       });
+      setUserInfo(finded);
     },
+
     [setUserInfo],
   );
 
   async function UpdateSchedule() {
-    //League iin current index update
-    await _updateLeague();
+    if (allPoint.one.point + allPoint.two.point === 10) {
+      //toglogch yalahad bagiin win-lose update
+      _updateHome1();
+      await _updateAway1();
+    } else {
+      //toglogch yalagdahad bagiin win-lose update
+      _updateHome2();
+      await _updateAway2();
+    }
 
-    // Updating Schedule data
     // Bagiin avsan onoog update hiine
-    await _updateSchedule();
+    _updateSchedule();
 
     //Toglogchdiin avsan onoog update
     updateProfile(Home[0].id, Home[0].player.id, allPoint.one.point);
@@ -239,16 +246,9 @@ export default function CountScreen({navigation, route}) {
     updateProfile(Away[1].id, Away[1].player.id, allPoint.four.point);
 
     _checkGame3();
-    if (allPoint.one.point + allPoint.two.point === 10) {
-      //toglogch yalahad bagiin win-lose update
-      _updateHome1();
-      _updateAway1();
-    } else {
-      //toglogch yalagdahad bagiin win-lose update
-      _updateHome2();
-      _updateAway2();
-    }
-    startPlayoff();
+
+    //League iin current index update
+    await _updateLeague();
   }
 
   async function _checkGame3() {
@@ -409,7 +409,10 @@ export default function CountScreen({navigation, route}) {
 
   async function _updateLeague() {
     const updateLeagueID = MatchData.leagueID;
+
+    //
     //Getting League current Schedule
+    //
     const leagueData = await API.graphql(
       graphqlOperation(await listLeagues, {
         filter: {
@@ -420,17 +423,50 @@ export default function CountScreen({navigation, route}) {
     let updateCurrentSchedule =
       leagueData.data.listLeagues.items[0].currentSchedule;
 
+    //
     //Updating League current schedule
+    //
     const _updatedLeague = await API.graphql(
       graphqlOperation(updateLeague, {
         input: {
           id: updateLeagueID,
           currentSchedule: updateCurrentSchedule + 1,
-          isPlayoff: true,
         },
       }),
     );
     console.log('Updated league', _updatedLeague);
+
+    //Check Playoff
+    if (
+      [
+        _updatedLeague.data.updateLeague.currentSchedule ==
+          _updatedLeague.data.updateLeague.maxSchedule,
+      ] && [_updatedLeague.data.updateLeague.isPlayoff == false]
+    ) {
+      // IsPlayoff = true
+      API.graphql(
+        graphqlOperation(updateLeague, {
+          input: {
+            id: _leagueID,
+            isPlayoff: true,
+          },
+        }),
+      );
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {leagueID: {eq: _leagueID}},
+        }),
+      );
+      startPlayoff(leagueData, _updatedLeague.data.updateLeague.game.name);
+    } else if (
+      [
+        _updatedLeague.data.updateLeague.currentSchedule ==
+          _updatedLeague.data.updateLeague.maxSchedule,
+      ] && [_updatedLeague.data.updateLeague.maxSchedule == 4]
+    ) {
+      //>>>>>>>>>>.
+      startFinals();
+    }
   }
 
   async function updateProfile(id, playerid, point) {
@@ -470,28 +506,9 @@ export default function CountScreen({navigation, route}) {
     );
   }
 
-  async function startPlayoff() {
+  async function startPlayoff(leagueData, _playoffGameID) {
     const _leagueID = MatchData.leagueID;
     try {
-      const leagueData = await API.graphql(
-        graphqlOperation(listTeams, {
-          filter: {leagueID: {eq: _leagueID}},
-        }),
-      );
-      const _league = await API.graphql(
-        graphqlOperation(listLeagues, {
-          filter: {id: {eq: _leagueID}},
-        }),
-      );
-      const _playoffGameID = _league.data.listLeagues.items[0].game.id;
-      console.log(
-        'Current schedule',
-        leagueData.data.listTeams.items[0].league.currentSchedule,
-      );
-      console.log(
-        'max schedule',
-        leagueData.data.listTeams.items[0].league.maxSchedule,
-      );
       if (
         leagueData.data.listTeams.items[0].league.currentSchedule ==
           leagueData.data.listTeams.items[0].league.maxSchedule &&

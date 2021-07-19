@@ -500,6 +500,14 @@ export default function FormInterface({navigation, route}) {
   async function startPlayoff() {
     const _leagueID = MatchData.leagueID;
     try {
+      API.graphql(
+        graphqlOperation(updateLeague, {
+          input: {
+            id: _leagueID,
+            isPlayoff: true,
+          },
+        }),
+      );
       const leagueData = await API.graphql(
         graphqlOperation(listTeams, {
           filter: {leagueID: {eq: _leagueID}},
