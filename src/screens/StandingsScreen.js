@@ -12,8 +12,6 @@ import {
   FlatList,
   RefreshControl,
   Animated,
-  Easing,
-  ActivityIndicator,
   ScrollView,
 } from 'react-native';
 
@@ -24,7 +22,7 @@ import {hp, wp} from '../constants/theme';
 import {COLORS, FONTS, icons, images} from '../constants';
 import LeaguePicker from '../components/LeaguePicker';
 
-import {listSchedules, listTeamPlayers, listTeams} from '../graphql/queries';
+import {listSchedules, listTeams} from '../graphql/queries';
 import {graphqlOperation} from '@aws-amplify/api-graphql';
 import API from '@aws-amplify/api';
 
@@ -299,6 +297,9 @@ const StandingsScreen = ({navigation, route}) => {
         }
       }
     }
+<<<<<<< HEAD
+  }, [win1, win2, win3, win4]);
+=======
     // console.log(`win1`, win1);
     // console.log(`win2`, win2);
     // console.log(`win3`, win3);
@@ -328,6 +329,7 @@ const StandingsScreen = ({navigation, route}) => {
     finalBImage = null;
     finalBName = null;
   }
+>>>>>>> 4cb2ba4d8b44d9775209aed68009e138e32dfebe
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
       await initShedule();
@@ -437,7 +439,7 @@ const StandingsScreen = ({navigation, route}) => {
       const sorted = leagueData
         .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
         .reverse();
-      //console.log('sorted Unique league data:>> sort hiisen ni ', sorted);
+      console.log('sorted Unique league data:>> sort hiisen ni ', sorted);
       setTeamData(sorted);
       setLoading(false);
       setLogoLoad(false);

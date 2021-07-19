@@ -8,7 +8,6 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
-  RefreshControl,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
