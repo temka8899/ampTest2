@@ -71,6 +71,8 @@ type Schedule @model {
   homeScore: Int
   awayScore: Int
   date: String!
+  scheduleHomeId: String
+  scheduleAwayId: String
 }
 
 type XP @model {

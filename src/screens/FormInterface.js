@@ -34,6 +34,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
 import {AuthContext} from '../../App';
+import {LoadingModal} from '../components/LoadingModal';
 
 const tempData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 const tempData2 = ['+1', '+2', '+3', 'OK'];
@@ -1136,26 +1137,7 @@ export default function FormInterface({navigation, route}) {
             loading={loading}
           />
         )}
-        <Modal
-          isVisible={initLoad}
-          style={{margin: 0, justifyContent: 'center', alignItems: 'center'}}>
-          <View
-            style={{
-              backgroundColor: COLORS.background,
-              width: wp(40),
-              height: wp(30),
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderColor: COLORS.brand,
-              borderWidth: 2,
-            }}>
-            <LottieView
-              autoPlay
-              source={require('../assets/Lottie/game-loader.json')}
-              style={{width: wp(50), height: wp(50)}}
-            />
-          </View>
-        </Modal>
+        <LoadingModal bool={initLoad} />
       </View>
     </SafeAreaView>
   );
