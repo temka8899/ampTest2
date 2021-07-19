@@ -297,9 +297,6 @@ const StandingsScreen = ({navigation, route}) => {
         }
       }
     }
-<<<<<<< HEAD
-  }, [win1, win2, win3, win4]);
-=======
     // console.log(`win1`, win1);
     // console.log(`win2`, win2);
     // console.log(`win3`, win3);
@@ -329,7 +326,6 @@ const StandingsScreen = ({navigation, route}) => {
     finalBImage = null;
     finalBName = null;
   }
->>>>>>> 4cb2ba4d8b44d9775209aed68009e138e32dfebe
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
       await initShedule();

@@ -34,13 +34,10 @@ import LottieView from 'lottie-react-native';
 
 import Auth from '@aws-amplify/auth';
 import {AuthContext} from '../../App';
-<<<<<<< HEAD
 import * as Animatable from 'react-native-animatable';
 import API, {graphqlOperation} from '@aws-amplify/api';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-=======
 import {LoadingModal} from '../components/LoadingModal';
->>>>>>> 4cb2ba4d8b44d9775209aed68009e138e32dfebe
 
 const tempData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 const tempData2 = ['+1', '+2', '+3', 'OK'];
