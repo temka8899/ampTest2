@@ -81,11 +81,28 @@ export default function CountScreen({navigation, route}) {
 
   useEffect(() => {
     const ScheduleData = route.params.match;
+    setPlaying(ScheduleData.id, true);
     setMatchData(ScheduleData);
     console.log(ScheduleData);
     getPlayerData(ScheduleData);
   }, [getPlayerData, route.params.match]);
 
+  const setPlaying = async (id, bool) => {
+    try {
+      await API.graphql(
+        graphqlOperation(updateSchedule, {
+          input: {
+            //Schedule id
+            id: id,
+            isPlaying: bool,
+          },
+        }),
+      );
+      console.log('Schedule Updated');
+    } catch (err) {
+      console.log('error fetching Schedule Updated', err);
+    }
+  };
   const getPlayerData = React.useCallback(async item => {
     let homePlayers = await fetchTeamPlayers(item.home.id);
     let awayPlayers = await fetchTeamPlayers(item.away.id);
@@ -868,6 +885,7 @@ export default function CountScreen({navigation, route}) {
             awayPlayers: awayID,
             finalsIndex: _finalsIndex,
             gameID: _playoffGameID,
+            isPlaying: false,
           },
         }),
       );
@@ -875,7 +893,12 @@ export default function CountScreen({navigation, route}) {
       console.log('error creating Schedule:', err);
     }
   }
-
+  const cancelMatch = async () => {
+    setinitLoad(true);
+    await setPlaying(MatchData.id, false);
+    setinitLoad(false);
+    navigation.pop();
+  };
   function CancelModal() {
     return (
       <View>
@@ -902,7 +925,7 @@ export default function CountScreen({navigation, route}) {
               }}>
               <TouchableOpacity
                 style={styles.modalBtnContainer}
-                onPress={() => navigation.pop()}>
+                onPress={() => cancelMatch()}>
                 <Text style={styles.modalBtnText}>End Match</Text>
               </TouchableOpacity>
               <TouchableOpacity

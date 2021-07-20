@@ -14,7 +14,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  TextComponent,
   ActivityIndicator,
 } from 'react-native';
 
@@ -27,10 +26,8 @@ import DatePicker from 'react-native-datepicker';
 import {createLeague} from '../graphql/mutations';
 import {listGames, listLeagues} from '../graphql/queries';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import Amplify, {API, graphqlOperation, Auth, Storage} from 'aws-amplify';
+import Amplify, {API, graphqlOperation} from 'aws-amplify';
 import {Picker} from '@react-native-picker/picker';
-import LeaguePicker from '../components/LeaguePicker';
-import MyText from '../components/MyText';
 
 Amplify.configure({
   ...awsmobile,

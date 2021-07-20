@@ -632,14 +632,11 @@ const GameScreen = ({navigation}) => {
           <View>
             <View style={styles.header}>
               <View>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('BracketScreen')}>
-                  <Text
-                    style={[
-                      styles.greeting,
-                      {fontSize: RFPercentage(1.8), color: COLORS.greyText},
-                    ]}>{`Good ${greet} `}</Text>
-                </TouchableOpacity>
+                <Text
+                  style={[
+                    styles.greeting,
+                    {fontSize: RFPercentage(1.8), color: COLORS.greyText},
+                  ]}>{`Good ${greet} `}</Text>
                 <Text
                   style={[
                     styles.greeting,

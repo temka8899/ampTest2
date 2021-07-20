@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import {hp, wp} from '../constants/theme';
@@ -120,8 +121,6 @@ const CreateGameScreen = ({navigation}) => {
               style={{
                 width: wp(60),
                 height: wp(60),
-                // borderColor: 'red',
-                // borderWidth: 1,
               }}
               source={images.local}
               resizeMode="contain"
@@ -140,22 +139,22 @@ const CreateGameScreen = ({navigation}) => {
             />
           )}
         </TouchableOpacity>
-        <View style={styles.formContainer}>
-          <TextInput
-            onChangeText={val => setInput('name', val)}
-            value={formState.name}
-            style={styles.input}
-            placeholder="Enter name"
-            placeholderTextColor={COLORS.purpleText}
-          />
-          <View
-            style={{
-              height: hp(0.3),
-              width: wp(70),
-              backgroundColor: COLORS.purpleText,
-            }}
-          />
-        </View>
+      </View>
+      <View style={styles.formContainer}>
+        <TextInput
+          onChangeText={val => setInput('name', val)}
+          value={formState.name}
+          style={styles.input}
+          placeholder="Enter name"
+          placeholderTextColor={COLORS.purpleText}
+        />
+        <View
+          style={{
+            height: hp(0.3),
+            width: wp(70),
+            backgroundColor: COLORS.purpleText,
+          }}
+        />
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity
@@ -217,7 +216,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     flex: 1,
-    alignItems: 'flex-end',
+    position: 'absolute',
+    bottom: 0,
+    marginBottom: hp(5),
   },
   button: {
     width: wp(45),

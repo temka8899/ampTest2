@@ -433,6 +433,7 @@ export const getSchedule = /* GraphQL */ `
       date
       scheduleHomeId
       scheduleAwayId
+      isPlaying
       createdAt
       updatedAt
     }
@@ -481,6 +482,7 @@ export const listSchedules = /* GraphQL */ `
         date
         scheduleHomeId
         scheduleAwayId
+        isPlaying
         createdAt
         updatedAt
       }

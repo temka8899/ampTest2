@@ -1,44 +1,48 @@
 import React, {useEffect, useRef, useState} from 'react';
+
 import {
   ActivityIndicator,
   Image,
   SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
-import {COLORS, FONTS, hp, wp} from '../constants/theme';
-import {icons, images} from '../constants';
+
+import {COLORS, FONTS, wp} from '../constants/theme';
+import {icons} from '../constants';
 import Modal from 'react-native-modal';
 import {EndModalForm} from '../components/EndModalForm';
+
 import {
   updateLeague,
   updateSchedule,
-  updateTeamPlayer,
   updateTeam,
-  updatePlayer,
   createSchedule,
 } from '../graphql/mutations';
+
 import moment from 'moment';
+
 import {
   listLeagues,
   listPlayers,
   listTeamPlayers,
   listTeams,
 } from '../graphql/queries';
+
 import LottieView from 'lottie-react-native';
 
-import * as Animatable from 'react-native-animatable';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import API, {graphqlOperation} from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
 import {AuthContext} from '../../App';
+import * as Animatable from 'react-native-animatable';
+import API, {graphqlOperation} from '@aws-amplify/api';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LoadingModal} from '../components/LoadingModal';
 
 const tempData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 const tempData2 = ['+1', '+2', '+3', 'OK'];
 const tempData3 = ['clear', 'back'];
+
 const ScoreButton = ({item, onPress, select}) => {
   const pulseAnimRef = useRef();
 
@@ -88,7 +92,7 @@ function ScoreButton3({item, onPress}) {
     </Animatable.View>
   );
 }
-
+// let initLoad;
 export default function FormInterface({navigation, route}) {
   const [CancelModalVisible, setCancelModalVisible] = useState(false);
   const [EndModalVisible, setEndModalVisible] = useState(false);
@@ -114,44 +118,64 @@ export default function FormInterface({navigation, route}) {
 
   useEffect(() => {
     const ScheduleData = route.params.match;
+    setPlaying(ScheduleData.id, true);
     setMatchData(ScheduleData);
     getPlayerData(ScheduleData);
     setinitLoad(false);
   }, [getPlayerData, route.params.match]);
+  const setPlaying = async (id, bool) => {
+    try {
+      await API.graphql(
+        graphqlOperation(updateSchedule, {
+          input: {
+            //Schedule id
+            id: id,
+            isPlaying: bool,
+          },
+        }),
+      );
+      console.log('Schedule Updated');
+    } catch (err) {
+      console.log('error fetching Schedule Updated', err);
+    }
+  };
   const toggleCancelModal = bool => {
     setCancelModalVisible(bool);
   };
-  const getPlayerData = React.useCallback(item => {
-    console.log(`item`, item);
-    if (item !== null) {
-      setImgLoad(false);
-    }
-    let homePlayersID1 = item.homePlayers.split('[');
-    let homePlayersID2 = homePlayersID1[1].split(']');
-    let homePlayersID = homePlayersID2[0].split(', ');
-    let awayPlayersID1 = item.awayPlayers.split('[');
-    let awayPlayersID2 = awayPlayersID1[1].split(']');
-    let awayPlayersID = awayPlayersID2[0].split(', ');
-    setHomeID(homePlayersID);
-    setAwayID(awayPlayersID);
-    let homeImages1 = item.homeImage.split('[');
-    let homeImages2 = homeImages1[1].split(']');
-    let homeImages = homeImages2[0].split(', ');
-    let awayImages1 = item.awayImage.split('[');
-    let awayImages2 = awayImages1[1].split(']');
-    let awayImages = awayImages2[0].split(', ');
-    setHomeAvatars(homeImages);
-    setAwayAvatars(awayImages);
-    setHomeName(item.home.name);
-    setAwayName(item.away.name);
+  const getPlayerData = React.useCallback(
+    item => {
+      console.log('item', item);
+      if (item !== null) {
+        setImgLoad(false);
+      }
+      let homePlayersID1 = item.homePlayers.split('[');
+      let homePlayersID2 = homePlayersID1[1].split(']');
+      let homePlayersID = homePlayersID2[0].split(', ');
+      let awayPlayersID1 = item.awayPlayers.split('[');
+      let awayPlayersID2 = awayPlayersID1[1].split(']');
+      let awayPlayersID = awayPlayersID2[0].split(', ');
+      setHomeID(homePlayersID);
+      setAwayID(awayPlayersID);
+      let homeImages1 = item.homeImage.split('[');
+      let homeImages2 = homeImages1[1].split(']');
+      let homeImages = homeImages2[0].split(', ');
+      let awayImages1 = item.awayImage.split('[');
+      let awayImages2 = awayImages1[1].split(']');
+      let awayImages = awayImages2[0].split(', ');
+      setHomeAvatars(homeImages);
+      setAwayAvatars(awayImages);
+      setHomeName(item.home.name);
+      setAwayName(item.away.name);
 
-    var inhome = homePlayersID.filter(element => element === userInfo.id);
-    if (inhome.length === 0) {
-      setMe('away');
-    } else {
-      setMe('home');
-    }
-  }, []);
+      var inhome = homePlayersID.filter(element => element === userInfo.id);
+      if (inhome.length === 0) {
+        setMe('away');
+      } else {
+        setMe('home');
+      }
+    },
+    [userInfo.id],
+  );
 
   // async function fetchTeamPlayers(id) {
   //   try {
@@ -173,6 +197,12 @@ export default function FormInterface({navigation, route}) {
       setEndModalVisible(true);
     }
   };
+
+  const cancelMatch = () => {
+    toggleCancelModal(false);
+    setPlaying(MatchData.id, false);
+    navigation.pop();
+  };
   function CancelModal() {
     return (
       <View>
@@ -181,16 +211,7 @@ export default function FormInterface({navigation, route}) {
           isVisible={CancelModalVisible}
           onBackdropPress={() => toggleCancelModal(false)}
           style={{justifyContent: 'center', alignItems: 'center'}}>
-          <View
-            style={{
-              width: wp(70),
-              height: wp(40),
-              backgroundColor: COLORS.background,
-              borderColor: COLORS.brand,
-              borderWidth: 2,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+          <View style={styles.modalStyle}>
             <View
               style={{
                 height: wp(25),
@@ -199,7 +220,7 @@ export default function FormInterface({navigation, route}) {
               }}>
               <TouchableOpacity
                 style={styles.modalBtnContainer}
-                onPress={() => navigation.pop()}>
+                onPress={() => cancelMatch()}>
                 <Text style={styles.modalBtnText}>End Match</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -213,6 +234,7 @@ export default function FormInterface({navigation, route}) {
       </View>
     );
   }
+
   const HomeScorePlaceholder = () => {
     if (homeScore.toString().length === 3) {
       return null;
@@ -819,6 +841,7 @@ export default function FormInterface({navigation, route}) {
             awayPlayers: awayID,
             finalsIndex: _finalsIndex,
             gameID: _playoffGameID,
+            isPlaying: false,
           },
         }),
       );
@@ -1232,5 +1255,14 @@ const styles = StyleSheet.create({
     color: COLORS.tabgrey,
     fontWeight: '900',
     fontSize: wp(4),
+  },
+  modalStyle: {
+    width: wp(70),
+    height: wp(40),
+    backgroundColor: COLORS.background,
+    borderColor: COLORS.brand,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
