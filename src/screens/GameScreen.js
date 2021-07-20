@@ -135,15 +135,20 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Home && (
                 <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => {
+                  {Home.map((_item, index) => {
                     return imgLoad ? (
                       <ActivityIndicator
+                        key={index}
                         style={styles.avatar}
                         size={'small'}
                         color={COLORS.brand}
                       />
                     ) : (
-                      <Image source={_item} style={styles.avatar} />
+                      <Image
+                        key={`avatar - ${index}`}
+                        source={_item}
+                        style={styles.avatar}
+                      />
                     );
                   })}
                 </View>
@@ -207,15 +212,16 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Away && (
                 <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => {
+                  {Away.map((_item, index) => {
                     return imgLoad ? (
                       <ActivityIndicator
+                        key={index}
                         style={styles.avatar}
                         size={'small'}
                         color={COLORS.brand}
                       />
                     ) : (
-                      <Image source={_item} style={styles.avatar} />
+                      <Image key={index} source={_item} style={styles.avatar} />
                     );
                   })}
                 </View>
@@ -267,15 +273,16 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Home && (
                 <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => {
+                  {Home.map((_item, index) => {
                     return imgLoad ? (
                       <ActivityIndicator
+                        key={index}
                         style={styles.avatar}
                         size={'small'}
                         color={COLORS.brand}
                       />
                     ) : (
-                      <Image source={_item} style={styles.avatar} />
+                      <Image key={index} source={_item} style={styles.avatar} />
                     );
                   })}
                 </View>
@@ -321,15 +328,16 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Away && (
                 <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => {
+                  {Away.map((_item, index) => {
                     return imgLoad ? (
                       <ActivityIndicator
+                        key={index}
                         style={styles.avatar}
                         size={'small'}
                         color={COLORS.brand}
                       />
                     ) : (
-                      <Image source={_item} style={styles.avatar} />
+                      <Image key={index} source={_item} style={styles.avatar} />
                     );
                   })}
                 </View>

@@ -33,6 +33,7 @@ const wait = timeout => {
 };
 
 let firstDate = new Date();
+
 let touch;
 
 const Match = ({item, onPress, user}) => {
@@ -40,22 +41,12 @@ const Match = ({item, onPress, user}) => {
   const [Away, setAway] = useState(undefined);
   const [imgLoad, setImgLoad] = useState(true);
   const [find, setFind] = useState('');
-  const [enable, setEnable] = useState();
+  const [enable, setEnable] = useState(false);
 
   useEffect(() => {
     getPlayerData();
   }, [getPlayerData]);
 
-  const getTouch = React.useCallback(async () => {
-    console.log(`item.isPlaying || find === ''`, item.isPlaying || find === '');
-    if (item.isPlaying || find === '') {
-      console.log('1');
-      touch = true;
-    } else {
-      touch = false;
-    }
-    console.log(`touch`, touch);
-  }, [find, item.isPlaying]);
   const getPlayerData = React.useCallback(async () => {
     if (item !== null) {
       setImgLoad(false);
@@ -78,16 +69,23 @@ const Match = ({item, onPress, user}) => {
       setFind('away');
     }
 
-    console.log(`item.isPlaying || find === ''`, item.isPlaying || find === '');
-    if (item.isPlaying || find === '') {
-      console.log('1');
-      touch = true;
+    console.log(
+      `item.isPlaying find `,
+      item.isPlaying,
+      `findHome`,
+      findHome,
+      `findAway`,
+      findAway,
+    );
+
+    if (item.isPlaying || findHome || findAway) {
+      console.log('true >>>>>>>>>>');
+      setEnable(false);
     } else {
-      touch = false;
+      console.log('false >>>>>>>>>>');
+      setEnable(true);
     }
-    setEnable(touch);
-    console.log(`touch`, touch);
-  }, [find, item, user.id]);
+  }, [item, user.id]);
 
   async function fetchTeamPlayers(id) {
     try {
@@ -151,15 +149,20 @@ const Match = ({item, onPress, user}) => {
                 }}>
                 {Home && (
                   <View style={{flexDirection: 'row'}}>
-                    {Home.map(_item => {
+                    {Home.map((_item, index) => {
                       return imgLoad ? (
                         <ActivityIndicator
+                          key={index}
                           style={styles.avatar}
                           size={'small'}
                           color={COLORS.brand}
                         />
                       ) : (
-                        <Image source={_item} style={styles.avatar} />
+                        <Image
+                          key={index}
+                          source={_item}
+                          style={styles.avatar}
+                        />
                       );
                     })}
                   </View>
@@ -223,15 +226,20 @@ const Match = ({item, onPress, user}) => {
                 }}>
                 {Away && (
                   <View style={{flexDirection: 'row'}}>
-                    {Away.map(_item => {
+                    {Away.map((_item, index) => {
                       return imgLoad ? (
                         <ActivityIndicator
+                          key={index}
                           style={styles.avatar}
                           size={'small'}
                           color={COLORS.brand}
                         />
                       ) : (
-                        <Image source={_item} style={styles.avatar} />
+                        <Image
+                          key={index}
+                          source={_item}
+                          style={styles.avatar}
+                        />
                       );
                     })}
                   </View>
@@ -264,9 +272,9 @@ const Match = ({item, onPress, user}) => {
   } else {
     return (
       <View>
-        {console.log(`enable`, enable)}
+        {console.log(`enable >>>>`, enable)}
         <TouchableOpacity
-          disabled={enable ? true : false}
+          disabled={enable}
           onPress={onPress}
           style={{
             width: wp(100),
@@ -283,15 +291,16 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Home && (
                 <View style={{flexDirection: 'row'}}>
-                  {Home.map(_item => {
+                  {Home.map((_item, index) => {
                     return imgLoad ? (
                       <ActivityIndicator
+                        key={index}
                         style={styles.avatar}
                         size={'small'}
                         color={COLORS.brand}
                       />
                     ) : (
-                      <Image source={_item} style={styles.avatar} />
+                      <Image key={index} source={_item} style={styles.avatar} />
                     );
                   })}
                 </View>
@@ -348,15 +357,16 @@ const Match = ({item, onPress, user}) => {
               }}>
               {Away && (
                 <View style={{flexDirection: 'row'}}>
-                  {Away.map(_item => {
+                  {Away.map((_item, index) => {
                     return imgLoad ? (
                       <ActivityIndicator
+                        key={index}
                         style={styles.avatar}
                         size={'small'}
                         color={COLORS.brand}
                       />
                     ) : (
-                      <Image source={_item} style={styles.avatar} />
+                      <Image key={index} source={_item} style={styles.avatar} />
                     );
                   })}
                 </View>
@@ -708,7 +718,7 @@ const ScheduleScreen = ({navigation, route}) => {
                     data={LocalDayData}
                     horizontal
                     renderItem={renderLocalDay}
-                    keyExtractor={item => item}
+                    keyExtractor={item => item.id}
                     style={{
                       borderBottomColor: COLORS.brand,
                       borderBottomWidth: 1,
@@ -719,7 +729,7 @@ const ScheduleScreen = ({navigation, route}) => {
                     data={dayData}
                     horizontal
                     renderItem={renderItem}
-                    keyExtractor={item => item}
+                    keyExtractor={item => item.id}
                     style={{
                       borderBottomColor: COLORS.brand,
                       borderBottomWidth: 1,
