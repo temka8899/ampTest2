@@ -346,7 +346,43 @@ export default function CountScreen({navigation, route}) {
         _schedule2[0].homeScore > _schedule2[0].awayScore &&
         _schedule2[1].homeScore < _schedule2[1].awayScore
       ) {
-        console.log('>>>>>>>>>>>>check');
+        console.log('check3');
+        _currentScheduleAdd();
+        _addSchedule(
+          MatchData.home.id,
+          MatchData.away.id,
+          MatchData.date,
+          MatchData.leagueID,
+          0,
+          3,
+          MatchData.homeImage,
+          MatchData.homePlayers,
+          MatchData.awayImage,
+          MatchData.awayPlayers,
+          0,
+          MatchData.gameID,
+        );
+      } else if (
+        _schedule2.length < 3 &&
+        _schedule2[0].homeScore < _schedule2[0].awayScore &&
+        _schedule2[1].homeScore > _schedule2[1].awayScore
+      ) {
+        console.log('check4', MatchData);
+        _currentScheduleAdd();
+        _addSchedule(
+          MatchData.home.id,
+          MatchData.away.id,
+          MatchData.date,
+          MatchData.leagueID,
+          0,
+          3,
+          MatchData.homeImage,
+          MatchData.homePlayers,
+          MatchData.awayImage,
+          MatchData.awayPlayers,
+          0,
+          MatchData.gameID,
+        );
       }
     }
   }
