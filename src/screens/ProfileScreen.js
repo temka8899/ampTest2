@@ -595,7 +595,7 @@ const Profile = ({navigation}) => {
 
   const getMai = () => {
     // console.log(`leagueNames`, leagueNames);
-    console.log(`teamNames`, teamNames);
+    //console.log(`teamNames`, teamNames);
     // Lnames = leagueNames;
   };
 
