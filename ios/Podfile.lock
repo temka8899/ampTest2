@@ -305,7 +305,7 @@ PODS:
     - React-cxxreact (= 0.64.2)
     - React-jsi (= 0.64.2)
     - React-perflogger (= 0.64.2)
-  - RNAWSCognito (5.0.3):
+  - RNAWSCognito (5.0.5):
     - React-Core
   - RNCAsyncStorage (1.15.5):
     - React-Core
@@ -502,11 +502,7 @@ SPEC CHECKSUMS:
   CodePush: 9bb93f52a44ee80b72739d89dead9c7e86c3bd3a
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-<<<<<<< HEAD
   FBReactNativeSpec: b8c7a89c1b3f6085acc90b38e4a104b51047c009
-=======
-  FBReactNativeSpec: 079d9f511724d5e43f77b33f23705729c68e38cd
->>>>>>> 8a87acafa975d9cea61230c1373e63b2bbf8d4cc
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   JWT: ef71dfb03e1f842081e64dc42eef0e164f35d251
   lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
@@ -537,7 +533,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 24600e3b1aaa77126989bc58b6747509a1ba14f3
   React-runtimeexecutor: a9904c6d0218fb9f8b19d6dd88607225927668f9
   ReactCommon: 149906e01aa51142707a10665185db879898e966
-  RNAWSCognito: a89946398b7fe2a387ad6af326fb69d82203f6db
+  RNAWSCognito: 142bb8cf9a4297e04064a6d6823a9a14fdb81ecd
   RNCAsyncStorage: 56a3355a10b5d660c48c6e37325ac85ebfd09885
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 6724ab5fcca83c34fe1f18a89baa13e9885f0393

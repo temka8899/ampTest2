@@ -201,12 +201,17 @@ const Profile = ({navigation}) => {
                 }}>
                 {Home && (
                   <View style={{flexDirection: 'row'}}>
-                    {Home.map(_item => (
+                    {Home.map((_item, index) => (
                       <>
                         {imgLoad ? (
-                          <ActivityIndicator size={'small'} color={'red'} />
+                          <ActivityIndicator
+                            key={index}
+                            size={'small'}
+                            color={'red'}
+                          />
                         ) : (
                           <Image
+                            key={index}
                             source={_item.player.avatar}
                             style={styles.avatar}
                           />
@@ -279,12 +284,17 @@ const Profile = ({navigation}) => {
                 }}>
                 {Away && (
                   <View style={{flexDirection: 'row'}}>
-                    {Away.map(_item => (
+                    {Away.map((_item, index) => (
                       <>
                         {imgLoad ? (
-                          <ActivityIndicator size={'small'} color={'red'} />
+                          <ActivityIndicator
+                            key={index}
+                            size={'small'}
+                            color={'red'}
+                          />
                         ) : (
                           <Image
+                            key={index}
                             source={_item.player.avatar}
                             style={styles.avatar}
                           />
@@ -401,7 +411,7 @@ const Profile = ({navigation}) => {
             <TextInput
               // editable={true}
               style={styles.input}
-              autoCapitalize={false}
+              autoCapitalize="none"
               autoCompleteType={false}
               placeholder={item.team.name}
               maxLength={20}
@@ -718,9 +728,9 @@ const Profile = ({navigation}) => {
                 right: 0,
                 zIndex: 12,
               }}>
-              {messages.map(message => (
+              {messages.map((message, index) => (
                 <Message
-                  key={message}
+                  key={index}
                   message={message}
                   onHide={() => {
                     setMessages(messages =>
@@ -792,7 +802,7 @@ const Profile = ({navigation}) => {
               data={teamNames}
               horizontal
               renderItem={renderName}
-              keyExtractor={item => item}
+              keyExtractor={item => item.id}
             />
             <View
               style={{
@@ -836,6 +846,7 @@ const Profile = ({navigation}) => {
             </Modal>
             <FlatList
               data={scheduleData}
+              scrollEnabled={false}
               renderItem={renderSchedule}
               keyExtractor={item => item.id}
               style={{
