@@ -4,14 +4,16 @@ import {
   View,
   Modal,
   Image,
+  FlatList,
+  Animated,
+  TextInput,
   StatusBar,
   StyleSheet,
+  ScrollView,
   SafeAreaView,
-  TextInput,
+  RefreshControl,
   TouchableOpacity,
-  FlatList,
   ActivityIndicator,
-  Animated,
 } from 'react-native';
 
 import {AuthContext} from '../../App';
@@ -22,7 +24,6 @@ import {LogoutModal} from '../components/LogoutModal';
 import LeaguePicker from '../components/LeaguePicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// import Toast from 'react-native-simple-toast';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {updatePlayer, updateTeam} from '../graphql/mutations';
@@ -96,191 +97,6 @@ const Message = props => {
   );
 };
 
-const UselessTextInput = ({value}) => {
-  const [text, onChangeText] = React.useState(value);
-  return (
-    <TextInput
-      style={styles1.input}
-      onChangeText={onChangeText}
-      value={text}
-      //onPressOut={console.log('onPressOut')}
-      editable={false}
-    />
-  );
-};
-
-const styles1 = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-    color: 'white',
-  },
-});
-// let Lnames;
-const Names = ({item, onPress, user}) => {
-  const styles1 = StyleSheet.create({
-    input: {
-      height: wp(8),
-      width: wp(35),
-      color: COLORS.white,
-      fontFamily: FONTS.brandFont,
-      fontSize: wp(3),
-      padding: 0,
-      textAlign: 'center',
-    },
-  });
-
-  const [LName1, setLName] = useState('');
-  const [readyChange, setReadyChange] = useState(false);
-
-  useEffect(() => {
-    getLName(item.team.leagueID);
-  }, [getLName, item]);
-
-  const getLName = React.useCallback(
-    async id => {
-      const LName = await _fetchleague(item.team.leagueID);
-      await setLName(LName);
-    },
-    [item.team.leagueID],
-  );
-
-  async function _fetchleague(id) {
-    try {
-      const leagueData = await API.graphql(
-        graphqlOperation(listLeagues, {
-          filter: {id: {eq: id}},
-        }),
-      );
-      const todos = leagueData.data.listLeagues.items;
-
-      return todos[0].game.name.toString();
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
-  }
-  const changeTeamName = React.useCallback(async () => {
-    console.log(`newTeamName`, newTeamName);
-    try {
-      await API.graphql(
-        graphqlOperation(updateTeam, {
-          input: {
-            //Team id
-            id: item.teamID,
-            name: newTeamName,
-          },
-        }),
-      );
-      console.log('Team ner soligdloo');
-      setReadyChange(false);
-    } catch (err) {
-      console.log('error updating Teams', err);
-    }
-  }, []);
-  return (
-    <View
-      style={{
-        width: wp(35),
-        alignItems: 'center',
-      }}>
-      <Text
-        ellipsizeMode="tail"
-        numberOfLines={1}
-        style={{
-          color: COLORS.brand,
-          fontFamily: FONTS.brandFont,
-          fontSize: wp(4),
-          marginTop: wp(2),
-        }}>
-        {LName1}
-      </Text>
-      {readyChange ? (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <TextInput
-            // editable={true}
-            style={styles1.input}
-            autoCapitalize={false}
-            autoCompleteType={false}
-            placeholder={item.team.name}
-            maxLength={20}
-            onChangeText={text => (newTeamName = text)}
-            placeholderTextColor={COLORS.purpleText}
-          />
-        </View>
-      ) : (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: wp(8),
-            width: wp(35),
-          }}>
-          <Text
-            ellipsizeMode="tail"
-            numberOfLines={1}
-            style={{
-              color: COLORS.white,
-              fontFamily: FONTS.brandFont,
-              marginVertical: wp(2),
-              fontSize: wp(3),
-            }}>
-            {item.team.name}
-          </Text>
-        </View>
-      )}
-
-      {readyChange ? (
-        <TouchableOpacity
-          style={{
-            width: wp(20),
-            height: wp(8),
-            borderWidth: 2,
-            borderColor: 'red',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: wp(1),
-            backgroundColor: COLORS.brand,
-          }}
-          onPress={() => changeTeamName()}>
-          <Text
-            style={{
-              color: COLORS.white,
-              fontFamily: FONTS.brandFont,
-              fontSize: wp(2.8),
-            }}>
-            Save
-          </Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          style={{
-            width: wp(20),
-            height: wp(8),
-            borderWidth: 2,
-            borderColor: 'red',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: wp(1),
-            backgroundColor: COLORS.brand,
-          }}
-          onPress={() => setReadyChange(true)}>
-          <Text
-            style={{
-              color: COLORS.white,
-              fontFamily: FONTS.brandFont,
-              fontSize: wp(2.8),
-            }}>
-            Change
-          </Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
-};
 const Profile = ({navigation}) => {
   const [isLoading, setLoading] = React.useState(true);
   const [chooseData, setChooseData] = useState('');
@@ -508,6 +324,156 @@ const Profile = ({navigation}) => {
     }
   };
 
+  const Names = ({item, onPress, user}) => {
+    const [LName1, setLName] = useState('');
+    const [readyChange, setReadyChange] = useState(false);
+
+    useEffect(() => {
+      getLName(item.team.leagueID);
+    }, [getLName, item]);
+
+    const getLName = React.useCallback(
+      async id => {
+        const LName = await _fetchleague(item.team.leagueID);
+        await setLName(LName);
+      },
+      [item.team.leagueID],
+    );
+
+    async function _fetchleague(id) {
+      try {
+        const leagueData = await API.graphql(
+          graphqlOperation(listLeagues, {
+            filter: {id: {eq: id}},
+          }),
+        );
+        const todos = leagueData.data.listLeagues.items;
+
+        return todos[0].game.name.toString();
+      } catch (err) {
+        console.log('error fetching todos', err);
+      }
+    }
+    const changeTeamName = React.useCallback(async () => {
+      console.log(`newTeamName`, newTeamName);
+      try {
+        await API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              //Team id
+              id: item.teamID,
+              name: newTeamName,
+            },
+          }),
+        );
+        console.log('Team ner soligdloo');
+        setReadyChange(false);
+        onRefresh();
+      } catch (err) {
+        console.log('error updating Teams', err);
+      }
+    }, []);
+    return (
+      <TouchableOpacity
+        onPress={() => setReadyChange(true)}
+        style={{
+          width: wp(35),
+          alignItems: 'center',
+          marginLeft: wp(3),
+        }}>
+        <Text
+          ellipsizeMode="tail"
+          numberOfLines={1}
+          style={{
+            color: COLORS.brand,
+            fontFamily: FONTS.brandFont,
+            fontSize: wp(3.5),
+            marginTop: wp(2),
+          }}>
+          {LName1}
+        </Text>
+        {readyChange ? (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TextInput
+              // editable={true}
+              style={styles.input}
+              autoCapitalize={false}
+              autoCompleteType={false}
+              placeholder={item.team.name}
+              maxLength={20}
+              onChangeText={text => (newTeamName = text)}
+              placeholderTextColor={COLORS.purpleText}
+            />
+          </View>
+        ) : (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: wp(8),
+              width: wp(35),
+            }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={{
+                color: COLORS.white,
+                fontFamily: FONTS.brandFont,
+                marginVertical: wp(2),
+                fontSize: wp(3),
+              }}>
+              {item.team.name}
+            </Text>
+          </View>
+        )}
+
+        {readyChange ? (
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              style={{
+                width: wp(20),
+                height: wp(8),
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: wp(1),
+                backgroundColor: COLORS.brand,
+                marginRight: wp(1),
+              }}
+              onPress={() => changeTeamName()}>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: wp(2.8),
+                }}>
+                Save
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setReadyChange(false)}
+              style={{
+                width: wp(8),
+                height: wp(8),
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: wp(1),
+                borderWidth: 2,
+                borderColor: COLORS.brand,
+              }}>
+              <Image
+                source={icons.Xbutton}
+                style={{width: wp(4), height: wp(4)}}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+      </TouchableOpacity>
+    );
+  };
   useEffect(() => {
     getXp();
     fetchTeamPlayers();
@@ -517,11 +483,12 @@ const Profile = ({navigation}) => {
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
-
-  // const onRefresh = React.useCallback(() => {
-  //   // mat.ref.get
-  //   wait(500).then(() => setRefreshing(false));
-  // }, []);
+  const onRefresh = React.useCallback(() => {
+    getXp();
+    fetchTeamPlayers();
+    _teamNames(userInfo.id);
+    wait(500).then(() => setRefreshing(false));
+  }, [fetchTeamPlayers, getXp, userInfo.id]);
 
   const setData = React.useCallback(async option => {
     setChooseData(option);
@@ -565,9 +532,6 @@ const Profile = ({navigation}) => {
   }
 
   const getXp = React.useCallback(async () => {
-    // let income = true;
-    // while (income) {
-    //   if (userInfo !== undefined) {
     let count = true;
     let value = userInfo.xp;
     let diff = 0;
@@ -612,7 +576,7 @@ const Profile = ({navigation}) => {
     [findUser, userInfo.id],
   );
 
-  async function fetchTeamPlayers() {
+  const fetchTeamPlayers = React.useCallback(async () => {
     try {
       const leagueData = await API.graphql(
         graphqlOperation(listTeamPlayers, {
@@ -625,7 +589,7 @@ const Profile = ({navigation}) => {
     } catch (err) {
       console.log('error fetching todos', err);
     }
-  }
+  }, [userInfo.id]);
 
   function renderSchedule({item}) {
     return <Match item={item} user={userInfo} />;
@@ -654,7 +618,7 @@ const Profile = ({navigation}) => {
 
   const getMai = () => {
     // console.log(`leagueNames`, leagueNames);
-    console.log(`teamNames`, teamNames);
+    //console.log(`teamNames`, teamNames);
     // Lnames = leagueNames;
   };
 
@@ -670,210 +634,224 @@ const Profile = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <StatusBar barStyle="light-content" />
-      {isLoading ? (
-        <SkeletonPlaceholder
-          speed={800}
-          backgroundColor={COLORS.count}
-          highlightColor={'gray'}>
-          <View>
-            <View style={{paddingHorizontal: hp(2)}}>
-              <View style={styles.skeleton1} />
-            </View>
-            <View style={styles.skeleton2}>
-              <View style={styles.skeleton2_1} />
-              <View style={styles.skeleton2_2}>
-                <View style={styles.skeleton2_2_1} />
-                <View style={styles.skeleton2_2_2} />
-              </View>
-            </View>
-            <View style={styles.skeleton3} />
-            <View style={styles.skeleton4}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-            </View>
-            <View style={styles.skeleton5} />
-            <View style={styles.skeleton6}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-            </View>
-            <View style={styles.skeleton7} />
-            <View style={styles.skeleton8}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                />
-                <View style={{width: wp(15), height: wp(15)}} />
-              </View>
-            </View>
-            <View style={styles.skeleton9} />
-          </View>
-        </SkeletonPlaceholder>
-      ) : (
-        <View>
-          {getMai()}
-          <View
-            style={{
-              position: 'absolute',
-              top: 45,
-              left: 0,
-              right: 0,
-              zIndex: 12,
-            }}>
-            {messages.map(message => (
-              <Message
-                key={message}
-                message={message}
-                onHide={() => {
-                  setMessages(messages =>
-                    messages.filter(
-                      currentMessage => currentMessage !== message,
-                    ),
-                  );
-                }}
-              />
-            ))}
-          </View>
-          <View style={styles.header}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            tintColor={COLORS.brand}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <StatusBar barStyle="light-content" />
+        {isLoading ? (
+          <SkeletonPlaceholder
+            speed={800}
+            backgroundColor={COLORS.count}
+            highlightColor={'gray'}>
             <View>
-              <>
-                {userInfo.admin && (
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('AdminScreen')}>
-                    <Image source={icons.plus} style={styles.plusBtn} />
-                  </TouchableOpacity>
-                )}
-              </>
-            </View>
-            <TouchableOpacity onPress={() => setLogoutModalVisible(true)}>
-              <Image source={icons.logOut} style={styles.plusBtn} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.subContainer}>
-            <View style={styles.subSubContainer}>
-              <CircleXp fill={xpPercent} />
-              <View style={styles.statusMain}>
-                <View style={styles.statusSub}>
-                  <Text
-                    style={[{fontSize: RFPercentage(2.5)}, styles.profileText]}>
-                    {userInfo === undefined ? `Player` : `${userInfo.name}`}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('EditScreen')}>
-                    <Image source={icons.editBtn} style={styles.editButton} />
-                  </TouchableOpacity>
+              <View style={{paddingHorizontal: hp(2)}}>
+                <View style={styles.skeleton1} />
+              </View>
+              <View style={styles.skeleton2}>
+                <View style={styles.skeleton2_1} />
+                <View style={styles.skeleton2_2}>
+                  <View style={styles.skeleton2_2_1} />
+                  <View style={styles.skeleton2_2_2} />
                 </View>
-                <View style={styles.levelContainer}>
-                  <Text
-                    style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
-                    Level
-                  </Text>
-                  <Text style={styles.level}>
-                    {userInfo === undefined ? '1' : `${userInfo.level}`}
-                  </Text>
+              </View>
+              <View style={styles.skeleton3} />
+              <View style={styles.skeleton4}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+              </View>
+              <View style={styles.skeleton5} />
+              <View style={styles.skeleton6}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+              </View>
+              <View style={styles.skeleton7} />
+              <View style={styles.skeleton8}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                  />
+                  <View style={{width: wp(15), height: wp(15)}} />
+                </View>
+              </View>
+              <View style={styles.skeleton9} />
+            </View>
+          </SkeletonPlaceholder>
+        ) : (
+          <View>
+            {getMai()}
+            <View
+              style={{
+                position: 'absolute',
+                top: 45,
+                left: 0,
+                right: 0,
+                zIndex: 12,
+              }}>
+              {messages.map(message => (
+                <Message
+                  key={message}
+                  message={message}
+                  onHide={() => {
+                    setMessages(messages =>
+                      messages.filter(
+                        currentMessage => currentMessage !== message,
+                      ),
+                    );
+                  }}
+                />
+              ))}
+            </View>
+            <View style={styles.header}>
+              <View>
+                <>
+                  {userInfo.admin && (
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('AdminScreen')}>
+                      <Image source={icons.plus} style={styles.plusBtn} />
+                    </TouchableOpacity>
+                  )}
+                </>
+              </View>
+              <TouchableOpacity onPress={() => setLogoutModalVisible(true)}>
+                <Image source={icons.logOut} style={styles.plusBtn} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.subContainer}>
+              <View style={styles.subSubContainer}>
+                <CircleXp fill={xpPercent} />
+                <View style={styles.statusMain}>
+                  <View style={styles.statusSub}>
+                    <Text
+                      style={[
+                        {fontSize: RFPercentage(2.5)},
+                        styles.profileText,
+                      ]}>
+                      {userInfo === undefined ? `Player` : `${userInfo.name}`}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('EditScreen')}>
+                      <Image source={icons.editBtn} style={styles.editButton} />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.levelContainer}>
+                    <Text
+                      style={[{fontSize: RFPercentage(2)}, styles.profileText]}>
+                      Level
+                    </Text>
+                    <Text style={styles.level}>
+                      {userInfo === undefined ? '1' : `${userInfo.level}`}
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-          <View style={{borderColor: 'red', borderWidth: 1}}>
-            <FlatList
-              data={teamNames}
-              horizontal
-              renderItem={renderName}
-              keyExtractor={item => item}
-              style={{
-                borderBottomColor: COLORS.brand,
-                borderBottomWidth: 1,
-              }}
-            />
-            {/* {teamNames.map((_team, ind) => (
-              <UselessTextInput key={ind} value={_team.team.name} />
-            ))} */}
-            <View style={styles.formContainer}></View>
-          </View>
-          <View
-            style={{
-              marginTop: hp(8),
-              marginBottom: hp(2),
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                const message = getRandomMessage();
-                setMessages([...messages, message]);
-              }}>
-              <Text>dsgds</Text>
-            </TouchableOpacity>
             <Text
               style={{
                 color: COLORS.greyText,
                 fontFamily: FONTS.brandFont,
                 fontSize: RFPercentage(1.7),
                 marginLeft: wp(3),
+                marginBottom: wp(3),
+                marginTop: wp(5),
               }}>
-              RECENT MATCHES
+              YOUR TEAMS
             </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => changeModalVisible(true)}
-            style={styles.chooseButton}>
-            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-              {chooseData === '' ? 'Select' : chooseData.game.name}
-            </Text>
-            <Image source={icons.drop} style={styles.dropButton} />
-          </TouchableOpacity>
-          <Modal
-            transparent={true}
-            animationType="fade"
-            visible={modalVisible}
-            nRequestClose={() => changeModalVisible(false)}>
-            <LeaguePicker
-              changeModalVisible={changeModalVisible}
-              setData={setData}
+
+            <FlatList
+              data={teamNames}
+              horizontal
+              renderItem={renderName}
+              keyExtractor={item => item}
             />
-          </Modal>
-          <FlatList
-            data={scheduleData}
-            renderItem={renderSchedule}
-            keyExtractor={item => item.id}
-            style={{
-              height: hp(20),
-            }}
-          />
-          <View>
-            <LogoutModal
-              visible={LogoutModalVisible}
-              modalHide={modalHide}
-              logout={logout}
+            <View
+              style={{
+                marginTop: wp(5),
+                marginBottom: wp(3),
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  const message = getRandomMessage();
+                  setMessages([...messages, message]);
+                }}>
+                <Text>dsgds</Text>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  color: COLORS.greyText,
+                  fontFamily: FONTS.brandFont,
+                  fontSize: RFPercentage(1.7),
+                  marginLeft: wp(3),
+                }}>
+                RECENT MATCHES
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => changeModalVisible(true)}
+              style={styles.chooseButton}>
+              <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+                {chooseData === '' ? 'Select' : chooseData.game.name}
+              </Text>
+              <Image source={icons.drop} style={styles.dropButton} />
+            </TouchableOpacity>
+            <Modal
+              transparent={true}
+              animationType="fade"
+              visible={modalVisible}
+              nRequestClose={() => changeModalVisible(false)}>
+              <LeaguePicker
+                changeModalVisible={changeModalVisible}
+                setData={setData}
+              />
+            </Modal>
+            <FlatList
+              data={scheduleData}
+              renderItem={renderSchedule}
+              keyExtractor={item => item.id}
+              style={{
+                height: wp(75),
+              }}
             />
+            <View>
+              <LogoutModal
+                visible={LogoutModalVisible}
+                modalHide={modalHide}
+                logout={logout}
+              />
+            </View>
           </View>
-        </View>
-      )}
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -884,10 +862,12 @@ const styles = StyleSheet.create({
   },
   matchPointContainer: {
     width: wp(29.3),
-    height: hp(10.2),
+    height: wp(20),
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
+    // borderColor: 'red',
+    // borderWidth: 1,
   },
   avatar: {
     width: wp(9.6),
@@ -896,11 +876,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: COLORS.background,
-  },
-  formContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: hp(3),
   },
   header: {
     width: wp(100),
@@ -1045,6 +1020,15 @@ const styles = StyleSheet.create({
     width: wp(7.4),
     height: wp(7.4),
     borderColor: 'white',
+  },
+  input: {
+    height: wp(8),
+    width: wp(35),
+    color: COLORS.white,
+    fontFamily: FONTS.brandFont,
+    fontSize: wp(3),
+    padding: 0,
+    textAlign: 'center',
   },
 });
 

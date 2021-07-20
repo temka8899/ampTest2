@@ -962,7 +962,7 @@ const StandingsScreen = ({navigation, route}) => {
                   }
                   data={teamData}
                   style={{height: hp(100)}}
-                  keyExtractor={item => item}
+                  keyExtractor={item => item.id}
                   renderItem={renderItem}
                 />
               ) : (

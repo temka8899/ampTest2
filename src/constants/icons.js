@@ -15,6 +15,7 @@ export const removeBtn = require('../assets/icons/removeBtn.png');
 export const backWhiteBtn = require('../assets/icons/backWhiteBtn.png');
 export const signBackBtn = require('../assets/icons/signBackBtn.png');
 export const star = require('../assets/icons/star.png');
+export const Xbutton = require('../assets/icons/Xbutton.png');
 export const line1agreen = require('../assets/icons/bracketLines/line1agreen.png');
 export const line1bgreen = require('../assets/icons/bracketLines/line1bgreen.png');
 export const line1agrey = require('../assets/icons/bracketLines/line1agrey.png');
@@ -33,6 +34,7 @@ export default {
   StandingsFill,
   Profile,
   ProfileFill,
+  Xbutton,
   star,
   signBackBtn,
   backWhiteBtn,
