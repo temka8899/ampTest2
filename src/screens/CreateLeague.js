@@ -73,7 +73,6 @@ const CreateLeagueScreen = ({navigation}) => {
 
   useEffect(() => {
     fetchGames();
-    fetchLeague();
   }, []);
 
   async function fetchGames() {
@@ -83,6 +82,7 @@ const CreateLeagueScreen = ({navigation}) => {
       setGameList(gameList);
       console.log('Games>>>>', gameList);
     } catch (err) {
+      fetchLeague();
       console.log('error fetching todos', err);
     }
   }
