@@ -848,12 +848,15 @@ const Profile = ({navigation}) => {
               setData={setData}
             />
           </Modal>
-          <FlatList
-            data={scheduleData}
-            scrollEnabled={true}
-            renderItem={renderSchedule}
-            keyExtractor={item => item.id}
-          />
+          <View style={{height: Platform.OS === 'ios' ? wp(74) : wp(35)}}>
+            <FlatList
+              data={scheduleData}
+              scrollEnabled={true}
+              renderItem={renderSchedule}
+              keyExtractor={item => item.id}
+              style={{}}
+            />
+          </View>
           <View>
             <LogoutModal
               visible={LogoutModalVisible}

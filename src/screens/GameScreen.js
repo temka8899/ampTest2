@@ -683,9 +683,6 @@ const GameScreen = ({navigation}) => {
                   keyExtractor={item => item.id}
                   extraData={selectedId}
                   onPress={() => {}}
-                  style={{
-                    height: Platform.OS === 'ios' ? wp(75) : wp(35),
-                  }}
                 />
               ) : (
                 <View>
@@ -716,7 +713,7 @@ const GameScreen = ({navigation}) => {
               PLAYING TODAY
             </Text>
           </View>
-          <View style={{height: wp(76)}}>
+          <View style={{height: Platform.OS === 'ios' ? wp(77) : wp(35)}}>
             <FlatList
               data={schedule}
               keyExtractor={item => item.id}
