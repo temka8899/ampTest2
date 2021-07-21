@@ -488,11 +488,12 @@ const Profile = ({navigation}) => {
     getXp();
     fetchTeamPlayers();
     _teamNames(userInfo.id);
-  }, []);
+  }, [fetchTeamPlayers, getXp, userInfo.id]);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
+
   const onRefresh = React.useCallback(() => {
     getXp();
     fetchTeamPlayers();
@@ -846,7 +847,7 @@ const Profile = ({navigation}) => {
             </Modal>
             <FlatList
               data={scheduleData}
-              scrollEnabled={false}
+              scrollEnabled={true}
               renderItem={renderSchedule}
               keyExtractor={item => item.id}
               style={{
