@@ -1163,9 +1163,7 @@ export default function CountScreen({navigation, route}) {
     }
   }
   const cancelMatch = async () => {
-    setinitLoad(true);
     await setPlaying(MatchData.id, false);
-    setinitLoad(false);
     navigation.pop();
   };
   function CancelModal() {
