@@ -629,12 +629,7 @@ export default function CountScreen({navigation, route}) {
           );
         }
       }
-      var date = new Date();
-      date = moment(date).add(1, 'd').format('MM/D/YY');
-      var date2 = moment(date).format('dddd');
-      if (date2 == 'Saturday') {
-        date = moment(date).add(2, 'd').format('MM/D/YY');
-      }
+
       const _teamPlayerData1 = await API.graphql(
         graphqlOperation(await listTeamPlayers, {
           filter: {
@@ -705,12 +700,17 @@ export default function CountScreen({navigation, route}) {
       const _team = _teamsTemp.data.listSchedules.items.sort(
         (a, b) => b.index - a.index,
       );
-      console.log('>>>>>>>>>>>>>>>>', _team);
+      const _dateTemp = _team[0].date;
+      var playoffDate = await moment(_dateTemp).add(1, 'd').format('MM/D/YY');
+      var playoffDate2 = await moment(playoffDate).format('dddd');
+      if (playoffDate2 == 'Saturday') {
+        playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
+      }
 
       _addSchedule(
         sorted[1].id,
         sorted[2].id,
-        date,
+        playoffDate,
         _leagueID,
         0,
         1,
@@ -725,7 +725,7 @@ export default function CountScreen({navigation, route}) {
       _addSchedule(
         sorted[1].id,
         sorted[2].id,
-        date,
+        playoffDate,
         _leagueID,
         0,
         2,
@@ -737,16 +737,16 @@ export default function CountScreen({navigation, route}) {
         _playoffGameID,
       );
 
-      await moment(date).add(1, 'd').format('MM/D/YY');
-      date2 = moment(date).format('dddd');
-      if (date2 == 'Saturday') {
-        date = moment(date).add(2, 'd').format('MM/D/YY');
+      playoffDate = await moment(_dateTemp).add(2, 'd').format('MM/D/YY');
+      playoffDate2 = await moment(playoffDate).format('dddd');
+      if (playoffDate2 == 'Saturday') {
+        playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
       }
 
       _addSchedule(
         sorted[0].id,
         sorted[3].id,
-        date,
+        playoffDate,
         _leagueID,
         0,
         1,
@@ -760,7 +760,7 @@ export default function CountScreen({navigation, route}) {
       _addSchedule(
         sorted[0].id,
         sorted[3].id,
-        date,
+        playoffDate,
         _leagueID,
         0,
         2,
