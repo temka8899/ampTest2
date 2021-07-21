@@ -695,6 +695,18 @@ export default function CountScreen({navigation, route}) {
       _teamID4.push(player4[0].player.id);
       _teamID4.push(player4[1].player.id);
 
+      const _teamsTemp = await API.graphql(
+        graphqlOperation(await listSchedules, {
+          filter: {
+            leagueID: {eq: sorted[0].leagueID},
+          },
+        }),
+      );
+      const _team = _teamsTemp.data.listSchedules.items.sort(
+        (a, b) => b.index - a.index,
+      );
+      console.log('>>>>>>>>>>>>>>>>', _team);
+
       _addSchedule(
         sorted[1].id,
         sorted[2].id,
