@@ -338,6 +338,7 @@ const Profile = ({navigation}) => {
   const Names = ({item, onPress, user}) => {
     const [LName1, setLName] = useState('');
     const [readyChange, setReadyChange] = useState(false);
+    const InputFocus = React.useRef();
 
     useEffect(() => {
       getLName(item.team.leagueID);
@@ -384,9 +385,15 @@ const Profile = ({navigation}) => {
         console.log('error updating Teams', err);
       }
     }, []);
+    const focus = () => {
+      // setReadyChange(true);
+      console.log(`InputFocus`, InputFocus);
+      setTimeout(() => {
+        InputFocus.current.focus();
+      }, 3000);
+    };
     return (
-      <TouchableOpacity
-        onPress={() => setReadyChange(true)}
+      <View
         style={{
           width: wp(35),
           alignItems: 'center',
@@ -403,44 +410,25 @@ const Profile = ({navigation}) => {
           }}>
           {LName1}
         </Text>
-        {readyChange ? (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <TextInput
-              // editable={true}
-              style={styles.input}
-              autoCapitalize="none"
-              autoCompleteType={false}
-              placeholder={item.team.name}
-              maxLength={20}
-              onChangeText={text => (newTeamName = text)}
-              placeholderTextColor={COLORS.purpleText}
-            />
-          </View>
-        ) : (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: wp(8),
-              width: wp(35),
-            }}>
-            <Text
-              ellipsizeMode="tail"
-              numberOfLines={1}
-              style={{
-                color: COLORS.white,
-                fontFamily: FONTS.brandFont,
-                marginVertical: wp(2),
-                fontSize: wp(3),
-              }}>
-              {item.team.name}
-            </Text>
-          </View>
-        )}
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <TextInput
+            onFocus={() => setReadyChange(true)}
+            blurOnSubmit={false}
+            ref={InputFocus}
+            // editable={true}
+            style={styles.input}
+            autoCapitalize="none"
+            autoCompleteType={false}
+            placeholder={item.team.name}
+            maxLength={20}
+            onChangeText={text => (newTeamName = text)}
+            placeholderTextColor={COLORS.purpleText}
+          />
+        </View>
 
         {readyChange ? (
           <View style={{flexDirection: 'row'}}>
@@ -482,7 +470,7 @@ const Profile = ({navigation}) => {
             </TouchableOpacity>
           </View>
         ) : null}
-      </TouchableOpacity>
+      </View>
     );
   };
   useEffect(() => {
