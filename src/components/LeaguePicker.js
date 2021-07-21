@@ -24,7 +24,6 @@ const LeaguePicker = props => {
       const leagueData = await API.graphql(graphqlOperation(listLeagues));
       const leagueList = leagueData.data.listLeagues.items;
       setLeagueList(leagueList);
-      console.log('Leagues>>>>', leagueList);
     } catch (err) {
       console.log('error fetching todos', err);
     }

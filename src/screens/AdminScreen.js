@@ -294,6 +294,8 @@ const AdminScreen = ({navigation}) => {
     }
 
     addScheduleLoop(startLeagueId, _leagueData);
+    const message = 'League started';
+    setMessages([...messages, message]);
   };
 
   async function addScheduleLoop(startLeagueId, _leagueData) {
