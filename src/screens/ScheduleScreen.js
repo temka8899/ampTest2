@@ -77,13 +77,17 @@ const Match = ({item, onPress, user}) => {
     //   `findAway`,
     //   findAway,
     // );
-
-    if (item.isPlaying || findHome || findAway) {
-      //console.log('true >>>>>>>>>>');
-      setEnable(false);
-    } else {
-      //console.log('false >>>>>>>>>>');
+    if (item.isPlaying) {
+      console.log('isplaying uchir dargadahgui');
       setEnable(true);
+    } else {
+      if (findHome || findAway) {
+        console.log('daragdana >>>>>>>>>>');
+        setEnable(false);
+      } else {
+        console.log('daragdahgui >>>>>>>>>>');
+        setEnable(true);
+      }
     }
   }, [item, user.id]);
 
