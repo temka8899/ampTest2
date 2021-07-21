@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   ScrollView,
+  Platform,
 } from 'react-native';
 
 import {wp, hp, COLORS, FONTS} from '../constants/theme';
@@ -682,9 +683,6 @@ const GameScreen = ({navigation}) => {
                   keyExtractor={item => item.id}
                   extraData={selectedId}
                   onPress={() => {}}
-                  style={{
-                    height: wp(75),
-                  }}
                 />
               ) : (
                 <View>
@@ -715,7 +713,7 @@ const GameScreen = ({navigation}) => {
               PLAYING TODAY
             </Text>
           </View>
-          <View style={{height: wp(76)}}>
+          <View style={{height: Platform.OS === 'ios' ? wp(77) : wp(35)}}>
             <FlatList
               data={schedule}
               keyExtractor={item => item.id}

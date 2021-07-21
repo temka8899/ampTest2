@@ -746,7 +746,7 @@ export default function FormInterface({navigation, route}) {
         }),
       );
     } catch (err) {
-      console.log('error fetching todos', err);
+      console.log('error fetching todos ', err);
     }
   }
 
