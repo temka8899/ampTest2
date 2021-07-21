@@ -73,19 +73,19 @@ const CreateLeagueScreen = ({navigation}) => {
 
   useEffect(() => {
     fetchGames();
-    fetchLeague();
-  }, []);
+  }, [fetchGames]);
 
-  async function fetchGames() {
+  const fetchGames = React.useCallback(async () => {
     try {
       const gameData = await API.graphql(graphqlOperation(listGames));
       const gameList = gameData.data.listGames.items;
       setGameList(gameList);
       console.log('Games>>>>', gameList);
     } catch (err) {
+      fetchLeague();
       console.log('error fetching todos', err);
     }
-  }
+  }, []);
 
   async function fetchLeague() {
     try {
