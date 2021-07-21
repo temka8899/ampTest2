@@ -471,12 +471,12 @@ export default function FormInterface({navigation, route}) {
           MatchData.date,
           MatchData.leagueID,
           0,
-          3,
+          0,
           MatchData.homeImage,
           MatchData.homePlayers,
           MatchData.awayImage,
           MatchData.awayPlayers,
-          0,
+          3,
           MatchData.gameID,
         );
       } else if (
@@ -492,12 +492,12 @@ export default function FormInterface({navigation, route}) {
           MatchData.date,
           MatchData.leagueID,
           0,
-          3,
+          0,
           MatchData.homeImage,
           MatchData.homePlayers,
           MatchData.awayImage,
           MatchData.awayPlayers,
-          0,
+          3,
           MatchData.gameID,
         );
       }
@@ -846,8 +846,8 @@ export default function FormInterface({navigation, route}) {
       if (playoffDate2 == 'Saturday') {
         playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
       }
-      // console.log(`Final1 ${homeWin1}-${awayWin1}`);
-      // console.log(`Final2 ${homeWin2}-${awayWin2}`);
+      console.log(`Final1 ${homeWin1}-${awayWin1}`);
+      console.log(`Final2 ${homeWin2}-${awayWin2}`);
       if (homeWin1 > awayWin1 && homeWin2 > awayWin2) {
         API.graphql(
           graphqlOperation(updateTeam, {
@@ -1001,28 +1001,28 @@ export default function FormInterface({navigation, route}) {
           }),
         );
         _addSchedule(
-          final1[0].away.id,
+          final1[0].home.id,
           final2[0].away.id,
           playoffDate,
           final1[0].leagueID,
           0,
           0,
-          final1[0].awayImage,
-          final1[0].awayPlayers,
+          final1[0].homeImage,
+          final1[0].homePlayers,
           final2[0].awayImage,
           final2[0].awayPlayers,
           1,
           final1[0].gameID,
         );
         _addSchedule(
-          final1[0].away.id,
+          final1[0].home.id,
           final2[0].away.id,
           playoffDate,
           final1[0].leagueID,
           0,
           0,
-          final1[0].awayImage,
-          final1[0].awayPlayers,
+          final1[0].homeImage,
+          final1[0].homePlayers,
           final2[0].awayImage,
           final2[0].awayPlayers,
           2,

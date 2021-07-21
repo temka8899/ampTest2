@@ -78,14 +78,11 @@ const Match = ({item, onPress, user}) => {
     //   findAway,
     // );
     if (item.isPlaying) {
-      console.log('isplaying uchir dargadahgui');
       setEnable(true);
     } else {
       if (findHome || findAway) {
-        console.log('daragdana >>>>>>>>>>');
         setEnable(false);
       } else {
-        console.log('daragdahgui >>>>>>>>>>');
         setEnable(true);
       }
     }

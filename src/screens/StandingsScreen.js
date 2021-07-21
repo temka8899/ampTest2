@@ -1066,6 +1066,8 @@ const StandingsScreen = ({navigation, route}) => {
                           <View style={{justifyContent: 'center'}}>
                             <View style={styles.teamContainerFinal}>
                               <View style={{flexDirection: 'row'}}>
+                                {console.log(`champImage`, champImage)}
+                                {console.log(`champName`, champName)}
                                 {champImage ? (
                                   <View style={{flexDirection: 'row'}}>
                                     {champImage.map(_item => {

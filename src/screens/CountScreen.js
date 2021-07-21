@@ -832,8 +832,8 @@ export default function CountScreen({navigation, route}) {
           awayWin2++;
         }
       }
-      // console.log(`Final1 ${homeWin1}-${awayWin1}`);
-      // console.log(`Final2 ${homeWin2}-${awayWin2}`);
+      console.log(`Final1 ${homeWin1}-${awayWin1}`);
+      console.log(`Final2 ${homeWin2}-${awayWin2}`);
       if (homeWin1 > awayWin1 && homeWin2 > awayWin2) {
         API.graphql(
           graphqlOperation(updateTeam, {
