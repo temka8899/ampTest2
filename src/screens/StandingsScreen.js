@@ -30,28 +30,14 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-let Team1;
-let Team2;
-let Team3;
-let Team4;
-
 let confA;
 let confB;
 
-let confAhomeImage;
-let confAawayImage;
-let confBhomeImage;
-let confBawayImage;
+// let confBhomeImage;
+// let confBawayImage;
 
-let confAhomeName;
-let confAawayName;
-let confBhomeName;
-let confBawayName;
-
-let finalAImage;
-let finalAName;
-let finalBImage;
-let finalBName;
+// let confBhomeName;
+// let confBawayName;
 
 let champImage;
 let champName;
@@ -67,14 +53,28 @@ const StandingsScreen = ({navigation, route}) => {
   const [logoLoad, setLogoLoad] = useState();
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [imgLoad, setImgLoad] = useState(true);
-  // const
-  // const [Team1, setTeam1] = useState();
-  // const [Team2, setTeam2] = useState();
-  // const [Team3, setTeam3] = useState();
-  // const [Team4, setTeam4] = useState();
+
+  const [finalAImage, setFinalAImage] = useState('');
+  const [finalAName, setFinalAName] = useState('');
+  const [finalBImage, setFinalBImage] = useState('');
+  const [finalBName, setFinalBName] = useState('');
+
+  const [confAhomeImage, setConfAhomeImage] = useState('');
+  const [confAhomeName, setConfAhomeName] = useState('');
+  const [confAawayImage, setConfAawayImage] = useState('');
+  const [confAawayName, setConfAawayName] = useState('');
+
+  const [confBhomeImage, setConfBhomeImage] = useState('');
+  const [confBhomeName, setConfBhomeName] = useState('');
+  const [confBawayImage, setConfBawayImage] = useState('');
+  const [confBawayName, setConfBawayName] = useState('');
+
+  const [champImage, setChampImage] = useState('');
+  const [champName, setChampName] = useState('');
 
   // const [confA, setConfA] = useState();
   // const [confB, setConfB] = useState();
+
   const [win1, setWin1] = useState(0);
   const [win2, setWin2] = useState(0);
   const [win3, setWin3] = useState(0);
@@ -192,9 +192,9 @@ const StandingsScreen = ({navigation, route}) => {
       setTempOption(option);
       if (option.isPlayoff === true) {
         await fetchPlayoffTeam(option.id);
-        await fetchPlayoffSchedule(option.id);
+        let names = await fetchPlayoffSchedule(option.id);
 
-        setImgLoad(true);
+        // setImgLoad(true);
         let homeImages1 = confA[0].homeImage.split('[');
         let homeImages2 = homeImages1[1].split(']');
         let homeImages = homeImages2[0].split(', ');
@@ -207,43 +207,41 @@ const StandingsScreen = ({navigation, route}) => {
         let AawayImages1 = confB[0].awayImage.split('[');
         let AawayImages2 = AawayImages1[1].split(']');
         let AawayImages = AawayImages2[0].split(', ');
-        confAawayImage = awayImages;
-        confAhomeImage = homeImages;
-        confBhomeImage = AhomeImages;
-        confBawayImage = AawayImages;
+
+        setConfAhomeImage(homeImages);
+        setConfAawayImage(awayImages);
+        setConfBhomeImage(AhomeImages);
+        setConfBawayImage(AawayImages);
+        let image = [homeImages, awayImages, AhomeImages, AawayImages];
         await initWin();
         // let win1 = 0;
         // let win2 = 0;
         // let win3 = 0;
         // let win4 = 0;
-        setImgLoad(false);
+        // setImgLoad(false);
 
-        console.log(`confAhomeImage`, confAhomeImage);
-        console.log(`confAawayImage`, confAawayImage);
-        console.log(`confBhomeImage`, confBhomeImage);
-        console.log(`confBawayImage`, confBawayImage);
+        // console.log(`confAhomeImage`, confAhomeImage);
+        // console.log(`confAawayImage`, confAawayImage);
+        // console.log(`confBhomeImage`, confBhomeImage);
+        // console.log(`confBawayImage`, confBawayImage);
 
-        getWinner();
-        initFinal();
-        initChamp();
-        getChamp();
+        let param = await getWinner();
+        console.log(`param`, param);
+        let isfinal = initFinal(param, image, names);
+        if (isfinal) {
+          let finalMatches = await fetchFinalSchedule(option.id);
+          let finalPoint = await getFinalWinner(finalMatches);
+          if (finalPoint[0] == 2 || finalPoint[1] == 2) {
+            getChamp(finalPoint);
+          }
+        }
+
+        // initChamp();
       }
-      // console.log(`Team1`, Team1);
-      // console.log(`Team2`, Team2);
-      // console.log(`Team3`, Team3);
-      // console.log(`Team4`, Team4);
-      console.log(`confA`, confA);
-      console.log(`confB`, confB);
+      // console.log(`confA`, confA);
+      // console.log(`confB`, confB);
     },
-    [
-      fetchPlayoffSchedule,
-      fetchPlayoffTeam,
-      fetchTeam,
-      getChamp,
-      getWinner,
-      initChamp,
-      initFinal,
-    ],
+    [fetchPlayoffSchedule, fetchPlayoffTeam, fetchTeam, getWinner, initFinal],
   );
   async function initWin() {
     await setWin1(0);
@@ -253,27 +251,95 @@ const StandingsScreen = ({navigation, route}) => {
     await setFinal1(0);
     await setFinal2(0);
   }
-  const initChamp = React.useCallback(() => {}, []);
-  const getChamp = React.useCallback(() => {}, []);
-  const initFinal = React.useCallback(() => {
-    if (win1 === 2 || win2 === 2) {
-      if (win1 === 2) {
-        finalAImage = confAhomeImage;
-        finalAName = confAhomeName;
-      } else {
-        finalAImage = confAawayImage;
-        finalAName = confAawayName;
-      }
-      if (win3 === 2) {
-        finalBImage = confBhomeImage;
-        finalBName = confBhomeName;
-      } else {
-        finalBImage = confBawayImage;
-        finalBName = confBawayName;
-      }
+  // const initChamp = React.useCallback(() => {}, []);
+  const getChamp = React.useCallback(finalPoint => {
+    if (finalPoint[0] == 2) {
+      setChampImage(finalAImage);
+      setChampName(finalAName);
+    } else {
+      setChampImage(finalBImage);
+      setChampName(finalBName);
     }
   }, []);
-  const getWinner = React.useCallback(() => {
+
+  const initFinal = React.useCallback((param, image, names) => {
+    // console.log(`win1>>`, win1);
+    // console.log(`win2>>`, win2);
+    // console.log(`win3>>`, win3);
+    // console.log(`win4>>`, win4);
+    console.log('init final ehellee');
+    // finalAImage = null;
+    // finalAName = null;
+    // finalBImage = null;
+    // finalBName = null;
+
+    if (param[0] === 2 || param[1] === 2) {
+      if (param[0] === 2) {
+        console.log('final a d set hiilee');
+        setFinalAImage(image[0]);
+        setFinalAName(names[0]);
+        // finalAImage = confAhomeImage;
+        // finalAName = confAhomeName;
+      } else {
+        console.log('final a d set hiilee');
+        setFinalAImage(image[1]);
+        setFinalAName(names[1]);
+        // finalAImage = confAawayImage;
+        // finalAName = confAawayName;
+      }
+      if (param[2] === 2) {
+        setFinalBImage(image[2]);
+        setFinalBName(names[2]);
+        // finalBImage = confBhomeImage;
+        // finalBName = confBhomeName;
+      } else {
+        setFinalBImage(image[3]);
+        setFinalBName(names[3]);
+        // finalBImage = confBawayImage;
+        // finalBName = confBawayName;
+      }
+      return true;
+    } else {
+      return false;
+    }
+    console.log(`finalAImage`, finalAImage);
+    console.log(`finalAName`, finalAName);
+    console.log(`finalBImage`, finalBImage);
+    console.log(`finalBName`, finalBName);
+  }, []);
+
+  const getFinalWinner = React.useCallback(async matches => {
+    let win1 = 0;
+    let win2 = 0;
+    console.log('final ajiiljiin');
+    for (let i = 0; i < matches.length; i++) {
+      if (!(matches[i].homeScore === 0 && matches[i].awayScore === 0)) {
+        if (matches[i].homeScore > matches[i].awayScore) {
+          // const temp = win1 + 1;
+          // setWin1(temp);
+          win1++;
+        } else {
+          // const temp = win2 + 1;
+          // setWin2(temp);
+          win2++;
+        }
+      }
+    }
+    console.log(`final win1`, win1);
+    console.log(`final win2`, win2);
+    setFinal1(win1);
+    setFinal2(win2);
+    return [win1, win2];
+
+    // console.log(`win3`, win3);
+    // console.log(`win4`, win4);
+  }, []);
+
+  const getWinner = React.useCallback(async () => {
+    let win1 = 0;
+    let win2 = 0;
+    let win3 = 0;
+    let win4 = 0;
     // console.log(`win1>>`, win1);
     // console.log(`win2>>`, win2);
     // console.log(`win3>>`, win3);
@@ -284,56 +350,80 @@ const StandingsScreen = ({navigation, route}) => {
         if (confA[i].homeScore > confA[i].awayScore) {
           // const temp = win1 + 1;
           // setWin1(temp);
-          setWin1(prev => prev + 1);
+          win1++;
         } else {
           // const temp = win2 + 1;
           // setWin2(temp);
-          setWin2(prev => prev + 1);
+          win2++;
         }
       }
+      console.log('get winner duuslaa');
     }
     for (let i = 0; i < confB.length; i++) {
       if (!(confB[i].homeScore === 0 && confB[i].awayScore === 0)) {
         if (confB[i].homeScore > confB[i].awayScore) {
           // const temp = win3 + 1;
           // setWin3(temp);
-          setWin3(prev => prev + 1);
+          // setWin3(prev => prev + 1);
+          win3++;
         } else {
           // const temp = win4 + 1;
           // setWin4(temp);
-          setWin4(prev => prev + 1);
+          // setWin4(prev => prev + 1);
+          win4++;
         }
       }
     }
+    setWin1(win1);
+    setWin2(win2);
+    setWin3(win3);
+    setWin4(win4);
+    return [win1, win2, win3, win4];
     // console.log(`win1`, win1);
     // console.log(`win2`, win2);
     // console.log(`win3`, win3);
     // console.log(`win4`, win4);
   }, []);
-  async function initShedule() {
-    Team1 = null;
-    Team2 = null;
-    Team3 = null;
-    Team4 = null;
 
+  async function initShedule() {
     confA = null;
     confB = null;
 
-    confAhomeImage = null;
-    confAawayImage = null;
-    confBhomeImage = null;
-    confBawayImage = null;
+    // confAhomeImage = null;
+    // confAawayImage = null;
+    // confBhomeImage = null;
+    // confBawayImage = null;
 
-    confAhomeName = null;
-    confAawayName = null;
-    confBhomeName = null;
-    confBawayName = null;
-
-    finalAImage = null;
-    finalAName = null;
-    finalBImage = null;
-    finalBName = null;
+    // confAhomeName = null;
+    // confAawayName = null;
+    // confBhomeName = null;
+    // confBawayName = null;
   }
+  const fetchFinalSchedule = React.useCallback(async lgID => {
+    try {
+      // await initShedule();
+      const leagueData = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {leagueID: {eq: lgID}, finalsIndex: {ne: 0}},
+        }),
+      );
+
+      const finalSchedules = leagueData.data.listSchedules.items;
+
+      // console.log(`schedules`, schedules);
+      // const temp = finalSchedules.filter(
+      //   element =>
+      //     element.away.leagueStatus === 'Playoff4' ||
+      //     element.away.leagueStatus === 'Playoff1',
+      // );
+      // confA = temp;
+      console.log(`finalSchedules`, finalSchedules);
+      return finalSchedules;
+    } catch (err) {
+      console.log('error fetching playoffSchedule', err);
+    }
+  }, []);
+
   const fetchPlayoffSchedule = React.useCallback(async lgID => {
     try {
       await initShedule();
@@ -345,29 +435,35 @@ const StandingsScreen = ({navigation, route}) => {
 
       const schedules = leagueData.data.listSchedules.items;
 
-      console.log(`schedules`, schedules);
+      // console.log(`schedules`, schedules);
       const temp = schedules.filter(
         element =>
           element.away.leagueStatus === 'Playoff4' ||
           element.away.leagueStatus === 'Playoff1',
       );
-      console.log(`temp`, temp);
+      // console.log(`temp`, temp);
       confA = temp;
-      confAhomeName = temp[0].home.name;
-      confAawayName = temp[0].away.name;
-      console.log('2');
+      setConfAhomeName(temp[0].home.name);
+      setConfAawayName(temp[0].away.name);
+      // confAhomeName = temp[0].home.name;
+      // confAawayName = temp[0].away.name;
       const temp1 = schedules.filter(
         element =>
           element.away.leagueStatus === 'Playoff2' ||
           element.away.leagueStatus === 'Playoff3',
       );
-      console.log('3');
       confB = temp1;
-
-      confBhomeName = temp1[0].home.name;
-      confBawayName = temp1[0].away.name;
-      console.log(`playoffSchedule`, schedules);
-      return schedules;
+      setConfBhomeName(temp1[0].home.name);
+      setConfBawayName(temp1[0].away.name);
+      // confBhomeName = temp1[0].home.name;
+      // confBawayName = temp1[0].away.name;
+      // console.log(`playoffSchedule`, schedules);
+      return [
+        temp[0].home.name,
+        temp[0].away.name,
+        temp1[0].home.name,
+        temp1[0].away.name,
+      ];
     } catch (err) {
       console.log('error fetching playoffSchedule', err);
     }
@@ -382,24 +478,6 @@ const StandingsScreen = ({navigation, route}) => {
       );
       const teams = leagueData.data.listTeams.items;
       console.log(`teams`, teams);
-      // for (let i = 0; i < teams.length; i++) {
-      //   switch (teams[i].leagueStatus) {
-      //     case 'Playoff1':
-      //       Team1 = teams[i];
-      //       break;
-      //     case 'Playoff2':
-      //       Team2 = teams[i];
-      //       break;
-      //     case 'Playoff3':
-      //       Team3 = teams[i];
-      //       break;
-      //     case 'Playoff4':
-      //       Team4 = teams[i];
-      //       break;
-      //     default:
-      //       break;
-      //   }
-      // }
       console.log(`playoffTeams`, teams);
       return teams;
     } catch (err) {
@@ -837,13 +915,58 @@ const StandingsScreen = ({navigation, route}) => {
                                   </View>
                                 )}
                               </View>
-                              <Text
-                                ellipsizeMode="tail"
-                                numberOfLines={1}
-                                style={styles.textStyle}>
-                                T1 or T2
-                              </Text>
+                              {finalAName ? (
+                                <Text
+                                  ellipsizeMode="tail"
+                                  numberOfLines={1}
+                                  style={styles.textStyle}>
+                                  {finalAName}
+                                </Text>
+                              ) : (
+                                <Text
+                                  ellipsizeMode="tail"
+                                  numberOfLines={1}
+                                  style={styles.textStyle}>
+                                  T1 or T2
+                                </Text>
+                              )}
                             </View>
+                          </View>
+                          <View style={{height: wp(4)}} />
+                          <View
+                            style={{
+                              flex: 1,
+                              flexDirection: 'row',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}>
+                            <Text
+                              style={[
+                                styles.finalPoint,
+                                {
+                                  color: getColor(final1, final2),
+                                },
+                              ]}>
+                              {final1}
+                            </Text>
+                            <Text
+                              style={[
+                                styles.finalPoint,
+                                {color: COLORS.greyText},
+                              ]}>
+                              {' '}
+                              -{' '}
+                            </Text>
+
+                            <Text
+                              style={[
+                                styles.finalPoint,
+                                {
+                                  color: getColor(final2, final1),
+                                },
+                              ]}>
+                              {final2}
+                            </Text>
                           </View>
                           <View
                             style={{
@@ -882,16 +1005,25 @@ const StandingsScreen = ({navigation, route}) => {
                                     </View>
                                   )}
                                 </View>
-                                <Text
-                                  ellipsizeMode="tail"
-                                  numberOfLines={1}
-                                  style={{
-                                    color: COLORS.greyText,
-                                    fontFamily: FONTS.brandFont,
-                                    fontSize: wp(2.66),
-                                  }}>
-                                  T3 or T4
-                                </Text>
+                                {finalBName ? (
+                                  <Text
+                                    ellipsizeMode="tail"
+                                    numberOfLines={1}
+                                    style={styles.textStyle}>
+                                    {finalBName}
+                                  </Text>
+                                ) : (
+                                  <Text
+                                    ellipsizeMode="tail"
+                                    numberOfLines={1}
+                                    style={{
+                                      color: COLORS.greyText,
+                                      fontFamily: FONTS.brandFont,
+                                      fontSize: wp(2.66),
+                                    }}>
+                                    T3 or T4
+                                  </Text>
+                                )}
                               </View>
                             </View>
                           </View>
@@ -901,11 +1033,15 @@ const StandingsScreen = ({navigation, route}) => {
                             style={{
                               height: wp(117.6),
                               width: wp(16.89),
-                              borderWidth: 1,
                             }}>
                             <Image
-                              source={icons.line2agreen}
+                              source={
+                                final1 === 2
+                                  ? icons.line2agreen
+                                  : icons.line2agrey
+                              }
                               style={{
+                                zIndex: final1 !== 2 ? 0 : 1,
                                 width: wp(16),
                                 height: wp(41.06),
                                 position: 'absolute',
@@ -913,8 +1049,13 @@ const StandingsScreen = ({navigation, route}) => {
                               }}
                             />
                             <Image
-                              source={icons.line2bgreen}
+                              source={
+                                final2 === 2
+                                  ? icons.line2bgreen
+                                  : icons.line2bgrey
+                              }
                               style={{
+                                zIndex: final2 !== 2 ? 0 : 1,
                                 width: wp(16),
                                 height: wp(41.06),
                                 position: 'absolute',
@@ -925,25 +1066,53 @@ const StandingsScreen = ({navigation, route}) => {
                           <View style={{justifyContent: 'center'}}>
                             <View style={styles.teamContainerFinal}>
                               <View style={{flexDirection: 'row'}}>
-                                <Image
-                                  source={images.logo}
-                                  style={{width: wp(9.6), height: wp(9.6)}}
-                                />
-                                <Image
-                                  source={images.logo}
-                                  style={{width: wp(9.6), height: wp(9.6)}}
-                                />
+                                {champImage ? (
+                                  <View style={{flexDirection: 'row'}}>
+                                    {champImage.map(_item => {
+                                      return (
+                                        <Image
+                                          source={_item}
+                                          style={styles.teamAvatar}
+                                        />
+                                      );
+                                    })}
+                                  </View>
+                                ) : (
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Image
+                                      source={images.logo}
+                                      style={{width: wp(9.6), height: wp(9.6)}}
+                                    />
+                                    <Image
+                                      source={images.logo}
+                                      style={{width: wp(9.6), height: wp(9.6)}}
+                                    />
+                                  </View>
+                                )}
                               </View>
-                              <Text
-                                ellipsizeMode="tail"
-                                numberOfLines={1}
-                                style={{
-                                  color: COLORS.greyText,
-                                  fontFamily: FONTS.brandFont,
-                                  fontSize: wp(2.66),
-                                }}>
-                                Finalist
-                              </Text>
+                              {champName ? (
+                                <Text
+                                  ellipsizeMode="tail"
+                                  numberOfLines={1}
+                                  style={{
+                                    color: COLORS.greyText,
+                                    fontFamily: FONTS.brandFont,
+                                    fontSize: wp(2.66),
+                                  }}>
+                                  {champName}
+                                </Text>
+                              ) : (
+                                <Text
+                                  ellipsizeMode="tail"
+                                  numberOfLines={1}
+                                  style={{
+                                    color: COLORS.greyText,
+                                    fontFamily: FONTS.brandFont,
+                                    fontSize: wp(2.66),
+                                  }}>
+                                  Finalist
+                                </Text>
+                              )}
                             </View>
                           </View>
                         </View>
@@ -996,6 +1165,10 @@ const styles = StyleSheet.create({
   seriesText: {
     fontFamily: FONTS.brandFont,
     fontSize: wp(3.2),
+  },
+  finalPoint: {
+    fontFamily: FONTS.brandFont,
+    fontSize: wp(4.2),
   },
   skeletonMain: {
     alignItems: 'center',
