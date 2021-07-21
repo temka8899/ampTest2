@@ -98,7 +98,7 @@ export default function CountScreen({navigation, route}) {
           },
         }),
       );
-      console.log('Schedule Updated');
+      console.log('set playing');
     } catch (err) {
       console.log('error fetching Schedule Updated', err);
     }
@@ -775,16 +775,237 @@ export default function CountScreen({navigation, route}) {
 
   async function startFinals() {
     console.log('PlayOffEnded');
-    const _scheduleData1 = await API.graphql(
-      graphqlOperation(listSchedules, {
-        filter: {
-          leagueID: MatchData.leagueID,
-          playOffIndex: {gt: 0},
-        },
-      }),
-    );
-    const _schedule1 = _scheduleData1.data.listSchedules.items;
-    console.log('Playoff schedule2', _schedule1);
+    try {
+      const _scheduleData1 = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            leagueID: {eq: MatchData.leagueID},
+            playOffIndex: {gt: 0},
+          },
+        }),
+      );
+      const _schedule1 = _scheduleData1.data.listSchedules.items;
+      // console.log('Playoff schedule2', _schedule1);
+      var final1 = [];
+      var final2 = [];
+      for (var i = 0; i < _schedule1.length; i++) {
+        if (
+          _schedule1[i].away.leagueStatus == 'Playoff4' ||
+          _schedule1[i].away.leagueStatus == 'Playoff1'
+        ) {
+          final1.push(_schedule1[i]);
+        } else if (
+          _schedule1[i].away.leagueStatus == 'Playoff3' ||
+          _schedule1[i].away.leagueStatus == 'Playoff2'
+        ) {
+          final2.push(_schedule1[i]);
+        }
+      }
+
+      var homeWin1 = 0;
+      var awayWin1 = 0;
+      var homeWin2 = 0;
+      var awayWin2 = 0;
+      for (var i = 0; i < final1.length; i++) {
+        if (final1[i].homeScore > final1[i].awayScore) {
+          homeWin1++;
+        } else if (final1[i].awayScore > final1[i].homeScore) {
+          awayWin1++;
+        }
+      }
+      for (var i = 0; i < final2.length; i++) {
+        if (final2[i].homeScore > final2[i].awayScore) {
+          homeWin2++;
+        } else if (final2[i].awayScore > final2[i].homeScore) {
+          awayWin2++;
+        }
+      }
+      // console.log(`Final1 ${homeWin1}-${awayWin1}`);
+      // console.log(`Final2 ${homeWin2}-${awayWin2}`);
+      if (homeWin1 > awayWin1 && homeWin2 > awayWin2) {
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final1[0].home.id}`,
+              leagueStatus: `final1`,
+            },
+          }),
+        );
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final2[0].home.id}`,
+              leagueStatus: `final2`,
+            },
+          }),
+        );
+        _addSchedule(
+          final1[0].home.id,
+          final2[0].home.id,
+          final1[0].date,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].homeImage,
+          final1[0].homePlayers,
+          final2[0].homeImage,
+          final2[0].homePlayers,
+          1,
+          final1[0].gameID,
+        );
+        _addSchedule(
+          final1[0].home.id,
+          final2[0].home.id,
+          final1[0].date,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].homeImage,
+          final1[0].homePlayers,
+          final2[0].homeImage,
+          final2[0].homePlayers,
+          2,
+          final1[0].gameID,
+        );
+      } else if (homeWin1 < awayWin1 && homeWin2 > awayWin2) {
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final1[0].away.id}`,
+              leagueStatus: `final1`,
+            },
+          }),
+        );
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final2[0].home.id}`,
+              leagueStatus: `final2`,
+            },
+          }),
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].home.id,
+          final1[0].date,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].homeImage,
+          final2[0].homePlayers,
+          1,
+          final1[0].gameID,
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].home.id,
+          final1[0].date,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].homeImage,
+          final2[0].homePlayers,
+          2,
+          final1[0].gameID,
+        );
+      } else if (homeWin1 < awayWin1 && homeWin2 < awayWin2) {
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final1[0].away.id}`,
+              leagueStatus: `final1`,
+            },
+          }),
+        );
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final2[0].away.id}`,
+              leagueStatus: `final2`,
+            },
+          }),
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].away.id,
+          final1[0].date,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].awayImage,
+          final2[0].awayPlayers,
+          1,
+          final1[0].gameID,
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].away.id,
+          final1[0].date,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].awayImage,
+          final2[0].awayPlayers,
+          2,
+          final1[0].gameID,
+        );
+      } else if (homeWin1 > awayWin1 && homeWin2 < awayWin2) {
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final1[0].home.id}`,
+              leagueStatus: `final1`,
+            },
+          }),
+        );
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final2[0].away.id}`,
+              leagueStatus: `final2`,
+            },
+          }),
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].away.id,
+          final1[0].date,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].awayImage,
+          final2[0].awayPlayers,
+          1,
+          final1[0].gameID,
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].away.id,
+          final1[0].date,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].awayImage,
+          final2[0].awayPlayers,
+          2,
+          final1[0].gameID,
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
     // var date = new Date();
     // date = moment(date).add(1, 'd').format('MM/D/YY');
     // var date2 = moment(date).format('dddd');
