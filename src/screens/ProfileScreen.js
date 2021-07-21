@@ -476,11 +476,12 @@ const Profile = ({navigation}) => {
     getXp();
     fetchTeamPlayers();
     _teamNames(userInfo.id);
-  }, []);
+  }, [fetchTeamPlayers, getXp, userInfo.id]);
 
   const changeModalVisible = bool => {
     setModalVisible(bool);
   };
+
   const onRefresh = React.useCallback(() => {
     getXp();
     fetchTeamPlayers();
@@ -632,104 +633,104 @@ const Profile = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            tintColor={COLORS.brand}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }>
-        <StatusBar barStyle="light-content" />
-        {isLoading ? (
-          <SkeletonPlaceholder
-            speed={800}
-            backgroundColor={COLORS.count}
-            highlightColor={'gray'}>
-            <View>
-              <View style={{paddingHorizontal: hp(2)}}>
-                <View style={styles.skeleton1} />
-              </View>
-              <View style={styles.skeleton2}>
-                <View style={styles.skeleton2_1} />
-                <View style={styles.skeleton2_2}>
-                  <View style={styles.skeleton2_2_1} />
-                  <View style={styles.skeleton2_2_2} />
-                </View>
-              </View>
-              <View style={styles.skeleton3} />
-              <View style={styles.skeleton4}>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                  />
-                  <View style={{width: wp(15), height: wp(15)}} />
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                  />
-                  <View style={{width: wp(15), height: wp(15)}} />
-                </View>
-              </View>
-              <View style={styles.skeleton5} />
-              <View style={styles.skeleton6}>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                  />
-                  <View style={{width: wp(15), height: wp(15)}} />
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                  />
-                  <View style={{width: wp(15), height: wp(15)}} />
-                </View>
-              </View>
-              <View style={styles.skeleton7} />
-              <View style={styles.skeleton8}>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                  />
-                  <View style={{width: wp(15), height: wp(15)}} />
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
-                  />
-                  <View style={{width: wp(15), height: wp(15)}} />
-                </View>
-              </View>
-              <View style={styles.skeleton9} />
-            </View>
-          </SkeletonPlaceholder>
-        ) : (
+      <StatusBar barStyle="light-content" />
+      {isLoading ? (
+        <SkeletonPlaceholder
+          speed={800}
+          backgroundColor={COLORS.count}
+          highlightColor={'gray'}>
           <View>
-            {getMai()}
-            <View
-              style={{
-                position: 'absolute',
-                top: 45,
-                left: 0,
-                right: 0,
-                zIndex: 12,
-              }}>
-              {messages.map((message, index) => (
-                <Message
-                  key={index}
-                  message={message}
-                  onHide={() => {
-                    setMessages(messages =>
-                      messages.filter(
-                        currentMessage => currentMessage !== message,
-                      ),
-                    );
-                  }}
-                />
-              ))}
+            <View style={{paddingHorizontal: hp(2)}}>
+              <View style={styles.skeleton1} />
             </View>
+            <View style={styles.skeleton2}>
+              <View style={styles.skeleton2_1} />
+              <View style={styles.skeleton2_2}>
+                <View style={styles.skeleton2_2_1} />
+                <View style={styles.skeleton2_2_2} />
+              </View>
+            </View>
+            <View style={styles.skeleton3} />
+            <View style={styles.skeleton4}>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+            </View>
+            <View style={styles.skeleton5} />
+            <View style={styles.skeleton6}>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+            </View>
+            <View style={styles.skeleton7} />
+            <View style={styles.skeleton8}>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{width: wp(15), height: wp(15), marginRight: hp(1)}}
+                />
+                <View style={{width: wp(15), height: wp(15)}} />
+              </View>
+            </View>
+            <View style={styles.skeleton9} />
+          </View>
+        </SkeletonPlaceholder>
+      ) : (
+        <View>
+          {getMai()}
+          <View
+            style={{
+              position: 'absolute',
+              top: 45,
+              left: 0,
+              right: 0,
+              zIndex: 12,
+            }}>
+            {messages.map((message, index) => (
+              <Message
+                key={index}
+                message={message}
+                onHide={() => {
+                  setMessages(messages =>
+                    messages.filter(
+                      currentMessage => currentMessage !== message,
+                    ),
+                  );
+                }}
+              />
+            ))}
+          </View>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                tintColor={COLORS.brand}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }>
             <View style={styles.header}>
               <View>
                 <>
@@ -804,53 +805,54 @@ const Profile = ({navigation}) => {
                 }}>
                 <Text>dsgds</Text>
               </TouchableOpacity>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.7),
-                  marginLeft: wp(3),
-                }}>
-                RECENT MATCHES
-              </Text>
             </View>
-            <TouchableOpacity
-              onPress={() => changeModalVisible(true)}
-              style={styles.chooseButton}>
-              <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
-                {chooseData === '' ? 'Select' : chooseData.game.name}
-              </Text>
-              <Image source={icons.drop} style={styles.dropButton} />
-            </TouchableOpacity>
-            <Modal
-              transparent={true}
-              animationType="fade"
-              visible={modalVisible}
-              nRequestClose={() => changeModalVisible(false)}>
-              <LeaguePicker
-                changeModalVisible={changeModalVisible}
-                setData={setData}
-              />
-            </Modal>
-            <FlatList
-              data={scheduleData}
-              scrollEnabled={false}
-              renderItem={renderSchedule}
-              keyExtractor={item => item.id}
-              style={{
-                height: wp(75),
-              }}
+          </ScrollView>
+          <Text
+            style={{
+              color: COLORS.greyText,
+              fontFamily: FONTS.brandFont,
+              fontSize: RFPercentage(1.7),
+              marginLeft: wp(3),
+            }}>
+            RECENT MATCHES
+          </Text>
+
+          <TouchableOpacity
+            onPress={() => changeModalVisible(true)}
+            style={styles.chooseButton}>
+            <Text style={{fontFamily: FONTS.brandFont, color: COLORS.white}}>
+              {chooseData === '' ? 'Select' : chooseData.game.name}
+            </Text>
+            <Image source={icons.drop} style={styles.dropButton} />
+          </TouchableOpacity>
+          <Modal
+            transparent={true}
+            animationType="fade"
+            visible={modalVisible}
+            nRequestClose={() => changeModalVisible(false)}>
+            <LeaguePicker
+              changeModalVisible={changeModalVisible}
+              setData={setData}
             />
-            <View>
-              <LogoutModal
-                visible={LogoutModalVisible}
-                modalHide={modalHide}
-                logout={logout}
-              />
-            </View>
+          </Modal>
+          <FlatList
+            data={scheduleData}
+            scrollEnabled={true}
+            renderItem={renderSchedule}
+            keyExtractor={item => item.id}
+            style={{
+              height: hp(35),
+            }}
+          />
+          <View>
+            <LogoutModal
+              visible={LogoutModalVisible}
+              modalHide={modalHide}
+              logout={logout}
+            />
           </View>
-        )}
-      </ScrollView>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

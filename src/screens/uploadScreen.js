@@ -43,9 +43,9 @@ const Home = ({navigation}) => {
         compressImageMaxWidth: 300,
         compressImageMaxHeight: 400,
         compressImageQuality: 0.7,
-        cropping: true,
       }).then(image => {
         const file = {
+          cropping: true,
           uri: image.sourceURL,
           name: image.filename,
           type: image.mime,

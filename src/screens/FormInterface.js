@@ -28,6 +28,7 @@ import {
   listPlayers,
   listTeamPlayers,
   listTeams,
+  listSchedules,
 } from '../graphql/queries';
 
 import LottieView from 'lottie-react-native';
@@ -366,8 +367,8 @@ export default function FormInterface({navigation, route}) {
   );
 
   async function UpdateSchedule() {
-    await _updateLeague();
-    _updateSchedule();
+    await _updateSchedule();
+
     if (homeScore > awayScore) {
       //toglogch yalahad bagiin win-lose update
       _updateHome1();
@@ -377,12 +378,138 @@ export default function FormInterface({navigation, route}) {
       _updateHome2();
       _updateAway2();
     }
-    startPlayoff();
+
+    //Check game 3
+    await _checkGame3();
+
+    //League iin current index update
+    _updateLeague();
+  }
+
+  async function _checkGame3() {
+    //Playoff
+    if (MatchData.playOffIndex > 0) {
+      const _scheduleData1 = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            homePlayers: {eq: MatchData.homePlayers},
+            awayPlayers: {eq: MatchData.awayPlayers},
+            playOffIndex: {gt: 0},
+          },
+        }),
+      );
+      const _schedule1 = _scheduleData1.data.listSchedules.items;
+      console.log('Playoff schedule', _schedule1);
+      if (
+        _schedule1.length < 3 &&
+        _schedule1[0].homeScore > _schedule1[0].awayScore &&
+        _schedule1[1].homeScore < _schedule1[1].awayScore
+      ) {
+        console.log('check1');
+        _currentScheduleAdd();
+        _addSchedule(
+          MatchData.home.id,
+          MatchData.away.id,
+          MatchData.date,
+          MatchData.leagueID,
+          0,
+          3,
+          MatchData.homeImage,
+          MatchData.homePlayers,
+          MatchData.awayImage,
+          MatchData.awayPlayers,
+          0,
+          MatchData.gameID,
+        );
+      } else if (
+        _schedule1.length < 3 &&
+        _schedule1[0].homeScore < _schedule1[0].awayScore &&
+        _schedule1[1].homeScore > _schedule1[1].awayScore
+      ) {
+        console.log('check2', MatchData);
+        _currentScheduleAdd();
+        _addSchedule(
+          MatchData.home.id,
+          MatchData.away.id,
+          MatchData.date,
+          MatchData.leagueID,
+          0,
+          3,
+          MatchData.homeImage,
+          MatchData.homePlayers,
+          MatchData.awayImage,
+          MatchData.awayPlayers,
+          0,
+          MatchData.gameID,
+        );
+      }
+    }
+
+    //Finals
+    if (MatchData.finalsIndex > 0) {
+      const _scheduleData2 = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            homePlayers: {eq: MatchData.homePlayers},
+            awayPlayers: {eq: MatchData.awayPlayers},
+            finalsIndex: {gt: 0},
+          },
+        }),
+      );
+      const _schedule2 = _scheduleData2.data.listSchedules.items;
+      console.log('Finals schedule', _schedule2);
+      if (
+        _schedule2.length < 3 &&
+        _schedule2[0].homeScore > _schedule2[0].awayScore &&
+        _schedule2[1].homeScore < _schedule2[1].awayScore
+      ) {
+        console.log('check3');
+        _currentScheduleAdd();
+        _addSchedule(
+          MatchData.home.id,
+          MatchData.away.id,
+          MatchData.date,
+          MatchData.leagueID,
+          0,
+          3,
+          MatchData.homeImage,
+          MatchData.homePlayers,
+          MatchData.awayImage,
+          MatchData.awayPlayers,
+          0,
+          MatchData.gameID,
+        );
+      } else if (
+        _schedule2.length < 3 &&
+        _schedule2[0].homeScore < _schedule2[0].awayScore &&
+        _schedule2[1].homeScore > _schedule2[1].awayScore
+      ) {
+        console.log('check4', MatchData);
+        _currentScheduleAdd();
+        _addSchedule(
+          MatchData.home.id,
+          MatchData.away.id,
+          MatchData.date,
+          MatchData.leagueID,
+          0,
+          3,
+          MatchData.homeImage,
+          MatchData.homePlayers,
+          MatchData.awayImage,
+          MatchData.awayPlayers,
+          0,
+          MatchData.gameID,
+        );
+      }
+    }
   }
 
   async function _updateLeague() {
     const updateLeagueID = MatchData.leagueID;
+
+    //
     //Getting League current Schedule
+    //
     const leagueData = await API.graphql(
       graphqlOperation(await listLeagues, {
         filter: {
@@ -393,19 +520,522 @@ export default function FormInterface({navigation, route}) {
     let updateCurrentSchedule =
       leagueData.data.listLeagues.items[0].currentSchedule;
 
+    //
     //Updating League current schedule
-    API.graphql(
-      graphqlOperation(updateLeague, {
+    //
+    const _updatedLeague = await API.graphql(
+      graphqlOperation(await updateLeague, {
         input: {
           id: updateLeagueID,
           currentSchedule: updateCurrentSchedule + 1,
         },
       }),
     );
+    console.log('Updated league', _updatedLeague.data.updateLeague);
+
+    //Check Playoff
+    if (
+      _updatedLeague.data.updateLeague.currentSchedule ==
+        _updatedLeague.data.updateLeague.maxSchedule &&
+      _updatedLeague.data.updateLeague.isPlayoff == false
+    ) {
+      // IsPlayoff = true
+      await API.graphql(
+        graphqlOperation(updateLeague, {
+          input: {
+            id: updateLeagueID,
+            isPlayoff: true,
+          },
+        }),
+      );
+      const leagueData = await API.graphql(
+        graphqlOperation(listTeams, {
+          filter: {leagueID: {eq: updateLeagueID}},
+        }),
+      );
+      startPlayoff(leagueData, _updatedLeague.data.updateLeague.game.id);
+    } else if (
+      _updatedLeague.data.updateLeague.currentSchedule ==
+        _updatedLeague.data.updateLeague.maxSchedule &&
+      _updatedLeague.data.updateLeague.isPlayoff == true
+    ) {
+      startFinals();
+    } else {
+      console.log('Season not ended');
+    }
   }
 
-  function _updateSchedule() {
-    API.graphql(
+  async function startPlayoff(leagueData, _playoffGameID) {
+    const _leagueID = MatchData.leagueID;
+    try {
+      console.log('Season Ended');
+      const teams = leagueData.data.listTeams.items
+        .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
+        .reverse();
+      const sorted = [];
+      for (var i = 0; i < 4; i++) {
+        sorted.push(teams[i]);
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${teams[i].id}`,
+              leagueStatus: `Playoff${i + 1}`,
+            },
+          }),
+        );
+      }
+      if (teams.length > 4) {
+        for (var i = 4; teams.length; i++) {
+          API.graphql(
+            graphqlOperation(updateTeam, {
+              input: {
+                id: `${teams[i].id}`,
+                leagueStatus: 'Ended',
+              },
+            }),
+          );
+        }
+      }
+      const _teamPlayerData1 = await API.graphql(
+        graphqlOperation(await listTeamPlayers, {
+          filter: {
+            teamID: {eq: `${sorted[0].id}`},
+          },
+        }),
+      );
+      const player1 = _teamPlayerData1.data.listTeamPlayers.items;
+      const _teamAvatar1 = [];
+      const _teamID1 = [];
+      _teamAvatar1.push(player1[0].player.avatar);
+      _teamAvatar1.push(player1[1].player.avatar);
+      _teamID1.push(player1[0].player.id);
+      _teamID1.push(player1[1].player.id);
+
+      const _teamPlayerData2 = await API.graphql(
+        graphqlOperation(await listTeamPlayers, {
+          filter: {
+            teamID: {eq: `${sorted[1].id}`},
+          },
+        }),
+      );
+      const player2 = _teamPlayerData2.data.listTeamPlayers.items;
+      const _teamAvatar2 = [];
+      const _teamID2 = [];
+      _teamAvatar2.push(player2[0].player.avatar);
+      _teamAvatar2.push(player2[1].player.avatar);
+      _teamID2.push(player2[0].player.id);
+      _teamID2.push(player2[1].player.id);
+
+      const _teamPlayerData3 = await API.graphql(
+        graphqlOperation(await listTeamPlayers, {
+          filter: {
+            teamID: {eq: `${sorted[2].id}`},
+          },
+        }),
+      );
+      const player3 = _teamPlayerData3.data.listTeamPlayers.items;
+      const _teamAvatar3 = [];
+      const _teamID3 = [];
+      _teamAvatar3.push(player3[0].player.avatar);
+      _teamAvatar3.push(player3[1].player.avatar);
+      _teamID3.push(player3[0].player.id);
+      _teamID3.push(player3[1].player.id);
+
+      const _teamPlayerData4 = await API.graphql(
+        graphqlOperation(await listTeamPlayers, {
+          filter: {
+            teamID: {eq: `${sorted[3].id}`},
+          },
+        }),
+      );
+      const player4 = _teamPlayerData4.data.listTeamPlayers.items;
+      const _teamAvatar4 = [];
+      const _teamID4 = [];
+      _teamAvatar4.push(player4[0].player.avatar);
+      _teamAvatar4.push(player4[1].player.avatar);
+      _teamID4.push(player4[0].player.id);
+      _teamID4.push(player4[1].player.id);
+
+      const _teamsTemp = await API.graphql(
+        graphqlOperation(await listSchedules, {
+          filter: {
+            leagueID: {eq: sorted[0].leagueID},
+          },
+        }),
+      );
+      const _team = await _teamsTemp.data.listSchedules.items.sort(
+        (a, b) => b.index - a.index,
+      );
+      const _dateTemp = _team[0].date;
+      var playoffDate = await moment(_dateTemp).add(1, 'd').format('MM/D/YY');
+      var playoffDate2 = await moment(playoffDate).format('dddd');
+      if (playoffDate2 == 'Saturday') {
+        playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
+      }
+
+      _addSchedule(
+        sorted[1].id,
+        sorted[2].id,
+        playoffDate,
+        _leagueID,
+        0,
+        1,
+        _teamAvatar2,
+        _teamID2,
+        _teamAvatar3,
+        _teamID3,
+
+        0,
+        _playoffGameID,
+      );
+      _addSchedule(
+        sorted[1].id,
+        sorted[2].id,
+        playoffDate,
+        _leagueID,
+        0,
+        2,
+        _teamAvatar2,
+        _teamID2,
+        _teamAvatar3,
+        _teamID3,
+        0,
+        _playoffGameID,
+      );
+
+      playoffDate = await moment(_dateTemp).add(2, 'd').format('MM/D/YY');
+      playoffDate2 = await moment(playoffDate).format('dddd');
+      if (playoffDate2 == 'Saturday') {
+        playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
+      }
+      _addSchedule(
+        sorted[0].id,
+        sorted[3].id,
+        playoffDate,
+        _leagueID,
+        0,
+        4,
+        _teamAvatar1,
+        _teamID1,
+        _teamAvatar4,
+        _teamID4,
+        0,
+        _playoffGameID,
+      );
+      _addSchedule(
+        sorted[0].id,
+        sorted[3].id,
+        playoffDate,
+        _leagueID,
+        0,
+        5,
+        _teamAvatar1,
+        _teamID1,
+        _teamAvatar4,
+        _teamID4,
+        0,
+        _playoffGameID,
+      );
+      await API.graphql(
+        graphqlOperation(updateLeague, {
+          input: {
+            id: _leagueID,
+            maxSchedule: 4,
+            currentSchedule: 0,
+          },
+        }),
+      );
+    } catch (err) {
+      console.log('error fetching todos', err);
+    }
+  }
+
+  async function _currentScheduleAdd() {
+    const updateLeagueID = MatchData.leagueID;
+    //
+    //Getting League current Schedule
+    //
+    const leagueData = await API.graphql(
+      graphqlOperation(await listLeagues, {
+        filter: {
+          id: {eq: updateLeagueID},
+        },
+      }),
+    );
+    let updateCurrentSchedule =
+      leagueData.data.listLeagues.items[0].currentSchedule;
+    let updateMaxSchedule = leagueData.data.listLeagues.items[0].maxSchedule;
+    //
+    //Updating League current schedule
+    //
+    const _updatedLeague = await API.graphql(
+      graphqlOperation(await updateLeague, {
+        input: {
+          id: updateLeagueID,
+          currentSchedule: updateCurrentSchedule + 1,
+          maxSchedule: updateMaxSchedule + 1,
+        },
+      }),
+    );
+    console.log('Current schedule added', _updatedLeague.data.updateLeague);
+  }
+
+  async function startFinals() {
+    console.log('PlayOffEnded');
+    try {
+      const _scheduleData1 = await API.graphql(
+        graphqlOperation(listSchedules, {
+          filter: {
+            leagueID: {eq: MatchData.leagueID},
+            playOffIndex: {gt: 0},
+          },
+        }),
+      );
+      const _schedule1 = _scheduleData1.data.listSchedules.items;
+      // console.log('Playoff schedule2', _schedule1);
+      var final1 = [];
+      var final2 = [];
+      for (var i = 0; i < _schedule1.length; i++) {
+        if (
+          _schedule1[i].away.leagueStatus == 'Playoff4' ||
+          _schedule1[i].away.leagueStatus == 'Playoff1'
+        ) {
+          final1.push(_schedule1[i]);
+        } else if (
+          _schedule1[i].away.leagueStatus == 'Playoff3' ||
+          _schedule1[i].away.leagueStatus == 'Playoff2'
+        ) {
+          final2.push(_schedule1[i]);
+        }
+      }
+
+      var homeWin1 = 0;
+      var awayWin1 = 0;
+      var homeWin2 = 0;
+      var awayWin2 = 0;
+      for (var i = 0; i < final1.length; i++) {
+        if (final1[i].homeScore > final1[i].awayScore) {
+          homeWin1++;
+        } else if (final1[i].awayScore > final1[i].homeScore) {
+          awayWin1++;
+        }
+      }
+      for (var i = 0; i < final2.length; i++) {
+        if (final2[i].homeScore > final2[i].awayScore) {
+          homeWin2++;
+        } else if (final2[i].awayScore > final2[i].homeScore) {
+          awayWin2++;
+        }
+      }
+
+      const _teamsTemp = await API.graphql(
+        graphqlOperation(await listSchedules, {
+          filter: {
+            leagueID: {eq: final1[0].leagueID},
+            playOffIndex: {gt: 0},
+          },
+        }),
+      );
+      const _team = await _teamsTemp.data.listSchedules.items.sort(
+        (a, b) => b.playOffIndex - a.playOffIndex,
+      );
+      console.log('>>>>>>>>', _team);
+      const _dateTemp = _team[0].date;
+      var playoffDate = await moment(_dateTemp).add(1, 'd').format('MM/D/YY');
+      var playoffDate2 = await moment(playoffDate).format('dddd');
+      if (playoffDate2 == 'Saturday') {
+        playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
+      }
+      // console.log(`Final1 ${homeWin1}-${awayWin1}`);
+      // console.log(`Final2 ${homeWin2}-${awayWin2}`);
+      if (homeWin1 > awayWin1 && homeWin2 > awayWin2) {
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final1[0].home.id}`,
+              finalStatus: `final1`,
+            },
+          }),
+        );
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final2[0].home.id}`,
+              finalStatus: `final2`,
+            },
+          }),
+        );
+        _addSchedule(
+          final1[0].home.id,
+          final2[0].home.id,
+          playoffDate,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].homeImage,
+          final1[0].homePlayers,
+          final2[0].homeImage,
+          final2[0].homePlayers,
+          1,
+          final1[0].gameID,
+        );
+        _addSchedule(
+          final1[0].home.id,
+          final2[0].home.id,
+          playoffDate,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].homeImage,
+          final1[0].homePlayers,
+          final2[0].homeImage,
+          final2[0].homePlayers,
+          2,
+          final1[0].gameID,
+        );
+      } else if (homeWin1 < awayWin1 && homeWin2 > awayWin2) {
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final1[0].away.id}`,
+              finalStatus: `final1`,
+            },
+          }),
+        );
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final2[0].home.id}`,
+              finalStatus: `final2`,
+            },
+          }),
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].home.id,
+          playoffDate,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].homeImage,
+          final2[0].homePlayers,
+          1,
+          final1[0].gameID,
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].home.id,
+          playoffDate,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].homeImage,
+          final2[0].homePlayers,
+          2,
+          final1[0].gameID,
+        );
+      } else if (homeWin1 < awayWin1 && homeWin2 < awayWin2) {
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final1[0].away.id}`,
+              finalStatus: `final1`,
+            },
+          }),
+        );
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final2[0].away.id}`,
+              finalStatus: `final2`,
+            },
+          }),
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].away.id,
+          playoffDate,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].awayImage,
+          final2[0].awayPlayers,
+          1,
+          final1[0].gameID,
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].away.id,
+          playoffDate,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].awayImage,
+          final2[0].awayPlayers,
+          2,
+          final1[0].gameID,
+        );
+      } else if (homeWin1 > awayWin1 && homeWin2 < awayWin2) {
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final1[0].home.id}`,
+              finalStatus: `final1`,
+            },
+          }),
+        );
+        API.graphql(
+          graphqlOperation(updateTeam, {
+            input: {
+              id: `${final2[0].away.id}`,
+              finalStatus: `final2`,
+            },
+          }),
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].away.id,
+          playoffDate,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].awayImage,
+          final2[0].awayPlayers,
+          1,
+          final1[0].gameID,
+        );
+        _addSchedule(
+          final1[0].away.id,
+          final2[0].away.id,
+          playoffDate,
+          final1[0].leagueID,
+          0,
+          0,
+          final1[0].awayImage,
+          final1[0].awayPlayers,
+          final2[0].awayImage,
+          final2[0].awayPlayers,
+          2,
+          final1[0].gameID,
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function _updateSchedule() {
+    await API.graphql(
       graphqlOperation(updateSchedule, {
         input: {
           //Schedule id
@@ -518,295 +1148,6 @@ export default function FormInterface({navigation, route}) {
         },
       }),
     );
-  }
-
-  async function startPlayoff() {
-    const _leagueID = MatchData.leagueID;
-    try {
-      API.graphql(
-        graphqlOperation(updateLeague, {
-          input: {
-            id: _leagueID,
-            isPlayoff: true,
-          },
-        }),
-      );
-      const leagueData = await API.graphql(
-        graphqlOperation(listTeams, {
-          filter: {leagueID: {eq: _leagueID}},
-        }),
-      );
-      const _league = await API.graphql(
-        graphqlOperation(listLeagues, {
-          filter: {id: {eq: _leagueID}},
-        }),
-      );
-      const _playoffGameID = _league.data.listLeagues.items[0].game.id;
-      console.log(
-        'Current schedule',
-        leagueData.data.listTeams.items[0].league.currentSchedule,
-      );
-      console.log(
-        'max schedule',
-        leagueData.data.listTeams.items[0].league.maxSchedule,
-      );
-      if (
-        leagueData.data.listTeams.items[0].league.currentSchedule ==
-          leagueData.data.listTeams.items[0].league.maxSchedule &&
-        leagueData.data.listTeams.items[0].league.maxSchedule > 4
-      ) {
-        console.log('Season Ended');
-        const teams = leagueData.data.listTeams.items
-          .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
-          .reverse();
-        const sorted = [];
-        for (var i = 0; i < 4; i++) {
-          sorted.push(teams[i]);
-          API.graphql(
-            graphqlOperation(updateTeam, {
-              input: {
-                id: `${teams[i].id}`,
-                leagueStatus: `Playoff${i + 1}`,
-              },
-            }),
-          );
-        }
-        if (teams.length > 4) {
-          for (var i = 4; teams.length; i++) {
-            API.graphql(
-              graphqlOperation(updateTeam, {
-                input: {
-                  id: `${teams[i].id}`,
-                  leagueStatus: 'Ended',
-                },
-              }),
-            );
-          }
-        }
-        var date = new Date();
-        date = moment(date).add(1, 'd').format('MM/D/YY');
-        var date2 = moment(date).format('dddd');
-        if (date2 == 'Saturday') {
-          date = moment(date).add(2, 'd').format('MM/D/YY');
-        }
-        const _teamPlayerData1 = await API.graphql(
-          graphqlOperation(await listTeamPlayers, {
-            filter: {
-              teamID: {eq: `${sorted[0].id}`},
-            },
-          }),
-        );
-        const player1 = _teamPlayerData1.data.listTeamPlayers.items;
-        const _teamAvatar1 = [];
-        const _teamID1 = [];
-        _teamAvatar1.push(player1[0].player.avatar);
-        _teamAvatar1.push(player1[1].player.avatar);
-        _teamID1.push(player1[0].player.id);
-        _teamID1.push(player1[1].player.id);
-
-        const _teamPlayerData2 = await API.graphql(
-          graphqlOperation(await listTeamPlayers, {
-            filter: {
-              teamID: {eq: `${sorted[1].id}`},
-            },
-          }),
-        );
-        const player2 = _teamPlayerData2.data.listTeamPlayers.items;
-        const _teamAvatar2 = [];
-        const _teamID2 = [];
-        _teamAvatar2.push(player2[0].player.avatar);
-        _teamAvatar2.push(player2[1].player.avatar);
-        _teamID2.push(player2[0].player.id);
-        _teamID2.push(player2[1].player.id);
-
-        const _teamPlayerData3 = await API.graphql(
-          graphqlOperation(await listTeamPlayers, {
-            filter: {
-              teamID: {eq: `${sorted[2].id}`},
-            },
-          }),
-        );
-        const player3 = _teamPlayerData3.data.listTeamPlayers.items;
-        const _teamAvatar3 = [];
-        const _teamID3 = [];
-        _teamAvatar3.push(player3[0].player.avatar);
-        _teamAvatar3.push(player3[1].player.avatar);
-        _teamID3.push(player3[0].player.id);
-        _teamID3.push(player3[1].player.id);
-
-        const _teamPlayerData4 = await API.graphql(
-          graphqlOperation(await listTeamPlayers, {
-            filter: {
-              teamID: {eq: `${sorted[3].id}`},
-            },
-          }),
-        );
-        const player4 = _teamPlayerData4.data.listTeamPlayers.items;
-        const _teamAvatar4 = [];
-        const _teamID4 = [];
-        _teamAvatar4.push(player4[0].player.avatar);
-        _teamAvatar4.push(player4[1].player.avatar);
-        _teamID4.push(player4[0].player.id);
-        _teamID4.push(player4[1].player.id);
-
-        _addSchedule(
-          sorted[1].id,
-          sorted[2].id,
-          date,
-          _leagueID,
-          0,
-          1,
-          _teamAvatar2,
-          _teamID2,
-          _teamAvatar3,
-          _teamID3,
-          0,
-          _playoffGameID,
-        );
-        _addSchedule(
-          sorted[1].id,
-          sorted[2].id,
-          date,
-          _leagueID,
-          0,
-          2,
-          _teamAvatar2,
-          _teamID2,
-          _teamAvatar3,
-          _teamID3,
-          0,
-          _playoffGameID,
-        );
-
-        await moment(date).add(1, 'd').format('MM/D/YY');
-        date2 = moment(date).format('dddd');
-        if (date2 == 'Saturday') {
-          date = moment(date).add(2, 'd').format('MM/D/YY');
-        }
-
-        _addSchedule(
-          sorted[0].id,
-          sorted[3].id,
-          date,
-          _leagueID,
-          0,
-          1,
-          _teamAvatar1,
-          _teamID1,
-          _teamAvatar4,
-          _teamID4,
-          0,
-          _playoffGameID,
-        );
-        _addSchedule(
-          sorted[0].id,
-          sorted[3].id,
-          date,
-          _leagueID,
-          0,
-          2,
-          _teamAvatar1,
-          _teamID1,
-          _teamAvatar4,
-          _teamID4,
-          0,
-          _playoffGameID,
-        );
-        await API.graphql(
-          graphqlOperation(updateLeague, {
-            input: {
-              id: _leagueID,
-              maxSchedule: 4,
-              currentSchedule: 0,
-            },
-          }),
-        );
-      } else if (
-        leagueData.data.listTeams.items[0].league.currentSchedule ==
-          leagueData.data.listTeams.items[0].league.maxSchedule &&
-        leagueData.data.listTeams.items[0].league.maxSchedule == 4
-      ) {
-        console.log('PlayOffEnded');
-        const teams = leagueData.data.listTeams.items
-          .sort((a, b) => a.win / (a.lose + a.win) - b.win / (b.lose + b.win))
-          .reverse();
-        const sorted = [];
-        for (var i = 0; i < 2; i++) {
-          sorted.push(teams[i]);
-        }
-
-        var date = new Date();
-        date = moment(date).add(1, 'd').format('MM/D/YY');
-        var date2 = moment(date).format('dddd');
-        if (date2 == 'Saturday') {
-          date = moment(date).add(2, 'd').format('MM/D/YY');
-        }
-
-        const _teamPlayerData1 = await API.graphql(
-          graphqlOperation(await listTeamPlayers, {
-            filter: {
-              teamID: {eq: `${sorted[0].id}`},
-            },
-          }),
-        );
-        const player1 = _teamPlayerData1.data.listTeamPlayers.items;
-        const _teamAvatar1 = [];
-        const _teamID1 = [];
-        _teamAvatar1.push(player1[0].player.avatar);
-        _teamAvatar1.push(player1[1].player.avatar);
-        _teamID1.push(player1[0].player.id);
-        _teamID1.push(player1[1].player.id);
-
-        const _teamPlayerData2 = await API.graphql(
-          graphqlOperation(await listTeamPlayers, {
-            filter: {
-              teamID: {eq: `${sorted[1].id}`},
-            },
-          }),
-        );
-        const player2 = _teamPlayerData2.data.listTeamPlayers.items;
-        const _teamAvatar2 = [];
-        const _teamID2 = [];
-        _teamAvatar2.push(player2[0].player.avatar);
-        _teamAvatar2.push(player2[1].player.avatar);
-        _teamID2.push(player2[0].player.id);
-        _teamID2.push(player2[1].player.id);
-
-        _addSchedule(
-          sorted[0].id,
-          sorted[1].id,
-          date,
-          _leagueID,
-          0,
-          0,
-          _teamAvatar1,
-          _teamID1,
-          _teamAvatar2,
-          _teamID2,
-          1,
-          _playoffGameID,
-        );
-        _addSchedule(
-          sorted[0].id,
-          sorted[1].id,
-          date,
-          _leagueID,
-
-          0,
-          0,
-          _teamAvatar1,
-          _teamID1,
-          _teamAvatar2,
-          _teamID2,
-          2,
-          _playoffGameID,
-        );
-      } else {
-        console.log('League not ended');
-      }
-    } catch (err) {
-      console.log('error fetching todos', err);
-    }
   }
 
   async function _addSchedule(
