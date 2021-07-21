@@ -1089,7 +1089,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   bracketContainer: {
-    borderWidth: 1,
     width: wp(96),
     height: wp(117.6),
     flexDirection: 'row',
@@ -1098,7 +1097,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     height: wp(117.6),
     width: wp(23),
-    borderWidth: 1,
     justifyContent: 'space-between',
   },
   teamContainer: {
@@ -1130,7 +1128,7 @@ const styles = StyleSheet.create({
   lineContainer: {
     height: wp(117.6),
     width: wp(18),
-    borderWidth: 1,
+
     justifyContent: 'space-between',
   },
   line1: {
@@ -1141,13 +1139,11 @@ const styles = StyleSheet.create({
   section2: {
     height: wp(117.6),
     width: wp(23),
-    borderWidth: 1,
     justifyContent: 'space-between',
   },
   sectionContainerFinal: {
     height: wp(117.6),
     width: wp(32),
-    borderWidth: 1,
     flexDirection: 'row',
   },
 });
