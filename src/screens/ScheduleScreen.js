@@ -7,9 +7,9 @@ import {
   StatusBar,
   StyleSheet,
   SafeAreaView,
+  RefreshControl,
   TouchableOpacity,
   ActivityIndicator,
-  RefreshControl,
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -272,7 +272,6 @@ const Match = ({item, onPress, user}) => {
   } else {
     return (
       <View>
-        {console.log(`enable >>>>`, enable)}
         <TouchableOpacity
           disabled={enable}
           onPress={onPress}
