@@ -69,20 +69,20 @@ const Match = ({item, onPress, user}) => {
       setFind('away');
     }
 
-    console.log(
-      `item.isPlaying find `,
-      item.isPlaying,
-      `findHome`,
-      findHome,
-      `findAway`,
-      findAway,
-    );
+    // console.log(
+    //   `item.isPlaying find `,
+    //   item.isPlaying,
+    //   `findHome`,
+    //   findHome,
+    //   `findAway`,
+    //   findAway,
+    // );
 
     if (item.isPlaying || findHome || findAway) {
-      console.log('true >>>>>>>>>>');
+      //console.log('true >>>>>>>>>>');
       setEnable(false);
     } else {
-      console.log('false >>>>>>>>>>');
+      //console.log('false >>>>>>>>>>');
       setEnable(true);
     }
   }, [item, user.id]);
