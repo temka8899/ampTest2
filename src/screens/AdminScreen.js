@@ -237,6 +237,7 @@ const AdminScreen = ({navigation}) => {
                 leagueID: leagueID,
                 teamLeagueId: leagueID,
                 leagueStatus: 'Season',
+                finalStatus: 'Season',
                 win: 0,
                 lose: 0,
               },

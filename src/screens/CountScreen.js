@@ -827,7 +827,7 @@ export default function CountScreen({navigation, route}) {
           graphqlOperation(updateTeam, {
             input: {
               id: `${final1[0].home.id}`,
-              leagueStatus: `final1`,
+              finalStatus: `final1`,
             },
           }),
         );
@@ -835,7 +835,7 @@ export default function CountScreen({navigation, route}) {
           graphqlOperation(updateTeam, {
             input: {
               id: `${final2[0].home.id}`,
-              leagueStatus: `final2`,
+              finalStatus: `final2`,
             },
           }),
         );
@@ -872,7 +872,7 @@ export default function CountScreen({navigation, route}) {
           graphqlOperation(updateTeam, {
             input: {
               id: `${final1[0].away.id}`,
-              leagueStatus: `final1`,
+              finalStatus: `final1`,
             },
           }),
         );
@@ -880,7 +880,7 @@ export default function CountScreen({navigation, route}) {
           graphqlOperation(updateTeam, {
             input: {
               id: `${final2[0].home.id}`,
-              leagueStatus: `final2`,
+              finalStatus: `final2`,
             },
           }),
         );
@@ -917,7 +917,7 @@ export default function CountScreen({navigation, route}) {
           graphqlOperation(updateTeam, {
             input: {
               id: `${final1[0].away.id}`,
-              leagueStatus: `final1`,
+              finalStatus: `final1`,
             },
           }),
         );
@@ -925,7 +925,7 @@ export default function CountScreen({navigation, route}) {
           graphqlOperation(updateTeam, {
             input: {
               id: `${final2[0].away.id}`,
-              leagueStatus: `final2`,
+              finalStatus: `final2`,
             },
           }),
         );
@@ -962,7 +962,7 @@ export default function CountScreen({navigation, route}) {
           graphqlOperation(updateTeam, {
             input: {
               id: `${final1[0].home.id}`,
-              leagueStatus: `final1`,
+              finalStatus: `final1`,
             },
           }),
         );
@@ -970,7 +970,7 @@ export default function CountScreen({navigation, route}) {
           graphqlOperation(updateTeam, {
             input: {
               id: `${final2[0].away.id}`,
-              leagueStatus: `final2`,
+              finalStatus: `final2`,
             },
           }),
         );
