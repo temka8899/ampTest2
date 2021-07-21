@@ -158,6 +158,7 @@ export const onCreateTeam = /* GraphQL */ `
   subscription OnCreateTeam {
     onCreateTeam {
       leagueStatus
+      finalStatus
       id
       league {
         minPlayer
@@ -193,6 +194,7 @@ export const onUpdateTeam = /* GraphQL */ `
   subscription OnUpdateTeam {
     onUpdateTeam {
       leagueStatus
+      finalStatus
       id
       league {
         minPlayer
@@ -228,6 +230,7 @@ export const onDeleteTeam = /* GraphQL */ `
   subscription OnDeleteTeam {
     onDeleteTeam {
       leagueStatus
+      finalStatus
       id
       league {
         minPlayer
@@ -265,6 +268,7 @@ export const onCreateTeamPlayer = /* GraphQL */ `
       id
       team {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
@@ -312,6 +316,7 @@ export const onUpdateTeamPlayer = /* GraphQL */ `
       id
       team {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
@@ -359,6 +364,7 @@ export const onDeleteTeamPlayer = /* GraphQL */ `
       id
       team {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
@@ -540,6 +546,7 @@ export const onCreateSchedule = /* GraphQL */ `
       gameID
       home {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
@@ -564,6 +571,7 @@ export const onCreateSchedule = /* GraphQL */ `
       }
       away {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
@@ -612,6 +620,7 @@ export const onUpdateSchedule = /* GraphQL */ `
       gameID
       home {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
@@ -636,6 +645,7 @@ export const onUpdateSchedule = /* GraphQL */ `
       }
       away {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
@@ -684,6 +694,7 @@ export const onDeleteSchedule = /* GraphQL */ `
       gameID
       home {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
@@ -708,6 +719,7 @@ export const onDeleteSchedule = /* GraphQL */ `
       }
       away {
         leagueStatus
+        finalStatus
         id
         league {
           minPlayer
