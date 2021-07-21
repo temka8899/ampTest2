@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   ScrollView,
+  Platform,
 } from 'react-native';
 
 import {wp, hp, COLORS, FONTS} from '../constants/theme';
@@ -683,7 +684,7 @@ const GameScreen = ({navigation}) => {
                   extraData={selectedId}
                   onPress={() => {}}
                   style={{
-                    height: wp(75),
+                    height: Platform.OS === 'ios' ? wp(75) : wp(35),
                   }}
                 />
               ) : (

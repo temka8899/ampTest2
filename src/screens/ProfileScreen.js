@@ -14,6 +14,7 @@ import {
   RefreshControl,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 
 import {AuthContext} from '../../App';
@@ -852,9 +853,6 @@ const Profile = ({navigation}) => {
             scrollEnabled={true}
             renderItem={renderSchedule}
             keyExtractor={item => item.id}
-            style={{
-              height: hp(35),
-            }}
           />
           <View>
             <LogoutModal
