@@ -606,38 +606,38 @@ const GameScreen = ({navigation}) => {
     </SafeAreaView>
   ) : (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            tintColor={COLORS.brand}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }>
-        <StatusBar barStyle="light-content" />
-        {isLoading ? (
-          <SkeletonPlaceholder
-            speed={800}
-            backgroundColor={COLORS.count}
-            highlightColor={'gray'}>
-            <View style={{paddingHorizontal: wp(4)}}>
-              <View style={styles.skeletonFirstContainer}>
-                <View style={{marginHorizontal: wp(5)}}>
-                  <View style={styles.skeletonFirstSub} />
-                  <View style={styles.skeletonFirstSub} />
-                </View>
-                <View style={styles.skeletonFirstSubSub} />
+      <StatusBar barStyle="light-content" />
+      {isLoading ? (
+        <SkeletonPlaceholder
+          speed={800}
+          backgroundColor={COLORS.count}
+          highlightColor={'gray'}>
+          <View style={{paddingHorizontal: wp(4)}}>
+            <View style={styles.skeletonFirstContainer}>
+              <View style={{marginHorizontal: wp(5)}}>
+                <View style={styles.skeletonFirstSub} />
+                <View style={styles.skeletonFirstSub} />
               </View>
-              <View style={styles.skeletonSecondContainer}>
-                <View style={styles.skeletonSecondFirstSub} />
-                <View style={styles.skeletonSecondSecondSub} />
-                <View style={styles.skeletonSecondThirdSub} />
-              </View>
-              <View style={styles.skeletonThirdContainer} />
+              <View style={styles.skeletonFirstSubSub} />
             </View>
-          </SkeletonPlaceholder>
-        ) : (
-          <View>
+            <View style={styles.skeletonSecondContainer}>
+              <View style={styles.skeletonSecondFirstSub} />
+              <View style={styles.skeletonSecondSecondSub} />
+              <View style={styles.skeletonSecondThirdSub} />
+            </View>
+            <View style={styles.skeletonThirdContainer} />
+          </View>
+        </SkeletonPlaceholder>
+      ) : (
+        <View>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                tintColor={COLORS.brand}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }>
             <View style={styles.header}>
               <View>
                 <Text
@@ -698,69 +698,70 @@ const GameScreen = ({navigation}) => {
                 </View>
               )}
             </View>
-            <View
+          </ScrollView>
+
+          <View
+            style={{
+              height: wp(12),
+              justifyContent: 'center',
+            }}>
+            <Text
               style={{
-                height: wp(12),
-                justifyContent: 'center',
+                color: COLORS.greyText,
+                fontFamily: FONTS.brandFont,
+                fontSize: RFPercentage(1.7),
+                marginLeft: wp(4),
               }}>
-              <Text
-                style={{
-                  color: COLORS.greyText,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.7),
-                  marginLeft: wp(4),
-                }}>
-                PLAYING TODAY
-              </Text>
-            </View>
-            <View style={{height: wp(76)}}>
-              <FlatList
-                data={schedule}
-                keyExtractor={item => item.id}
-                renderItem={renderSchedule}
-              />
-            </View>
+              PLAYING TODAY
+            </Text>
           </View>
-        )}
-        <Modal
-          animationIn="rubberBand"
-          isVisible={AvatarModal}
-          style={styles.modal}>
-          <View style={styles.modalContainer}>
+          <View style={{height: wp(76)}}>
+            <FlatList
+              data={schedule}
+              keyExtractor={item => item.id}
+              renderItem={renderSchedule}
+            />
+          </View>
+        </View>
+      )}
+      <Modal
+        animationIn="rubberBand"
+        isVisible={AvatarModal}
+        style={styles.modal}>
+        <View style={styles.modalContainer}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontFamily: FONTS.brandFont,
+              fontSize: RFPercentage(1.8),
+              marginTop: hp(3),
+              marginBottom: hp(2),
+            }}>
+            Choose your avatar
+          </Text>
+          <FlatList
+            data={Avatars}
+            renderItem={avatarsRender}
+            keyExtractor={item => item.id}
+            extraData={selectedId}
+            numColumns={4}
+            showsHorizontalScrollIndicator={false}
+          />
+          <TouchableOpacity
+            onPress={() => setAvatar()}
+            style={styles.modalButton}>
             <Text
               style={{
                 color: COLORS.white,
                 fontFamily: FONTS.brandFont,
                 fontSize: RFPercentage(1.8),
-                marginTop: hp(3),
-                marginBottom: hp(2),
               }}>
-              Choose your avatar
+              OK
             </Text>
-            <FlatList
-              data={Avatars}
-              renderItem={avatarsRender}
-              keyExtractor={item => item.id}
-              extraData={selectedId}
-              numColumns={4}
-              showsHorizontalScrollIndicator={false}
-            />
-            <TouchableOpacity
-              onPress={() => setAvatar()}
-              style={styles.modalButton}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  fontFamily: FONTS.brandFont,
-                  fontSize: RFPercentage(1.8),
-                }}>
-                OK
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-        <IntroModal visible={introModal} close={close} />
-      </ScrollView>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <IntroModal visible={introModal} close={close} />
     </SafeAreaView>
   );
 };
