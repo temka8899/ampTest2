@@ -160,6 +160,12 @@ export default function CountScreen({navigation, route}) {
     }
   }
 
+  const onRefresh = React.useCallback(() => {
+    checkInLeague();
+    setRefreshing(true);
+    wait(500).then(() => setRefresh);
+  }, []);
+
   function setFind(option) {
     setfindMistake(option);
     console.log('suuliin onoo', allPoint);
