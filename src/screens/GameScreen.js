@@ -735,7 +735,7 @@ const GameScreen = ({navigation}) => {
               marginTop: hp(3),
               marginBottom: hp(2),
             }}>
-            Choose your avatar
+            Choose your avatarr
           </Text>
           <FlatList
             data={Avatars}
@@ -890,7 +890,7 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    // marginVertical: 8,
+    height: hp(30),
   },
   title: {
     fontSize: 32,
