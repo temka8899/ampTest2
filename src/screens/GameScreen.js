@@ -118,7 +118,7 @@ const Match = ({item, onPress, user}) => {
   }
   if (item.awayScore === 10 || item.homeScore === 10) {
     return (
-      <View>
+      <View style={{}}>
         <View
           onPress={onPress}
           style={{
@@ -253,7 +253,7 @@ const Match = ({item, onPress, user}) => {
     );
   } else {
     return (
-      <View>
+      <View style={{}}>
         <TouchableOpacity
           disabled={find === '' ? true : false}
           onPress={onPress}
@@ -262,8 +262,6 @@ const Match = ({item, onPress, user}) => {
             height: wp(28),
             justifyContent: 'center',
             alignItems: 'center',
-            // borderWidth: 1,
-            // borderColor: 'red',
           }}>
           <View style={{flexDirection: 'row'}}>
             <View
@@ -296,7 +294,6 @@ const Match = ({item, onPress, user}) => {
                   textAlign: 'center',
                 }}>
                 {item.home.name}
-                {/* MMMMMMMMMMMMMMMMMMMM */}
               </Text>
             </View>
             <View
@@ -438,7 +435,7 @@ const GameScreen = ({navigation}) => {
       <>
         <TouchableOpacity
           onPress={onPress}
-          style={[styles.item, {backgroundColor: COLORS.background}]}>
+          style={{backgroundColor: COLORS.background}}>
           {imgLoadGame ? (
             <ActivityIndicator size={'large'} color={COLORS.brand} />
           ) : (
@@ -630,8 +627,9 @@ const GameScreen = ({navigation}) => {
           </View>
         </SkeletonPlaceholder>
       ) : (
-        <View>
+        <View style={{flex: 1}}>
           <ScrollView
+            nestedScrollEnabled
             refreshControl={
               <RefreshControl
                 tintColor={COLORS.brand}
@@ -682,7 +680,6 @@ const GameScreen = ({navigation}) => {
                   renderItem={renderItem}
                   keyExtractor={item => item.id}
                   extraData={selectedId}
-                  onPress={() => {}}
                 />
               ) : (
                 <View>
@@ -700,8 +697,8 @@ const GameScreen = ({navigation}) => {
 
           <View
             style={{
-              height: wp(12),
-              justifyContent: 'center',
+              marginLeft: wp(2),
+              marginBottom: hp(2),
             }}>
             <Text
               style={{
@@ -713,7 +710,7 @@ const GameScreen = ({navigation}) => {
               PLAYING TODAY
             </Text>
           </View>
-          <View style={{height: Platform.OS === 'ios' ? wp(77) : wp(35)}}>
+          <View style={{height: hp(38)}}>
             <FlatList
               data={schedule}
               keyExtractor={item => item.id}
@@ -735,7 +732,7 @@ const GameScreen = ({navigation}) => {
               marginTop: hp(3),
               marginBottom: hp(2),
             }}>
-            Choose your avatarr
+            Choose your avatar
           </Text>
           <FlatList
             data={Avatars}
@@ -888,9 +885,6 @@ const styles = StyleSheet.create({
   },
   container: {
     marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    height: hp(30),
   },
   title: {
     fontSize: 32,

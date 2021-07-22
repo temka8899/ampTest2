@@ -47,8 +47,8 @@ const LoadImage = ({imgURL, gameTitle, gameDate}) => {
 
 const styles = StyleSheet.create({
   img: {
-    width: wp(52),
-    height: wp(68),
+    width: wp(49),
+    height: wp(64),
   },
   leagueStatus: {
     flex: 1,
