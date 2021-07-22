@@ -797,15 +797,7 @@ const Profile = ({navigation}) => {
               style={{
                 marginTop: wp(5),
                 marginBottom: wp(3),
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  const message = getRandomMessage();
-                  setMessages([...messages, message]);
-                }}>
-                <Text>dsgds</Text>
-              </TouchableOpacity>
-            </View>
+              }}></View>
           </ScrollView>
           <Text
             style={{

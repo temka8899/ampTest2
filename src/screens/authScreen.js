@@ -348,7 +348,6 @@ const SwitchView = ({value, onPress}) => {
           </View>
         </KeyboardAvoidingView>
       );
-
     default:
       return;
   }
@@ -428,6 +427,7 @@ const SignInScreen = ({navigation, onPress}) => {
                 paddingTop: wp(2),
                 margin: wp(2),
                 fontSize: RFPercentage(1.7),
+                marginLeft: 30,
               }}>
               Forgot Password?
             </Text>
@@ -444,9 +444,7 @@ export default function AuthScreen({navigation}) {
   const [cogID, setCogID] = useState('');
 
   const startValue = useRef(new Animated.Value(1)).current;
-
   const moveValue = useState(new Animated.Value(0))[0];
-
   const endValue = 0.8;
 
   const _keyboardDidShow = React.useCallback(() => {
@@ -679,7 +677,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#00032590',
     borderRadius: 15,
     alignItems: 'center',
-
     justifyContent: 'space-evenly',
     paddingVertical: wp(4),
   },
