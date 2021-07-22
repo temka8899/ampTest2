@@ -7,6 +7,7 @@ export const men2 = require('../assets/images/avatars/men2.png');
 export const logo = require('../assets/images/logo.png');
 export const nullPic = require('../assets/images/null.png');
 export const local = require('../assets/images/default.png');
+export const trophy = require('../assets/images/trophy.png');
 
 // export const  = require('../assets/images/.png');
 
@@ -16,6 +17,7 @@ export default {
   button,
   profilePic,
   men,
+  trophy,
   local,
   nullPic,
   logo,
