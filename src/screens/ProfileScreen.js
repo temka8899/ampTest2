@@ -787,7 +787,6 @@ const Profile = ({navigation}) => {
               }}>
               YOUR TEAMS
             </Text>
-
             <FlatList
               data={teamNames}
               horizontal

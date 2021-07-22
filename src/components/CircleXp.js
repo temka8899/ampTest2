@@ -9,8 +9,6 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 const CircleXp = props => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
-
-  //console.log(props.fill);
   return (
     <View>
       <AnimatedCircularProgress
