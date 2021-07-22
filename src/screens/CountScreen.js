@@ -703,9 +703,14 @@ export default function CountScreen({navigation, route}) {
       const _dateTemp = _team[0].date;
       var playoffDate = await moment(_dateTemp).add(1, 'd').format('MM/D/YY');
       var playoffDate2 = await moment(playoffDate).format('dddd');
+      console.log('>>>>>datetemp', _dateTemp);
+      console.log('>>>>>playoffdate', playoffDate);
+      console.log('>>>>>playoffDate2', playoffDate2);
+
       if (playoffDate2 == 'Saturday') {
         playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
       }
+      console.log('>>>>>>>playoffDate2 after if', playoffDate);
 
       _addSchedule(
         sorted[1].id,
@@ -737,7 +742,7 @@ export default function CountScreen({navigation, route}) {
         _playoffGameID,
       );
 
-      playoffDate = await moment(_dateTemp).add(2, 'd').format('MM/D/YY');
+      playoffDate = await moment(playoffDate).add(1, 'd').format('MM/D/YY');
       playoffDate2 = await moment(playoffDate).format('dddd');
       if (playoffDate2 == 'Saturday') {
         playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
@@ -749,7 +754,7 @@ export default function CountScreen({navigation, route}) {
         playoffDate,
         _leagueID,
         0,
-        1,
+        4,
         _teamAvatar1,
         _teamID1,
         _teamAvatar4,
@@ -763,7 +768,7 @@ export default function CountScreen({navigation, route}) {
         playoffDate,
         _leagueID,
         0,
-        2,
+        5,
         _teamAvatar1,
         _teamID1,
         _teamAvatar4,
@@ -832,6 +837,26 @@ export default function CountScreen({navigation, route}) {
           awayWin2++;
         }
       }
+
+      const _teamsTemp = await API.graphql(
+        graphqlOperation(await listSchedules, {
+          filter: {
+            leagueID: {eq: final1[0].leagueID},
+            playOffIndex: {gt: 0},
+          },
+        }),
+      );
+      const _team = await _teamsTemp.data.listSchedules.items.sort(
+        (a, b) => b.playOffIndex - a.playOffIndex,
+      );
+      console.log('>>>>>>>>', _team);
+      const _dateTemp = _team[0].date;
+      var playoffDate = await moment(_dateTemp).add(1, 'd').format('MM/D/YY');
+      var playoffDate2 = await moment(playoffDate).format('dddd');
+      if (playoffDate2 == 'Saturday') {
+        playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
+      }
+
       console.log(`Final1 ${homeWin1}-${awayWin1}`);
       console.log(`Final2 ${homeWin2}-${awayWin2}`);
       if (homeWin1 > awayWin1 && homeWin2 > awayWin2) {
@@ -854,7 +879,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           final1[0].home.id,
           final2[0].home.id,
-          final1[0].date,
+          playoffDate,
           final1[0].leagueID,
           0,
           0,
@@ -868,7 +893,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           final1[0].home.id,
           final2[0].home.id,
-          final1[0].date,
+          playoffDate,
           final1[0].leagueID,
           0,
           0,
@@ -899,7 +924,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           final1[0].away.id,
           final2[0].home.id,
-          final1[0].date,
+          playoffDate,
           final1[0].leagueID,
           0,
           0,
@@ -913,7 +938,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           final1[0].away.id,
           final2[0].home.id,
-          final1[0].date,
+          playoffDate,
           final1[0].leagueID,
           0,
           0,
@@ -944,7 +969,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           final1[0].away.id,
           final2[0].away.id,
-          final1[0].date,
+          playoffDate,
           final1[0].leagueID,
           0,
           0,
@@ -958,7 +983,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           final1[0].away.id,
           final2[0].away.id,
-          final1[0].date,
+          playoffDate,
           final1[0].leagueID,
           0,
           0,
@@ -989,7 +1014,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           final1[0].home.id,
           final2[0].away.id,
-          final1[0].date,
+          playoffDate,
           final1[0].leagueID,
           0,
           0,
@@ -1003,7 +1028,7 @@ export default function CountScreen({navigation, route}) {
         _addSchedule(
           final1[0].home.id,
           final2[0].away.id,
-          final1[0].date,
+          playoffDate,
           final1[0].leagueID,
           0,
           0,

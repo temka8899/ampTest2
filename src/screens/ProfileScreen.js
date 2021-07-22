@@ -814,6 +814,7 @@ const Profile = ({navigation}) => {
               fontFamily: FONTS.brandFont,
               fontSize: RFPercentage(1.7),
               marginLeft: wp(3),
+              marginBottom: wp(2),
             }}>
             RECENT MATCHES
           </Text>
