@@ -231,7 +231,7 @@ export default function EditProfileScreen({navigation}) {
             style={styles.firstMainSub}>
             <Image source={newImage} style={styles.image} />
           </TouchableOpacity>
-          <View style={{zIndex: 2}}>
+          <View>
             <Text
               style={{
                 color: COLORS.greyText,
