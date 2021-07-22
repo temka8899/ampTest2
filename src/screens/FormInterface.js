@@ -703,7 +703,7 @@ export default function FormInterface({navigation, route}) {
         _playoffGameID,
       );
 
-      playoffDate = await moment(_dateTemp).add(2, 'd').format('MM/D/YY');
+      playoffDate = await moment(playoffDate).add(1, 'd').format('MM/D/YY');
       playoffDate2 = await moment(playoffDate).format('dddd');
       if (playoffDate2 == 'Saturday') {
         playoffDate = await moment(playoffDate).add(2, 'd').format('MM/D/YY');
