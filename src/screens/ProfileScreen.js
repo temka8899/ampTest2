@@ -189,8 +189,6 @@ const Profile = ({navigation}) => {
               height: wp(28),
               justifyContent: 'center',
               alignItems: 'center',
-              // borderWidth: 1,
-              // borderColor: 'red',
             }}>
             <View style={{flexDirection: 'row'}}>
               <View
@@ -700,7 +698,7 @@ const Profile = ({navigation}) => {
           </View>
         </SkeletonPlaceholder>
       ) : (
-        <View>
+        <View style={{flex: 1}}>
           {getMai()}
           <View
             style={{
@@ -828,13 +826,12 @@ const Profile = ({navigation}) => {
               setData={setData}
             />
           </Modal>
-          <View style={{height: Platform.OS === 'ios' ? wp(74) : wp(35)}}>
+          <View style={{height: hp(30)}}>
             <FlatList
               data={scheduleData}
               scrollEnabled={true}
               renderItem={renderSchedule}
               keyExtractor={item => item.id}
-              style={{}}
             />
           </View>
           <View>
