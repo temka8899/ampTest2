@@ -215,7 +215,7 @@ const StandingsScreen = ({navigation, route}) => {
   const {userInfo, setUserInfo} = React.useContext(AuthContext);
   const [imgLoad, setImgLoad] = useState(true);
 
-  const [initLoad, setinitLoad] = useState(true);
+  const [initLoad, setinitLoad] = useState(false);
 
   const [finalAImage, setFinalAImage] = useState('');
   const [finalAName, setFinalAName] = useState('');
@@ -343,13 +343,14 @@ const StandingsScreen = ({navigation, route}) => {
   };
 
   const onRefresh = React.useCallback(() => {
+    setinitLoad(true);
     setData(tempOption);
+    setinitLoad(false);
     wait(500).then(() => setRefreshing(false));
   }, [setData, tempOption]);
 
   const setData = React.useCallback(
     async option => {
-      setinitLoad(true);
       await setChooseData(option);
       await fetchTeam(option.id);
       setTempOption(option);
@@ -395,7 +396,6 @@ const StandingsScreen = ({navigation, route}) => {
           }
         }
       }
-      setinitLoad(false);
     },
     [
       fetchFinalSchedule,

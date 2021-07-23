@@ -651,13 +651,13 @@ const AdminScreen = ({navigation}) => {
             </View>
           )}
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             const message = getRandomMessage();
             setMessages([...messages, message]);
           }}>
           <Text style={{color: 'white'}}>dsgds</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Text style={styles.textStyle}> Game List </Text>
         <View>
           {GameData.length !== 0 ? (

@@ -380,8 +380,6 @@ const GameScreen = ({navigation}) => {
   const [greet, setGreet] = useState('');
   const [introModal, setIntroModal] = useState(false);
 
-  //console.log('userInfo :>> ', userInfo);
-
   useEffect(() => {
     fetchLeague();
     findGreet();
@@ -416,6 +414,7 @@ const GameScreen = ({navigation}) => {
   };
 
   function renderSchedule({item}) {
+    console.log('>>>>>>>>>>>>>>>>>');
     return (
       <Match
         item={item}
@@ -576,8 +575,12 @@ const GameScreen = ({navigation}) => {
       );
       const todos = scheduleData.data.listSchedules.items;
       const sorted = todos.sort((a, b) => a.index - b.index);
-      // console.log('sorted', sorted);
-      setSchedule(sorted);
+      if (sorted.length == 0) {
+        console.log('>>>>>>>>>>>>');
+        setSchedule([]);
+      } else {
+        setSchedule(sorted);
+      }
     } catch (err) {}
   }, []);
 
@@ -665,7 +668,7 @@ const GameScreen = ({navigation}) => {
                   ) : (
                     <Image
                       source={userInfo.avatar}
-                      style={styles.profileImage}
+                      style={[styles.profileImage, {borderRadius: wp(15)}]}
                     />
                   )}
                 </TouchableOpacity>
@@ -710,12 +713,19 @@ const GameScreen = ({navigation}) => {
               PLAYING TODAY
             </Text>
           </View>
+
           <View style={{height: hp(38)}}>
-            <FlatList
-              data={schedule}
-              keyExtractor={item => item.id}
-              renderItem={renderSchedule}
-            />
+            {schedule.length > 0 ? (
+              <FlatList
+                data={schedule}
+                keyExtractor={item => item.id}
+                renderItem={renderSchedule}
+              />
+            ) : (
+              <Text style={{color: COLORS.white}}>
+                Schedule coming soon ...
+              </Text>
+            )}
           </View>
         </View>
       )}

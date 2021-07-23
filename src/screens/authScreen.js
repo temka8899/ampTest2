@@ -363,7 +363,7 @@ const SignInScreen = ({navigation, onPress}) => {
       setLoading(true);
       let response = await Auth.signIn(username, password);
       await AsyncStorage.setItem('@userID', response.attributes.sub);
-      navigation.navigate('Tabs');
+      navigation.replace('Tabs');
       console.log('✅ Sign In Success');
       setLoading(false);
       setUsername('');
@@ -464,7 +464,7 @@ export default function AuthScreen({navigation}) {
       const value = await AsyncStorage.getItem('@userID');
       if (value !== null) {
         setCogID(value);
-        navigation.navigate('Tabs');
+        navigation.replace('Tabs');
       }
     } catch (e) {
       // error reading value
