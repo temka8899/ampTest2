@@ -14,10 +14,11 @@ const AppBar = () => {
 const styles = StyleSheet.create({
   container: {
     width: wp(100),
-    height: wp(6),
+    height: wp(8),
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 15,
   },
   text: {
     color: COLORS.white,

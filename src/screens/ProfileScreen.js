@@ -785,26 +785,17 @@ const Profile = ({navigation}) => {
               }}>
               YOUR TEAMS
             </Text>
-
-            <FlatList
+            {/* <FlatList
               data={teamNames}
               horizontal
               renderItem={renderName}
               keyExtractor={item => item.id}
-            />
+            /> */}
             <View
               style={{
                 marginTop: wp(5),
                 marginBottom: wp(3),
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  const message = getRandomMessage();
-                  setMessages([...messages, message]);
-                }}>
-                <Text>dsgds</Text>
-              </TouchableOpacity>
-            </View>
+              }}></View>
           </ScrollView>
           <Text
             style={{

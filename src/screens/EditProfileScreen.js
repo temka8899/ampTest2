@@ -147,7 +147,7 @@ export default function EditProfileScreen({navigation}) {
             _newHomeImages.push(newAvatar);
             _newHomeImages.push(homeImages[0]);
           }
-          await updateScheduleHomeImages(todos[i].id, _newHomeImages, true);
+          updateScheduleHomeImages(todos[i].id, _newHomeImages, true);
         } else {
           let awayImages1 = todos[i].awayImage.split('[');
           let awayImages2 = awayImages1[1].split(']');
@@ -160,7 +160,7 @@ export default function EditProfileScreen({navigation}) {
             _newAwayImages.push(newAvatar);
             _newAwayImages.push(awayImages[0]);
           }
-          await updateScheduleHomeImages(todos[i].id, _newAwayImages, false);
+          updateScheduleHomeImages(todos[i].id, _newAwayImages, false);
         }
       }
     } catch (err) {

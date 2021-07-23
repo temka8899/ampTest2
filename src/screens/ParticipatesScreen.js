@@ -284,6 +284,10 @@ const ParticipatesScreen = ({navigation, route}) => {
                 fontFamily: FONTS.brandFont,
                 fontSize: RFPercentage(1.7),
                 color: COLORS.white,
+                // alignItems: 'center',
+                // alignContent: 'center',
+                textAlign: 'justify',
+                // textAlignVertical: 'center',
               }}>
               {inLeague ? "I'm out" : "I'm in"}
             </Text>
