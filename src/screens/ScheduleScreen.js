@@ -59,7 +59,7 @@ const Match = ({item, onPress, user}) => {
     let awayImages = awayImages2[0].split(', ');
     setHome(homeImages);
     setAway(awayImages);
-
+    console.log('>>>>>>>>>>>', user);
     let findHome = await findTeam(user.id, item.homePlayers);
     let findAway = await findTeam(user.id, item.awayPlayers);
 
@@ -77,10 +77,13 @@ const Match = ({item, onPress, user}) => {
     //   `findAway`,
     //   findAway,
     // );
+
     if (item.isPlaying) {
       setEnable(true);
     } else {
       if (findHome || findAway) {
+        setEnable(false);
+      } else if (user.admin == true) {
         setEnable(false);
       } else {
         setEnable(true);
@@ -88,19 +91,19 @@ const Match = ({item, onPress, user}) => {
     }
   }, [item, user.id]);
 
-  async function fetchTeamPlayers(id) {
-    try {
-      const leagueData = await API.graphql(
-        graphqlOperation(listTeamPlayers, {
-          filter: {teamID: {eq: id}},
-        }),
-      );
-      const todos = leagueData.data.listTeamPlayers.items;
-      return todos;
-    } catch (err) {
-      //
-    }
-  }
+  // async function fetchTeamPlayers(id) {
+  //   try {
+  //     const leagueData = await API.graphql(
+  //       graphqlOperation(listTeamPlayers, {
+  //         filter: {teamID: {eq: id}},
+  //       }),
+  //     );
+  //     const todos = leagueData.data.listTeamPlayers.items;
+  //     return todos;
+  //   } catch (err) {
+  //     //
+  //   }
+  // }
   async function findTeam(id, teamId) {
     let homeId1 = teamId.split('[');
     let homeId2 = homeId1[1].split(']');
