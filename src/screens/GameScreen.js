@@ -722,9 +722,24 @@ const GameScreen = ({navigation}) => {
                 renderItem={renderSchedule}
               />
             ) : (
-              <Text style={{color: COLORS.white}}>
-                Schedule coming soon ...
-              </Text>
+              <View>
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    alignSelf: 'center',
+                    marginTop: 50,
+                  }}>
+                  Schedule coming soon ...
+                </Text>
+                <LottieView
+                  autoPlay
+                  source={require('../assets/Lottie/game-loader.json')}
+                  style={{
+                    height: hp(20),
+                    alignSelf: 'center',
+                  }}
+                />
+              </View>
             )}
           </View>
         </View>
