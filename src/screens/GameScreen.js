@@ -729,7 +729,7 @@ const GameScreen = ({navigation}) => {
                     alignSelf: 'center',
                     marginTop: 50,
                   }}>
-                  Schedule coming soon ...
+                  Schedule coming soon
                 </Text>
                 <LottieView
                   autoPlay

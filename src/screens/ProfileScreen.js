@@ -785,12 +785,12 @@ const Profile = ({navigation}) => {
               }}>
               YOUR TEAMS
             </Text>
-            {/* <FlatList
+            <FlatList
               data={teamNames}
               horizontal
               renderItem={renderName}
               keyExtractor={item => item.id}
-            /> */}
+            />
             <View
               style={{
                 marginTop: wp(5),
