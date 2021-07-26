@@ -420,7 +420,6 @@ const Profile = ({navigation}) => {
             // editable={true}
             style={styles.input}
             autoCapitalize="none"
-            autoCompleteType={false}
             placeholder={item.team.name}
             maxLength={20}
             onChangeText={text => (newTeamName = text)}
