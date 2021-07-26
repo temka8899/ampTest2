@@ -414,7 +414,6 @@ const GameScreen = ({navigation}) => {
   };
 
   function renderSchedule({item}) {
-    console.log('>>>>>>>>>>>>>>>>>');
     return (
       <Match
         item={item}

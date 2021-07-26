@@ -78,15 +78,17 @@ const Match = ({item, onPress, user}) => {
     //   findAway,
     // );
 
-    if (item.isPlaying) {
-      setEnable(true);
+    if (user.admin == true) {
+      setEnable(false);
     } else {
-      if (findHome || findAway) {
-        setEnable(false);
-      } else if (user.admin == true) {
-        setEnable(false);
-      } else {
+      if (item.isPlaying) {
         setEnable(true);
+      } else {
+        if (findHome || findAway) {
+          setEnable(false);
+        } else {
+          setEnable(true);
+        }
       }
     }
   }, [item, user.id]);

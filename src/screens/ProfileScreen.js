@@ -522,8 +522,6 @@ const Profile = ({navigation}) => {
       );
       const names = leagueData.data.listTeamPlayers.items;
       setTeamNames(names);
-
-      console.log('>>>>>>>>>>>>>>>', names);
     } catch (err) {
       console.log('error fetching names', err);
     }

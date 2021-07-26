@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.brand,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
   },
   text: {
     color: COLORS.white,
