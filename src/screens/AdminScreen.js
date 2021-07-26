@@ -519,6 +519,7 @@ const AdminScreen = ({navigation}) => {
             ) : (
               <CustomButton
                 text={'Start'}
+                textStyle={{alignSelf: 'center'}}
                 disabled={btnLoad}
                 loading={item.loading}
                 styleAdd={styles.startBtn}
@@ -808,6 +809,9 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontFamily: FONTS.brandFont,
     fontSize: RFPercentage(1.3),
+    alignSelf: 'center',
+    textAlign: 'justify',
+    textAlignVertical: 'center',
   },
   backBtn: {
     resizeMode: 'contain',

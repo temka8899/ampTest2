@@ -48,8 +48,8 @@ const CreateLeagueScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const initialState = {name: ''};
   const [formState, setFormState] = useState(initialState);
-  const [startDate, setStartDate] = useState('2021-06-01');
-  const [date, setdate] = useState('2021-06-01');
+  const [startDate, setStartDate] = useState('2021-07-01');
+  const [date, setdate] = useState('2021-07-01');
   const [leagueGameId, setLeagueGameId] = useState();
   const [leagueDescription, setleagueDescription] = useState();
   const [minimumPlayer, setMinimumPlayer] = useState();
@@ -211,8 +211,8 @@ const CreateLeagueScreen = ({navigation}) => {
                   mode="date"
                   placeholder="select date"
                   format="YYYY MM DD"
-                  minDate="2021-06-01"
-                  maxDate="2022-06-01"
+                  minDate="2021-07-01"
+                  maxDate="2022-07-01"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
                   customStyles={{

@@ -1566,9 +1566,8 @@ const styles = StyleSheet.create({
     width: wp(90),
     height: wp(25),
     marginHorizontal: wp(5),
-
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   pointContainer: {
     width: wp(35),

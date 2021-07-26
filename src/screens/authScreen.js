@@ -354,8 +354,8 @@ const SwitchView = ({value, onPress}) => {
 };
 
 const SignInScreen = ({navigation, onPress}) => {
-  const [username, setUsername] = useState('moogii67890@gmail.com');
-  const [password, setPassword] = useState('12345678');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const signIn = async () => {

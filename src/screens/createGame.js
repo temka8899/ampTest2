@@ -114,7 +114,7 @@ const CreateGameScreen = ({navigation}) => {
       </View>
       <View>
         <TouchableOpacity
-          onPress={choosePhotoFromLibrary}
+          onPress={isLoading ? null : choosePhotoFromLibrary}
           style={styles.imageContainer}>
           {uploadImage === '' ? (
             <Image
@@ -160,7 +160,11 @@ const CreateGameScreen = ({navigation}) => {
         <TouchableOpacity
           onPress={choosePhotoFromLibrary}
           style={styles.button}>
-          <Text style={styles.btnText}>Choose an image</Text>
+          {isLoading ? (
+            <ActivityIndicator size={'small'} color={COLORS.white} />
+          ) : (
+            <Text style={styles.btnText}>Choose an image</Text>
+          )}
         </TouchableOpacity>
         <>
           <TouchableOpacity

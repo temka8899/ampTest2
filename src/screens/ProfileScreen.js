@@ -420,7 +420,6 @@ const Profile = ({navigation}) => {
             // editable={true}
             style={styles.input}
             autoCapitalize="none"
-            autoCompleteType={false}
             placeholder={item.team.name}
             maxLength={20}
             onChangeText={text => (newTeamName = text)}
@@ -783,12 +782,12 @@ const Profile = ({navigation}) => {
               }}>
               YOUR TEAMS
             </Text>
-            {/* <FlatList
+            <FlatList
               data={teamNames}
               horizontal
               renderItem={renderName}
               keyExtractor={item => item.id}
-            /> */}
+            />
             <View
               style={{
                 marginTop: wp(5),

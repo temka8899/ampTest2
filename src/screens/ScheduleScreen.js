@@ -106,6 +106,7 @@ const Match = ({item, onPress, user}) => {
   //     //
   //   }
   // }
+
   async function findTeam(id, teamId) {
     let homeId1 = teamId.split('[');
     let homeId2 = homeId1[1].split(']');
